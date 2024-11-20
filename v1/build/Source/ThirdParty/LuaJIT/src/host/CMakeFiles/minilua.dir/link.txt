@@ -1,0 +1,1 @@
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -fomit-frame-pointer -O3 -DNDEBUG  -Wl,-E CMakeFiles/minilua.dir/minilua.c.o  -o minilua  -lm 

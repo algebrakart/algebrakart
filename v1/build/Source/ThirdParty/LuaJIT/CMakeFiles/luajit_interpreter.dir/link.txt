@@ -1,0 +1,1 @@
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -fomit-frame-pointer -O3 -DNDEBUG  -Wl,-E CMakeFiles/luajit_interpreter.dir/src/luajit.c.o  -o ../../../bin/luajit  libLuaJIT.a -lm -ldl -lm 

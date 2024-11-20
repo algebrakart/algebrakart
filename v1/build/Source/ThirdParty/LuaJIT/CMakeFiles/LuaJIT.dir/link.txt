@@ -1,0 +1,2 @@
+/usr/bin/ar qc libLuaJIT.a  CMakeFiles/LuaJIT.dir/src/ljamalg.c.o CMakeFiles/LuaJIT.dir/generated/lj_vm.S.o
+/usr/bin/ranlib libLuaJIT.a

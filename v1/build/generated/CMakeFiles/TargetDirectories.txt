@@ -1,0 +1,2 @@
+/code/dev/algebrakart/v1/build/generated/CMakeFiles/rebuild_cache.dir
+/code/dev/algebrakart/v1/build/generated/CMakeFiles/edit_cache.dir

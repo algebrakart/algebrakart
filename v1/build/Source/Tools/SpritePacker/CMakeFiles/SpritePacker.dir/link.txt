@@ -1,0 +1,1 @@
+/usr/bin/c++  -mtune=generic  -Wno-invalid-offsetof -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -O3 -DNDEBUG  -Wl,-E CMakeFiles/SpritePacker.dir/SpritePacker.cpp.o  -o ../../../bin/tool/SpritePacker  ../../../lib/libUrho3D.a -ldl -lm -lrt -ldl -lm -lGL -lrt -lGL 

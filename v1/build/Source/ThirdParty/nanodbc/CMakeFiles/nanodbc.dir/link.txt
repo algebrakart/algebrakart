@@ -1,0 +1,2 @@
+/usr/bin/ar qc libnanodbc.a  CMakeFiles/nanodbc.dir/nanodbc/nanodbc.cpp.o
+/usr/bin/ranlib libnanodbc.a

@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/code/dev/algebrakart/v1/build/Source/Urho3D/CMakeFiles/tolua++"
+		},
+		{
+			"file" : "/code/dev/algebrakart/v1/build/Source/Urho3D/CMakeFiles/tolua++.rule"
+		},
+		{
+			"file" : "/code/dev/algebrakart/v1/build/Source/Urho3D/CMakeFiles/tolua++-complete.rule"
+		},
+		{
+			"file" : "/code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-install.rule"
+		},
+		{
+			"file" : "/code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-mkdir.rule"
+		},
+		{
+			"file" : "/code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-download.rule"
+		},
+		{
+			"file" : "/code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-update.rule"
+		},
+		{
+			"file" : "/code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-patch.rule"
+		},
+		{
+			"file" : "/code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-configure.rule"
+		},
+		{
+			"file" : "/code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-build.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"tolua++"
+		],
+		"name" : "tolua++"
+	}
+}

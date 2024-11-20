@@ -1,0 +1,1 @@
+/usr/bin/cc -mtune=generic  -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -O3 -DNDEBUG   CMakeFiles/tolua++.dir/tolua.c.o CMakeFiles/tolua++.dir/generated/toluabind.c.o  -o tolua++  host/toluapp/libtoluapp.a host/Lua/libLua.a -lm -ldl -lm -lrt 

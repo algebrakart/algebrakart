@@ -1,0 +1,1 @@
+cmd='/usr/bin/cmake;-E;env;CC=/usr/bin/cc;CXX=/usr/bin/c++;CI=;/usr/bin/cmake;-D;URHO3D_DEPLOYMENT_TARGET=generic;-D;DEST_RUNTIME_DIR=/code/dev/algebrakart/v1/build/bin/tool;-D;BAKED_CMAKE_SOURCE_DIR=/code/dev/algebrakart/v1;-D;URHO3D_UPDATE_SOURCE_TREE=OFF;-D;CMAKE_MAKE_PROGRAM=/usr/bin/make;-GUnix Makefiles;<SOURCE_DIR><SOURCE_SUBDIR>'

@@ -1,0 +1,1 @@
+/usr/bin/c++  -mtune=generic  -Wno-invalid-offsetof -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -O3 -DNDEBUG  -Wl,-E CMakeFiles/OgreImporter.dir/OgreImporter.cpp.o  -o ../../../bin/tool/OgreImporter  ../../../lib/libUrho3D.a -ldl -lm -lrt -ldl -lm -lGL -lrt -lGL 

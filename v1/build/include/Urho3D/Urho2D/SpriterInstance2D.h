@@ -1,0 +1,1 @@
+../../../../Source/Urho3D/Urho2D/SpriterInstance2D.h

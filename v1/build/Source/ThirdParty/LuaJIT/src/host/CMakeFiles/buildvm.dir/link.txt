@@ -1,0 +1,1 @@
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -fomit-frame-pointer -O3 -DNDEBUG  -Wl,-E CMakeFiles/buildvm.dir/buildvm.c.o CMakeFiles/buildvm.dir/buildvm_asm.c.o CMakeFiles/buildvm.dir/buildvm_fold.c.o CMakeFiles/buildvm.dir/buildvm_lib.c.o CMakeFiles/buildvm.dir/buildvm_peobj.c.o  -o buildvm 

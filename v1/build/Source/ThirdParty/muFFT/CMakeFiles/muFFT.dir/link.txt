@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmuFFT.a  CMakeFiles/muFFT.dir/src/bench.c.o CMakeFiles/muFFT.dir/src/cpu.c.o CMakeFiles/muFFT.dir/src/fft.c.o CMakeFiles/muFFT.dir/src/kernel.c.o CMakeFiles/muFFT.dir/src/test.c.o
+/usr/bin/ranlib libmuFFT.a

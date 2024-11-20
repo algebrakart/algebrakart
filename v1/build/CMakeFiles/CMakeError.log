@@ -1,0 +1,622 @@
+Determining if the function __sincosf exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_1183b/fast && /usr/bin/make -f CMakeFiles/cmTC_1183b.dir/build.make CMakeFiles/cmTC_1183b.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1183b.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=__sincosf   -o CMakeFiles/cmTC_1183b.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_1183b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1183b.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=__sincosf  -Wl,-E  CMakeFiles/cmTC_1183b.dir/CheckFunctionExists.c.o  -o cmTC_1183b 
+/usr/bin/ld: CMakeFiles/cmTC_1183b.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `__sincosf'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_1183b.dir/build.make:87: cmTC_1183b] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_1183b/fast] Error 2
+
+
+
+Performing C SOURCE FILE Test HAVE_GCC_PREFERRED_STACK_BOUNDARY failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_0ebda/fast && /usr/bin/make -f CMakeFiles/cmTC_0ebda.dir/build.make CMakeFiles/cmTC_0ebda.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_0ebda.dir/src.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DHAVE_GCC_PREFERRED_STACK_BOUNDARY -mpreferred-stack-boundary=2   -o CMakeFiles/cmTC_0ebda.dir/src.c.o   -c /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.c
+cc1: error: ‘-mpreferred-stack-boundary=2’ is not between 3 and 12
+make[1]: *** [CMakeFiles/cmTC_0ebda.dir/build.make:66: CMakeFiles/cmTC_0ebda.dir/src.c.o] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_0ebda/fast] Error 2
+
+
+Source file was:
+int x = 0; int main(int argc, char **argv) {}
+Determining if the function strlcpy exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_2252b/fast && /usr/bin/make -f CMakeFiles/cmTC_2252b.dir/build.make CMakeFiles/cmTC_2252b.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2252b.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=strlcpy   -o CMakeFiles/cmTC_2252b.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_2252b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2252b.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=strlcpy  -Wl,-E  CMakeFiles/cmTC_2252b.dir/CheckFunctionExists.c.o  -o cmTC_2252b 
+/usr/bin/ld: CMakeFiles/cmTC_2252b.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `strlcpy'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_2252b.dir/build.make:87: cmTC_2252b] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_2252b/fast] Error 2
+
+
+
+Determining if the function strlcat exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_31c2f/fast && /usr/bin/make -f CMakeFiles/cmTC_31c2f.dir/build.make CMakeFiles/cmTC_31c2f.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_31c2f.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=strlcat   -o CMakeFiles/cmTC_31c2f.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_31c2f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_31c2f.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=strlcat  -Wl,-E  CMakeFiles/cmTC_31c2f.dir/CheckFunctionExists.c.o  -o cmTC_31c2f 
+/usr/bin/ld: CMakeFiles/cmTC_31c2f.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `strlcat'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_31c2f.dir/build.make:87: cmTC_31c2f] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_31c2f/fast] Error 2
+
+
+
+Determining if the function _strrev exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_8bbc2/fast && /usr/bin/make -f CMakeFiles/cmTC_8bbc2.dir/build.make CMakeFiles/cmTC_8bbc2.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8bbc2.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_strrev   -o CMakeFiles/cmTC_8bbc2.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_8bbc2
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8bbc2.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_strrev  -Wl,-E  CMakeFiles/cmTC_8bbc2.dir/CheckFunctionExists.c.o  -o cmTC_8bbc2 
+/usr/bin/ld: CMakeFiles/cmTC_8bbc2.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `_strrev'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_8bbc2.dir/build.make:87: cmTC_8bbc2] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_8bbc2/fast] Error 2
+
+
+
+Determining if the function _strupr exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_7cc83/fast && /usr/bin/make -f CMakeFiles/cmTC_7cc83.dir/build.make CMakeFiles/cmTC_7cc83.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7cc83.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_strupr   -o CMakeFiles/cmTC_7cc83.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_7cc83
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7cc83.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_strupr  -Wl,-E  CMakeFiles/cmTC_7cc83.dir/CheckFunctionExists.c.o  -o cmTC_7cc83 
+/usr/bin/ld: CMakeFiles/cmTC_7cc83.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `_strupr'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_7cc83.dir/build.make:87: cmTC_7cc83] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_7cc83/fast] Error 2
+
+
+
+Determining if the function _strlwr exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_c0630/fast && /usr/bin/make -f CMakeFiles/cmTC_c0630.dir/build.make CMakeFiles/cmTC_c0630.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c0630.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_strlwr   -o CMakeFiles/cmTC_c0630.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_c0630
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c0630.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_strlwr  -Wl,-E  CMakeFiles/cmTC_c0630.dir/CheckFunctionExists.c.o  -o cmTC_c0630 
+/usr/bin/ld: CMakeFiles/cmTC_c0630.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `_strlwr'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_c0630.dir/build.make:87: cmTC_c0630] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_c0630/fast] Error 2
+
+
+
+Determining if the function itoa exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_c9bfa/fast && /usr/bin/make -f CMakeFiles/cmTC_c9bfa.dir/build.make CMakeFiles/cmTC_c9bfa.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c9bfa.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=itoa   -o CMakeFiles/cmTC_c9bfa.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_c9bfa
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c9bfa.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=itoa  -Wl,-E  CMakeFiles/cmTC_c9bfa.dir/CheckFunctionExists.c.o  -o cmTC_c9bfa 
+/usr/bin/ld: CMakeFiles/cmTC_c9bfa.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `itoa'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_c9bfa.dir/build.make:87: cmTC_c9bfa] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_c9bfa/fast] Error 2
+
+
+
+Determining if the function _ltoa exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_9d859/fast && /usr/bin/make -f CMakeFiles/cmTC_9d859.dir/build.make CMakeFiles/cmTC_9d859.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9d859.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_ltoa   -o CMakeFiles/cmTC_9d859.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_9d859
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9d859.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_ltoa  -Wl,-E  CMakeFiles/cmTC_9d859.dir/CheckFunctionExists.c.o  -o cmTC_9d859 
+/usr/bin/ld: CMakeFiles/cmTC_9d859.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `_ltoa'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_9d859.dir/build.make:87: cmTC_9d859] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_9d859/fast] Error 2
+
+
+
+Determining if the function _uitoa exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_dd532/fast && /usr/bin/make -f CMakeFiles/cmTC_dd532.dir/build.make CMakeFiles/cmTC_dd532.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_dd532.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_uitoa   -o CMakeFiles/cmTC_dd532.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_dd532
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_dd532.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_uitoa  -Wl,-E  CMakeFiles/cmTC_dd532.dir/CheckFunctionExists.c.o  -o cmTC_dd532 
+/usr/bin/ld: CMakeFiles/cmTC_dd532.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `_uitoa'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_dd532.dir/build.make:87: cmTC_dd532] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_dd532/fast] Error 2
+
+
+
+Determining if the function _ultoa exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_39ebc/fast && /usr/bin/make -f CMakeFiles/cmTC_39ebc.dir/build.make CMakeFiles/cmTC_39ebc.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_39ebc.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_ultoa   -o CMakeFiles/cmTC_39ebc.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_39ebc
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_39ebc.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_ultoa  -Wl,-E  CMakeFiles/cmTC_39ebc.dir/CheckFunctionExists.c.o  -o cmTC_39ebc 
+/usr/bin/ld: CMakeFiles/cmTC_39ebc.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `_ultoa'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_39ebc.dir/build.make:87: cmTC_39ebc] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_39ebc/fast] Error 2
+
+
+
+Determining if the function _i64toa exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_e75ae/fast && /usr/bin/make -f CMakeFiles/cmTC_e75ae.dir/build.make CMakeFiles/cmTC_e75ae.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e75ae.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_i64toa   -o CMakeFiles/cmTC_e75ae.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_e75ae
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e75ae.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_i64toa  -Wl,-E  CMakeFiles/cmTC_e75ae.dir/CheckFunctionExists.c.o  -o cmTC_e75ae 
+/usr/bin/ld: CMakeFiles/cmTC_e75ae.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `_i64toa'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_e75ae.dir/build.make:87: cmTC_e75ae] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_e75ae/fast] Error 2
+
+
+
+Determining if the function _ui64toa exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_c7b85/fast && /usr/bin/make -f CMakeFiles/cmTC_c7b85.dir/build.make CMakeFiles/cmTC_c7b85.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c7b85.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_ui64toa   -o CMakeFiles/cmTC_c7b85.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_c7b85
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c7b85.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_ui64toa  -Wl,-E  CMakeFiles/cmTC_c7b85.dir/CheckFunctionExists.c.o  -o cmTC_c7b85 
+/usr/bin/ld: CMakeFiles/cmTC_c7b85.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `_ui64toa'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_c7b85.dir/build.make:87: cmTC_c7b85] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_c7b85/fast] Error 2
+
+
+
+Determining if the function _stricmp exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_a440b/fast && /usr/bin/make -f CMakeFiles/cmTC_a440b.dir/build.make CMakeFiles/cmTC_a440b.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_a440b.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_stricmp   -o CMakeFiles/cmTC_a440b.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_a440b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a440b.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_stricmp  -Wl,-E  CMakeFiles/cmTC_a440b.dir/CheckFunctionExists.c.o  -o cmTC_a440b 
+/usr/bin/ld: CMakeFiles/cmTC_a440b.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `_stricmp'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_a440b.dir/build.make:87: cmTC_a440b] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_a440b/fast] Error 2
+
+
+
+Determining if the function _strnicmp exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_9085c/fast && /usr/bin/make -f CMakeFiles/cmTC_9085c.dir/build.make CMakeFiles/cmTC_9085c.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9085c.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_strnicmp   -o CMakeFiles/cmTC_9085c.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_9085c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9085c.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=_strnicmp  -Wl,-E  CMakeFiles/cmTC_9085c.dir/CheckFunctionExists.c.o  -o cmTC_9085c 
+/usr/bin/ld: CMakeFiles/cmTC_9085c.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `_strnicmp'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_9085c.dir/build.make:87: cmTC_9085c] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_9085c/fast] Error 2
+
+
+
+Determining if the function sysctlbyname exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_03779/fast && /usr/bin/make -f CMakeFiles/cmTC_03779.dir/build.make CMakeFiles/cmTC_03779.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_03779.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=sysctlbyname   -o CMakeFiles/cmTC_03779.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_03779
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_03779.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=sysctlbyname  -Wl,-E  CMakeFiles/cmTC_03779.dir/CheckFunctionExists.c.o  -o cmTC_03779 
+/usr/bin/ld: CMakeFiles/cmTC_03779.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `sysctlbyname'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_03779.dir/build.make:87: cmTC_03779] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_03779/fast] Error 2
+
+
+
+Determining if the function iconv_open exists in the iconv failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_8c547/fast && /usr/bin/make -f CMakeFiles/cmTC_8c547.dir/build.make CMakeFiles/cmTC_8c547.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8c547.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=iconv_open   -o CMakeFiles/cmTC_8c547.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_8c547
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8c547.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=iconv_open  -Wl,-E  CMakeFiles/cmTC_8c547.dir/CheckFunctionExists.c.o  -o cmTC_8c547  -liconv 
+/usr/bin/ld: cannot find -liconv
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_8c547.dir/build.make:87: cmTC_8c547] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_8c547/fast] Error 2
+
+
+
+Determining if the function dlopen exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_28d68/fast && /usr/bin/make -f CMakeFiles/cmTC_28d68.dir/build.make CMakeFiles/cmTC_28d68.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_28d68.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=dlopen   -o CMakeFiles/cmTC_28d68.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_28d68
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_28d68.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=dlopen  -Wl,-E  CMakeFiles/cmTC_28d68.dir/CheckFunctionExists.c.o  -o cmTC_28d68 
+/usr/bin/ld: CMakeFiles/cmTC_28d68.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `dlopen'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_28d68.dir/build.make:87: cmTC_28d68] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_28d68/fast] Error 2
+
+
+
+Performing C SOURCE FILE Test HAVE_PTHREAD_NP_H failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_bf685/fast && /usr/bin/make -f CMakeFiles/cmTC_bf685.dir/build.make CMakeFiles/cmTC_bf685.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_bf685.dir/src.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DHAVE_PTHREAD_NP_H -pthread   -o CMakeFiles/cmTC_bf685.dir/src.c.o   -c /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.c
+/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.c:3:20: fatal error: pthread_np.h: No such file or directory
+    3 |           #include <pthread_np.h>
+      |                    ^~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [CMakeFiles/cmTC_bf685.dir/build.make:66: CMakeFiles/cmTC_bf685.dir/src.c.o] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_bf685/fast] Error 2
+
+
+Source file was:
+
+          #include <pthread.h>
+          #include <pthread_np.h>
+          int main(int argc, char** argv) { return 0; }
+Determining if the function pthread_set_name_np exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_8cc90/fast && /usr/bin/make -f CMakeFiles/cmTC_8cc90.dir/build.make CMakeFiles/cmTC_8cc90.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8cc90.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=pthread_set_name_np -pthread   -o CMakeFiles/cmTC_8cc90.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_8cc90
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8cc90.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=pthread_set_name_np -pthread  -Wl,-E  CMakeFiles/cmTC_8cc90.dir/CheckFunctionExists.c.o  -o cmTC_8cc90 
+/usr/bin/ld: CMakeFiles/cmTC_8cc90.dir/CheckFunctionExists.c.o: in function `main':
+CheckFunctionExists.c:(.text+0x14): undefined reference to `pthread_set_name_np'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_8cc90.dir/build.make:87: cmTC_8cc90] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_8cc90/fast] Error 2
+
+
+
+Performing C SOURCE FILE Test HAVE_VIDEO_VIVANTE_VDK failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_3a60a/fast && /usr/bin/make -f CMakeFiles/cmTC_3a60a.dir/build.make CMakeFiles/cmTC_3a60a.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_3a60a.dir/src.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DHAVE_VIDEO_VIVANTE_VDK   -o CMakeFiles/cmTC_3a60a.dir/src.c.o   -c /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.c
+/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.c:2:18: fatal error: gc_vdk.h: No such file or directory
+    2 |         #include <gc_vdk.h>
+      |                  ^~~~~~~~~~
+compilation terminated.
+make[1]: *** [CMakeFiles/cmTC_3a60a.dir/build.make:66: CMakeFiles/cmTC_3a60a.dir/src.c.o] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_3a60a/fast] Error 2
+
+
+Source file was:
+
+        #include <gc_vdk.h>
+        int main(int argc, char** argv) {}
+Performing C SOURCE FILE Test HAVE_VIDEO_VIVANTE_EGL_FB failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_ef97c/fast && /usr/bin/make -f CMakeFiles/cmTC_ef97c.dir/build.make CMakeFiles/cmTC_ef97c.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ef97c.dir/src.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DHAVE_VIDEO_VIVANTE_EGL_FB   -o CMakeFiles/cmTC_ef97c.dir/src.c.o   -c /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.c
+/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.c:4:18: fatal error: EGL/eglvivante.h: No such file or directory
+    4 |         #include <EGL/eglvivante.h>
+      |                  ^~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [CMakeFiles/cmTC_ef97c.dir/build.make:66: CMakeFiles/cmTC_ef97c.dir/src.c.o] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_ef97c/fast] Error 2
+
+
+Source file was:
+
+        #define LINUX
+        #define EGL_API_FB
+        #include <EGL/eglvivante.h>
+        int main(int argc, char** argv) {}
+Determining if the include file tslib.h exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_50b1e/fast && /usr/bin/make -f CMakeFiles/cmTC_50b1e.dir/build.make CMakeFiles/cmTC_50b1e.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_50b1e.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto     -o CMakeFiles/cmTC_50b1e.dir/CheckIncludeFile.c.o   -c /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: tslib.h: No such file or directory
+    1 | #include <tslib.h>
+      |          ^~~~~~~~~
+compilation terminated.
+make[1]: *** [CMakeFiles/cmTC_50b1e.dir/build.make:66: CMakeFiles/cmTC_50b1e.dir/CheckIncludeFile.c.o] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_50b1e/fast] Error 2
+
+
+
+Determining if the function hid_init exists in the usbhid failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_d4b42/fast && /usr/bin/make -f CMakeFiles/cmTC_d4b42.dir/build.make CMakeFiles/cmTC_d4b42.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_d4b42.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=hid_init   -o CMakeFiles/cmTC_d4b42.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_d4b42
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d4b42.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=hid_init  -Wl,-E  CMakeFiles/cmTC_d4b42.dir/CheckFunctionExists.c.o  -o cmTC_d4b42  -lusbhid 
+/usr/bin/ld: cannot find -lusbhid
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_d4b42.dir/build.make:87: cmTC_d4b42] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_d4b42/fast] Error 2
+
+
+
+Determining if the include file usb.h exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_1c1d9/fast && /usr/bin/make -f CMakeFiles/cmTC_1c1d9.dir/build.make CMakeFiles/cmTC_1c1d9.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_1c1d9.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto     -o CMakeFiles/cmTC_1c1d9.dir/CheckIncludeFile.c.o   -c /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: usb.h: No such file or directory
+    1 | #include <usb.h>
+      |          ^~~~~~~
+compilation terminated.
+make[1]: *** [CMakeFiles/cmTC_1c1d9.dir/build.make:66: CMakeFiles/cmTC_1c1d9.dir/CheckIncludeFile.c.o] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_1c1d9/fast] Error 2
+
+
+
+Determining if the include file libusb.h exists failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_2eca3/fast && /usr/bin/make -f CMakeFiles/cmTC_2eca3.dir/build.make CMakeFiles/cmTC_2eca3.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_2eca3.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto     -o CMakeFiles/cmTC_2eca3.dir/CheckIncludeFile.c.o   -c /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: libusb.h: No such file or directory
+    1 | #include <libusb.h>
+      |          ^~~~~~~~~~
+compilation terminated.
+make[1]: *** [CMakeFiles/cmTC_2eca3.dir/build.make:66: CMakeFiles/cmTC_2eca3.dir/CheckIncludeFile.c.o] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_2eca3/fast] Error 2
+
+
+
+Determining if the function hid_init exists in the usb failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_957ea/fast && /usr/bin/make -f CMakeFiles/cmTC_957ea.dir/build.make CMakeFiles/cmTC_957ea.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_957ea.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=hid_init   -o CMakeFiles/cmTC_957ea.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_957ea
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_957ea.dir/link.txt --verbose=1
+/usr/bin/cc -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DCHECK_FUNCTION_EXISTS=hid_init  -Wl,-E  CMakeFiles/cmTC_957ea.dir/CheckFunctionExists.c.o  -o cmTC_957ea  -lusb 
+/usr/bin/ld: cannot find -lusb
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_957ea.dir/build.make:87: cmTC_957ea] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_957ea/fast] Error 2
+
+
+
+Performing C SOURCE FILE Test HAVE_USBHID failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_10566/fast && /usr/bin/make -f CMakeFiles/cmTC_10566.dir/build.make CMakeFiles/cmTC_10566.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_10566.dir/src.c.o
+/usr/bin/cc   -mtune=generic  -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DHAVE_USBHID   -o CMakeFiles/cmTC_10566.dir/src.c.o   -c /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.c
+/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.c:10:19: fatal error: dev/usb/usb.h: No such file or directory
+   10 |         # include <dev/usb/usb.h>
+      |                   ^~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [CMakeFiles/cmTC_10566.dir/build.make:66: CMakeFiles/cmTC_10566.dir/src.c.o] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_10566/fast] Error 2
+
+
+Source file was:
+
+       #include <sys/types.h>
+        #if defined(HAVE_USB_H)
+        #include <usb.h>
+        #endif
+        #ifdef __DragonFly__
+        # include <bus/usb/usb.h>
+        # include <bus/usb/usbhid.h>
+        #else
+        # include <dev/usb/usb.h>
+        # include <dev/usb/usbhid.h>
+        #endif
+        #if defined(HAVE_USBHID_H)
+        #include <usbhid.h>
+        #elif defined(HAVE_LIBUSB_H)
+        #include <libusb.h>
+        #elif defined(HAVE_LIBUSBHID_H)
+        #include <libusbhid.h>
+        #endif
+        int main(int argc, char **argv) {
+          struct report_desc *repdesc;
+          struct usb_ctl_report *repbuf;
+          hid_kind_t hidkind;
+          return 0;
+        }
+Performing C++ SOURCE FILE Test INET_FUNCTIONS_EXISTS_2 failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_22a96/fast && /usr/bin/make -f CMakeFiles/cmTC_22a96.dir/build.make CMakeFiles/cmTC_22a96.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_22a96.dir/src.cxx.o
+/usr/bin/c++    -mtune=generic  -Wno-invalid-offsetof -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DINET_FUNCTIONS_EXISTS_2   -std=c++11 -o CMakeFiles/cmTC_22a96.dir/src.cxx.o -c /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.cxx
+/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.cxx:1:10: fatal error: winsock2.h: No such file or directory
+    1 | #include <winsock2.h>
+      |          ^~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [CMakeFiles/cmTC_22a96.dir/build.make:66: CMakeFiles/cmTC_22a96.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_22a96/fast] Error 2
+
+
+Source file was:
+#include <winsock2.h>
+#include <ws2tcpip.h>
+int main() {
+    struct sockaddr_in sa;
+    char str[INET_ADDRSTRLEN];
+    inet_pton(AF_INET, "192.0.2.33", &(sa.sin_addr));
+    inet_ntop(AF_INET, &(sa.sin_addr), str, INET_ADDRSTRLEN);
+}
+Performing C++ SOURCE FILE Test SPRINTFS_FUNCTION_EXISTS failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_c6977/fast && /usr/bin/make -f CMakeFiles/cmTC_c6977.dir/build.make CMakeFiles/cmTC_c6977.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_c6977.dir/src.cxx.o
+/usr/bin/c++    -mtune=generic  -Wno-invalid-offsetof -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DSPRINTFS_FUNCTION_EXISTS   -std=c++11 -o CMakeFiles/cmTC_c6977.dir/src.cxx.o -c /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.cxx
+/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.cxx: In function ‘int main()’:
+/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.cxx:4:1: error: ‘sprintf_s’ was not declared in this scope; did you mean ‘sprintf’?
+    4 | sprintf_s(s, 80, "Test:%d", x); }
+      | ^~~~~~~~~
+      | sprintf
+make[1]: *** [CMakeFiles/cmTC_c6977.dir/build.make:66: CMakeFiles/cmTC_c6977.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_c6977/fast] Error 2
+
+
+Source file was:
+#include <stdio.h>
+int main() { char s[80];
+int x = 1;
+sprintf_s(s, 80, "Test:%d", x); }
+Performing C++ SOURCE FILE Test VSNPRINTFS_FUNCTION_EXISTS failed with the following output:
+Change Dir: /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make cmTC_6933b/fast && /usr/bin/make -f CMakeFiles/cmTC_6933b.dir/build.make CMakeFiles/cmTC_6933b.dir/build
+make[1]: Entering directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_6933b.dir/src.cxx.o
+/usr/bin/c++    -mtune=generic  -Wno-invalid-offsetof -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -DVSNPRINTFS_FUNCTION_EXISTS   -std=c++11 -o CMakeFiles/cmTC_6933b.dir/src.cxx.o -c /code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.cxx
+/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.cxx: In function ‘int main()’:
+/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.cxx:6:1: error: ‘vsnprintf_s’ was not declared in this scope; did you mean ‘vsnprintf’?
+    6 | vsnprintf_s(s, 80, "Test:%d", args);}
+      | ^~~~~~~~~~~
+      | vsnprintf
+/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp/src.cxx:4:5: warning: unused variable ‘x’ [-Wunused-variable]
+    4 | int x = 1;
+      |     ^
+make[1]: *** [CMakeFiles/cmTC_6933b.dir/build.make:66: CMakeFiles/cmTC_6933b.dir/src.cxx.o] Error 1
+make[1]: Leaving directory '/code/dev/algebrakart/v1/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_6933b/fast] Error 2
+
+
+Source file was:
+#include <stdio.h>
+int main() {
+char s[80];
+int x = 1;
+va_list args = {};
+vsnprintf_s(s, 80, "Test:%d", args);}

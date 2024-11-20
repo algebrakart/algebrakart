@@ -1,0 +1,13 @@
+# Target labels
+ tolua++
+# Source files and their labels
+/code/dev/algebrakart/v1/build/Source/Urho3D/CMakeFiles/tolua++
+/code/dev/algebrakart/v1/build/Source/Urho3D/CMakeFiles/tolua++.rule
+/code/dev/algebrakart/v1/build/Source/Urho3D/CMakeFiles/tolua++-complete.rule
+/code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-install.rule
+/code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-mkdir.rule
+/code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-download.rule
+/code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-update.rule
+/code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-patch.rule
+/code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-configure.rule
+/code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-build.rule

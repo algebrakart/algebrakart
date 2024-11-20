@@ -1,0 +1,2 @@
+/usr/bin/ar qc libETCPACK.a  CMakeFiles/ETCPACK.dir/source/etcdec.cxx.o
+/usr/bin/ranlib libETCPACK.a
