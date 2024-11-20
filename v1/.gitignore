@@ -34,3 +34,5 @@
 # Binaries
 bin*/
 
+# Build
+build*/
