@@ -318,11 +318,11 @@ void Game::SetWindowTitleAndIcon()
         graphics->SetWindowIcon(icon);
 
         std::string s;
-        s = s.append("Monkey Maya Studios: MayaScape Build ").append(datetime()).append(" (demo)");
-
+        char buffer[100];
+        sprintf(buffer, "%s %.1f.", APP_TITLE, VERSION);
+        s = s.append(buffer);
         graphics->SetWindowTitle(s.c_str());
     }
-    //sprintf("MayaSpace Engine Build " " by Ajay Bhaga", __DATE__));
 }
 
 void Game::CreateConsoleAndDebugHud()

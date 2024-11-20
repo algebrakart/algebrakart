@@ -68,10 +68,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /code/dev/TrafficCity/src/Urho3D
+CMAKE_SOURCE_DIR = /code/dev/AlgebraKart/src/Urho3D
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /code/dev/TrafficCity/src/Urho3D
+CMAKE_BINARY_DIR = /code/dev/AlgebraKart/src/Urho3D
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -114,7 +114,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target package_source
 package_source:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	cd /code/dev/TrafficCity/src/Urho3D && /usr/bin/cpack --config ./CPackSourceConfig.cmake /code/dev/TrafficCity/src/Urho3D/CPackSourceConfig.cmake
+	cd /code/dev/AlgebraKart/src/Urho3D && /usr/bin/cpack --config ./CPackSourceConfig.cmake /code/dev/AlgebraKart/src/Urho3D/CPackSourceConfig.cmake
 .PHONY : package_source
 
 # Special rule for the target package_source
@@ -158,7 +158,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target package
 package: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool..."
-	cd /code/dev/TrafficCity/src/Urho3D && /usr/bin/cpack --config ./CPackConfig.cmake
+	cd /code/dev/AlgebraKart/src/Urho3D && /usr/bin/cpack --config ./CPackConfig.cmake
 .PHONY : package
 
 # Special rule for the target package
@@ -168,14 +168,14 @@ package/fast: package
 
 # The main all target
 all: cmake_check_build_system
-	cd /code/dev/TrafficCity/src/Urho3D && $(CMAKE_COMMAND) -E cmake_progress_start /code/dev/TrafficCity/src/Urho3D/CMakeFiles /code/dev/TrafficCity/src/Urho3D/Source/Game/CMakeFiles/progress.marks
-	cd /code/dev/TrafficCity/src/Urho3D && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Source/Game/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /code/dev/TrafficCity/src/Urho3D/CMakeFiles 0
+	cd /code/dev/AlgebraKart/src/Urho3D && $(CMAKE_COMMAND) -E cmake_progress_start /code/dev/AlgebraKart/src/Urho3D/CMakeFiles /code/dev/AlgebraKart/src/Urho3D/Source/Game/CMakeFiles/progress.marks
+	cd /code/dev/AlgebraKart/src/Urho3D && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Source/Game/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /code/dev/AlgebraKart/src/Urho3D/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /code/dev/TrafficCity/src/Urho3D && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Source/Game/clean
+	cd /code/dev/AlgebraKart/src/Urho3D && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Source/Game/clean
 .PHONY : clean
 
 # The main clean target
@@ -185,17 +185,17 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /code/dev/TrafficCity/src/Urho3D && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Source/Game/preinstall
+	cd /code/dev/AlgebraKart/src/Urho3D && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Source/Game/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /code/dev/TrafficCity/src/Urho3D && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Source/Game/preinstall
+	cd /code/dev/AlgebraKart/src/Urho3D && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Source/Game/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /code/dev/TrafficCity/src/Urho3D && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /code/dev/AlgebraKart/src/Urho3D && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Help Target
@@ -223,6 +223,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /code/dev/TrafficCity/src/Urho3D && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /code/dev/AlgebraKart/src/Urho3D && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

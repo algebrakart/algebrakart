@@ -38,6 +38,10 @@ class Sprite;
 // All Urho3D classes reside in namespace Urho3D
 using namespace Urho3D;
 
+const float VERSION = 1.0f;
+#define APP_TITLE "AlgebraKart"
+#define STUDIO_VERSION "Bad Zindagi Music"
+
 const float TOUCH_SENSITIVITY = 2.0f;
 
 /// Game class.
