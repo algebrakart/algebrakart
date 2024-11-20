@@ -6,7 +6,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/MayaScape.dir/Pickup.cpp.o"
   "CMakeFiles/MayaScape.dir/PixelImage.cpp.o"
   "CMakeFiles/MayaScape.dir/SmoothStep.cpp.o"
-  "CMakeFiles/MayaScape.dir/TrafficCity.cpp.o"
+  "CMakeFiles/MayaScape.dir/AlgebraKart.cpp.o"
   "CMakeFiles/MayaScape.dir/WheelTrackModel.cpp.o"
   "CMakeFiles/MayaScape.dir/ai/agent.cpp.o"
   "CMakeFiles/MayaScape.dir/ai/agent_controller.cpp.o"

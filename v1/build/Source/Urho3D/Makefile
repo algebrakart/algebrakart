@@ -2854,6 +2854,60 @@ Core/WorkQueue.cpp.s:
 	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Urho3D/CMakeFiles/Urho3D.dir/build.make Source/Urho3D/CMakeFiles/Urho3D.dir/Core/WorkQueue.cpp.s
 .PHONY : Core/WorkQueue.cpp.s
 
+Database/Database.o: Database/Database.cpp.o
+
+.PHONY : Database/Database.o
+
+# target to build an object file
+Database/Database.cpp.o:
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Urho3D/CMakeFiles/Urho3D.dir/build.make Source/Urho3D/CMakeFiles/Urho3D.dir/Database/Database.cpp.o
+.PHONY : Database/Database.cpp.o
+
+Database/Database.i: Database/Database.cpp.i
+
+.PHONY : Database/Database.i
+
+# target to preprocess a source file
+Database/Database.cpp.i:
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Urho3D/CMakeFiles/Urho3D.dir/build.make Source/Urho3D/CMakeFiles/Urho3D.dir/Database/Database.cpp.i
+.PHONY : Database/Database.cpp.i
+
+Database/Database.s: Database/Database.cpp.s
+
+.PHONY : Database/Database.s
+
+# target to generate assembly for a file
+Database/Database.cpp.s:
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Urho3D/CMakeFiles/Urho3D.dir/build.make Source/Urho3D/CMakeFiles/Urho3D.dir/Database/Database.cpp.s
+.PHONY : Database/Database.cpp.s
+
+Database/ODBC/ODBCConnection.o: Database/ODBC/ODBCConnection.cpp.o
+
+.PHONY : Database/ODBC/ODBCConnection.o
+
+# target to build an object file
+Database/ODBC/ODBCConnection.cpp.o:
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Urho3D/CMakeFiles/Urho3D.dir/build.make Source/Urho3D/CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.o
+.PHONY : Database/ODBC/ODBCConnection.cpp.o
+
+Database/ODBC/ODBCConnection.i: Database/ODBC/ODBCConnection.cpp.i
+
+.PHONY : Database/ODBC/ODBCConnection.i
+
+# target to preprocess a source file
+Database/ODBC/ODBCConnection.cpp.i:
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Urho3D/CMakeFiles/Urho3D.dir/build.make Source/Urho3D/CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.i
+.PHONY : Database/ODBC/ODBCConnection.cpp.i
+
+Database/ODBC/ODBCConnection.s: Database/ODBC/ODBCConnection.cpp.s
+
+.PHONY : Database/ODBC/ODBCConnection.s
+
+# target to generate assembly for a file
+Database/ODBC/ODBCConnection.cpp.s:
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Urho3D/CMakeFiles/Urho3D.dir/build.make Source/Urho3D/CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.s
+.PHONY : Database/ODBC/ODBCConnection.cpp.s
+
 Engine/Application.o: Engine/Application.cpp.o
 
 .PHONY : Engine/Application.o
@@ -5337,6 +5391,33 @@ LuaScript/generated/CoreLuaAPI.s: LuaScript/generated/CoreLuaAPI.cpp.s
 LuaScript/generated/CoreLuaAPI.cpp.s:
 	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Urho3D/CMakeFiles/Urho3D.dir/build.make Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/CoreLuaAPI.cpp.s
 .PHONY : LuaScript/generated/CoreLuaAPI.cpp.s
+
+LuaScript/generated/DatabaseLuaAPI.o: LuaScript/generated/DatabaseLuaAPI.cpp.o
+
+.PHONY : LuaScript/generated/DatabaseLuaAPI.o
+
+# target to build an object file
+LuaScript/generated/DatabaseLuaAPI.cpp.o:
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Urho3D/CMakeFiles/Urho3D.dir/build.make Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.o
+.PHONY : LuaScript/generated/DatabaseLuaAPI.cpp.o
+
+LuaScript/generated/DatabaseLuaAPI.i: LuaScript/generated/DatabaseLuaAPI.cpp.i
+
+.PHONY : LuaScript/generated/DatabaseLuaAPI.i
+
+# target to preprocess a source file
+LuaScript/generated/DatabaseLuaAPI.cpp.i:
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Urho3D/CMakeFiles/Urho3D.dir/build.make Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.i
+.PHONY : LuaScript/generated/DatabaseLuaAPI.cpp.i
+
+LuaScript/generated/DatabaseLuaAPI.s: LuaScript/generated/DatabaseLuaAPI.cpp.s
+
+.PHONY : LuaScript/generated/DatabaseLuaAPI.s
+
+# target to generate assembly for a file
+LuaScript/generated/DatabaseLuaAPI.cpp.s:
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Urho3D/CMakeFiles/Urho3D.dir/build.make Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.s
+.PHONY : LuaScript/generated/DatabaseLuaAPI.cpp.s
 
 LuaScript/generated/EngineLuaAPI.o: LuaScript/generated/EngineLuaAPI.cpp.o
 
@@ -9536,6 +9617,12 @@ help:
 	@echo "... Core/WorkQueue.o"
 	@echo "... Core/WorkQueue.i"
 	@echo "... Core/WorkQueue.s"
+	@echo "... Database/Database.o"
+	@echo "... Database/Database.i"
+	@echo "... Database/Database.s"
+	@echo "... Database/ODBC/ODBCConnection.o"
+	@echo "... Database/ODBC/ODBCConnection.i"
+	@echo "... Database/ODBC/ODBCConnection.s"
 	@echo "... Engine/Application.o"
 	@echo "... Engine/Application.i"
 	@echo "... Engine/Application.s"
@@ -9812,6 +9899,9 @@ help:
 	@echo "... LuaScript/generated/CoreLuaAPI.o"
 	@echo "... LuaScript/generated/CoreLuaAPI.i"
 	@echo "... LuaScript/generated/CoreLuaAPI.s"
+	@echo "... LuaScript/generated/DatabaseLuaAPI.o"
+	@echo "... LuaScript/generated/DatabaseLuaAPI.i"
+	@echo "... LuaScript/generated/DatabaseLuaAPI.s"
 	@echo "... LuaScript/generated/EngineLuaAPI.o"
 	@echo "... LuaScript/generated/EngineLuaAPI.i"
 	@echo "... LuaScript/generated/EngineLuaAPI.s"

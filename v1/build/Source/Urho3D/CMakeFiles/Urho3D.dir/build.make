@@ -79,12 +79,20 @@ Source/Urho3D/LuaScript/generated/CoreLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating tolua++ API binding on the fly for Core"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/CoreLuaAPI.cpp CoreLuaAPI.pkg
 
+Source/Urho3D/LuaScript/generated/DatabaseLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/DatabaseLuaAPI.pkg
+Source/Urho3D/LuaScript/generated/DatabaseLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Database/Database.pkg
+Source/Urho3D/LuaScript/generated/DatabaseLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Database/DbConnection.pkg
+Source/Urho3D/LuaScript/generated/DatabaseLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Database/DbResult.pkg
+Source/Urho3D/LuaScript/generated/DatabaseLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating tolua++ API binding on the fly for Database"
+	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/DatabaseLuaAPI.cpp DatabaseLuaAPI.pkg
+
 Source/Urho3D/LuaScript/generated/EngineLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/EngineLuaAPI.pkg
 Source/Urho3D/LuaScript/generated/EngineLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Engine/Console.pkg
 Source/Urho3D/LuaScript/generated/EngineLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Engine/DebugHud.pkg
 Source/Urho3D/LuaScript/generated/EngineLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Engine/Engine.pkg
 Source/Urho3D/LuaScript/generated/EngineLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating tolua++ API binding on the fly for Engine"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating tolua++ API binding on the fly for Engine"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/EngineLuaAPI.cpp EngineLuaAPI.pkg
 
 Source/Urho3D/LuaScript/generated/GraphicsLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/GraphicsLuaAPI.pkg
@@ -129,7 +137,7 @@ Source/Urho3D/LuaScript/generated/GraphicsLuaAPI.cpp: ../Source/Urho3D/LuaScript
 Source/Urho3D/LuaScript/generated/GraphicsLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Graphics/Viewport.pkg
 Source/Urho3D/LuaScript/generated/GraphicsLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Graphics/Zone.pkg
 Source/Urho3D/LuaScript/generated/GraphicsLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating tolua++ API binding on the fly for Graphics"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating tolua++ API binding on the fly for Graphics"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/GraphicsLuaAPI.cpp GraphicsLuaAPI.pkg
 
 Source/Urho3D/LuaScript/generated/IKLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/IKLuaAPI.pkg
@@ -137,7 +145,7 @@ Source/Urho3D/LuaScript/generated/IKLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/
 Source/Urho3D/LuaScript/generated/IKLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/IK/IKEffector.pkg
 Source/Urho3D/LuaScript/generated/IKLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/IK/IKSolver.pkg
 Source/Urho3D/LuaScript/generated/IKLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Generating tolua++ API binding on the fly for IK"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Generating tolua++ API binding on the fly for IK"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/IKLuaAPI.cpp IKLuaAPI.pkg
 
 Source/Urho3D/LuaScript/generated/IOLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/IOLuaAPI.pkg
@@ -151,7 +159,7 @@ Source/Urho3D/LuaScript/generated/IOLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/
 Source/Urho3D/LuaScript/generated/IOLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/IO/Serializer.pkg
 Source/Urho3D/LuaScript/generated/IOLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/IO/VectorBuffer.pkg
 Source/Urho3D/LuaScript/generated/IOLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Generating tolua++ API binding on the fly for IO"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Generating tolua++ API binding on the fly for IO"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/IOLuaAPI.cpp IOLuaAPI.pkg
 
 Source/Urho3D/LuaScript/generated/InputLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/InputLuaAPI.pkg
@@ -159,7 +167,7 @@ Source/Urho3D/LuaScript/generated/InputLuaAPI.cpp: ../Source/Urho3D/LuaScript/pk
 Source/Urho3D/LuaScript/generated/InputLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Input/Input.pkg
 Source/Urho3D/LuaScript/generated/InputLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Input/InputEvents.pkg
 Source/Urho3D/LuaScript/generated/InputLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Generating tolua++ API binding on the fly for Input"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Generating tolua++ API binding on the fly for Input"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/InputLuaAPI.cpp InputLuaAPI.pkg
 
 Source/Urho3D/LuaScript/generated/LuaScriptLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/LuaScriptLuaAPI.pkg
@@ -167,7 +175,7 @@ Source/Urho3D/LuaScript/generated/LuaScriptLuaAPI.cpp: ../Source/Urho3D/LuaScrip
 Source/Urho3D/LuaScript/generated/LuaScriptLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/LuaScript/LuaScript.pkg
 Source/Urho3D/LuaScript/generated/LuaScriptLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/LuaScript/LuaScriptInstance.pkg
 Source/Urho3D/LuaScript/generated/LuaScriptLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Generating tolua++ API binding on the fly for LuaScript"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Generating tolua++ API binding on the fly for LuaScript"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/LuaScriptLuaAPI.cpp LuaScriptLuaAPI.pkg
 
 Source/Urho3D/LuaScript/generated/MathLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/MathLuaAPI.pkg
@@ -191,7 +199,7 @@ Source/Urho3D/LuaScript/generated/MathLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkg
 Source/Urho3D/LuaScript/generated/MathLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Math/Vector3.pkg
 Source/Urho3D/LuaScript/generated/MathLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Math/Vector4.pkg
 Source/Urho3D/LuaScript/generated/MathLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Generating tolua++ API binding on the fly for Math"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Generating tolua++ API binding on the fly for Math"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/MathLuaAPI.cpp MathLuaAPI.pkg
 
 Source/Urho3D/LuaScript/generated/NavigationLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/NavigationLuaAPI.pkg
@@ -204,7 +212,7 @@ Source/Urho3D/LuaScript/generated/NavigationLuaAPI.cpp: ../Source/Urho3D/LuaScri
 Source/Urho3D/LuaScript/generated/NavigationLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Navigation/Obstacle.pkg
 Source/Urho3D/LuaScript/generated/NavigationLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Navigation/OffMeshConnection.pkg
 Source/Urho3D/LuaScript/generated/NavigationLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Generating tolua++ API binding on the fly for Navigation"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Generating tolua++ API binding on the fly for Navigation"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/NavigationLuaAPI.cpp NavigationLuaAPI.pkg
 
 Source/Urho3D/LuaScript/generated/NetworkLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/NetworkLuaAPI.pkg
@@ -214,7 +222,7 @@ Source/Urho3D/LuaScript/generated/NetworkLuaAPI.cpp: ../Source/Urho3D/LuaScript/
 Source/Urho3D/LuaScript/generated/NetworkLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Network/NetworkPriority.pkg
 Source/Urho3D/LuaScript/generated/NetworkLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Network/Protocol.pkg
 Source/Urho3D/LuaScript/generated/NetworkLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Generating tolua++ API binding on the fly for Network"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Generating tolua++ API binding on the fly for Network"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/NetworkLuaAPI.cpp NetworkLuaAPI.pkg
 
 Source/Urho3D/LuaScript/generated/PhysicsLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/PhysicsLuaAPI.pkg
@@ -224,7 +232,7 @@ Source/Urho3D/LuaScript/generated/PhysicsLuaAPI.cpp: ../Source/Urho3D/LuaScript/
 Source/Urho3D/LuaScript/generated/PhysicsLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Physics/RaycastVehicle.pkg
 Source/Urho3D/LuaScript/generated/PhysicsLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Physics/RigidBody.pkg
 Source/Urho3D/LuaScript/generated/PhysicsLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Generating tolua++ API binding on the fly for Physics"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Generating tolua++ API binding on the fly for Physics"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/PhysicsLuaAPI.cpp PhysicsLuaAPI.pkg
 
 Source/Urho3D/LuaScript/generated/ResourceLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ResourceLuaAPI.pkg
@@ -237,7 +245,7 @@ Source/Urho3D/LuaScript/generated/ResourceLuaAPI.cpp: ../Source/Urho3D/LuaScript
 Source/Urho3D/LuaScript/generated/ResourceLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Resource/XMLElement.pkg
 Source/Urho3D/LuaScript/generated/ResourceLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Resource/XMLFile.pkg
 Source/Urho3D/LuaScript/generated/ResourceLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Generating tolua++ API binding on the fly for Resource"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Generating tolua++ API binding on the fly for Resource"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/ResourceLuaAPI.cpp ResourceLuaAPI.pkg
 
 Source/Urho3D/LuaScript/generated/SceneLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/SceneLuaAPI.pkg
@@ -250,7 +258,7 @@ Source/Urho3D/LuaScript/generated/SceneLuaAPI.cpp: ../Source/Urho3D/LuaScript/pk
 Source/Urho3D/LuaScript/generated/SceneLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Scene/SplinePath.pkg
 Source/Urho3D/LuaScript/generated/SceneLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Scene/ValueAnimation.pkg
 Source/Urho3D/LuaScript/generated/SceneLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Generating tolua++ API binding on the fly for Scene"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Generating tolua++ API binding on the fly for Scene"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/SceneLuaAPI.cpp SceneLuaAPI.pkg
 
 Source/Urho3D/LuaScript/generated/UILuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/UILuaAPI.pkg
@@ -280,7 +288,7 @@ Source/Urho3D/LuaScript/generated/UILuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/
 Source/Urho3D/LuaScript/generated/UILuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/UI/View3D.pkg
 Source/Urho3D/LuaScript/generated/UILuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/UI/Window.pkg
 Source/Urho3D/LuaScript/generated/UILuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Generating tolua++ API binding on the fly for UI"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Generating tolua++ API binding on the fly for UI"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/UILuaAPI.cpp UILuaAPI.pkg
 
 Source/Urho3D/LuaScript/generated/Urho2DLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Urho2DLuaAPI.pkg
@@ -318,7 +326,7 @@ Source/Urho3D/LuaScript/generated/Urho2DLuaAPI.cpp: ../Source/Urho3D/LuaScript/p
 Source/Urho3D/LuaScript/generated/Urho2DLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Urho2D/TileMapLayer2D.pkg
 Source/Urho3D/LuaScript/generated/Urho2DLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/Urho2D/TmxFile2D.pkg
 Source/Urho3D/LuaScript/generated/Urho2DLuaAPI.cpp: ../Source/Urho3D/LuaScript/pkgs/ToCppHook.lua
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Generating tolua++ API binding on the fly for Urho2D"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Generating tolua++ API binding on the fly for Urho2D"
 	cd /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/pkgs && /code/dev/algebrakart/v1/build/bin/tool/tolua++ -E Urho3D -L ToCppHook.lua -o /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/Urho2DLuaAPI.cpp Urho2DLuaAPI.pkg
 
 Source/Urho3D/librevision.h: Source/ThirdParty/ETCPACK/libETCPACK.a
@@ -341,6 +349,7 @@ Source/Urho3D/librevision.h: Source/ThirdParty/Recast/libRecast.a
 Source/Urho3D/librevision.h: Source/ThirdParty/Box2D/libBox2D.a
 Source/Urho3D/librevision.h: Source/ThirdParty/WebP/libWebP.a
 Source/Urho3D/librevision.h: Source/ThirdParty/Bullet/libBullet.a
+Source/Urho3D/librevision.h: Source/ThirdParty/Tracy/libTracy.a
 Source/Urho3D/librevision.h: Source/ThirdParty/GLEW/libGLEW.a
 Source/Urho3D/librevision.h: ../cmake/Modules/GetUrhoRevision.cmake
 	cd /code/dev/algebrakart/v1 && /usr/bin/cmake -DFILENAME=/code/dev/algebrakart/v1/build/Source/Urho3D/librevision.h.new -P cmake/Modules/GetUrhoRevision.cmake
@@ -363,13 +372,13 @@ Source/Urho3D/Precompiled.h.Release.pch.trigger: ../Source/Urho3D/Urho3DConfig.h
 Source/Urho3D/Precompiled.h.Release.pch.trigger: ../Source/Urho3D/Container/Vector.h
 Source/Urho3D/Precompiled.h.Release.pch.trigger: ../Source/Urho3D/Container/HashSet.h
 Source/Urho3D/Precompiled.h.Release.pch.trigger: ../Source/Urho3D/Container/Str.h
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Precompiling header file 'Precompiled.h' for Release configuration"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Precompiling header file 'Precompiled.h' for Release configuration"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++ @/code/dev/algebrakart/v1/build/Source/Urho3D/Precompiled.h.Release.pch.rsp -o Precompiled.h.gch/Precompiled.h.gch.Release /code/dev/algebrakart/v1/Source/Urho3D/Precompiled.h
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/cmake -E touch Precompiled.h.Release.pch.trigger
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Addons.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Addons.cpp.o: ../Source/Urho3D/AngelScript/Addons.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Addons.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Addons.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Addons.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Addons.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Addons.cpp.i: cmake_force
@@ -382,7 +391,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Addons.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/CoreAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/CoreAPI.cpp.o: ../Source/Urho3D/AngelScript/CoreAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/CoreAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/CoreAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/CoreAPI.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/CoreAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/CoreAPI.cpp.i: cmake_force
@@ -395,7 +404,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/CoreAPI.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedClasses.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedClasses.cpp.o: ../Source/Urho3D/AngelScript/GeneratedClasses.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedClasses.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedClasses.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/GeneratedClasses.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/GeneratedClasses.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedClasses.cpp.i: cmake_force
@@ -408,7 +417,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedClasses.cpp.s: cmake_fo
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedDefaultConstructors.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedDefaultConstructors.cpp.o: ../Source/Urho3D/AngelScript/GeneratedDefaultConstructors.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedDefaultConstructors.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedDefaultConstructors.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/GeneratedDefaultConstructors.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/GeneratedDefaultConstructors.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedDefaultConstructors.cpp.i: cmake_force
@@ -421,7 +430,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedDefaultConstructors.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedEnums.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedEnums.cpp.o: ../Source/Urho3D/AngelScript/GeneratedEnums.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedEnums.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedEnums.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/GeneratedEnums.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/GeneratedEnums.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedEnums.cpp.i: cmake_force
@@ -434,7 +443,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedEnums.cpp.s: cmake_forc
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedGlobalFunctions.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedGlobalFunctions.cpp.o: ../Source/Urho3D/AngelScript/GeneratedGlobalFunctions.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedGlobalFunctions.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedGlobalFunctions.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/GeneratedGlobalFunctions.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/GeneratedGlobalFunctions.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedGlobalFunctions.cpp.i: cmake_force
@@ -447,7 +456,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedGlobalFunctions.cpp.s: 
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedGlobalVariables.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedGlobalVariables.cpp.o: ../Source/Urho3D/AngelScript/GeneratedGlobalVariables.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedGlobalVariables.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedGlobalVariables.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/GeneratedGlobalVariables.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/GeneratedGlobalVariables.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedGlobalVariables.cpp.i: cmake_force
@@ -460,7 +469,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedGlobalVariables.cpp.s: 
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedObjectTypes.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedObjectTypes.cpp.o: ../Source/Urho3D/AngelScript/GeneratedObjectTypes.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedObjectTypes.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedObjectTypes.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/GeneratedObjectTypes.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/GeneratedObjectTypes.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedObjectTypes.cpp.i: cmake_force
@@ -473,7 +482,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/GeneratedObjectTypes.cpp.s: cmak
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Classes.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Classes.cpp.o: ../Source/Urho3D/AngelScript/Generated_Classes.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Classes.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Classes.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Classes.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Classes.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Classes.cpp.i: cmake_force
@@ -486,7 +495,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Classes.cpp.s: cmake_f
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_DefaultConstructors.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_DefaultConstructors.cpp.o: ../Source/Urho3D/AngelScript/Generated_DefaultConstructors.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_DefaultConstructors.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_DefaultConstructors.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_DefaultConstructors.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_DefaultConstructors.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_DefaultConstructors.cpp.i: cmake_force
@@ -499,7 +508,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_DefaultConstructors.cp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Enums.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Enums.cpp.o: ../Source/Urho3D/AngelScript/Generated_Enums.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Enums.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Enums.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Enums.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Enums.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Enums.cpp.i: cmake_force
@@ -512,7 +521,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Enums.cpp.s: cmake_for
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_GlobalFunctions.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_GlobalFunctions.cpp.o: ../Source/Urho3D/AngelScript/Generated_GlobalFunctions.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_GlobalFunctions.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_GlobalFunctions.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_GlobalFunctions.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_GlobalFunctions.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_GlobalFunctions.cpp.i: cmake_force
@@ -525,7 +534,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_GlobalFunctions.cpp.s:
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_GlobalVariables.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_GlobalVariables.cpp.o: ../Source/Urho3D/AngelScript/Generated_GlobalVariables.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_GlobalVariables.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_GlobalVariables.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_GlobalVariables.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_GlobalVariables.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_GlobalVariables.cpp.i: cmake_force
@@ -538,7 +547,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_GlobalVariables.cpp.s:
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_A.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_A.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_A.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_A.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_A.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_A.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_A.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_A.cpp.i: cmake_force
@@ -551,7 +560,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_A.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_B.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_B.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_B.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_B.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_B.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_B.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_B.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_B.cpp.i: cmake_force
@@ -564,7 +573,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_B.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Ca_Cm.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Ca_Cm.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_Ca_Cm.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Ca_Cm.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Ca_Cm.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Ca_Cm.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_Ca_Cm.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Ca_Cm.cpp.i: cmake_force
@@ -577,7 +586,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Ca_Cm.cpp.s: c
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Cn_Cz.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Cn_Cz.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_Cn_Cz.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Cn_Cz.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Cn_Cz.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Cn_Cz.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_Cn_Cz.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Cn_Cz.cpp.i: cmake_force
@@ -590,7 +599,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Cn_Cz.cpp.s: c
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Constraint.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Constraint.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_Constraint.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Constraint.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Constraint.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Constraint.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_Constraint.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Constraint.cpp.i: cmake_force
@@ -603,7 +612,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Constraint.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_D.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_D.cpp.i: cmake_force
@@ -616,7 +625,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_D.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_E.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_E.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_E.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_E.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_E.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_E.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_E.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_E.cpp.i: cmake_force
@@ -629,7 +638,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_E.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_F.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_F.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_F.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_F.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_F.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_F.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_F.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_F.cpp.i: cmake_force
@@ -642,7 +651,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_F.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_G.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_G.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_G.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_G.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_G.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_G.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_G.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_G.cpp.i: cmake_force
@@ -655,7 +664,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_G.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_H.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_H.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_H.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_H.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_H.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_H.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_H.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_H.cpp.i: cmake_force
@@ -668,7 +677,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_H.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_I.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_I.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_I.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_I.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_I.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_I.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_I.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_I.cpp.i: cmake_force
@@ -681,7 +690,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_I.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_J.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_J.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_J.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_J.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_J.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_J.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_J.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_J.cpp.i: cmake_force
@@ -694,7 +703,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_J.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_K.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_K.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_K.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_K.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_K.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_K.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_K.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_K.cpp.i: cmake_force
@@ -707,7 +716,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_K.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_L.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_L.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_L.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_L.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_L.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_L.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_L.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_L.cpp.i: cmake_force
@@ -720,7 +729,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_L.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_M.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_M.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_M.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_M.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_M.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_M.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_M.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_M.cpp.i: cmake_force
@@ -733,7 +742,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_M.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_N.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_N.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_N.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_N.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_N.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_N.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_N.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_N.cpp.i: cmake_force
@@ -746,7 +755,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_N.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_O.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_O.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_O.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_O.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_O.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_O.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_O.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_O.cpp.i: cmake_force
@@ -759,7 +768,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_O.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Other.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Other.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_Other.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Other.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Other.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Other.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_Other.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Other.cpp.i: cmake_force
@@ -772,7 +781,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Other.cpp.s: c
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_P.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_P.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_P.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_P.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_P.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_P.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_P.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_P.cpp.i: cmake_force
@@ -785,7 +794,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_P.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Q.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Q.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_Q.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Q.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Q.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Q.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_Q.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Q.cpp.i: cmake_force
@@ -798,7 +807,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Q.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_R.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_R.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_R.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_R.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_52) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_R.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_R.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_R.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_R.cpp.i: cmake_force
@@ -811,7 +820,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_R.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Sa_Sm.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Sa_Sm.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_Sa_Sm.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_52) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Sa_Sm.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_53) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Sa_Sm.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Sa_Sm.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_Sa_Sm.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Sa_Sm.cpp.i: cmake_force
@@ -824,7 +833,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Sa_Sm.cpp.s: c
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Sn_Sz.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Sn_Sz.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_Sn_Sz.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_53) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Sn_Sz.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_54) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Sn_Sz.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Sn_Sz.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_Sn_Sz.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Sn_Sz.cpp.i: cmake_force
@@ -837,7 +846,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Sn_Sz.cpp.s: c
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Ta_Tm.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Ta_Tm.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_Ta_Tm.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_54) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Ta_Tm.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_55) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Ta_Tm.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Ta_Tm.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_Ta_Tm.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Ta_Tm.cpp.i: cmake_force
@@ -850,7 +859,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Ta_Tm.cpp.s: c
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Tn_Tz.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Tn_Tz.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_Tn_Tz.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_55) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Tn_Tz.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_56) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Tn_Tz.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Tn_Tz.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_Tn_Tz.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Tn_Tz.cpp.i: cmake_force
@@ -863,7 +872,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Tn_Tz.cpp.s: c
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_U.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_U.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_U.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_56) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_U.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_57) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_U.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_U.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_U.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_U.cpp.i: cmake_force
@@ -876,7 +885,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_U.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_V.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_V.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_V.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_57) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_V.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_58) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_V.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_V.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_V.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_V.cpp.i: cmake_force
@@ -889,7 +898,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_V.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_W.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_W.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_W.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_58) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_W.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_59) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_W.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_W.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_W.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_W.cpp.i: cmake_force
@@ -902,7 +911,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_W.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_X.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_X.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_X.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_59) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_X.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_60) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_X.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_X.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_X.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_X.cpp.i: cmake_force
@@ -915,7 +924,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_X.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Y.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Y.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_Y.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_60) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Y.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_61) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Y.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Y.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_Y.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Y.cpp.i: cmake_force
@@ -928,7 +937,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Y.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Z.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Z.cpp.o: ../Source/Urho3D/AngelScript/Generated_Members_Z.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_61) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Z.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_62) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Z.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Z.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_Members_Z.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Z.cpp.i: cmake_force
@@ -941,7 +950,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_Members_Z.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_ObjectTypes.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_ObjectTypes.cpp.o: ../Source/Urho3D/AngelScript/Generated_ObjectTypes.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_62) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_ObjectTypes.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_63) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_ObjectTypes.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Generated_ObjectTypes.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Generated_ObjectTypes.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_ObjectTypes.cpp.i: cmake_force
@@ -954,7 +963,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Generated_ObjectTypes.cpp.s: cma
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual.cpp.o: ../Source/Urho3D/AngelScript/Manual.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_63) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_64) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual.cpp.i: cmake_force
@@ -967,7 +976,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Audio.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Audio.cpp.o: ../Source/Urho3D/AngelScript/Manual_Audio.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_64) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Audio.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_65) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Audio.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_Audio.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_Audio.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Audio.cpp.i: cmake_force
@@ -980,7 +989,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Audio.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Container.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Container.cpp.o: ../Source/Urho3D/AngelScript/Manual_Container.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_65) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Container.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_66) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Container.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_Container.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_Container.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Container.cpp.i: cmake_force
@@ -993,7 +1002,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Container.cpp.s: cmake_fo
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Core.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Core.cpp.o: ../Source/Urho3D/AngelScript/Manual_Core.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_66) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Core.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_67) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Core.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_Core.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_Core.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Core.cpp.i: cmake_force
@@ -1006,7 +1015,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Core.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Database.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Database.cpp.o: ../Source/Urho3D/AngelScript/Manual_Database.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_67) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Database.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_68) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Database.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_Database.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_Database.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Database.cpp.i: cmake_force
@@ -1019,7 +1028,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Database.cpp.s: cmake_for
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Engine.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Engine.cpp.o: ../Source/Urho3D/AngelScript/Manual_Engine.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_68) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Engine.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_69) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Engine.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_Engine.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_Engine.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Engine.cpp.i: cmake_force
@@ -1032,7 +1041,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Engine.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Graphics.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Graphics.cpp.o: ../Source/Urho3D/AngelScript/Manual_Graphics.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_69) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Graphics.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_70) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Graphics.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_Graphics.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_Graphics.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Graphics.cpp.i: cmake_force
@@ -1045,7 +1054,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Graphics.cpp.s: cmake_for
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_IK.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_IK.cpp.o: ../Source/Urho3D/AngelScript/Manual_IK.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_70) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_IK.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_71) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_IK.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_IK.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_IK.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_IK.cpp.i: cmake_force
@@ -1058,7 +1067,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_IK.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_IO.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_IO.cpp.o: ../Source/Urho3D/AngelScript/Manual_IO.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_71) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_IO.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_72) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_IO.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_IO.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_IO.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_IO.cpp.i: cmake_force
@@ -1071,7 +1080,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_IO.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Input.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Input.cpp.o: ../Source/Urho3D/AngelScript/Manual_Input.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_72) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Input.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_73) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Input.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_Input.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_Input.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Input.cpp.i: cmake_force
@@ -1084,7 +1093,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Input.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Math.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Math.cpp.o: ../Source/Urho3D/AngelScript/Manual_Math.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_73) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Math.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_74) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Math.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_Math.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_Math.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Math.cpp.i: cmake_force
@@ -1097,7 +1106,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Math.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Navigation.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Navigation.cpp.o: ../Source/Urho3D/AngelScript/Manual_Navigation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_74) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Navigation.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_75) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Navigation.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_Navigation.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_Navigation.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Navigation.cpp.i: cmake_force
@@ -1110,7 +1119,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Navigation.cpp.s: cmake_f
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Network.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Network.cpp.o: ../Source/Urho3D/AngelScript/Manual_Network.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_75) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Network.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_76) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Network.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_Network.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_Network.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Network.cpp.i: cmake_force
@@ -1123,7 +1132,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Network.cpp.s: cmake_forc
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Physics.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Physics.cpp.o: ../Source/Urho3D/AngelScript/Manual_Physics.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_76) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Physics.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_77) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Physics.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_Physics.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_Physics.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Physics.cpp.i: cmake_force
@@ -1136,7 +1145,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Physics.cpp.s: cmake_forc
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Resource.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Resource.cpp.o: ../Source/Urho3D/AngelScript/Manual_Resource.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_77) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Resource.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_78) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Resource.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_Resource.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_Resource.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Resource.cpp.i: cmake_force
@@ -1149,7 +1158,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Resource.cpp.s: cmake_for
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Scene.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Scene.cpp.o: ../Source/Urho3D/AngelScript/Manual_Scene.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_78) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Scene.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_79) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Scene.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_Scene.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_Scene.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Scene.cpp.i: cmake_force
@@ -1162,7 +1171,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Scene.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_UI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_UI.cpp.o: ../Source/Urho3D/AngelScript/Manual_UI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_79) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_UI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_80) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_UI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_UI.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_UI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_UI.cpp.i: cmake_force
@@ -1175,7 +1184,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_UI.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Urho2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Urho2D.cpp.o: ../Source/Urho3D/AngelScript/Manual_Urho2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_80) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Urho2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_81) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Urho2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Manual_Urho2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Manual_Urho2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Urho2D.cpp.i: cmake_force
@@ -1188,7 +1197,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Manual_Urho2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/SceneAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/SceneAPI.cpp.o: ../Source/Urho3D/AngelScript/SceneAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_81) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/SceneAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_82) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/SceneAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/SceneAPI.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/SceneAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/SceneAPI.cpp.i: cmake_force
@@ -1201,7 +1210,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/SceneAPI.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Script.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Script.cpp.o: ../Source/Urho3D/AngelScript/Script.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_82) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Script.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_83) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Script.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/Script.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/Script.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Script.cpp.i: cmake_force
@@ -1214,7 +1223,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/Script.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptAPI.cpp.o: ../Source/Urho3D/AngelScript/ScriptAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_83) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_84) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/ScriptAPI.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/ScriptAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptAPI.cpp.i: cmake_force
@@ -1227,7 +1236,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptAPI.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptAPIDump.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptAPIDump.cpp.o: ../Source/Urho3D/AngelScript/ScriptAPIDump.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_84) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptAPIDump.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_85) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptAPIDump.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/ScriptAPIDump.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/ScriptAPIDump.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptAPIDump.cpp.i: cmake_force
@@ -1240,7 +1249,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptAPIDump.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptFile.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptFile.cpp.o: ../Source/Urho3D/AngelScript/ScriptFile.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_85) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptFile.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_86) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptFile.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/ScriptFile.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/ScriptFile.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptFile.cpp.i: cmake_force
@@ -1253,7 +1262,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptFile.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptInstance.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptInstance.cpp.o: ../Source/Urho3D/AngelScript/ScriptInstance.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_86) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptInstance.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_87) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptInstance.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/AngelScript/ScriptInstance.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/AngelScript/ScriptInstance.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptInstance.cpp.i: cmake_force
@@ -1266,7 +1275,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/AngelScript/ScriptInstance.cpp.s: cmake_forc
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/Audio.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/Audio.cpp.o: ../Source/Urho3D/Audio/Audio.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_87) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/Audio.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_88) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/Audio.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Audio/Audio.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Audio/Audio.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/Audio.cpp.i: cmake_force
@@ -1279,7 +1288,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/Audio.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/BufferedSoundStream.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/BufferedSoundStream.cpp.o: ../Source/Urho3D/Audio/BufferedSoundStream.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_88) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/BufferedSoundStream.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_89) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/BufferedSoundStream.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Audio/BufferedSoundStream.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Audio/BufferedSoundStream.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/BufferedSoundStream.cpp.i: cmake_force
@@ -1292,7 +1301,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/BufferedSoundStream.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/OggVorbisSoundStream.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/OggVorbisSoundStream.cpp.o: ../Source/Urho3D/Audio/OggVorbisSoundStream.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_89) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/OggVorbisSoundStream.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_90) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/OggVorbisSoundStream.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Audio/OggVorbisSoundStream.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Audio/OggVorbisSoundStream.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/OggVorbisSoundStream.cpp.i: cmake_force
@@ -1305,7 +1314,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/OggVorbisSoundStream.cpp.s: cmake_forc
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/Sound.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/Sound.cpp.o: ../Source/Urho3D/Audio/Sound.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_90) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/Sound.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_91) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/Sound.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Audio/Sound.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Audio/Sound.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/Sound.cpp.i: cmake_force
@@ -1318,7 +1327,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/Sound.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundListener.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundListener.cpp.o: ../Source/Urho3D/Audio/SoundListener.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_91) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundListener.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_92) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundListener.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Audio/SoundListener.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Audio/SoundListener.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundListener.cpp.i: cmake_force
@@ -1331,7 +1340,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundListener.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundSource.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundSource.cpp.o: ../Source/Urho3D/Audio/SoundSource.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_92) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundSource.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_93) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundSource.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Audio/SoundSource.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Audio/SoundSource.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundSource.cpp.i: cmake_force
@@ -1344,7 +1353,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundSource.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundSource3D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundSource3D.cpp.o: ../Source/Urho3D/Audio/SoundSource3D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_93) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundSource3D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_94) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundSource3D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Audio/SoundSource3D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Audio/SoundSource3D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundSource3D.cpp.i: cmake_force
@@ -1357,7 +1366,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundSource3D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundStream.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundStream.cpp.o: ../Source/Urho3D/Audio/SoundStream.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_94) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundStream.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_95) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundStream.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Audio/SoundStream.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Audio/SoundStream.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundStream.cpp.i: cmake_force
@@ -1370,7 +1379,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Audio/SoundStream.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Allocator.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Allocator.cpp.o: ../Source/Urho3D/Container/Allocator.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_95) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Allocator.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_96) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Allocator.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Container/Allocator.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Container/Allocator.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Allocator.cpp.i: cmake_force
@@ -1383,7 +1392,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Allocator.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/HashBase.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/HashBase.cpp.o: ../Source/Urho3D/Container/HashBase.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_96) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Container/HashBase.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_97) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Container/HashBase.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Container/HashBase.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Container/HashBase.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/HashBase.cpp.i: cmake_force
@@ -1396,7 +1405,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Container/HashBase.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/RefCounted.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/RefCounted.cpp.o: ../Source/Urho3D/Container/RefCounted.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_97) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Container/RefCounted.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_98) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Container/RefCounted.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Container/RefCounted.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Container/RefCounted.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/RefCounted.cpp.i: cmake_force
@@ -1409,7 +1418,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Container/RefCounted.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Str.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Str.cpp.o: ../Source/Urho3D/Container/Str.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_98) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Str.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_99) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Str.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Container/Str.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Container/Str.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Str.cpp.i: cmake_force
@@ -1422,7 +1431,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Str.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Swap.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Swap.cpp.o: ../Source/Urho3D/Container/Swap.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_99) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Swap.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_100) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Swap.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Container/Swap.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Container/Swap.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Swap.cpp.i: cmake_force
@@ -1435,7 +1444,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Container/Swap.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/VectorBase.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/VectorBase.cpp.o: ../Source/Urho3D/Container/VectorBase.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_100) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Container/VectorBase.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_101) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Container/VectorBase.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Container/VectorBase.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Container/VectorBase.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Container/VectorBase.cpp.i: cmake_force
@@ -1448,7 +1457,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Container/VectorBase.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Condition.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Condition.cpp.o: ../Source/Urho3D/Core/Condition.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_101) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Condition.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_102) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Condition.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/Condition.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/Condition.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Condition.cpp.i: cmake_force
@@ -1461,7 +1470,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Condition.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Context.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Context.cpp.o: ../Source/Urho3D/Core/Context.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_102) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Context.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_103) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Context.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/Context.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/Context.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Context.cpp.i: cmake_force
@@ -1474,7 +1483,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Context.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/EventProfiler.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/EventProfiler.cpp.o: ../Source/Urho3D/Core/EventProfiler.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_103) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/EventProfiler.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_104) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/EventProfiler.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/EventProfiler.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/EventProfiler.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/EventProfiler.cpp.i: cmake_force
@@ -1487,7 +1496,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/EventProfiler.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/MiniDump.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/MiniDump.cpp.o: ../Source/Urho3D/Core/MiniDump.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_104) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/MiniDump.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_105) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/MiniDump.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/MiniDump.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/MiniDump.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/MiniDump.cpp.i: cmake_force
@@ -1500,7 +1509,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/MiniDump.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Mutex.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Mutex.cpp.o: ../Source/Urho3D/Core/Mutex.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_105) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Mutex.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_106) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Mutex.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/Mutex.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/Mutex.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Mutex.cpp.i: cmake_force
@@ -1513,7 +1522,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Mutex.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Object.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Object.cpp.o: ../Source/Urho3D/Core/Object.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_106) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Object.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_107) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Object.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/Object.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/Object.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Object.cpp.i: cmake_force
@@ -1526,7 +1535,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Object.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/ProcessUtils.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/ProcessUtils.cpp.o: ../Source/Urho3D/Core/ProcessUtils.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_107) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/ProcessUtils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_108) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/ProcessUtils.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/ProcessUtils.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/ProcessUtils.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/ProcessUtils.cpp.i: cmake_force
@@ -1539,7 +1548,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/ProcessUtils.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Profiler.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Profiler.cpp.o: ../Source/Urho3D/Core/Profiler.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_108) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Profiler.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_109) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Profiler.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/Profiler.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/Profiler.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Profiler.cpp.i: cmake_force
@@ -1552,7 +1561,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Profiler.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Spline.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Spline.cpp.o: ../Source/Urho3D/Core/Spline.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_109) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Spline.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_110) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Spline.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/Spline.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/Spline.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Spline.cpp.i: cmake_force
@@ -1565,7 +1574,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Spline.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/StringHashRegister.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/StringHashRegister.cpp.o: ../Source/Urho3D/Core/StringHashRegister.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_110) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/StringHashRegister.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_111) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/StringHashRegister.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/StringHashRegister.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/StringHashRegister.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/StringHashRegister.cpp.i: cmake_force
@@ -1578,7 +1587,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/StringHashRegister.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/StringUtils.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/StringUtils.cpp.o: ../Source/Urho3D/Core/StringUtils.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_111) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/StringUtils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_112) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/StringUtils.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/StringUtils.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/StringUtils.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/StringUtils.cpp.i: cmake_force
@@ -1591,7 +1600,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/StringUtils.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Thread.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Thread.cpp.o: ../Source/Urho3D/Core/Thread.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_112) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Thread.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_113) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Thread.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/Thread.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/Thread.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Thread.cpp.i: cmake_force
@@ -1604,7 +1613,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Thread.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Timer.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Timer.cpp.o: ../Source/Urho3D/Core/Timer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_113) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Timer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_114) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Timer.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/Timer.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/Timer.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Timer.cpp.i: cmake_force
@@ -1617,7 +1626,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Timer.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Variant.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Variant.cpp.o: ../Source/Urho3D/Core/Variant.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_114) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Variant.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_115) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Variant.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/Variant.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/Variant.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Variant.cpp.i: cmake_force
@@ -1630,7 +1639,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Variant.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/WorkQueue.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/WorkQueue.cpp.o: ../Source/Urho3D/Core/WorkQueue.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_115) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/WorkQueue.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_116) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Core/WorkQueue.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Core/WorkQueue.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Core/WorkQueue.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Core/WorkQueue.cpp.i: cmake_force
@@ -1641,9 +1650,35 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Core/WorkQueue.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Urho3D.dir/Core/WorkQueue.cpp.s"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /code/dev/algebrakart/v1/Source/Urho3D/Core/WorkQueue.cpp -o CMakeFiles/Urho3D.dir/Core/WorkQueue.cpp.s
 
+Source/Urho3D/CMakeFiles/Urho3D.dir/Database/Database.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
+Source/Urho3D/CMakeFiles/Urho3D.dir/Database/Database.cpp.o: ../Source/Urho3D/Database/Database.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_117) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Database/Database.cpp.o"
+	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Database/Database.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Database/Database.cpp
+
+Source/Urho3D/CMakeFiles/Urho3D.dir/Database/Database.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Urho3D.dir/Database/Database.cpp.i"
+	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /code/dev/algebrakart/v1/Source/Urho3D/Database/Database.cpp > CMakeFiles/Urho3D.dir/Database/Database.cpp.i
+
+Source/Urho3D/CMakeFiles/Urho3D.dir/Database/Database.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Urho3D.dir/Database/Database.cpp.s"
+	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /code/dev/algebrakart/v1/Source/Urho3D/Database/Database.cpp -o CMakeFiles/Urho3D.dir/Database/Database.cpp.s
+
+Source/Urho3D/CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
+Source/Urho3D/CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.o: ../Source/Urho3D/Database/ODBC/ODBCConnection.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_118) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.o"
+	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Database/ODBC/ODBCConnection.cpp
+
+Source/Urho3D/CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.i"
+	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /code/dev/algebrakart/v1/Source/Urho3D/Database/ODBC/ODBCConnection.cpp > CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.i
+
+Source/Urho3D/CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.s"
+	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /code/dev/algebrakart/v1/Source/Urho3D/Database/ODBC/ODBCConnection.cpp -o CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.s
+
 Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Application.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Application.cpp.o: ../Source/Urho3D/Engine/Application.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_116) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Application.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_119) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Application.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Engine/Application.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Engine/Application.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Application.cpp.i: cmake_force
@@ -1656,7 +1691,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Application.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Console.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Console.cpp.o: ../Source/Urho3D/Engine/Console.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_117) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Console.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_120) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Console.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Engine/Console.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Engine/Console.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Console.cpp.i: cmake_force
@@ -1669,7 +1704,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Console.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/DebugHud.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/DebugHud.cpp.o: ../Source/Urho3D/Engine/DebugHud.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_118) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/DebugHud.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_121) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/DebugHud.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Engine/DebugHud.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Engine/DebugHud.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/DebugHud.cpp.i: cmake_force
@@ -1682,7 +1717,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/DebugHud.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Engine.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Engine.cpp.o: ../Source/Urho3D/Engine/Engine.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_119) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Engine.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_122) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Engine.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Engine/Engine.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Engine/Engine.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Engine.cpp.i: cmake_force
@@ -1695,7 +1730,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Engine.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimatedModel.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimatedModel.cpp.o: ../Source/Urho3D/Graphics/AnimatedModel.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_120) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimatedModel.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_123) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimatedModel.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/AnimatedModel.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/AnimatedModel.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimatedModel.cpp.i: cmake_force
@@ -1708,7 +1743,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimatedModel.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Animation.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Animation.cpp.o: ../Source/Urho3D/Graphics/Animation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_121) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Animation.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_124) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Animation.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Animation.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Animation.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Animation.cpp.i: cmake_force
@@ -1721,7 +1756,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Animation.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimationController.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimationController.cpp.o: ../Source/Urho3D/Graphics/AnimationController.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_122) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimationController.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_125) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimationController.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/AnimationController.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/AnimationController.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimationController.cpp.i: cmake_force
@@ -1734,7 +1769,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimationController.cpp.s: cmake_fo
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimationState.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimationState.cpp.o: ../Source/Urho3D/Graphics/AnimationState.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_123) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimationState.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_126) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimationState.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/AnimationState.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/AnimationState.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimationState.cpp.i: cmake_force
@@ -1747,7 +1782,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/AnimationState.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Batch.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Batch.cpp.o: ../Source/Urho3D/Graphics/Batch.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_124) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Batch.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_127) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Batch.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Batch.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Batch.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Batch.cpp.i: cmake_force
@@ -1760,7 +1795,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Batch.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/BillboardSet.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/BillboardSet.cpp.o: ../Source/Urho3D/Graphics/BillboardSet.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_125) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/BillboardSet.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_128) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/BillboardSet.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/BillboardSet.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/BillboardSet.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/BillboardSet.cpp.i: cmake_force
@@ -1773,7 +1808,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/BillboardSet.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Camera.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Camera.cpp.o: ../Source/Urho3D/Graphics/Camera.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_126) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Camera.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_129) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Camera.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Camera.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Camera.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Camera.cpp.i: cmake_force
@@ -1786,7 +1821,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Camera.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ConstantBuffer.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ConstantBuffer.cpp.o: ../Source/Urho3D/Graphics/ConstantBuffer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_127) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ConstantBuffer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_130) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ConstantBuffer.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/ConstantBuffer.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/ConstantBuffer.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ConstantBuffer.cpp.i: cmake_force
@@ -1799,7 +1834,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ConstantBuffer.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/CustomGeometry.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/CustomGeometry.cpp.o: ../Source/Urho3D/Graphics/CustomGeometry.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_128) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/CustomGeometry.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_131) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/CustomGeometry.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/CustomGeometry.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/CustomGeometry.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/CustomGeometry.cpp.i: cmake_force
@@ -1812,7 +1847,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/CustomGeometry.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/DebugRenderer.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/DebugRenderer.cpp.o: ../Source/Urho3D/Graphics/DebugRenderer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_129) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/DebugRenderer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_132) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/DebugRenderer.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/DebugRenderer.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/DebugRenderer.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/DebugRenderer.cpp.i: cmake_force
@@ -1825,7 +1860,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/DebugRenderer.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/DecalSet.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/DecalSet.cpp.o: ../Source/Urho3D/Graphics/DecalSet.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_130) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/DecalSet.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_133) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/DecalSet.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/DecalSet.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/DecalSet.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/DecalSet.cpp.i: cmake_force
@@ -1838,7 +1873,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/DecalSet.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Drawable.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Drawable.cpp.o: ../Source/Urho3D/Graphics/Drawable.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_131) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Drawable.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_134) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Drawable.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Drawable.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Drawable.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Drawable.cpp.i: cmake_force
@@ -1851,7 +1886,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Drawable.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/GPUObject.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/GPUObject.cpp.o: ../Source/Urho3D/Graphics/GPUObject.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_132) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/GPUObject.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_135) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/GPUObject.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/GPUObject.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/GPUObject.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/GPUObject.cpp.i: cmake_force
@@ -1864,7 +1899,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/GPUObject.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Geometry.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Geometry.cpp.o: ../Source/Urho3D/Graphics/Geometry.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_133) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Geometry.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_136) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Geometry.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Geometry.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Geometry.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Geometry.cpp.i: cmake_force
@@ -1877,7 +1912,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Geometry.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Graphics.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Graphics.cpp.o: ../Source/Urho3D/Graphics/Graphics.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_134) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Graphics.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_137) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Graphics.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Graphics.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Graphics.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Graphics.cpp.i: cmake_force
@@ -1890,7 +1925,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Graphics.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/GraphicsDefs.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/GraphicsDefs.cpp.o: ../Source/Urho3D/Graphics/GraphicsDefs.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_135) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/GraphicsDefs.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_138) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/GraphicsDefs.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/GraphicsDefs.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/GraphicsDefs.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/GraphicsDefs.cpp.i: cmake_force
@@ -1903,7 +1938,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/GraphicsDefs.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/IndexBuffer.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/IndexBuffer.cpp.o: ../Source/Urho3D/Graphics/IndexBuffer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_136) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/IndexBuffer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_139) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/IndexBuffer.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/IndexBuffer.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/IndexBuffer.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/IndexBuffer.cpp.i: cmake_force
@@ -1916,7 +1951,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/IndexBuffer.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Light.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Light.cpp.o: ../Source/Urho3D/Graphics/Light.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_137) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Light.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_140) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Light.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Light.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Light.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Light.cpp.i: cmake_force
@@ -1929,7 +1964,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Light.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Material.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Material.cpp.o: ../Source/Urho3D/Graphics/Material.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_138) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Material.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_141) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Material.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Material.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Material.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Material.cpp.i: cmake_force
@@ -1942,7 +1977,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Material.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Model.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Model.cpp.o: ../Source/Urho3D/Graphics/Model.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_139) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Model.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_142) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Model.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Model.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Model.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Model.cpp.i: cmake_force
@@ -1955,7 +1990,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Model.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OcclusionBuffer.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OcclusionBuffer.cpp.o: ../Source/Urho3D/Graphics/OcclusionBuffer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_140) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OcclusionBuffer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_143) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OcclusionBuffer.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/OcclusionBuffer.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/OcclusionBuffer.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OcclusionBuffer.cpp.i: cmake_force
@@ -1968,7 +2003,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OcclusionBuffer.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Octree.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Octree.cpp.o: ../Source/Urho3D/Graphics/Octree.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_141) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Octree.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_144) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Octree.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Octree.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Octree.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Octree.cpp.i: cmake_force
@@ -1981,7 +2016,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Octree.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OctreeQuery.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OctreeQuery.cpp.o: ../Source/Urho3D/Graphics/OctreeQuery.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_142) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OctreeQuery.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_145) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OctreeQuery.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/OctreeQuery.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/OctreeQuery.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OctreeQuery.cpp.i: cmake_force
@@ -1994,7 +2029,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OctreeQuery.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLConstantBuffer.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLConstantBuffer.cpp.o: ../Source/Urho3D/Graphics/OpenGL/OGLConstantBuffer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_143) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLConstantBuffer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_146) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLConstantBuffer.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLConstantBuffer.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/OpenGL/OGLConstantBuffer.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLConstantBuffer.cpp.i: cmake_force
@@ -2007,7 +2042,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLConstantBuffer.cpp.s: cma
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLGraphics.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLGraphics.cpp.o: ../Source/Urho3D/Graphics/OpenGL/OGLGraphics.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_144) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLGraphics.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_147) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLGraphics.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLGraphics.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/OpenGL/OGLGraphics.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLGraphics.cpp.i: cmake_force
@@ -2020,7 +2055,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLGraphics.cpp.s: cmake_for
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLIndexBuffer.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLIndexBuffer.cpp.o: ../Source/Urho3D/Graphics/OpenGL/OGLIndexBuffer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_145) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLIndexBuffer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_148) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLIndexBuffer.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLIndexBuffer.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/OpenGL/OGLIndexBuffer.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLIndexBuffer.cpp.i: cmake_force
@@ -2033,7 +2068,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLIndexBuffer.cpp.s: cmake_
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLRenderSurface.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLRenderSurface.cpp.o: ../Source/Urho3D/Graphics/OpenGL/OGLRenderSurface.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_146) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLRenderSurface.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_149) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLRenderSurface.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLRenderSurface.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/OpenGL/OGLRenderSurface.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLRenderSurface.cpp.i: cmake_force
@@ -2046,7 +2081,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLRenderSurface.cpp.s: cmak
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLShaderProgram.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLShaderProgram.cpp.o: ../Source/Urho3D/Graphics/OpenGL/OGLShaderProgram.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_147) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLShaderProgram.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_150) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLShaderProgram.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLShaderProgram.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/OpenGL/OGLShaderProgram.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLShaderProgram.cpp.i: cmake_force
@@ -2059,7 +2094,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLShaderProgram.cpp.s: cmak
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLShaderVariation.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLShaderVariation.cpp.o: ../Source/Urho3D/Graphics/OpenGL/OGLShaderVariation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_148) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLShaderVariation.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_151) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLShaderVariation.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLShaderVariation.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/OpenGL/OGLShaderVariation.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLShaderVariation.cpp.i: cmake_force
@@ -2072,7 +2107,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLShaderVariation.cpp.s: cm
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture.cpp.o: ../Source/Urho3D/Graphics/OpenGL/OGLTexture.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_149) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_152) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/OpenGL/OGLTexture.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture.cpp.i: cmake_force
@@ -2085,7 +2120,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture.cpp.s: cmake_forc
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture2D.cpp.o: ../Source/Urho3D/Graphics/OpenGL/OGLTexture2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_150) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_153) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/OpenGL/OGLTexture2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture2D.cpp.i: cmake_force
@@ -2098,7 +2133,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture2D.cpp.s: cmake_fo
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture2DArray.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture2DArray.cpp.o: ../Source/Urho3D/Graphics/OpenGL/OGLTexture2DArray.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_151) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture2DArray.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_154) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture2DArray.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture2DArray.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/OpenGL/OGLTexture2DArray.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture2DArray.cpp.i: cmake_force
@@ -2111,7 +2146,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture2DArray.cpp.s: cma
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture3D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture3D.cpp.o: ../Source/Urho3D/Graphics/OpenGL/OGLTexture3D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_152) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture3D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_155) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture3D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture3D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/OpenGL/OGLTexture3D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture3D.cpp.i: cmake_force
@@ -2124,7 +2159,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTexture3D.cpp.s: cmake_fo
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTextureCube.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTextureCube.cpp.o: ../Source/Urho3D/Graphics/OpenGL/OGLTextureCube.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_153) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTextureCube.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_156) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTextureCube.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTextureCube.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/OpenGL/OGLTextureCube.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTextureCube.cpp.i: cmake_force
@@ -2137,7 +2172,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLTextureCube.cpp.s: cmake_
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLVertexBuffer.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLVertexBuffer.cpp.o: ../Source/Urho3D/Graphics/OpenGL/OGLVertexBuffer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_154) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLVertexBuffer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_157) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLVertexBuffer.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLVertexBuffer.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/OpenGL/OGLVertexBuffer.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLVertexBuffer.cpp.i: cmake_force
@@ -2150,7 +2185,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/OpenGL/OGLVertexBuffer.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ParticleEffect.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ParticleEffect.cpp.o: ../Source/Urho3D/Graphics/ParticleEffect.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_155) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ParticleEffect.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_158) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ParticleEffect.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/ParticleEffect.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/ParticleEffect.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ParticleEffect.cpp.i: cmake_force
@@ -2163,7 +2198,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ParticleEffect.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ParticleEmitter.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ParticleEmitter.cpp.o: ../Source/Urho3D/Graphics/ParticleEmitter.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_156) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ParticleEmitter.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_159) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ParticleEmitter.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/ParticleEmitter.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/ParticleEmitter.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ParticleEmitter.cpp.i: cmake_force
@@ -2176,7 +2211,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ParticleEmitter.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RenderPath.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RenderPath.cpp.o: ../Source/Urho3D/Graphics/RenderPath.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_157) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RenderPath.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_160) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RenderPath.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/RenderPath.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/RenderPath.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RenderPath.cpp.i: cmake_force
@@ -2189,7 +2224,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RenderPath.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RenderSurface.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RenderSurface.cpp.o: ../Source/Urho3D/Graphics/RenderSurface.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_158) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RenderSurface.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_161) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RenderSurface.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/RenderSurface.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/RenderSurface.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RenderSurface.cpp.i: cmake_force
@@ -2202,7 +2237,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RenderSurface.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Renderer.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Renderer.cpp.o: ../Source/Urho3D/Graphics/Renderer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_159) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Renderer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_162) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Renderer.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Renderer.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Renderer.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Renderer.cpp.i: cmake_force
@@ -2215,7 +2250,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Renderer.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RibbonTrail.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RibbonTrail.cpp.o: ../Source/Urho3D/Graphics/RibbonTrail.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_160) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RibbonTrail.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_163) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RibbonTrail.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/RibbonTrail.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/RibbonTrail.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RibbonTrail.cpp.i: cmake_force
@@ -2228,7 +2263,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/RibbonTrail.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Shader.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Shader.cpp.o: ../Source/Urho3D/Graphics/Shader.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_161) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Shader.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_164) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Shader.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Shader.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Shader.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Shader.cpp.i: cmake_force
@@ -2241,7 +2276,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Shader.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ShaderPrecache.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ShaderPrecache.cpp.o: ../Source/Urho3D/Graphics/ShaderPrecache.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_162) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ShaderPrecache.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_165) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ShaderPrecache.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/ShaderPrecache.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/ShaderPrecache.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ShaderPrecache.cpp.i: cmake_force
@@ -2254,7 +2289,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ShaderPrecache.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ShaderVariation.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ShaderVariation.cpp.o: ../Source/Urho3D/Graphics/ShaderVariation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_163) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ShaderVariation.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_166) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ShaderVariation.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/ShaderVariation.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/ShaderVariation.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ShaderVariation.cpp.i: cmake_force
@@ -2267,7 +2302,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/ShaderVariation.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Skeleton.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Skeleton.cpp.o: ../Source/Urho3D/Graphics/Skeleton.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_164) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Skeleton.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_167) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Skeleton.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Skeleton.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Skeleton.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Skeleton.cpp.i: cmake_force
@@ -2280,7 +2315,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Skeleton.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Skybox.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Skybox.cpp.o: ../Source/Urho3D/Graphics/Skybox.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_165) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Skybox.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_168) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Skybox.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Skybox.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Skybox.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Skybox.cpp.i: cmake_force
@@ -2293,7 +2328,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Skybox.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/StaticModel.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/StaticModel.cpp.o: ../Source/Urho3D/Graphics/StaticModel.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_166) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/StaticModel.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_169) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/StaticModel.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/StaticModel.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/StaticModel.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/StaticModel.cpp.i: cmake_force
@@ -2306,7 +2341,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/StaticModel.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/StaticModelGroup.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/StaticModelGroup.cpp.o: ../Source/Urho3D/Graphics/StaticModelGroup.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_167) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/StaticModelGroup.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_170) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/StaticModelGroup.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/StaticModelGroup.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/StaticModelGroup.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/StaticModelGroup.cpp.i: cmake_force
@@ -2319,7 +2354,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/StaticModelGroup.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Tangent.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Tangent.cpp.o: ../Source/Urho3D/Graphics/Tangent.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_168) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Tangent.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_171) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Tangent.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Tangent.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Tangent.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Tangent.cpp.i: cmake_force
@@ -2332,7 +2367,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Tangent.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Technique.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Technique.cpp.o: ../Source/Urho3D/Graphics/Technique.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_169) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Technique.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_172) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Technique.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Technique.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Technique.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Technique.cpp.i: cmake_force
@@ -2345,7 +2380,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Technique.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Terrain.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Terrain.cpp.o: ../Source/Urho3D/Graphics/Terrain.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_170) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Terrain.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_173) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Terrain.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Terrain.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Terrain.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Terrain.cpp.i: cmake_force
@@ -2358,7 +2393,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Terrain.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/TerrainPatch.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/TerrainPatch.cpp.o: ../Source/Urho3D/Graphics/TerrainPatch.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_171) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/TerrainPatch.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_174) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/TerrainPatch.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/TerrainPatch.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/TerrainPatch.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/TerrainPatch.cpp.i: cmake_force
@@ -2371,7 +2406,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/TerrainPatch.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture.cpp.o: ../Source/Urho3D/Graphics/Texture.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_172) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_175) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Texture.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Texture.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture.cpp.i: cmake_force
@@ -2384,7 +2419,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture2D.cpp.o: ../Source/Urho3D/Graphics/Texture2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_173) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_176) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Texture2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Texture2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture2D.cpp.i: cmake_force
@@ -2397,7 +2432,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture2DArray.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture2DArray.cpp.o: ../Source/Urho3D/Graphics/Texture2DArray.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_174) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture2DArray.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_177) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture2DArray.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Texture2DArray.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Texture2DArray.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture2DArray.cpp.i: cmake_force
@@ -2410,7 +2445,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture2DArray.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture3D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture3D.cpp.o: ../Source/Urho3D/Graphics/Texture3D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_175) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture3D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_178) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture3D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Texture3D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Texture3D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture3D.cpp.i: cmake_force
@@ -2423,7 +2458,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Texture3D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/TextureCube.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/TextureCube.cpp.o: ../Source/Urho3D/Graphics/TextureCube.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_176) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/TextureCube.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_179) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/TextureCube.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/TextureCube.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/TextureCube.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/TextureCube.cpp.i: cmake_force
@@ -2436,7 +2471,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/TextureCube.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/VertexBuffer.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/VertexBuffer.cpp.o: ../Source/Urho3D/Graphics/VertexBuffer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_177) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/VertexBuffer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_180) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/VertexBuffer.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/VertexBuffer.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/VertexBuffer.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/VertexBuffer.cpp.i: cmake_force
@@ -2449,7 +2484,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/VertexBuffer.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/View.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/View.cpp.o: ../Source/Urho3D/Graphics/View.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_178) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/View.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_181) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/View.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/View.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/View.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/View.cpp.i: cmake_force
@@ -2462,7 +2497,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/View.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Viewport.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Viewport.cpp.o: ../Source/Urho3D/Graphics/Viewport.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_179) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Viewport.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_182) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Viewport.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Viewport.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Viewport.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Viewport.cpp.i: cmake_force
@@ -2475,7 +2510,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Viewport.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Zone.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Zone.cpp.o: ../Source/Urho3D/Graphics/Zone.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_180) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Zone.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_183) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Zone.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Graphics/Zone.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Graphics/Zone.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Zone.cpp.i: cmake_force
@@ -2488,7 +2523,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Graphics/Zone.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IK.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IK.cpp.o: ../Source/Urho3D/IK/IK.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_181) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IK.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_184) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IK.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IK/IK.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IK/IK.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IK.cpp.i: cmake_force
@@ -2501,7 +2536,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IK.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKConstraint.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKConstraint.cpp.o: ../Source/Urho3D/IK/IKConstraint.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_182) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKConstraint.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_185) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKConstraint.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IK/IKConstraint.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IK/IKConstraint.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKConstraint.cpp.i: cmake_force
@@ -2514,7 +2549,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKConstraint.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKConverters.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKConverters.cpp.o: ../Source/Urho3D/IK/IKConverters.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_183) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKConverters.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_186) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKConverters.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IK/IKConverters.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IK/IKConverters.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKConverters.cpp.i: cmake_force
@@ -2527,7 +2562,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKConverters.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKEffector.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKEffector.cpp.o: ../Source/Urho3D/IK/IKEffector.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_184) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKEffector.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_187) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKEffector.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IK/IKEffector.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IK/IKEffector.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKEffector.cpp.i: cmake_force
@@ -2540,7 +2575,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKEffector.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKSolver.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKSolver.cpp.o: ../Source/Urho3D/IK/IKSolver.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_185) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKSolver.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_188) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKSolver.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IK/IKSolver.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IK/IKSolver.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKSolver.cpp.i: cmake_force
@@ -2553,7 +2588,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IK/IKSolver.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Compression.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Compression.cpp.o: ../Source/Urho3D/IO/Compression.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_186) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Compression.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_189) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Compression.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IO/Compression.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IO/Compression.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Compression.cpp.i: cmake_force
@@ -2566,7 +2601,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Compression.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Deserializer.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Deserializer.cpp.o: ../Source/Urho3D/IO/Deserializer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_187) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Deserializer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_190) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Deserializer.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IO/Deserializer.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IO/Deserializer.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Deserializer.cpp.i: cmake_force
@@ -2579,7 +2614,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Deserializer.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/File.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/File.cpp.o: ../Source/Urho3D/IO/File.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_188) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/File.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_191) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/File.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IO/File.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IO/File.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/File.cpp.i: cmake_force
@@ -2592,7 +2627,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IO/File.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/FileSystem.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/FileSystem.cpp.o: ../Source/Urho3D/IO/FileSystem.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_189) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/FileSystem.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_192) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/FileSystem.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IO/FileSystem.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IO/FileSystem.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/FileSystem.cpp.i: cmake_force
@@ -2605,7 +2640,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IO/FileSystem.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/FileWatcher.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/FileWatcher.cpp.o: ../Source/Urho3D/IO/FileWatcher.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_190) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/FileWatcher.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_193) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/FileWatcher.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IO/FileWatcher.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IO/FileWatcher.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/FileWatcher.cpp.i: cmake_force
@@ -2618,7 +2653,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IO/FileWatcher.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Log.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Log.cpp.o: ../Source/Urho3D/IO/Log.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_191) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Log.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_194) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Log.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IO/Log.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IO/Log.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Log.cpp.i: cmake_force
@@ -2631,7 +2666,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Log.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/MemoryBuffer.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/MemoryBuffer.cpp.o: ../Source/Urho3D/IO/MemoryBuffer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_192) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/MemoryBuffer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_195) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/MemoryBuffer.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IO/MemoryBuffer.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IO/MemoryBuffer.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/MemoryBuffer.cpp.i: cmake_force
@@ -2644,7 +2679,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IO/MemoryBuffer.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/NamedPipe.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/NamedPipe.cpp.o: ../Source/Urho3D/IO/NamedPipe.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_193) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/NamedPipe.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_196) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/NamedPipe.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IO/NamedPipe.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IO/NamedPipe.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/NamedPipe.cpp.i: cmake_force
@@ -2657,7 +2692,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IO/NamedPipe.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/PackageFile.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/PackageFile.cpp.o: ../Source/Urho3D/IO/PackageFile.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_194) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/PackageFile.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_197) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/PackageFile.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IO/PackageFile.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IO/PackageFile.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/PackageFile.cpp.i: cmake_force
@@ -2670,7 +2705,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IO/PackageFile.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Serializer.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Serializer.cpp.o: ../Source/Urho3D/IO/Serializer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_195) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Serializer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_198) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Serializer.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IO/Serializer.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IO/Serializer.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Serializer.cpp.i: cmake_force
@@ -2683,7 +2718,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IO/Serializer.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/VectorBuffer.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/VectorBuffer.cpp.o: ../Source/Urho3D/IO/VectorBuffer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_196) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/VectorBuffer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_199) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/IO/VectorBuffer.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/IO/VectorBuffer.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/IO/VectorBuffer.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/IO/VectorBuffer.cpp.i: cmake_force
@@ -2696,7 +2731,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/IO/VectorBuffer.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Input/Controls.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Input/Controls.cpp.o: ../Source/Urho3D/Input/Controls.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_197) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Input/Controls.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_200) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Input/Controls.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Input/Controls.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Input/Controls.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Input/Controls.cpp.i: cmake_force
@@ -2709,7 +2744,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Input/Controls.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Input/Input.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Input/Input.cpp.o: ../Source/Urho3D/Input/Input.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_198) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Input/Input.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_201) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Input/Input.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Input/Input.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Input/Input.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Input/Input.cpp.i: cmake_force
@@ -2722,7 +2757,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Input/Input.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LibraryInfo.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LibraryInfo.cpp.o: ../Source/Urho3D/LibraryInfo.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_199) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LibraryInfo.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_202) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LibraryInfo.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LibraryInfo.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/LibraryInfo.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LibraryInfo.cpp.i: cmake_force
@@ -2735,7 +2770,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LibraryInfo.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaFile.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaFile.cpp.o: ../Source/Urho3D/LuaScript/LuaFile.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_200) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaFile.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_203) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaFile.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/LuaFile.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/LuaFile.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaFile.cpp.i: cmake_force
@@ -2748,7 +2783,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaFile.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaFunction.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaFunction.cpp.o: ../Source/Urho3D/LuaScript/LuaFunction.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_201) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaFunction.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_204) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaFunction.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/LuaFunction.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/LuaFunction.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaFunction.cpp.i: cmake_force
@@ -2761,7 +2796,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaFunction.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScript.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScript.cpp.o: ../Source/Urho3D/LuaScript/LuaScript.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_202) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScript.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_205) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScript.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/LuaScript.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/LuaScript.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScript.cpp.i: cmake_force
@@ -2774,7 +2809,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScript.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScriptEventInvoker.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScriptEventInvoker.cpp.o: ../Source/Urho3D/LuaScript/LuaScriptEventInvoker.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_203) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScriptEventInvoker.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_206) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScriptEventInvoker.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/LuaScriptEventInvoker.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/LuaScriptEventInvoker.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScriptEventInvoker.cpp.i: cmake_force
@@ -2787,7 +2822,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScriptEventInvoker.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScriptInstance.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScriptInstance.cpp.o: ../Source/Urho3D/LuaScript/LuaScriptInstance.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_204) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScriptInstance.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_207) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScriptInstance.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/LuaScriptInstance.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/LuaScriptInstance.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScriptInstance.cpp.i: cmake_force
@@ -2800,7 +2835,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/LuaScriptInstance.cpp.s: cmake_for
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/ToluaUtils.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/ToluaUtils.cpp.o: ../Source/Urho3D/LuaScript/ToluaUtils.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_205) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/ToluaUtils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_208) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/ToluaUtils.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/ToluaUtils.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/LuaScript/ToluaUtils.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/ToluaUtils.cpp.i: cmake_force
@@ -2813,7 +2848,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/ToluaUtils.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/AreaAllocator.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/AreaAllocator.cpp.o: ../Source/Urho3D/Math/AreaAllocator.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_206) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/AreaAllocator.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_209) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/AreaAllocator.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/AreaAllocator.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/AreaAllocator.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/AreaAllocator.cpp.i: cmake_force
@@ -2826,7 +2861,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/AreaAllocator.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/BoundingBox.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/BoundingBox.cpp.o: ../Source/Urho3D/Math/BoundingBox.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_207) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/BoundingBox.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_210) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/BoundingBox.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/BoundingBox.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/BoundingBox.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/BoundingBox.cpp.i: cmake_force
@@ -2839,7 +2874,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/BoundingBox.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Color.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Color.cpp.o: ../Source/Urho3D/Math/Color.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_208) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Color.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_211) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Color.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Color.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Color.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Color.cpp.i: cmake_force
@@ -2852,7 +2887,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Color.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Frustum.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Frustum.cpp.o: ../Source/Urho3D/Math/Frustum.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_209) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Frustum.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_212) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Frustum.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Frustum.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Frustum.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Frustum.cpp.i: cmake_force
@@ -2865,7 +2900,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Frustum.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/MathDefs.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/MathDefs.cpp.o: ../Source/Urho3D/Math/MathDefs.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_210) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/MathDefs.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_213) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/MathDefs.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/MathDefs.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/MathDefs.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/MathDefs.cpp.i: cmake_force
@@ -2878,7 +2913,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/MathDefs.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix2.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix2.cpp.o: ../Source/Urho3D/Math/Matrix2.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_211) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix2.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_214) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix2.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Matrix2.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Matrix2.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix2.cpp.i: cmake_force
@@ -2891,7 +2926,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix2.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix3.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix3.cpp.o: ../Source/Urho3D/Math/Matrix3.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_212) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix3.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_215) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix3.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Matrix3.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Matrix3.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix3.cpp.i: cmake_force
@@ -2904,7 +2939,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix3.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix3x4.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix3x4.cpp.o: ../Source/Urho3D/Math/Matrix3x4.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_213) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix3x4.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_216) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix3x4.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Matrix3x4.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Matrix3x4.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix3x4.cpp.i: cmake_force
@@ -2917,7 +2952,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix3x4.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix4.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix4.cpp.o: ../Source/Urho3D/Math/Matrix4.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_214) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix4.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_217) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix4.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Matrix4.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Matrix4.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix4.cpp.i: cmake_force
@@ -2930,7 +2965,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Matrix4.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Plane.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Plane.cpp.o: ../Source/Urho3D/Math/Plane.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_215) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Plane.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_218) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Plane.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Plane.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Plane.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Plane.cpp.i: cmake_force
@@ -2943,7 +2978,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Plane.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Polyhedron.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Polyhedron.cpp.o: ../Source/Urho3D/Math/Polyhedron.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_216) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Polyhedron.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_219) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Polyhedron.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Polyhedron.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Polyhedron.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Polyhedron.cpp.i: cmake_force
@@ -2956,7 +2991,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Polyhedron.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Quaternion.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Quaternion.cpp.o: ../Source/Urho3D/Math/Quaternion.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_217) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Quaternion.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_220) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Quaternion.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Quaternion.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Quaternion.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Quaternion.cpp.i: cmake_force
@@ -2969,7 +3004,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Quaternion.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Random.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Random.cpp.o: ../Source/Urho3D/Math/Random.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_218) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Random.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_221) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Random.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Random.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Random.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Random.cpp.i: cmake_force
@@ -2982,7 +3017,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Random.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Ray.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Ray.cpp.o: ../Source/Urho3D/Math/Ray.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_219) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Ray.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_222) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Ray.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Ray.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Ray.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Ray.cpp.i: cmake_force
@@ -2995,7 +3030,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Ray.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Rect.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Rect.cpp.o: ../Source/Urho3D/Math/Rect.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_220) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Rect.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_223) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Rect.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Rect.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Rect.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Rect.cpp.i: cmake_force
@@ -3008,7 +3043,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Rect.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Sphere.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Sphere.cpp.o: ../Source/Urho3D/Math/Sphere.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_221) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Sphere.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_224) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Sphere.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Sphere.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Sphere.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Sphere.cpp.i: cmake_force
@@ -3021,7 +3056,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Sphere.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/StringHash.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/StringHash.cpp.o: ../Source/Urho3D/Math/StringHash.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_222) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/StringHash.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_225) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/StringHash.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/StringHash.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/StringHash.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/StringHash.cpp.i: cmake_force
@@ -3034,7 +3069,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/StringHash.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector2.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector2.cpp.o: ../Source/Urho3D/Math/Vector2.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_223) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector2.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_226) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector2.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Vector2.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Vector2.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector2.cpp.i: cmake_force
@@ -3047,7 +3082,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector2.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector3.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector3.cpp.o: ../Source/Urho3D/Math/Vector3.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_224) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector3.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_227) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector3.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Vector3.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Vector3.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector3.cpp.i: cmake_force
@@ -3060,7 +3095,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector3.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector4.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector4.cpp.o: ../Source/Urho3D/Math/Vector4.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_225) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector4.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_228) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector4.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Math/Vector4.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Math/Vector4.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector4.cpp.i: cmake_force
@@ -3073,7 +3108,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Math/Vector4.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/CrowdAgent.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/CrowdAgent.cpp.o: ../Source/Urho3D/Navigation/CrowdAgent.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_226) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/CrowdAgent.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_229) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/CrowdAgent.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Navigation/CrowdAgent.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Navigation/CrowdAgent.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/CrowdAgent.cpp.i: cmake_force
@@ -3086,7 +3121,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/CrowdAgent.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/CrowdManager.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/CrowdManager.cpp.o: ../Source/Urho3D/Navigation/CrowdManager.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_227) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/CrowdManager.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_230) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/CrowdManager.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Navigation/CrowdManager.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Navigation/CrowdManager.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/CrowdManager.cpp.i: cmake_force
@@ -3099,7 +3134,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/CrowdManager.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/DynamicNavigationMesh.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/DynamicNavigationMesh.cpp.o: ../Source/Urho3D/Navigation/DynamicNavigationMesh.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_228) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/DynamicNavigationMesh.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_231) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/DynamicNavigationMesh.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Navigation/DynamicNavigationMesh.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Navigation/DynamicNavigationMesh.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/DynamicNavigationMesh.cpp.i: cmake_force
@@ -3112,7 +3147,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/DynamicNavigationMesh.cpp.s: cmak
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavArea.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavArea.cpp.o: ../Source/Urho3D/Navigation/NavArea.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_229) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavArea.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_232) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavArea.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Navigation/NavArea.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Navigation/NavArea.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavArea.cpp.i: cmake_force
@@ -3125,7 +3160,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavArea.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavBuildData.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavBuildData.cpp.o: ../Source/Urho3D/Navigation/NavBuildData.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_230) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavBuildData.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_233) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavBuildData.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Navigation/NavBuildData.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Navigation/NavBuildData.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavBuildData.cpp.i: cmake_force
@@ -3138,7 +3173,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavBuildData.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/Navigable.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/Navigable.cpp.o: ../Source/Urho3D/Navigation/Navigable.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_231) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/Navigable.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_234) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/Navigable.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Navigation/Navigable.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Navigation/Navigable.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/Navigable.cpp.i: cmake_force
@@ -3151,7 +3186,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/Navigable.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavigationMesh.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavigationMesh.cpp.o: ../Source/Urho3D/Navigation/NavigationMesh.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_232) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavigationMesh.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_235) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavigationMesh.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Navigation/NavigationMesh.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Navigation/NavigationMesh.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavigationMesh.cpp.i: cmake_force
@@ -3164,7 +3199,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/NavigationMesh.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/Obstacle.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/Obstacle.cpp.o: ../Source/Urho3D/Navigation/Obstacle.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_233) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/Obstacle.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_236) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/Obstacle.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Navigation/Obstacle.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Navigation/Obstacle.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/Obstacle.cpp.i: cmake_force
@@ -3177,7 +3212,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/Obstacle.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/OffMeshConnection.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/OffMeshConnection.cpp.o: ../Source/Urho3D/Navigation/OffMeshConnection.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_234) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/OffMeshConnection.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_237) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/OffMeshConnection.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Navigation/OffMeshConnection.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Navigation/OffMeshConnection.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/OffMeshConnection.cpp.i: cmake_force
@@ -3190,7 +3225,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Navigation/OffMeshConnection.cpp.s: cmake_fo
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Network/Connection.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Network/Connection.cpp.o: ../Source/Urho3D/Network/Connection.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_235) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Network/Connection.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_238) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Network/Connection.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Network/Connection.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Network/Connection.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Network/Connection.cpp.i: cmake_force
@@ -3203,7 +3238,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Network/Connection.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Network/HttpRequest.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Network/HttpRequest.cpp.o: ../Source/Urho3D/Network/HttpRequest.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_236) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Network/HttpRequest.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_239) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Network/HttpRequest.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Network/HttpRequest.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Network/HttpRequest.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Network/HttpRequest.cpp.i: cmake_force
@@ -3216,7 +3251,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Network/HttpRequest.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Network/Network.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Network/Network.cpp.o: ../Source/Urho3D/Network/Network.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_237) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Network/Network.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_240) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Network/Network.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Network/Network.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Network/Network.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Network/Network.cpp.i: cmake_force
@@ -3229,7 +3264,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Network/Network.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Network/NetworkPriority.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Network/NetworkPriority.cpp.o: ../Source/Urho3D/Network/NetworkPriority.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_238) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Network/NetworkPriority.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_241) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Network/NetworkPriority.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Network/NetworkPriority.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Network/NetworkPriority.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Network/NetworkPriority.cpp.i: cmake_force
@@ -3242,7 +3277,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Network/NetworkPriority.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/CollisionShape.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/CollisionShape.cpp.o: ../Source/Urho3D/Physics/CollisionShape.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_239) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/CollisionShape.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_242) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/CollisionShape.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Physics/CollisionShape.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Physics/CollisionShape.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/CollisionShape.cpp.i: cmake_force
@@ -3255,7 +3290,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/CollisionShape.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/Constraint.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/Constraint.cpp.o: ../Source/Urho3D/Physics/Constraint.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_240) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/Constraint.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_243) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/Constraint.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Physics/Constraint.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Physics/Constraint.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/Constraint.cpp.i: cmake_force
@@ -3268,7 +3303,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/Constraint.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/KinematicCharacterController.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/KinematicCharacterController.cpp.o: ../Source/Urho3D/Physics/KinematicCharacterController.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_241) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/KinematicCharacterController.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_244) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/KinematicCharacterController.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Physics/KinematicCharacterController.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Physics/KinematicCharacterController.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/KinematicCharacterController.cpp.i: cmake_force
@@ -3281,7 +3316,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/KinematicCharacterController.cpp.s: 
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/PhysicsWorld.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/PhysicsWorld.cpp.o: ../Source/Urho3D/Physics/PhysicsWorld.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_242) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/PhysicsWorld.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_245) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/PhysicsWorld.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Physics/PhysicsWorld.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Physics/PhysicsWorld.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/PhysicsWorld.cpp.i: cmake_force
@@ -3294,7 +3329,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/PhysicsWorld.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RaycastVehicle.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RaycastVehicle.cpp.o: ../Source/Urho3D/Physics/RaycastVehicle.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_243) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RaycastVehicle.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_246) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RaycastVehicle.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Physics/RaycastVehicle.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Physics/RaycastVehicle.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RaycastVehicle.cpp.i: cmake_force
@@ -3307,7 +3342,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RaycastVehicle.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RaycastVehicleBase.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RaycastVehicleBase.cpp.o: ../Source/Urho3D/Physics/RaycastVehicleBase.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_244) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RaycastVehicleBase.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_247) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RaycastVehicleBase.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Physics/RaycastVehicleBase.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Physics/RaycastVehicleBase.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RaycastVehicleBase.cpp.i: cmake_force
@@ -3320,7 +3355,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RaycastVehicleBase.cpp.s: cmake_forc
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RigidBody.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RigidBody.cpp.o: ../Source/Urho3D/Physics/RigidBody.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_245) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RigidBody.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_248) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RigidBody.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Physics/RigidBody.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Physics/RigidBody.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RigidBody.cpp.i: cmake_force
@@ -3333,7 +3368,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Physics/RigidBody.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/BackgroundLoader.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/BackgroundLoader.cpp.o: ../Source/Urho3D/Resource/BackgroundLoader.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_246) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/BackgroundLoader.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_249) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/BackgroundLoader.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Resource/BackgroundLoader.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Resource/BackgroundLoader.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/BackgroundLoader.cpp.i: cmake_force
@@ -3346,7 +3381,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/BackgroundLoader.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Decompress.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Decompress.cpp.o: ../Source/Urho3D/Resource/Decompress.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_247) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Decompress.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_250) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Decompress.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Resource/Decompress.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Resource/Decompress.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Decompress.cpp.i: cmake_force
@@ -3359,7 +3394,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Decompress.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Image.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Image.cpp.o: ../Source/Urho3D/Resource/Image.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_248) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Image.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_251) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Image.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Resource/Image.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Resource/Image.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Image.cpp.i: cmake_force
@@ -3372,7 +3407,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Image.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/JSONFile.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/JSONFile.cpp.o: ../Source/Urho3D/Resource/JSONFile.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_249) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/JSONFile.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_252) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/JSONFile.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Resource/JSONFile.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Resource/JSONFile.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/JSONFile.cpp.i: cmake_force
@@ -3385,7 +3420,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/JSONFile.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/JSONValue.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/JSONValue.cpp.o: ../Source/Urho3D/Resource/JSONValue.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_250) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/JSONValue.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_253) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/JSONValue.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Resource/JSONValue.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Resource/JSONValue.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/JSONValue.cpp.i: cmake_force
@@ -3398,7 +3433,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/JSONValue.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Localization.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Localization.cpp.o: ../Source/Urho3D/Resource/Localization.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_251) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Localization.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_254) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Localization.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Resource/Localization.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Resource/Localization.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Localization.cpp.i: cmake_force
@@ -3411,7 +3446,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Localization.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/PListFile.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/PListFile.cpp.o: ../Source/Urho3D/Resource/PListFile.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_252) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/PListFile.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_255) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/PListFile.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Resource/PListFile.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Resource/PListFile.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/PListFile.cpp.i: cmake_force
@@ -3424,7 +3459,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/PListFile.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Resource.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Resource.cpp.o: ../Source/Urho3D/Resource/Resource.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_253) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Resource.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_256) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Resource.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Resource/Resource.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Resource/Resource.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Resource.cpp.i: cmake_force
@@ -3437,7 +3472,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/Resource.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/ResourceCache.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/ResourceCache.cpp.o: ../Source/Urho3D/Resource/ResourceCache.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_254) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/ResourceCache.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_257) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/ResourceCache.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Resource/ResourceCache.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Resource/ResourceCache.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/ResourceCache.cpp.i: cmake_force
@@ -3450,7 +3485,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/ResourceCache.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/XMLElement.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/XMLElement.cpp.o: ../Source/Urho3D/Resource/XMLElement.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_255) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/XMLElement.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_258) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/XMLElement.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Resource/XMLElement.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Resource/XMLElement.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/XMLElement.cpp.i: cmake_force
@@ -3463,7 +3498,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/XMLElement.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/XMLFile.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/XMLFile.cpp.o: ../Source/Urho3D/Resource/XMLFile.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_256) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/XMLFile.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_259) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/XMLFile.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Resource/XMLFile.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Resource/XMLFile.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/XMLFile.cpp.i: cmake_force
@@ -3476,7 +3511,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Resource/XMLFile.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Animatable.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Animatable.cpp.o: ../Source/Urho3D/Scene/Animatable.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_257) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Animatable.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_260) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Animatable.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Scene/Animatable.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Scene/Animatable.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Animatable.cpp.i: cmake_force
@@ -3489,7 +3524,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Animatable.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Component.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Component.cpp.o: ../Source/Urho3D/Scene/Component.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_258) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Component.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_261) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Component.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Scene/Component.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Scene/Component.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Component.cpp.i: cmake_force
@@ -3502,7 +3537,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Component.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/LogicComponent.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/LogicComponent.cpp.o: ../Source/Urho3D/Scene/LogicComponent.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_259) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/LogicComponent.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_262) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/LogicComponent.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Scene/LogicComponent.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Scene/LogicComponent.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/LogicComponent.cpp.i: cmake_force
@@ -3515,7 +3550,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/LogicComponent.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Node.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Node.cpp.o: ../Source/Urho3D/Scene/Node.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_260) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Node.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_263) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Node.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Scene/Node.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Scene/Node.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Node.cpp.i: cmake_force
@@ -3528,7 +3563,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Node.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ObjectAnimation.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ObjectAnimation.cpp.o: ../Source/Urho3D/Scene/ObjectAnimation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_261) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ObjectAnimation.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_264) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ObjectAnimation.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Scene/ObjectAnimation.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Scene/ObjectAnimation.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ObjectAnimation.cpp.i: cmake_force
@@ -3541,7 +3576,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ObjectAnimation.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Scene.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Scene.cpp.o: ../Source/Urho3D/Scene/Scene.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_262) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Scene.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_265) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Scene.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Scene/Scene.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Scene/Scene.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Scene.cpp.i: cmake_force
@@ -3554,7 +3589,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Scene.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SceneResolver.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SceneResolver.cpp.o: ../Source/Urho3D/Scene/SceneResolver.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_263) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SceneResolver.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_266) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SceneResolver.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Scene/SceneResolver.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Scene/SceneResolver.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SceneResolver.cpp.i: cmake_force
@@ -3567,7 +3602,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SceneResolver.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Serializable.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Serializable.cpp.o: ../Source/Urho3D/Scene/Serializable.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_264) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Serializable.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_267) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Serializable.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Scene/Serializable.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Scene/Serializable.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Serializable.cpp.i: cmake_force
@@ -3580,7 +3615,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/Serializable.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SmoothedTransform.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SmoothedTransform.cpp.o: ../Source/Urho3D/Scene/SmoothedTransform.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_265) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SmoothedTransform.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_268) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SmoothedTransform.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Scene/SmoothedTransform.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Scene/SmoothedTransform.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SmoothedTransform.cpp.i: cmake_force
@@ -3593,7 +3628,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SmoothedTransform.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SplinePath.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SplinePath.cpp.o: ../Source/Urho3D/Scene/SplinePath.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_266) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SplinePath.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_269) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SplinePath.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Scene/SplinePath.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Scene/SplinePath.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SplinePath.cpp.i: cmake_force
@@ -3606,7 +3641,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/SplinePath.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/UnknownComponent.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/UnknownComponent.cpp.o: ../Source/Urho3D/Scene/UnknownComponent.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_267) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/UnknownComponent.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_270) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/UnknownComponent.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Scene/UnknownComponent.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Scene/UnknownComponent.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/UnknownComponent.cpp.i: cmake_force
@@ -3619,7 +3654,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/UnknownComponent.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ValueAnimation.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ValueAnimation.cpp.o: ../Source/Urho3D/Scene/ValueAnimation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_268) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ValueAnimation.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_271) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ValueAnimation.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Scene/ValueAnimation.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Scene/ValueAnimation.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ValueAnimation.cpp.i: cmake_force
@@ -3632,7 +3667,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ValueAnimation.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ValueAnimationInfo.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ValueAnimationInfo.cpp.o: ../Source/Urho3D/Scene/ValueAnimationInfo.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_269) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ValueAnimationInfo.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_272) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ValueAnimationInfo.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Scene/ValueAnimationInfo.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Scene/ValueAnimationInfo.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ValueAnimationInfo.cpp.i: cmake_force
@@ -3645,7 +3680,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Scene/ValueAnimationInfo.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/BorderImage.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/BorderImage.cpp.o: ../Source/Urho3D/UI/BorderImage.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_270) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/BorderImage.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_273) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/BorderImage.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/BorderImage.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/BorderImage.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/BorderImage.cpp.i: cmake_force
@@ -3658,7 +3693,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/BorderImage.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Button.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Button.cpp.o: ../Source/Urho3D/UI/Button.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_271) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Button.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_274) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Button.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/Button.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/Button.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Button.cpp.i: cmake_force
@@ -3671,7 +3706,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Button.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/CheckBox.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/CheckBox.cpp.o: ../Source/Urho3D/UI/CheckBox.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_272) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/CheckBox.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_275) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/CheckBox.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/CheckBox.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/CheckBox.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/CheckBox.cpp.i: cmake_force
@@ -3684,7 +3719,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/CheckBox.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Cursor.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Cursor.cpp.o: ../Source/Urho3D/UI/Cursor.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_273) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Cursor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_276) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Cursor.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/Cursor.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/Cursor.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Cursor.cpp.i: cmake_force
@@ -3697,7 +3732,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Cursor.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/DropDownList.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/DropDownList.cpp.o: ../Source/Urho3D/UI/DropDownList.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_274) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/DropDownList.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_277) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/DropDownList.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/DropDownList.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/DropDownList.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/DropDownList.cpp.i: cmake_force
@@ -3710,7 +3745,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/DropDownList.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FileSelector.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FileSelector.cpp.o: ../Source/Urho3D/UI/FileSelector.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_275) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FileSelector.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_278) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FileSelector.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/FileSelector.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/FileSelector.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FileSelector.cpp.i: cmake_force
@@ -3723,7 +3758,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FileSelector.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Font.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Font.cpp.o: ../Source/Urho3D/UI/Font.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_276) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Font.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_279) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Font.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/Font.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/Font.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Font.cpp.i: cmake_force
@@ -3736,7 +3771,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Font.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFace.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFace.cpp.o: ../Source/Urho3D/UI/FontFace.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_277) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFace.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_280) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFace.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/FontFace.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/FontFace.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFace.cpp.i: cmake_force
@@ -3749,7 +3784,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFace.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFaceBitmap.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFaceBitmap.cpp.o: ../Source/Urho3D/UI/FontFaceBitmap.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_278) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFaceBitmap.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_281) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFaceBitmap.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/FontFaceBitmap.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/FontFaceBitmap.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFaceBitmap.cpp.i: cmake_force
@@ -3762,7 +3797,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFaceBitmap.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFaceFreeType.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFaceFreeType.cpp.o: ../Source/Urho3D/UI/FontFaceFreeType.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_279) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFaceFreeType.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_282) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFaceFreeType.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/FontFaceFreeType.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/FontFaceFreeType.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFaceFreeType.cpp.i: cmake_force
@@ -3775,7 +3810,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/FontFaceFreeType.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/LineEdit.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/LineEdit.cpp.o: ../Source/Urho3D/UI/LineEdit.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_280) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/LineEdit.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_283) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/LineEdit.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/LineEdit.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/LineEdit.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/LineEdit.cpp.i: cmake_force
@@ -3788,7 +3823,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/LineEdit.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ListView.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ListView.cpp.o: ../Source/Urho3D/UI/ListView.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_281) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ListView.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_284) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ListView.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/ListView.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/ListView.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ListView.cpp.i: cmake_force
@@ -3801,7 +3836,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ListView.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Menu.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Menu.cpp.o: ../Source/Urho3D/UI/Menu.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_282) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Menu.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_285) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Menu.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/Menu.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/Menu.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Menu.cpp.i: cmake_force
@@ -3814,7 +3849,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Menu.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/MessageBox.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/MessageBox.cpp.o: ../Source/Urho3D/UI/MessageBox.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_283) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/MessageBox.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_286) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/MessageBox.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/MessageBox.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/MessageBox.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/MessageBox.cpp.i: cmake_force
@@ -3827,7 +3862,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/MessageBox.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ProgressBar.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ProgressBar.cpp.o: ../Source/Urho3D/UI/ProgressBar.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_284) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ProgressBar.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_287) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ProgressBar.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/ProgressBar.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/ProgressBar.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ProgressBar.cpp.i: cmake_force
@@ -3840,7 +3875,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ProgressBar.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ScrollBar.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ScrollBar.cpp.o: ../Source/Urho3D/UI/ScrollBar.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_285) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ScrollBar.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_288) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ScrollBar.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/ScrollBar.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/ScrollBar.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ScrollBar.cpp.i: cmake_force
@@ -3853,7 +3888,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ScrollBar.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ScrollView.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ScrollView.cpp.o: ../Source/Urho3D/UI/ScrollView.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_286) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ScrollView.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_289) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ScrollView.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/ScrollView.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/ScrollView.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ScrollView.cpp.i: cmake_force
@@ -3866,7 +3901,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ScrollView.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Slider.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Slider.cpp.o: ../Source/Urho3D/UI/Slider.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_287) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Slider.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_290) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Slider.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/Slider.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/Slider.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Slider.cpp.i: cmake_force
@@ -3879,7 +3914,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Slider.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Sprite.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Sprite.cpp.o: ../Source/Urho3D/UI/Sprite.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_288) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Sprite.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_291) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Sprite.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/Sprite.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/Sprite.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Sprite.cpp.i: cmake_force
@@ -3892,7 +3927,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Sprite.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Text.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Text.cpp.o: ../Source/Urho3D/UI/Text.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_289) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Text.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_292) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Text.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/Text.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/Text.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Text.cpp.i: cmake_force
@@ -3905,7 +3940,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Text.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Text3D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Text3D.cpp.o: ../Source/Urho3D/UI/Text3D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_290) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Text3D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_293) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Text3D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/Text3D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/Text3D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Text3D.cpp.i: cmake_force
@@ -3918,7 +3953,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Text3D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ToolTip.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ToolTip.cpp.o: ../Source/Urho3D/UI/ToolTip.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_291) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ToolTip.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_294) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ToolTip.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/ToolTip.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/ToolTip.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ToolTip.cpp.i: cmake_force
@@ -3931,7 +3966,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/ToolTip.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UI.cpp.o: ../Source/Urho3D/UI/UI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_292) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_295) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/UI.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/UI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UI.cpp.i: cmake_force
@@ -3944,7 +3979,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UI.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIBatch.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIBatch.cpp.o: ../Source/Urho3D/UI/UIBatch.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_293) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIBatch.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_296) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIBatch.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/UIBatch.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/UIBatch.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIBatch.cpp.i: cmake_force
@@ -3957,7 +3992,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIBatch.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIComponent.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIComponent.cpp.o: ../Source/Urho3D/UI/UIComponent.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_294) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIComponent.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_297) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIComponent.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/UIComponent.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/UIComponent.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIComponent.cpp.i: cmake_force
@@ -3970,7 +4005,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIComponent.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIElement.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIElement.cpp.o: ../Source/Urho3D/UI/UIElement.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_295) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIElement.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_298) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIElement.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/UIElement.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/UIElement.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIElement.cpp.i: cmake_force
@@ -3983,7 +4018,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UIElement.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UISelectable.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UISelectable.cpp.o: ../Source/Urho3D/UI/UISelectable.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_296) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UISelectable.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_299) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UISelectable.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/UISelectable.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/UISelectable.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UISelectable.cpp.i: cmake_force
@@ -3996,7 +4031,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/UISelectable.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/View3D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/View3D.cpp.o: ../Source/Urho3D/UI/View3D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_297) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/View3D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_300) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/View3D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/View3D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/View3D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/View3D.cpp.i: cmake_force
@@ -4009,7 +4044,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/View3D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Window.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Window.cpp.o: ../Source/Urho3D/UI/Window.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_298) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Window.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_301) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Window.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/UI/Window.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/UI/Window.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Window.cpp.i: cmake_force
@@ -4022,7 +4057,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/UI/Window.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/AnimatedSprite2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/AnimatedSprite2D.cpp.o: ../Source/Urho3D/Urho2D/AnimatedSprite2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_299) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/AnimatedSprite2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_302) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/AnimatedSprite2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/AnimatedSprite2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/AnimatedSprite2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/AnimatedSprite2D.cpp.i: cmake_force
@@ -4035,7 +4070,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/AnimatedSprite2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/AnimationSet2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/AnimationSet2D.cpp.o: ../Source/Urho3D/Urho2D/AnimationSet2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_300) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/AnimationSet2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_303) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/AnimationSet2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/AnimationSet2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/AnimationSet2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/AnimationSet2D.cpp.i: cmake_force
@@ -4048,7 +4083,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/AnimationSet2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionBox2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionBox2D.cpp.o: ../Source/Urho3D/Urho2D/CollisionBox2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_301) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionBox2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_304) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionBox2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/CollisionBox2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/CollisionBox2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionBox2D.cpp.i: cmake_force
@@ -4061,7 +4096,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionBox2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionChain2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionChain2D.cpp.o: ../Source/Urho3D/Urho2D/CollisionChain2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_302) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionChain2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_305) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionChain2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/CollisionChain2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/CollisionChain2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionChain2D.cpp.i: cmake_force
@@ -4074,7 +4109,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionChain2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionCircle2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionCircle2D.cpp.o: ../Source/Urho3D/Urho2D/CollisionCircle2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_303) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionCircle2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_306) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionCircle2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/CollisionCircle2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/CollisionCircle2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionCircle2D.cpp.i: cmake_force
@@ -4087,7 +4122,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionCircle2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionEdge2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionEdge2D.cpp.o: ../Source/Urho3D/Urho2D/CollisionEdge2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_304) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionEdge2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_307) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionEdge2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/CollisionEdge2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/CollisionEdge2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionEdge2D.cpp.i: cmake_force
@@ -4100,7 +4135,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionEdge2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionPolygon2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionPolygon2D.cpp.o: ../Source/Urho3D/Urho2D/CollisionPolygon2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_305) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionPolygon2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_308) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionPolygon2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/CollisionPolygon2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/CollisionPolygon2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionPolygon2D.cpp.i: cmake_force
@@ -4113,7 +4148,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionPolygon2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionShape2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionShape2D.cpp.o: ../Source/Urho3D/Urho2D/CollisionShape2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_306) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionShape2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_309) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionShape2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/CollisionShape2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/CollisionShape2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionShape2D.cpp.i: cmake_force
@@ -4126,7 +4161,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/CollisionShape2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Constraint2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Constraint2D.cpp.o: ../Source/Urho3D/Urho2D/Constraint2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_307) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Constraint2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_310) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Constraint2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/Constraint2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/Constraint2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Constraint2D.cpp.i: cmake_force
@@ -4139,7 +4174,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Constraint2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintDistance2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintDistance2D.cpp.o: ../Source/Urho3D/Urho2D/ConstraintDistance2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_308) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintDistance2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_311) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintDistance2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/ConstraintDistance2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/ConstraintDistance2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintDistance2D.cpp.i: cmake_force
@@ -4152,7 +4187,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintDistance2D.cpp.s: cmake_for
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintFriction2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintFriction2D.cpp.o: ../Source/Urho3D/Urho2D/ConstraintFriction2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_309) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintFriction2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_312) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintFriction2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/ConstraintFriction2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/ConstraintFriction2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintFriction2D.cpp.i: cmake_force
@@ -4165,7 +4200,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintFriction2D.cpp.s: cmake_for
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintGear2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintGear2D.cpp.o: ../Source/Urho3D/Urho2D/ConstraintGear2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_310) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintGear2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_313) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintGear2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/ConstraintGear2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/ConstraintGear2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintGear2D.cpp.i: cmake_force
@@ -4178,7 +4213,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintGear2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintMotor2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintMotor2D.cpp.o: ../Source/Urho3D/Urho2D/ConstraintMotor2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_311) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintMotor2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_314) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintMotor2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/ConstraintMotor2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/ConstraintMotor2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintMotor2D.cpp.i: cmake_force
@@ -4191,7 +4226,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintMotor2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintMouse2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintMouse2D.cpp.o: ../Source/Urho3D/Urho2D/ConstraintMouse2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_312) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintMouse2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_315) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintMouse2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/ConstraintMouse2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/ConstraintMouse2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintMouse2D.cpp.i: cmake_force
@@ -4204,7 +4239,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintMouse2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintPrismatic2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintPrismatic2D.cpp.o: ../Source/Urho3D/Urho2D/ConstraintPrismatic2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_313) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintPrismatic2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_316) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintPrismatic2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/ConstraintPrismatic2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/ConstraintPrismatic2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintPrismatic2D.cpp.i: cmake_force
@@ -4217,7 +4252,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintPrismatic2D.cpp.s: cmake_fo
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintPulley2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintPulley2D.cpp.o: ../Source/Urho3D/Urho2D/ConstraintPulley2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_314) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintPulley2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_317) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintPulley2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/ConstraintPulley2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/ConstraintPulley2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintPulley2D.cpp.i: cmake_force
@@ -4230,7 +4265,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintPulley2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintRevolute2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintRevolute2D.cpp.o: ../Source/Urho3D/Urho2D/ConstraintRevolute2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_315) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintRevolute2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_318) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintRevolute2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/ConstraintRevolute2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/ConstraintRevolute2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintRevolute2D.cpp.i: cmake_force
@@ -4243,7 +4278,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintRevolute2D.cpp.s: cmake_for
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintRope2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintRope2D.cpp.o: ../Source/Urho3D/Urho2D/ConstraintRope2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_316) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintRope2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_319) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintRope2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/ConstraintRope2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/ConstraintRope2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintRope2D.cpp.i: cmake_force
@@ -4256,7 +4291,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintRope2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintWeld2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintWeld2D.cpp.o: ../Source/Urho3D/Urho2D/ConstraintWeld2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_317) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintWeld2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_320) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintWeld2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/ConstraintWeld2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/ConstraintWeld2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintWeld2D.cpp.i: cmake_force
@@ -4269,7 +4304,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintWeld2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintWheel2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintWheel2D.cpp.o: ../Source/Urho3D/Urho2D/ConstraintWheel2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_318) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintWheel2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_321) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintWheel2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/ConstraintWheel2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/ConstraintWheel2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintWheel2D.cpp.i: cmake_force
@@ -4282,7 +4317,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ConstraintWheel2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Drawable2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Drawable2D.cpp.o: ../Source/Urho3D/Urho2D/Drawable2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_319) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Drawable2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_322) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Drawable2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/Drawable2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/Drawable2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Drawable2D.cpp.i: cmake_force
@@ -4295,7 +4330,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Drawable2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ParticleEffect2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ParticleEffect2D.cpp.o: ../Source/Urho3D/Urho2D/ParticleEffect2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_320) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ParticleEffect2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_323) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ParticleEffect2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/ParticleEffect2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/ParticleEffect2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ParticleEffect2D.cpp.i: cmake_force
@@ -4308,7 +4343,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ParticleEffect2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ParticleEmitter2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ParticleEmitter2D.cpp.o: ../Source/Urho3D/Urho2D/ParticleEmitter2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_321) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ParticleEmitter2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_324) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ParticleEmitter2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/ParticleEmitter2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/ParticleEmitter2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ParticleEmitter2D.cpp.i: cmake_force
@@ -4321,7 +4356,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/ParticleEmitter2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/PhysicsWorld2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/PhysicsWorld2D.cpp.o: ../Source/Urho3D/Urho2D/PhysicsWorld2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_322) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/PhysicsWorld2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_325) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/PhysicsWorld2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/PhysicsWorld2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/PhysicsWorld2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/PhysicsWorld2D.cpp.i: cmake_force
@@ -4334,7 +4369,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/PhysicsWorld2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Renderer2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Renderer2D.cpp.o: ../Source/Urho3D/Urho2D/Renderer2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_323) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Renderer2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_326) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Renderer2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/Renderer2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/Renderer2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Renderer2D.cpp.i: cmake_force
@@ -4347,7 +4382,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Renderer2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/RigidBody2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/RigidBody2D.cpp.o: ../Source/Urho3D/Urho2D/RigidBody2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_324) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/RigidBody2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_327) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/RigidBody2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/RigidBody2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/RigidBody2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/RigidBody2D.cpp.i: cmake_force
@@ -4360,7 +4395,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/RigidBody2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Sprite2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Sprite2D.cpp.o: ../Source/Urho3D/Urho2D/Sprite2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_325) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Sprite2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_328) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Sprite2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/Sprite2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/Sprite2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Sprite2D.cpp.i: cmake_force
@@ -4373,7 +4408,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Sprite2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriteSheet2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriteSheet2D.cpp.o: ../Source/Urho3D/Urho2D/SpriteSheet2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_326) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriteSheet2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_329) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriteSheet2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/SpriteSheet2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/SpriteSheet2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriteSheet2D.cpp.i: cmake_force
@@ -4386,7 +4421,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriteSheet2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriterData2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriterData2D.cpp.o: ../Source/Urho3D/Urho2D/SpriterData2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_327) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriterData2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_330) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriterData2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/SpriterData2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/SpriterData2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriterData2D.cpp.i: cmake_force
@@ -4399,7 +4434,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriterData2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriterInstance2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriterInstance2D.cpp.o: ../Source/Urho3D/Urho2D/SpriterInstance2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_328) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriterInstance2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_331) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriterInstance2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/SpriterInstance2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/SpriterInstance2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriterInstance2D.cpp.i: cmake_force
@@ -4412,7 +4447,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/SpriterInstance2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/StaticSprite2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/StaticSprite2D.cpp.o: ../Source/Urho3D/Urho2D/StaticSprite2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_329) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/StaticSprite2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_332) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/StaticSprite2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/StaticSprite2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/StaticSprite2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/StaticSprite2D.cpp.i: cmake_force
@@ -4425,7 +4460,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/StaticSprite2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/StretchableSprite2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/StretchableSprite2D.cpp.o: ../Source/Urho3D/Urho2D/StretchableSprite2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_330) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/StretchableSprite2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_333) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/StretchableSprite2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/StretchableSprite2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/StretchableSprite2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/StretchableSprite2D.cpp.i: cmake_force
@@ -4438,7 +4473,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/StretchableSprite2D.cpp.s: cmake_forc
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMap2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMap2D.cpp.o: ../Source/Urho3D/Urho2D/TileMap2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_331) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMap2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_334) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMap2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/TileMap2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/TileMap2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMap2D.cpp.i: cmake_force
@@ -4451,7 +4486,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMap2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMapDefs2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMapDefs2D.cpp.o: ../Source/Urho3D/Urho2D/TileMapDefs2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_332) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMapDefs2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_335) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMapDefs2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/TileMapDefs2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/TileMapDefs2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMapDefs2D.cpp.i: cmake_force
@@ -4464,7 +4499,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMapDefs2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMapLayer2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMapLayer2D.cpp.o: ../Source/Urho3D/Urho2D/TileMapLayer2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_333) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMapLayer2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_336) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMapLayer2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/TileMapLayer2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/TileMapLayer2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMapLayer2D.cpp.i: cmake_force
@@ -4477,7 +4512,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TileMapLayer2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TmxFile2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TmxFile2D.cpp.o: ../Source/Urho3D/Urho2D/TmxFile2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_334) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TmxFile2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_337) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TmxFile2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/TmxFile2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/TmxFile2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TmxFile2D.cpp.i: cmake_force
@@ -4490,7 +4525,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TmxFile2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Urho2D.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Urho2D.cpp.o: ../Source/Urho3D/Urho2D/Urho2D.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_335) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Urho2D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_338) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Urho2D.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/Urho2D/Urho2D.cpp.o -c /code/dev/algebrakart/v1/Source/Urho3D/Urho2D/Urho2D.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Urho2D.cpp.i: cmake_force
@@ -4503,7 +4538,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Urho2D.cpp.s: cmake_force
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/AudioLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/AudioLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/AudioLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_336) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/AudioLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_339) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/AudioLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/AudioLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/AudioLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/AudioLuaAPI.cpp.i: cmake_force
@@ -4516,7 +4551,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/AudioLuaAPI.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/CoreLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/CoreLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/CoreLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_337) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/CoreLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_340) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/CoreLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/CoreLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/CoreLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/CoreLuaAPI.cpp.i: cmake_force
@@ -4527,9 +4562,22 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/CoreLuaAPI.cpp.s: cmake_
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Urho3D.dir/LuaScript/generated/CoreLuaAPI.cpp.s"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/CoreLuaAPI.cpp -o CMakeFiles/Urho3D.dir/LuaScript/generated/CoreLuaAPI.cpp.s
 
+Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
+Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/DatabaseLuaAPI.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_341) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.o"
+	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/DatabaseLuaAPI.cpp
+
+Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.i"
+	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/DatabaseLuaAPI.cpp > CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.i
+
+Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.s"
+	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/DatabaseLuaAPI.cpp -o CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.s
+
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/EngineLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/EngineLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/EngineLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_338) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/EngineLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_342) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/EngineLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/EngineLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/EngineLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/EngineLuaAPI.cpp.i: cmake_force
@@ -4542,7 +4590,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/EngineLuaAPI.cpp.s: cmak
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/GraphicsLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/GraphicsLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/GraphicsLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_339) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/GraphicsLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_343) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/GraphicsLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/GraphicsLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/GraphicsLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/GraphicsLuaAPI.cpp.i: cmake_force
@@ -4555,7 +4603,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/GraphicsLuaAPI.cpp.s: cm
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/IKLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/IKLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/IKLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_340) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/IKLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_344) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/IKLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/IKLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/IKLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/IKLuaAPI.cpp.i: cmake_force
@@ -4568,7 +4616,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/IKLuaAPI.cpp.s: cmake_fo
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/IOLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/IOLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/IOLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_341) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/IOLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_345) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/IOLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/IOLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/IOLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/IOLuaAPI.cpp.i: cmake_force
@@ -4581,7 +4629,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/IOLuaAPI.cpp.s: cmake_fo
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/InputLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/InputLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/InputLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_342) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/InputLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_346) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/InputLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/InputLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/InputLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/InputLuaAPI.cpp.i: cmake_force
@@ -4594,7 +4642,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/InputLuaAPI.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/LuaScriptLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/LuaScriptLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/LuaScriptLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_343) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/LuaScriptLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_347) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/LuaScriptLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/LuaScriptLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/LuaScriptLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/LuaScriptLuaAPI.cpp.i: cmake_force
@@ -4607,7 +4655,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/LuaScriptLuaAPI.cpp.s: c
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/MathLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/MathLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/MathLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_344) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/MathLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_348) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/MathLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/MathLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/MathLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/MathLuaAPI.cpp.i: cmake_force
@@ -4620,7 +4668,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/MathLuaAPI.cpp.s: cmake_
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/NavigationLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/NavigationLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/NavigationLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_345) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/NavigationLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_349) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/NavigationLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/NavigationLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/NavigationLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/NavigationLuaAPI.cpp.i: cmake_force
@@ -4633,7 +4681,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/NavigationLuaAPI.cpp.s: 
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/NetworkLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/NetworkLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/NetworkLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_346) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/NetworkLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_350) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/NetworkLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/NetworkLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/NetworkLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/NetworkLuaAPI.cpp.i: cmake_force
@@ -4646,7 +4694,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/NetworkLuaAPI.cpp.s: cma
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/PhysicsLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/PhysicsLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/PhysicsLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_347) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/PhysicsLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_351) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/PhysicsLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/PhysicsLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/PhysicsLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/PhysicsLuaAPI.cpp.i: cmake_force
@@ -4659,7 +4707,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/PhysicsLuaAPI.cpp.s: cma
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/ResourceLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/ResourceLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/ResourceLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_348) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/ResourceLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_352) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/ResourceLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/ResourceLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/ResourceLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/ResourceLuaAPI.cpp.i: cmake_force
@@ -4672,7 +4720,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/ResourceLuaAPI.cpp.s: cm
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/SceneLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/SceneLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/SceneLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_349) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/SceneLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_353) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/SceneLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/SceneLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/SceneLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/SceneLuaAPI.cpp.i: cmake_force
@@ -4685,7 +4733,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/SceneLuaAPI.cpp.s: cmake
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/UILuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/UILuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/UILuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_350) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/UILuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_354) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/UILuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/UILuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/UILuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/UILuaAPI.cpp.i: cmake_force
@@ -4698,7 +4746,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/UILuaAPI.cpp.s: cmake_fo
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/Urho2DLuaAPI.cpp.o: Source/Urho3D/CMakeFiles/Urho3D.dir/flags.make
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/Urho2DLuaAPI.cpp.o: Source/Urho3D/LuaScript/generated/Urho2DLuaAPI.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_351) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/Urho2DLuaAPI.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_355) "Building CXX object Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/Urho2DLuaAPI.cpp.o"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Urho3D.dir/LuaScript/generated/Urho2DLuaAPI.cpp.o -c /code/dev/algebrakart/v1/build/Source/Urho3D/LuaScript/generated/Urho2DLuaAPI.cpp
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/Urho2DLuaAPI.cpp.i: cmake_force
@@ -4809,6 +4857,8 @@ Urho3D_OBJECTS = \
 "CMakeFiles/Urho3D.dir/Core/Timer.cpp.o" \
 "CMakeFiles/Urho3D.dir/Core/Variant.cpp.o" \
 "CMakeFiles/Urho3D.dir/Core/WorkQueue.cpp.o" \
+"CMakeFiles/Urho3D.dir/Database/Database.cpp.o" \
+"CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.o" \
 "CMakeFiles/Urho3D.dir/Engine/Application.cpp.o" \
 "CMakeFiles/Urho3D.dir/Engine/Console.cpp.o" \
 "CMakeFiles/Urho3D.dir/Engine/DebugHud.cpp.o" \
@@ -5031,6 +5081,7 @@ Urho3D_OBJECTS = \
 "CMakeFiles/Urho3D.dir/Urho2D/Urho2D.cpp.o" \
 "CMakeFiles/Urho3D.dir/LuaScript/generated/AudioLuaAPI.cpp.o" \
 "CMakeFiles/Urho3D.dir/LuaScript/generated/CoreLuaAPI.cpp.o" \
+"CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.o" \
 "CMakeFiles/Urho3D.dir/LuaScript/generated/EngineLuaAPI.cpp.o" \
 "CMakeFiles/Urho3D.dir/LuaScript/generated/GraphicsLuaAPI.cpp.o" \
 "CMakeFiles/Urho3D.dir/LuaScript/generated/IKLuaAPI.cpp.o" \
@@ -5147,6 +5198,8 @@ lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Thread.cpp.o
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Timer.cpp.o
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/Core/Variant.cpp.o
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/Core/WorkQueue.cpp.o
+lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/Database/Database.cpp.o
+lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/Database/ODBC/ODBCConnection.cpp.o
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Application.cpp.o
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/Console.cpp.o
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/Engine/DebugHud.cpp.o
@@ -5369,6 +5422,7 @@ lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/TmxFile2D.cpp.o
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/Urho2D/Urho2D.cpp.o
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/AudioLuaAPI.cpp.o
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/CoreLuaAPI.cpp.o
+lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/DatabaseLuaAPI.cpp.o
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/EngineLuaAPI.cpp.o
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/GraphicsLuaAPI.cpp.o
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/IKLuaAPI.cpp.o
@@ -5385,7 +5439,7 @@ lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/UILuaAP
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/LuaScript/generated/Urho2DLuaAPI.cpp.o
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/build.make
 lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_352) "Linking CXX static library ../../lib/libUrho3D.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_356) "Linking CXX static library ../../lib/libUrho3D.a"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && $(CMAKE_COMMAND) -P CMakeFiles/Urho3D.dir/cmake_clean_target.cmake
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Urho3D.dir/link.txt --verbose=$(VERBOSE)
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && /usr/bin/cmake -E rename /code/dev/algebrakart/v1/build/lib/libUrho3D.a /code/dev/algebrakart/v1/build/lib/libUrho3D.a.engine
@@ -5411,6 +5465,7 @@ lib/libUrho3D.a: Source/Urho3D/CMakeFiles/Urho3D.dir/link.txt
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && echo ADDLIB /code/dev/algebrakart/v1/build/Source/ThirdParty/Box2D/libBox2D.a >>script.ar
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && echo ADDLIB /code/dev/algebrakart/v1/build/Source/ThirdParty/WebP/libWebP.a >>script.ar
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && echo ADDLIB /code/dev/algebrakart/v1/build/Source/ThirdParty/Bullet/libBullet.a >>script.ar
+	cd /code/dev/algebrakart/v1/build/Source/Urho3D && echo ADDLIB /code/dev/algebrakart/v1/build/Source/ThirdParty/Tracy/libTracy.a >>script.ar
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && echo ADDLIB /code/dev/algebrakart/v1/build/Source/ThirdParty/GLEW/libGLEW.a >>script.ar
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Merging all archives into a single static library using ar"
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D && echo SAVE >>script.ar
@@ -5429,6 +5484,7 @@ Source/Urho3D/CMakeFiles/Urho3D.dir/clean:
 
 Source/Urho3D/CMakeFiles/Urho3D.dir/depend: Source/Urho3D/LuaScript/generated/AudioLuaAPI.cpp
 Source/Urho3D/CMakeFiles/Urho3D.dir/depend: Source/Urho3D/LuaScript/generated/CoreLuaAPI.cpp
+Source/Urho3D/CMakeFiles/Urho3D.dir/depend: Source/Urho3D/LuaScript/generated/DatabaseLuaAPI.cpp
 Source/Urho3D/CMakeFiles/Urho3D.dir/depend: Source/Urho3D/LuaScript/generated/EngineLuaAPI.cpp
 Source/Urho3D/CMakeFiles/Urho3D.dir/depend: Source/Urho3D/LuaScript/generated/GraphicsLuaAPI.cpp
 Source/Urho3D/CMakeFiles/Urho3D.dir/depend: Source/Urho3D/LuaScript/generated/IKLuaAPI.cpp

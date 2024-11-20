@@ -484,9 +484,9 @@ POWERPC:INTERNAL=0
 //Is RTTI enabled
 RTTI:INTERNAL=1
 //Initial value for CC
-SAVED_CC:INTERNAL=/usr/bin/cc
+SAVED_CC:INTERNAL=
 //Initial value for CXX
-SAVED_CXX:INTERNAL=/usr/bin/c++
+SAVED_CXX:INTERNAL=
 //Compiler toolchain has predefined macros matching __SIZEOF_POINTER__
 SIZEOF_POINTER:INTERNAL=8
 //Path to system root of the cross-compiling target

@@ -134,10 +134,6 @@ lj_obj.h
 lj_ir.h
 ../Source/ThirdParty/LuaJIT/src/lj_ir.h
 
-../Source/ThirdParty/LuaJIT/src/lj_lib.h
-lj_obj.h
-../Source/ThirdParty/LuaJIT/src/lj_obj.h
-
 ../Source/ThirdParty/LuaJIT/src/lj_obj.h
 lua.h
 ../Source/ThirdParty/LuaJIT/src/lua.h
@@ -229,40 +225,6 @@ lj_def.h
 /code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/lj_def.h
 lj_arch.h
 /code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/lj_arch.h
-
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/buildvm_asm.c
-buildvm.h
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/buildvm.h
-lj_bc.h
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/lj_bc.h
-
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/buildvm_fold.c
-buildvm.h
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/buildvm.h
-lj_obj.h
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/lj_obj.h
-lj_ir.h
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/lj_ir.h
-
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/buildvm_lib.c
-buildvm.h
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/buildvm.h
-lj_obj.h
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/lj_obj.h
-lj_bc.h
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/lj_bc.h
-lj_lib.h
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/lj_lib.h
-buildvm_libbc.h
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/buildvm_libbc.h
-
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/buildvm_libbc.h
-
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/buildvm_peobj.c
-buildvm.h
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/buildvm.h
-lj_bc.h
-/code/dev/algebrakart/v1/Source/ThirdParty/LuaJIT/src/host/lj_bc.h
 
 Source/ThirdParty/LuaJIT/src/host/buildvm_arch.h
 

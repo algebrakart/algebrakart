@@ -6,21 +6,3 @@
 
 #IncludeRegexTransform: 
 
-/code/dev/algebrakart/v1/Source/ThirdParty/StanHull/hull.cpp
-stdio.h
--
-stdlib.h
--
-string.h
--
-assert.h
--
-math.h
--
-float.h
--
-hull.h
-/code/dev/algebrakart/v1/Source/ThirdParty/StanHull/hull.h
-
-/code/dev/algebrakart/v1/Source/ThirdParty/StanHull/hull.h
-

@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_FLAGS = -mtune=generic  -Wno-invalid-offsetof -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -include "/code/dev/algebrakart/v1/build/Source/Urho3D/Precompiled.h" -Winvalid-pch -O3 -DNDEBUG -fvisibility=hidden -fvisibility-inlines-hidden   -std=c++11
 
-CXX_DEFINES = -DGLEW_NO_GLU -DGLEW_STATIC -DHAVE_SINCOSF -DHAVE_STDINT_H -DTOLUA_RELEASE -DURHO3D_ANGELSCRIPT -DURHO3D_FILEWATCHER -DURHO3D_IK -DURHO3D_IS_BUILDING -DURHO3D_LOGGING -DURHO3D_LUA -DURHO3D_NAVIGATION -DURHO3D_NETWORK -DURHO3D_PHYSICS -DURHO3D_PROFILING -DURHO3D_STATIC_DEFINE -DURHO3D_THREADING -DURHO3D_URHO2D -DURHO3D_WEBP
+CXX_DEFINES = -DGLEW_NO_GLU -DGLEW_STATIC -DHAVE_SINCOSF -DHAVE_STDINT_H -DTOLUA_RELEASE -DURHO3D_ANGELSCRIPT -DURHO3D_DATABASE -DURHO3D_FILEWATCHER -DURHO3D_IK -DURHO3D_IS_BUILDING -DURHO3D_LOGGING -DURHO3D_LUA -DURHO3D_NAVIGATION -DURHO3D_NETWORK -DURHO3D_PHYSICS -DURHO3D_STATIC_DEFINE -DURHO3D_THREADING -DURHO3D_TRACY_PROFILING -DURHO3D_URHO2D -DURHO3D_WEBP
 
 CXX_INCLUDES = -I/code/dev/algebrakart/v1/build/Source/Urho3D -I/code/dev/algebrakart/v1/Source/Urho3D -I/code/dev/algebrakart/v1/build/include/Urho3D/ThirdParty -I/code/dev/algebrakart/v1/build/include/Urho3D/ThirdParty/Bullet -I/code/dev/algebrakart/v1/build/include/Urho3D/ThirdParty/Detour -I/code/dev/algebrakart/v1/build/include/Urho3D/ThirdParty/LuaJIT 
 

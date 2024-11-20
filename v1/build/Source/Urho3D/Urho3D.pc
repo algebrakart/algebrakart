@@ -34,5 +34,5 @@ Name: Urho3D
 Description: Urho3D is a free lightweight, cross-platform 2D and 3D game engine implemented in C++ and released under the MIT license. Greatly inspired by OGRE (http://www.ogre3d.org) and Horde3D (http://www.horde3d.org).
 Version: 0.0.0
 URL: https://github.com/urho3d/Urho3D
-Libs: -Wl,-E  -L"${libdir}" -lUrho3D -ldl -lm -lrt -ldl -lm -lGL
-Cflags: -DURHO3D_STATIC_DEFINE -DURHO3D_ANGELSCRIPT -DURHO3D_FILEWATCHER -DURHO3D_IK -DURHO3D_LOGGING -DURHO3D_LUA -DURHO3D_NAVIGATION -DURHO3D_NETWORK -DURHO3D_PHYSICS -DURHO3D_PROFILING -DURHO3D_THREADING -DURHO3D_URHO2D -DURHO3D_WEBP -DHAVE_STDINT_H -mtune=generic  -Wno-invalid-offsetof -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -Winvalid-pch  -I"${includedir}" -I"${includedir}/Urho3D/ThirdParty" -I"${includedir}/Urho3D/ThirdParty/Bullet" -I"${includedir}/Urho3D/ThirdParty/LuaJIT"
+Libs: -Wl,-E  -L"${libdir}" -lUrho3D -ldl -lm -lrt -ldl -lm -lGL -l-L/usr/local/lib -lodbc
+Cflags: -DURHO3D_STATIC_DEFINE -DURHO3D_ANGELSCRIPT -DURHO3D_DATABASE -DURHO3D_FILEWATCHER -DURHO3D_IK -DURHO3D_LOGGING -DURHO3D_LUA -DURHO3D_NAVIGATION -DURHO3D_NETWORK -DURHO3D_PHYSICS -DURHO3D_TRACY_PROFILING -DURHO3D_THREADING -DURHO3D_URHO2D -DURHO3D_WEBP -DHAVE_STDINT_H -mtune=generic  -Wno-invalid-offsetof -march=native -msse3 -Wall -Wextra -pthread -fdiagnostics-color=auto -Winvalid-pch  -I"${includedir}" -I"${includedir}/Urho3D/ThirdParty" -I"${includedir}/Urho3D/ThirdParty/Bullet" -I"${includedir}/Urho3D/ThirdParty/LuaJIT"

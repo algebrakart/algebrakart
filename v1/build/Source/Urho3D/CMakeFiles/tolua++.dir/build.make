@@ -104,7 +104,7 @@ Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-configure: Source/Urho3D/
 Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-configure: Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-update
 Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-configure: Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-patch
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/code/dev/algebrakart/v1/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Performing configure step for 'tolua++'"
-	cd /code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-build && /usr/bin/cmake -E env CC=/usr/bin/cc CXX=/usr/bin/c++ CI= /usr/bin/cmake -D URHO3D_DEPLOYMENT_TARGET=generic -D DEST_RUNTIME_DIR=/code/dev/algebrakart/v1/build/bin/tool -D BAKED_CMAKE_SOURCE_DIR=/code/dev/algebrakart/v1 -D URHO3D_UPDATE_SOURCE_TREE=OFF -D CMAKE_MAKE_PROGRAM=/usr/bin/make "-GUnix Makefiles" /code/dev/algebrakart/v1/Source/ThirdParty/toluapp/src/bin
+	cd /code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-build && /usr/bin/cmake -E env CC= CXX= CI= /usr/bin/cmake -D URHO3D_DEPLOYMENT_TARGET=generic -D DEST_RUNTIME_DIR=/code/dev/algebrakart/v1/build/bin/tool -D BAKED_CMAKE_SOURCE_DIR=/code/dev/algebrakart/v1 -D URHO3D_UPDATE_SOURCE_TREE=OFF -D CMAKE_MAKE_PROGRAM=/usr/bin/make "-GUnix Makefiles" /code/dev/algebrakart/v1/Source/ThirdParty/toluapp/src/bin
 	cd /code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-build && /usr/bin/cmake -E touch /code/dev/algebrakart/v1/build/Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-configure
 
 Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-build: Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-configure

@@ -6,9 +6,3 @@
 
 #IncludeRegexTransform: 
 
-/code/dev/algebrakart/v1/Source/ThirdParty/ETCPACK/source/etcdec.cxx
-stdio.h
--
-stdlib.h
--
-

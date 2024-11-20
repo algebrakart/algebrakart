@@ -1,4 +1,4 @@
-# Install script for directory: /code/dev/algebrakart/v1/Source/Game/TrafficCity
+# Install script for directory: /code/dev/algebrakart/v1/Source/Game/AlgebraKart
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

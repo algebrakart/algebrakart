@@ -148,14 +148,14 @@ package/fast: package
 
 # The main all target
 all: cmake_check_build_system
-	cd /code/dev/algebrakart/v1/build && $(CMAKE_COMMAND) -E cmake_progress_start /code/dev/algebrakart/v1/build/CMakeFiles /code/dev/algebrakart/v1/build/Source/Game/TrafficCity/CMakeFiles/progress.marks
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f CMakeFiles/Makefile2 Source/Game/TrafficCity/all
+	cd /code/dev/algebrakart/v1/build && $(CMAKE_COMMAND) -E cmake_progress_start /code/dev/algebrakart/v1/build/CMakeFiles /code/dev/algebrakart/v1/build/Source/Game/AlgebraKart/CMakeFiles/progress.marks
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f CMakeFiles/Makefile2 Source/Game/AlgebraKart/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /code/dev/algebrakart/v1/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f CMakeFiles/Makefile2 Source/Game/TrafficCity/clean
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f CMakeFiles/Makefile2 Source/Game/AlgebraKart/clean
 .PHONY : clean
 
 # The main clean target
@@ -165,12 +165,12 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f CMakeFiles/Makefile2 Source/Game/TrafficCity/preinstall
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f CMakeFiles/Makefile2 Source/Game/AlgebraKart/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f CMakeFiles/Makefile2 Source/Game/TrafficCity/preinstall
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f CMakeFiles/Makefile2 Source/Game/AlgebraKart/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
@@ -179,18 +179,18 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/rule:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f CMakeFiles/Makefile2 Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/rule
-.PHONY : Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/rule
+Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/rule:
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f CMakeFiles/Makefile2 Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/rule
+.PHONY : Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/rule
 
 # Convenience name for target.
-MayaScape: Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/rule
+MayaScape: Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/rule
 
 .PHONY : MayaScape
 
 # fast build rule for target.
 MayaScape/fast:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build
 .PHONY : MayaScape/fast
 
 GameController.o: GameController.cpp.o
@@ -199,7 +199,7 @@ GameController.o: GameController.cpp.o
 
 # target to build an object file
 GameController.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/GameController.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/GameController.cpp.o
 .PHONY : GameController.cpp.o
 
 GameController.i: GameController.cpp.i
@@ -208,7 +208,7 @@ GameController.i: GameController.cpp.i
 
 # target to preprocess a source file
 GameController.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/GameController.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/GameController.cpp.i
 .PHONY : GameController.cpp.i
 
 GameController.s: GameController.cpp.s
@@ -217,7 +217,7 @@ GameController.s: GameController.cpp.s
 
 # target to generate assembly for a file
 GameController.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/GameController.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/GameController.cpp.s
 .PHONY : GameController.cpp.s
 
 Missile.o: Missile.cpp.o
@@ -226,7 +226,7 @@ Missile.o: Missile.cpp.o
 
 # target to build an object file
 Missile.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/Missile.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/Missile.cpp.o
 .PHONY : Missile.cpp.o
 
 Missile.i: Missile.cpp.i
@@ -235,7 +235,7 @@ Missile.i: Missile.cpp.i
 
 # target to preprocess a source file
 Missile.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/Missile.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/Missile.cpp.i
 .PHONY : Missile.cpp.i
 
 Missile.s: Missile.cpp.s
@@ -244,7 +244,7 @@ Missile.s: Missile.cpp.s
 
 # target to generate assembly for a file
 Missile.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/Missile.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/Missile.cpp.s
 .PHONY : Missile.cpp.s
 
 Pickup.o: Pickup.cpp.o
@@ -253,7 +253,7 @@ Pickup.o: Pickup.cpp.o
 
 # target to build an object file
 Pickup.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/Pickup.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/Pickup.cpp.o
 .PHONY : Pickup.cpp.o
 
 Pickup.i: Pickup.cpp.i
@@ -262,7 +262,7 @@ Pickup.i: Pickup.cpp.i
 
 # target to preprocess a source file
 Pickup.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/Pickup.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/Pickup.cpp.i
 .PHONY : Pickup.cpp.i
 
 Pickup.s: Pickup.cpp.s
@@ -271,7 +271,7 @@ Pickup.s: Pickup.cpp.s
 
 # target to generate assembly for a file
 Pickup.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/Pickup.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/Pickup.cpp.s
 .PHONY : Pickup.cpp.s
 
 PixelImage.o: PixelImage.cpp.o
@@ -280,7 +280,7 @@ PixelImage.o: PixelImage.cpp.o
 
 # target to build an object file
 PixelImage.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/PixelImage.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/PixelImage.cpp.o
 .PHONY : PixelImage.cpp.o
 
 PixelImage.i: PixelImage.cpp.i
@@ -289,7 +289,7 @@ PixelImage.i: PixelImage.cpp.i
 
 # target to preprocess a source file
 PixelImage.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/PixelImage.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/PixelImage.cpp.i
 .PHONY : PixelImage.cpp.i
 
 PixelImage.s: PixelImage.cpp.s
@@ -298,7 +298,7 @@ PixelImage.s: PixelImage.cpp.s
 
 # target to generate assembly for a file
 PixelImage.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/PixelImage.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/PixelImage.cpp.s
 .PHONY : PixelImage.cpp.s
 
 SmoothStep.o: SmoothStep.cpp.o
@@ -307,7 +307,7 @@ SmoothStep.o: SmoothStep.cpp.o
 
 # target to build an object file
 SmoothStep.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/SmoothStep.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/SmoothStep.cpp.o
 .PHONY : SmoothStep.cpp.o
 
 SmoothStep.i: SmoothStep.cpp.i
@@ -316,7 +316,7 @@ SmoothStep.i: SmoothStep.cpp.i
 
 # target to preprocess a source file
 SmoothStep.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/SmoothStep.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/SmoothStep.cpp.i
 .PHONY : SmoothStep.cpp.i
 
 SmoothStep.s: SmoothStep.cpp.s
@@ -325,35 +325,35 @@ SmoothStep.s: SmoothStep.cpp.s
 
 # target to generate assembly for a file
 SmoothStep.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/SmoothStep.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/SmoothStep.cpp.s
 .PHONY : SmoothStep.cpp.s
 
-TrafficCity.o: TrafficCity.cpp.o
+AlgebraKart.o: AlgebraKart.cpp.o
 
-.PHONY : TrafficCity.o
+.PHONY : AlgebraKart.o
 
 # target to build an object file
-TrafficCity.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/TrafficCity.cpp.o
-.PHONY : TrafficCity.cpp.o
+AlgebraKart.cpp.o:
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/AlgebraKart.cpp.o
+.PHONY : AlgebraKart.cpp.o
 
-TrafficCity.i: TrafficCity.cpp.i
+AlgebraKart.i: AlgebraKart.cpp.i
 
-.PHONY : TrafficCity.i
+.PHONY : AlgebraKart.i
 
 # target to preprocess a source file
-TrafficCity.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/TrafficCity.cpp.i
-.PHONY : TrafficCity.cpp.i
+AlgebraKart.cpp.i:
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/AlgebraKart.cpp.i
+.PHONY : AlgebraKart.cpp.i
 
-TrafficCity.s: TrafficCity.cpp.s
+AlgebraKart.s: AlgebraKart.cpp.s
 
-.PHONY : TrafficCity.s
+.PHONY : AlgebraKart.s
 
 # target to generate assembly for a file
-TrafficCity.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/TrafficCity.cpp.s
-.PHONY : TrafficCity.cpp.s
+AlgebraKart.cpp.s:
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/AlgebraKart.cpp.s
+.PHONY : AlgebraKart.cpp.s
 
 WheelTrackModel.o: WheelTrackModel.cpp.o
 
@@ -361,7 +361,7 @@ WheelTrackModel.o: WheelTrackModel.cpp.o
 
 # target to build an object file
 WheelTrackModel.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/WheelTrackModel.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/WheelTrackModel.cpp.o
 .PHONY : WheelTrackModel.cpp.o
 
 WheelTrackModel.i: WheelTrackModel.cpp.i
@@ -370,7 +370,7 @@ WheelTrackModel.i: WheelTrackModel.cpp.i
 
 # target to preprocess a source file
 WheelTrackModel.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/WheelTrackModel.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/WheelTrackModel.cpp.i
 .PHONY : WheelTrackModel.cpp.i
 
 WheelTrackModel.s: WheelTrackModel.cpp.s
@@ -379,7 +379,7 @@ WheelTrackModel.s: WheelTrackModel.cpp.s
 
 # target to generate assembly for a file
 WheelTrackModel.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/WheelTrackModel.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/WheelTrackModel.cpp.s
 .PHONY : WheelTrackModel.cpp.s
 
 ai/agent.o: ai/agent.cpp.o
@@ -388,7 +388,7 @@ ai/agent.o: ai/agent.cpp.o
 
 # target to build an object file
 ai/agent.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/agent.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/agent.cpp.o
 .PHONY : ai/agent.cpp.o
 
 ai/agent.i: ai/agent.cpp.i
@@ -397,7 +397,7 @@ ai/agent.i: ai/agent.cpp.i
 
 # target to preprocess a source file
 ai/agent.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/agent.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/agent.cpp.i
 .PHONY : ai/agent.cpp.i
 
 ai/agent.s: ai/agent.cpp.s
@@ -406,7 +406,7 @@ ai/agent.s: ai/agent.cpp.s
 
 # target to generate assembly for a file
 ai/agent.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/agent.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/agent.cpp.s
 .PHONY : ai/agent.cpp.s
 
 ai/agent_controller.o: ai/agent_controller.cpp.o
@@ -415,7 +415,7 @@ ai/agent_controller.o: ai/agent_controller.cpp.o
 
 # target to build an object file
 ai/agent_controller.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/agent_controller.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/agent_controller.cpp.o
 .PHONY : ai/agent_controller.cpp.o
 
 ai/agent_controller.i: ai/agent_controller.cpp.i
@@ -424,7 +424,7 @@ ai/agent_controller.i: ai/agent_controller.cpp.i
 
 # target to preprocess a source file
 ai/agent_controller.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/agent_controller.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/agent_controller.cpp.i
 .PHONY : ai/agent_controller.cpp.i
 
 ai/agent_controller.s: ai/agent_controller.cpp.s
@@ -433,7 +433,7 @@ ai/agent_controller.s: ai/agent_controller.cpp.s
 
 # target to generate assembly for a file
 ai/agent_controller.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/agent_controller.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/agent_controller.cpp.s
 .PHONY : ai/agent_controller.cpp.s
 
 ai/agent_fsm.o: ai/agent_fsm.cpp.o
@@ -442,7 +442,7 @@ ai/agent_fsm.o: ai/agent_fsm.cpp.o
 
 # target to build an object file
 ai/agent_fsm.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/agent_fsm.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/agent_fsm.cpp.o
 .PHONY : ai/agent_fsm.cpp.o
 
 ai/agent_fsm.i: ai/agent_fsm.cpp.i
@@ -451,7 +451,7 @@ ai/agent_fsm.i: ai/agent_fsm.cpp.i
 
 # target to preprocess a source file
 ai/agent_fsm.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/agent_fsm.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/agent_fsm.cpp.i
 .PHONY : ai/agent_fsm.cpp.i
 
 ai/agent_fsm.s: ai/agent_fsm.cpp.s
@@ -460,7 +460,7 @@ ai/agent_fsm.s: ai/agent_fsm.cpp.s
 
 # target to generate assembly for a file
 ai/agent_fsm.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/agent_fsm.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/agent_fsm.cpp.s
 .PHONY : ai/agent_fsm.cpp.s
 
 ai/agent_movement.o: ai/agent_movement.cpp.o
@@ -469,7 +469,7 @@ ai/agent_movement.o: ai/agent_movement.cpp.o
 
 # target to build an object file
 ai/agent_movement.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/agent_movement.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/agent_movement.cpp.o
 .PHONY : ai/agent_movement.cpp.o
 
 ai/agent_movement.i: ai/agent_movement.cpp.i
@@ -478,7 +478,7 @@ ai/agent_movement.i: ai/agent_movement.cpp.i
 
 # target to preprocess a source file
 ai/agent_movement.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/agent_movement.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/agent_movement.cpp.i
 .PHONY : ai/agent_movement.cpp.i
 
 ai/agent_movement.s: ai/agent_movement.cpp.s
@@ -487,7 +487,7 @@ ai/agent_movement.s: ai/agent_movement.cpp.s
 
 # target to generate assembly for a file
 ai/agent_movement.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/agent_movement.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/agent_movement.cpp.s
 .PHONY : ai/agent_movement.cpp.s
 
 ai/evolution_manager.o: ai/evolution_manager.cpp.o
@@ -496,7 +496,7 @@ ai/evolution_manager.o: ai/evolution_manager.cpp.o
 
 # target to build an object file
 ai/evolution_manager.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/evolution_manager.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/evolution_manager.cpp.o
 .PHONY : ai/evolution_manager.cpp.o
 
 ai/evolution_manager.i: ai/evolution_manager.cpp.i
@@ -505,7 +505,7 @@ ai/evolution_manager.i: ai/evolution_manager.cpp.i
 
 # target to preprocess a source file
 ai/evolution_manager.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/evolution_manager.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/evolution_manager.cpp.i
 .PHONY : ai/evolution_manager.cpp.i
 
 ai/evolution_manager.s: ai/evolution_manager.cpp.s
@@ -514,7 +514,7 @@ ai/evolution_manager.s: ai/evolution_manager.cpp.s
 
 # target to generate assembly for a file
 ai/evolution_manager.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/evolution_manager.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/evolution_manager.cpp.s
 .PHONY : ai/evolution_manager.cpp.s
 
 ai/flag.o: ai/flag.cpp.o
@@ -523,7 +523,7 @@ ai/flag.o: ai/flag.cpp.o
 
 # target to build an object file
 ai/flag.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/flag.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/flag.cpp.o
 .PHONY : ai/flag.cpp.o
 
 ai/flag.i: ai/flag.cpp.i
@@ -532,7 +532,7 @@ ai/flag.i: ai/flag.cpp.i
 
 # target to preprocess a source file
 ai/flag.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/flag.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/flag.cpp.i
 .PHONY : ai/flag.cpp.i
 
 ai/flag.s: ai/flag.cpp.s
@@ -541,7 +541,7 @@ ai/flag.s: ai/flag.cpp.s
 
 # target to generate assembly for a file
 ai/flag.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/flag.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/flag.cpp.s
 .PHONY : ai/flag.cpp.s
 
 ai/fsm.o: ai/fsm.cpp.o
@@ -550,7 +550,7 @@ ai/fsm.o: ai/fsm.cpp.o
 
 # target to build an object file
 ai/fsm.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/fsm.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/fsm.cpp.o
 .PHONY : ai/fsm.cpp.o
 
 ai/fsm.i: ai/fsm.cpp.i
@@ -559,7 +559,7 @@ ai/fsm.i: ai/fsm.cpp.i
 
 # target to preprocess a source file
 ai/fsm.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/fsm.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/fsm.cpp.i
 .PHONY : ai/fsm.cpp.i
 
 ai/fsm.s: ai/fsm.cpp.s
@@ -568,7 +568,7 @@ ai/fsm.s: ai/fsm.cpp.s
 
 # target to generate assembly for a file
 ai/fsm.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/fsm.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/fsm.cpp.s
 .PHONY : ai/fsm.cpp.s
 
 ai/fsm_event_data.o: ai/fsm_event_data.cpp.o
@@ -577,7 +577,7 @@ ai/fsm_event_data.o: ai/fsm_event_data.cpp.o
 
 # target to build an object file
 ai/fsm_event_data.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/fsm_event_data.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/fsm_event_data.cpp.o
 .PHONY : ai/fsm_event_data.cpp.o
 
 ai/fsm_event_data.i: ai/fsm_event_data.cpp.i
@@ -586,7 +586,7 @@ ai/fsm_event_data.i: ai/fsm_event_data.cpp.i
 
 # target to preprocess a source file
 ai/fsm_event_data.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/fsm_event_data.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/fsm_event_data.cpp.i
 .PHONY : ai/fsm_event_data.cpp.i
 
 ai/fsm_event_data.s: ai/fsm_event_data.cpp.s
@@ -595,7 +595,7 @@ ai/fsm_event_data.s: ai/fsm_event_data.cpp.s
 
 # target to generate assembly for a file
 ai/fsm_event_data.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/fsm_event_data.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/fsm_event_data.cpp.s
 .PHONY : ai/fsm_event_data.cpp.s
 
 ai/genetic_algorithm.o: ai/genetic_algorithm.cpp.o
@@ -604,7 +604,7 @@ ai/genetic_algorithm.o: ai/genetic_algorithm.cpp.o
 
 # target to build an object file
 ai/genetic_algorithm.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/genetic_algorithm.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/genetic_algorithm.cpp.o
 .PHONY : ai/genetic_algorithm.cpp.o
 
 ai/genetic_algorithm.i: ai/genetic_algorithm.cpp.i
@@ -613,7 +613,7 @@ ai/genetic_algorithm.i: ai/genetic_algorithm.cpp.i
 
 # target to preprocess a source file
 ai/genetic_algorithm.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/genetic_algorithm.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/genetic_algorithm.cpp.i
 .PHONY : ai/genetic_algorithm.cpp.i
 
 ai/genetic_algorithm.s: ai/genetic_algorithm.cpp.s
@@ -622,7 +622,7 @@ ai/genetic_algorithm.s: ai/genetic_algorithm.cpp.s
 
 # target to generate assembly for a file
 ai/genetic_algorithm.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/genetic_algorithm.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/genetic_algorithm.cpp.s
 .PHONY : ai/genetic_algorithm.cpp.s
 
 ai/genotype.o: ai/genotype.cpp.o
@@ -631,7 +631,7 @@ ai/genotype.o: ai/genotype.cpp.o
 
 # target to build an object file
 ai/genotype.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/genotype.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/genotype.cpp.o
 .PHONY : ai/genotype.cpp.o
 
 ai/genotype.i: ai/genotype.cpp.i
@@ -640,7 +640,7 @@ ai/genotype.i: ai/genotype.cpp.i
 
 # target to preprocess a source file
 ai/genotype.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/genotype.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/genotype.cpp.i
 .PHONY : ai/genotype.cpp.i
 
 ai/genotype.s: ai/genotype.cpp.s
@@ -649,7 +649,7 @@ ai/genotype.s: ai/genotype.cpp.s
 
 # target to generate assembly for a file
 ai/genotype.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/genotype.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/genotype.cpp.s
 .PHONY : ai/genotype.cpp.s
 
 ai/neural_layer.o: ai/neural_layer.cpp.o
@@ -658,7 +658,7 @@ ai/neural_layer.o: ai/neural_layer.cpp.o
 
 # target to build an object file
 ai/neural_layer.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/neural_layer.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/neural_layer.cpp.o
 .PHONY : ai/neural_layer.cpp.o
 
 ai/neural_layer.i: ai/neural_layer.cpp.i
@@ -667,7 +667,7 @@ ai/neural_layer.i: ai/neural_layer.cpp.i
 
 # target to preprocess a source file
 ai/neural_layer.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/neural_layer.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/neural_layer.cpp.i
 .PHONY : ai/neural_layer.cpp.i
 
 ai/neural_layer.s: ai/neural_layer.cpp.s
@@ -676,7 +676,7 @@ ai/neural_layer.s: ai/neural_layer.cpp.s
 
 # target to generate assembly for a file
 ai/neural_layer.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/neural_layer.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/neural_layer.cpp.s
 .PHONY : ai/neural_layer.cpp.s
 
 ai/neural_network.o: ai/neural_network.cpp.o
@@ -685,7 +685,7 @@ ai/neural_network.o: ai/neural_network.cpp.o
 
 # target to build an object file
 ai/neural_network.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/neural_network.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/neural_network.cpp.o
 .PHONY : ai/neural_network.cpp.o
 
 ai/neural_network.i: ai/neural_network.cpp.i
@@ -694,7 +694,7 @@ ai/neural_network.i: ai/neural_network.cpp.i
 
 # target to preprocess a source file
 ai/neural_network.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/neural_network.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/neural_network.cpp.i
 .PHONY : ai/neural_network.cpp.i
 
 ai/neural_network.s: ai/neural_network.cpp.s
@@ -703,7 +703,7 @@ ai/neural_network.s: ai/neural_network.cpp.s
 
 # target to generate assembly for a file
 ai/neural_network.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/neural_network.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/neural_network.cpp.s
 .PHONY : ai/neural_network.cpp.s
 
 ai/sensor.o: ai/sensor.cpp.o
@@ -712,7 +712,7 @@ ai/sensor.o: ai/sensor.cpp.o
 
 # target to build an object file
 ai/sensor.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/sensor.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/sensor.cpp.o
 .PHONY : ai/sensor.cpp.o
 
 ai/sensor.i: ai/sensor.cpp.i
@@ -721,7 +721,7 @@ ai/sensor.i: ai/sensor.cpp.i
 
 # target to preprocess a source file
 ai/sensor.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/sensor.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/sensor.cpp.i
 .PHONY : ai/sensor.cpp.i
 
 ai/sensor.s: ai/sensor.cpp.s
@@ -730,7 +730,7 @@ ai/sensor.s: ai/sensor.cpp.s
 
 # target to generate assembly for a file
 ai/sensor.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/ai/sensor.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/ai/sensor.cpp.s
 .PHONY : ai/sensor.cpp.s
 
 beat/Beat.o: beat/Beat.cpp.o
@@ -739,7 +739,7 @@ beat/Beat.o: beat/Beat.cpp.o
 
 # target to build an object file
 beat/Beat.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Beat.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Beat.cpp.o
 .PHONY : beat/Beat.cpp.o
 
 beat/Beat.i: beat/Beat.cpp.i
@@ -748,7 +748,7 @@ beat/Beat.i: beat/Beat.cpp.i
 
 # target to preprocess a source file
 beat/Beat.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Beat.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Beat.cpp.i
 .PHONY : beat/Beat.cpp.i
 
 beat/Beat.s: beat/Beat.cpp.s
@@ -757,7 +757,7 @@ beat/Beat.s: beat/Beat.cpp.s
 
 # target to generate assembly for a file
 beat/Beat.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Beat.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Beat.cpp.s
 .PHONY : beat/Beat.cpp.s
 
 beat/BeatTime.o: beat/BeatTime.cpp.o
@@ -766,7 +766,7 @@ beat/BeatTime.o: beat/BeatTime.cpp.o
 
 # target to build an object file
 beat/BeatTime.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/BeatTime.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/BeatTime.cpp.o
 .PHONY : beat/BeatTime.cpp.o
 
 beat/BeatTime.i: beat/BeatTime.cpp.i
@@ -775,7 +775,7 @@ beat/BeatTime.i: beat/BeatTime.cpp.i
 
 # target to preprocess a source file
 beat/BeatTime.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/BeatTime.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/BeatTime.cpp.i
 .PHONY : beat/BeatTime.cpp.i
 
 beat/BeatTime.s: beat/BeatTime.cpp.s
@@ -784,7 +784,7 @@ beat/BeatTime.s: beat/BeatTime.cpp.s
 
 # target to generate assembly for a file
 beat/BeatTime.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/BeatTime.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/BeatTime.cpp.s
 .PHONY : beat/BeatTime.cpp.s
 
 beat/BufferData.o: beat/BufferData.cpp.o
@@ -793,7 +793,7 @@ beat/BufferData.o: beat/BufferData.cpp.o
 
 # target to build an object file
 beat/BufferData.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/BufferData.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/BufferData.cpp.o
 .PHONY : beat/BufferData.cpp.o
 
 beat/BufferData.i: beat/BufferData.cpp.i
@@ -802,7 +802,7 @@ beat/BufferData.i: beat/BufferData.cpp.i
 
 # target to preprocess a source file
 beat/BufferData.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/BufferData.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/BufferData.cpp.i
 .PHONY : beat/BufferData.cpp.i
 
 beat/BufferData.s: beat/BufferData.cpp.s
@@ -811,7 +811,7 @@ beat/BufferData.s: beat/BufferData.cpp.s
 
 # target to generate assembly for a file
 beat/BufferData.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/BufferData.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/BufferData.cpp.s
 .PHONY : beat/BufferData.cpp.s
 
 beat/Recorder.o: beat/Recorder.cpp.o
@@ -820,7 +820,7 @@ beat/Recorder.o: beat/Recorder.cpp.o
 
 # target to build an object file
 beat/Recorder.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Recorder.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Recorder.cpp.o
 .PHONY : beat/Recorder.cpp.o
 
 beat/Recorder.i: beat/Recorder.cpp.i
@@ -829,7 +829,7 @@ beat/Recorder.i: beat/Recorder.cpp.i
 
 # target to preprocess a source file
 beat/Recorder.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Recorder.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Recorder.cpp.i
 .PHONY : beat/Recorder.cpp.i
 
 beat/Recorder.s: beat/Recorder.cpp.s
@@ -838,7 +838,7 @@ beat/Recorder.s: beat/Recorder.cpp.s
 
 # target to generate assembly for a file
 beat/Recorder.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Recorder.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Recorder.cpp.s
 .PHONY : beat/Recorder.cpp.s
 
 beat/Sampler.o: beat/Sampler.cpp.o
@@ -847,7 +847,7 @@ beat/Sampler.o: beat/Sampler.cpp.o
 
 # target to build an object file
 beat/Sampler.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Sampler.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Sampler.cpp.o
 .PHONY : beat/Sampler.cpp.o
 
 beat/Sampler.i: beat/Sampler.cpp.i
@@ -856,7 +856,7 @@ beat/Sampler.i: beat/Sampler.cpp.i
 
 # target to preprocess a source file
 beat/Sampler.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Sampler.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Sampler.cpp.i
 .PHONY : beat/Sampler.cpp.i
 
 beat/Sampler.s: beat/Sampler.cpp.s
@@ -865,7 +865,7 @@ beat/Sampler.s: beat/Sampler.cpp.s
 
 # target to generate assembly for a file
 beat/Sampler.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Sampler.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Sampler.cpp.s
 .PHONY : beat/Sampler.cpp.s
 
 beat/Sequencer.o: beat/Sequencer.cpp.o
@@ -874,7 +874,7 @@ beat/Sequencer.o: beat/Sequencer.cpp.o
 
 # target to build an object file
 beat/Sequencer.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Sequencer.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Sequencer.cpp.o
 .PHONY : beat/Sequencer.cpp.o
 
 beat/Sequencer.i: beat/Sequencer.cpp.i
@@ -883,7 +883,7 @@ beat/Sequencer.i: beat/Sequencer.cpp.i
 
 # target to preprocess a source file
 beat/Sequencer.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Sequencer.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Sequencer.cpp.i
 .PHONY : beat/Sequencer.cpp.i
 
 beat/Sequencer.s: beat/Sequencer.cpp.s
@@ -892,7 +892,7 @@ beat/Sequencer.s: beat/Sequencer.cpp.s
 
 # target to generate assembly for a file
 beat/Sequencer.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Sequencer.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Sequencer.cpp.s
 .PHONY : beat/Sequencer.cpp.s
 
 beat/Synthesizer.o: beat/Synthesizer.cpp.o
@@ -901,7 +901,7 @@ beat/Synthesizer.o: beat/Synthesizer.cpp.o
 
 # target to build an object file
 beat/Synthesizer.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Synthesizer.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Synthesizer.cpp.o
 .PHONY : beat/Synthesizer.cpp.o
 
 beat/Synthesizer.i: beat/Synthesizer.cpp.i
@@ -910,7 +910,7 @@ beat/Synthesizer.i: beat/Synthesizer.cpp.i
 
 # target to preprocess a source file
 beat/Synthesizer.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Synthesizer.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Synthesizer.cpp.i
 .PHONY : beat/Synthesizer.cpp.i
 
 beat/Synthesizer.s: beat/Synthesizer.cpp.s
@@ -919,7 +919,7 @@ beat/Synthesizer.s: beat/Synthesizer.cpp.s
 
 # target to generate assembly for a file
 beat/Synthesizer.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/beat/Synthesizer.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/beat/Synthesizer.cpp.s
 .PHONY : beat/Synthesizer.cpp.s
 
 network/ClientObj.o: network/ClientObj.cpp.o
@@ -928,7 +928,7 @@ network/ClientObj.o: network/ClientObj.cpp.o
 
 # target to build an object file
 network/ClientObj.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/ClientObj.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/ClientObj.cpp.o
 .PHONY : network/ClientObj.cpp.o
 
 network/ClientObj.i: network/ClientObj.cpp.i
@@ -937,7 +937,7 @@ network/ClientObj.i: network/ClientObj.cpp.i
 
 # target to preprocess a source file
 network/ClientObj.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/ClientObj.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/ClientObj.cpp.i
 .PHONY : network/ClientObj.cpp.i
 
 network/ClientObj.s: network/ClientObj.cpp.s
@@ -946,7 +946,7 @@ network/ClientObj.s: network/ClientObj.cpp.s
 
 # target to generate assembly for a file
 network/ClientObj.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/ClientObj.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/ClientObj.cpp.s
 .PHONY : network/ClientObj.cpp.s
 
 network/NetworkActor.o: network/NetworkActor.cpp.o
@@ -955,7 +955,7 @@ network/NetworkActor.o: network/NetworkActor.cpp.o
 
 # target to build an object file
 network/NetworkActor.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/NetworkActor.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/NetworkActor.cpp.o
 .PHONY : network/NetworkActor.cpp.o
 
 network/NetworkActor.i: network/NetworkActor.cpp.i
@@ -964,7 +964,7 @@ network/NetworkActor.i: network/NetworkActor.cpp.i
 
 # target to preprocess a source file
 network/NetworkActor.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/NetworkActor.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/NetworkActor.cpp.i
 .PHONY : network/NetworkActor.cpp.i
 
 network/NetworkActor.s: network/NetworkActor.cpp.s
@@ -973,7 +973,7 @@ network/NetworkActor.s: network/NetworkActor.cpp.s
 
 # target to generate assembly for a file
 network/NetworkActor.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/NetworkActor.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/NetworkActor.cpp.s
 .PHONY : network/NetworkActor.cpp.s
 
 network/Server.o: network/Server.cpp.o
@@ -982,7 +982,7 @@ network/Server.o: network/Server.cpp.o
 
 # target to build an object file
 network/Server.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/Server.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/Server.cpp.o
 .PHONY : network/Server.cpp.o
 
 network/Server.i: network/Server.cpp.i
@@ -991,7 +991,7 @@ network/Server.i: network/Server.cpp.i
 
 # target to preprocess a source file
 network/Server.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/Server.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/Server.cpp.i
 .PHONY : network/Server.cpp.i
 
 network/Server.s: network/Server.cpp.s
@@ -1000,7 +1000,7 @@ network/Server.s: network/Server.cpp.s
 
 # target to generate assembly for a file
 network/Server.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/Server.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/Server.cpp.s
 .PHONY : network/Server.cpp.s
 
 network/Vehicle.o: network/Vehicle.cpp.o
@@ -1009,7 +1009,7 @@ network/Vehicle.o: network/Vehicle.cpp.o
 
 # target to build an object file
 network/Vehicle.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/Vehicle.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/Vehicle.cpp.o
 .PHONY : network/Vehicle.cpp.o
 
 network/Vehicle.i: network/Vehicle.cpp.i
@@ -1018,7 +1018,7 @@ network/Vehicle.i: network/Vehicle.cpp.i
 
 # target to preprocess a source file
 network/Vehicle.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/Vehicle.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/Vehicle.cpp.i
 .PHONY : network/Vehicle.cpp.i
 
 network/Vehicle.s: network/Vehicle.cpp.s
@@ -1027,7 +1027,7 @@ network/Vehicle.s: network/Vehicle.cpp.s
 
 # target to generate assembly for a file
 network/Vehicle.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/Vehicle.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/Vehicle.cpp.s
 .PHONY : network/Vehicle.cpp.s
 
 network/csp/CSP_Client.o: network/csp/CSP_Client.cpp.o
@@ -1036,7 +1036,7 @@ network/csp/CSP_Client.o: network/csp/CSP_Client.cpp.o
 
 # target to build an object file
 network/csp/CSP_Client.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/csp/CSP_Client.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/csp/CSP_Client.cpp.o
 .PHONY : network/csp/CSP_Client.cpp.o
 
 network/csp/CSP_Client.i: network/csp/CSP_Client.cpp.i
@@ -1045,7 +1045,7 @@ network/csp/CSP_Client.i: network/csp/CSP_Client.cpp.i
 
 # target to preprocess a source file
 network/csp/CSP_Client.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/csp/CSP_Client.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/csp/CSP_Client.cpp.i
 .PHONY : network/csp/CSP_Client.cpp.i
 
 network/csp/CSP_Client.s: network/csp/CSP_Client.cpp.s
@@ -1054,7 +1054,7 @@ network/csp/CSP_Client.s: network/csp/CSP_Client.cpp.s
 
 # target to generate assembly for a file
 network/csp/CSP_Client.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/csp/CSP_Client.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/csp/CSP_Client.cpp.s
 .PHONY : network/csp/CSP_Client.cpp.s
 
 network/csp/CSP_Server.o: network/csp/CSP_Server.cpp.o
@@ -1063,7 +1063,7 @@ network/csp/CSP_Server.o: network/csp/CSP_Server.cpp.o
 
 # target to build an object file
 network/csp/CSP_Server.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/csp/CSP_Server.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/csp/CSP_Server.cpp.o
 .PHONY : network/csp/CSP_Server.cpp.o
 
 network/csp/CSP_Server.i: network/csp/CSP_Server.cpp.i
@@ -1072,7 +1072,7 @@ network/csp/CSP_Server.i: network/csp/CSP_Server.cpp.i
 
 # target to preprocess a source file
 network/csp/CSP_Server.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/csp/CSP_Server.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/csp/CSP_Server.cpp.i
 .PHONY : network/csp/CSP_Server.cpp.i
 
 network/csp/CSP_Server.s: network/csp/CSP_Server.cpp.s
@@ -1081,7 +1081,7 @@ network/csp/CSP_Server.s: network/csp/CSP_Server.cpp.s
 
 # target to generate assembly for a file
 network/csp/CSP_Server.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/network/csp/CSP_Server.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/network/csp/CSP_Server.cpp.s
 .PHONY : network/csp/CSP_Server.cpp.s
 
 util/event.o: util/event.cpp.o
@@ -1090,7 +1090,7 @@ util/event.o: util/event.cpp.o
 
 # target to build an object file
 util/event.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/util/event.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/util/event.cpp.o
 .PHONY : util/event.cpp.o
 
 util/event.i: util/event.cpp.i
@@ -1099,7 +1099,7 @@ util/event.i: util/event.cpp.i
 
 # target to preprocess a source file
 util/event.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/util/event.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/util/event.cpp.i
 .PHONY : util/event.cpp.i
 
 util/event.s: util/event.cpp.s
@@ -1108,7 +1108,7 @@ util/event.s: util/event.cpp.s
 
 # target to generate assembly for a file
 util/event.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/util/event.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/util/event.cpp.s
 .PHONY : util/event.cpp.s
 
 util/file_utility.o: util/file_utility.cpp.o
@@ -1117,7 +1117,7 @@ util/file_utility.o: util/file_utility.cpp.o
 
 # target to build an object file
 util/file_utility.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/util/file_utility.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/util/file_utility.cpp.o
 .PHONY : util/file_utility.cpp.o
 
 util/file_utility.i: util/file_utility.cpp.i
@@ -1126,7 +1126,7 @@ util/file_utility.i: util/file_utility.cpp.i
 
 # target to preprocess a source file
 util/file_utility.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/util/file_utility.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/util/file_utility.cpp.i
 .PHONY : util/file_utility.cpp.i
 
 util/file_utility.s: util/file_utility.cpp.s
@@ -1135,7 +1135,7 @@ util/file_utility.s: util/file_utility.cpp.s
 
 # target to generate assembly for a file
 util/file_utility.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/util/file_utility.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/util/file_utility.cpp.s
 .PHONY : util/file_utility.cpp.s
 
 util/math_helper.o: util/math_helper.cpp.o
@@ -1144,7 +1144,7 @@ util/math_helper.o: util/math_helper.cpp.o
 
 # target to build an object file
 util/math_helper.cpp.o:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/util/math_helper.cpp.o
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/util/math_helper.cpp.o
 .PHONY : util/math_helper.cpp.o
 
 util/math_helper.i: util/math_helper.cpp.i
@@ -1153,7 +1153,7 @@ util/math_helper.i: util/math_helper.cpp.i
 
 # target to preprocess a source file
 util/math_helper.cpp.i:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/util/math_helper.cpp.i
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/util/math_helper.cpp.i
 .PHONY : util/math_helper.cpp.i
 
 util/math_helper.s: util/math_helper.cpp.s
@@ -1162,7 +1162,7 @@ util/math_helper.s: util/math_helper.cpp.s
 
 # target to generate assembly for a file
 util/math_helper.cpp.s:
-	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/util/math_helper.cpp.s
+	cd /code/dev/algebrakart/v1/build && $(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/util/math_helper.cpp.s
 .PHONY : util/math_helper.cpp.s
 
 # Help Target
@@ -1195,9 +1195,9 @@ help:
 	@echo "... SmoothStep.o"
 	@echo "... SmoothStep.i"
 	@echo "... SmoothStep.s"
-	@echo "... TrafficCity.o"
-	@echo "... TrafficCity.i"
-	@echo "... TrafficCity.s"
+	@echo "... AlgebraKart.o"
+	@echo "... AlgebraKart.i"
+	@echo "... AlgebraKart.s"
 	@echo "... WheelTrackModel.o"
 	@echo "... WheelTrackModel.i"
 	@echo "... WheelTrackModel.s"

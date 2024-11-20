@@ -517,6 +517,19 @@ Bullet/fast:
 .PHONY : Bullet/fast
 
 #=============================================================================
+# Target rules for targets named Tracy
+
+# Build rule for target.
+Tracy: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Tracy
+.PHONY : Tracy
+
+# fast build rule for target.
+Tracy/fast:
+	$(MAKE) -f Source/ThirdParty/Tracy/CMakeFiles/Tracy.dir/build.make Source/ThirdParty/Tracy/CMakeFiles/Tracy.dir/build
+.PHONY : Tracy/fast
+
+#=============================================================================
 # Target rules for targets named GLEW
 
 # Build rule for target.
@@ -669,7 +682,7 @@ MayaScape: cmake_check_build_system
 
 # fast build rule for target.
 MayaScape/fast:
-	$(MAKE) -f Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build.make Source/Game/TrafficCity/CMakeFiles/MayaScape.dir/build
+	$(MAKE) -f Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build.make Source/Game/AlgebraKart/CMakeFiles/MayaScape.dir/build
 .PHONY : MayaScape/fast
 
 # Help Target
@@ -712,6 +725,7 @@ help:
 	@echo "... Box2D"
 	@echo "... WebP"
 	@echo "... Bullet"
+	@echo "... Tracy"
 	@echo "... GLEW"
 	@echo "... Urho3D"
 	@echo "... tolua++"

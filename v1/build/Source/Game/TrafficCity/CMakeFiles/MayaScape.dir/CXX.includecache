@@ -76,33 +76,33 @@ string
 ctime
 -
 
-../Source/Game/TrafficCity/Constants.h
+../Source/Game/AlgebraKart/Constants.h
 
-../Source/Game/TrafficCity/GameController.h
+../Source/Game/AlgebraKart/GameController.h
 Urho3D/Core/Object.h
 -
 
-../Source/Game/TrafficCity/Missile.h
+../Source/Game/AlgebraKart/Missile.h
 Urho3D/Scene/LogicComponent.h
 -
 Urho3D/Graphics/StaticModel.h
 -
 Urho3D/Graphics/ParticleEmitter.h
 -
-TrafficCity/network/NetworkActor.h
-../Source/Game/TrafficCity/TrafficCity/network/NetworkActor.h
+AlgebraKart/network/NetworkActor.h
+../Source/Game/AlgebraKart/AlgebraKart/network/NetworkActor.h
 
-../Source/Game/TrafficCity/Pickup.h
+../Source/Game/AlgebraKart/Pickup.h
 Urho3D/Scene/LogicComponent.h
 -
 Urho3D/Graphics/StaticModel.h
 -
 Urho3D/Graphics/ParticleEmitter.h
 -
-TrafficCity/network/NetworkActor.h
-../Source/Game/TrafficCity/TrafficCity/network/NetworkActor.h
+AlgebraKart/network/NetworkActor.h
+../Source/Game/AlgebraKart/AlgebraKart/network/NetworkActor.h
 
-../Source/Game/TrafficCity/PixelImage.h
+../Source/Game/AlgebraKart/PixelImage.h
 Urho3D/Urho3D.h
 -
 Urho3D/Core/Context.h
@@ -130,95 +130,95 @@ Urho3D/Resource/Image.h
 SDL/SDL_log.h
 -
 
-../Source/Game/TrafficCity/WheelTrackModel.h
+../Source/Game/AlgebraKart/WheelTrackModel.h
 Urho3D/Urho3D.h
 -
 Urho3D/Core/Object.h
 -
 
-../Source/Game/TrafficCity/ai/agent.h
+../Source/Game/AlgebraKart/ai/agent.h
 ../shared_libs.h
-../Source/Game/TrafficCity/shared_libs.h
+../Source/Game/AlgebraKart/shared_libs.h
 ../util/event.h
-../Source/Game/TrafficCity/util/event.h
+../Source/Game/AlgebraKart/util/event.h
 Urho3D/Math/MathDefs.h
 -
 Urho3D/Math/Vector3.h
 -
 Urho3D/Math/Quaternion.h
 -
-TrafficCity/network/NetworkActor.h
+AlgebraKart/network/NetworkActor.h
 -
 
-../Source/Game/TrafficCity/ai/agent_controller.h
+../Source/Game/AlgebraKart/ai/agent_controller.h
 genotype.h
-../Source/Game/TrafficCity/ai/genotype.h
+../Source/Game/AlgebraKart/ai/genotype.h
 neural_layer.h
-../Source/Game/TrafficCity/ai/neural_layer.h
+../Source/Game/AlgebraKart/ai/neural_layer.h
 genetic_algorithm.h
-../Source/Game/TrafficCity/ai/genetic_algorithm.h
+../Source/Game/AlgebraKart/ai/genetic_algorithm.h
 neural_network.h
-../Source/Game/TrafficCity/ai/neural_network.h
+../Source/Game/AlgebraKart/ai/neural_network.h
 sensor.h
-../Source/Game/TrafficCity/ai/sensor.h
+../Source/Game/AlgebraKart/ai/sensor.h
 flag.h
-../Source/Game/TrafficCity/ai/flag.h
+../Source/Game/AlgebraKart/ai/flag.h
 agent_fsm.h
-../Source/Game/TrafficCity/ai/agent_fsm.h
+../Source/Game/AlgebraKart/ai/agent_fsm.h
 agent.h
-../Source/Game/TrafficCity/ai/agent.h
+../Source/Game/AlgebraKart/ai/agent.h
 agent_movement.h
-../Source/Game/TrafficCity/ai/agent_movement.h
+../Source/Game/AlgebraKart/ai/agent_movement.h
 ../shared_libs.h
-../Source/Game/TrafficCity/shared_libs.h
+../Source/Game/AlgebraKart/shared_libs.h
 
-../Source/Game/TrafficCity/ai/agent_fsm.h
+../Source/Game/AlgebraKart/ai/agent_fsm.h
 fsm_event_data.h
-../Source/Game/TrafficCity/ai/fsm_event_data.h
+../Source/Game/AlgebraKart/ai/fsm_event_data.h
 fsm.h
-../Source/Game/TrafficCity/ai/fsm.h
+../Source/Game/AlgebraKart/ai/fsm.h
 
-../Source/Game/TrafficCity/ai/agent_movement.h
+../Source/Game/AlgebraKart/ai/agent_movement.h
 agent_controller.h
-../Source/Game/TrafficCity/ai/agent_controller.h
+../Source/Game/AlgebraKart/ai/agent_controller.h
 Urho3D/Math/Vector3.h
 -
 Urho3D/Math/Quaternion.h
 -
-TrafficCity/network/NetworkActor.h
+AlgebraKart/network/NetworkActor.h
 -
 
-../Source/Game/TrafficCity/ai/evolution_manager.h
-TrafficCity/network/NetworkActor.h
+../Source/Game/AlgebraKart/ai/evolution_manager.h
+AlgebraKart/network/NetworkActor.h
 -
 genetic_algorithm.h
-../Source/Game/TrafficCity/ai/genetic_algorithm.h
+../Source/Game/AlgebraKart/ai/genetic_algorithm.h
 agent_controller.h
-../Source/Game/TrafficCity/ai/agent_controller.h
+../Source/Game/AlgebraKart/ai/agent_controller.h
 ../util/event.h
-../Source/Game/TrafficCity/util/event.h
+../Source/Game/AlgebraKart/util/event.h
 
-../Source/Game/TrafficCity/ai/flag.h
+../Source/Game/AlgebraKart/ai/flag.h
 
-../Source/Game/TrafficCity/ai/fsm.h
+../Source/Game/AlgebraKart/ai/fsm.h
 stdio.h
 -
 fsm_event_data.h
-../Source/Game/TrafficCity/ai/fsm_event_data.h
+../Source/Game/AlgebraKart/ai/fsm_event_data.h
 ../util/semaphore.h
-../Source/Game/TrafficCity/util/semaphore.h
+../Source/Game/AlgebraKart/util/semaphore.h
 
-../Source/Game/TrafficCity/ai/fsm_event_data.h
+../Source/Game/AlgebraKart/ai/fsm_event_data.h
 
-../Source/Game/TrafficCity/ai/genetic_algorithm.h
+../Source/Game/AlgebraKart/ai/genetic_algorithm.h
 genotype.h
-../Source/Game/TrafficCity/ai/genotype.h
+../Source/Game/AlgebraKart/ai/genotype.h
 ../util/event.h
-../Source/Game/TrafficCity/util/event.h
+../Source/Game/AlgebraKart/util/event.h
 evolution_manager.h
-../Source/Game/TrafficCity/ai/evolution_manager.h
+../Source/Game/AlgebraKart/ai/evolution_manager.h
 
-../Source/Game/TrafficCity/ai/genotype.h
+../Source/Game/AlgebraKart/ai/genotype.h
 string
 -
 iostream
@@ -232,7 +232,7 @@ fstream
 vector
 -
 
-../Source/Game/TrafficCity/ai/neural_layer.h
+../Source/Game/AlgebraKart/ai/neural_layer.h
 string
 -
 functional
@@ -240,29 +240,29 @@ functional
 stdlib.h
 -
 ../util/math_helper.h
-../Source/Game/TrafficCity/util/math_helper.h
+../Source/Game/AlgebraKart/util/math_helper.h
 
-../Source/Game/TrafficCity/ai/neural_network.h
+../Source/Game/AlgebraKart/ai/neural_network.h
 neural_layer.h
-../Source/Game/TrafficCity/ai/neural_layer.h
+../Source/Game/AlgebraKart/ai/neural_layer.h
 
-../Source/Game/TrafficCity/ai/sensor.h
+../Source/Game/AlgebraKart/ai/sensor.h
 string
 -
 stdlib.h
 -
 ../util/math_helper.h
-../Source/Game/TrafficCity/util/math_helper.h
+../Source/Game/AlgebraKart/util/math_helper.h
 agent.h
-../Source/Game/TrafficCity/ai/agent.h
+../Source/Game/AlgebraKart/ai/agent.h
 Urho3D/Math/Vector3.h
 -
 Urho3D/Math/Quaternion.h
 -
-TrafficCity/network/NetworkActor.h
+AlgebraKart/network/NetworkActor.h
 -
 
-../Source/Game/TrafficCity/beat/AudioSpectrumAnalyzer.h
+../Source/Game/AlgebraKart/beat/AudioSpectrumAnalyzer.h
 vector
 -
 cstdint
@@ -284,7 +284,7 @@ Urho3D/Container/Vector.h
 Urho3D/Container/Str.h
 -
 
-../Source/Game/TrafficCity/beat/AudioSpectrumAxis.h
+../Source/Game/AlgebraKart/beat/AudioSpectrumAxis.h
 unordered_map
 -
 vector
@@ -296,7 +296,7 @@ Urho3D/Container/Vector.h
 Urho3D/Container/Str.h
 -
 
-../Source/Game/TrafficCity/beat/AudioSpectrumCapture.h
+../Source/Game/AlgebraKart/beat/AudioSpectrumCapture.h
 vector
 -
 string
@@ -306,7 +306,7 @@ iostream
 Urho3D/Container/Vector.h
 -
 
-../Source/Game/TrafficCity/beat/AudioSpectrumRender.h
+../Source/Game/AlgebraKart/beat/AudioSpectrumRender.h
 vector
 -
 numeric
@@ -322,9 +322,9 @@ Urho3D/Container/Vector.h
 Urho3D/Container/Str.h
 -
 
-../Source/Game/TrafficCity/beat/Beat.h
+../Source/Game/AlgebraKart/beat/Beat.h
 Sampler.h
-../Source/Game/TrafficCity/beat/Sampler.h
+../Source/Game/AlgebraKart/beat/Sampler.h
 Urho3D/Container/Str.h
 -
 Urho3D/Container/Vector.h
@@ -332,11 +332,11 @@ Urho3D/Container/Vector.h
 Urho3D/Audio/Sound.h
 -
 
-../Source/Game/TrafficCity/beat/BeatTime.h
+../Source/Game/AlgebraKart/beat/BeatTime.h
 Urho3D/Container/Vector.h
 -
 
-../Source/Game/TrafficCity/beat/BufferData.h
+../Source/Game/AlgebraKart/beat/BufferData.h
 Urho3D/Container/Str.h
 -
 Urho3D/Container/Vector.h
@@ -350,11 +350,11 @@ Urho3D/Scene/LogicComponent.h
 Urho3D/Database/Database.h
 -
 BeatTime.h
-../Source/Game/TrafficCity/beat/BeatTime.h
+../Source/Game/AlgebraKart/beat/BeatTime.h
 Beat.h
-../Source/Game/TrafficCity/beat/Beat.h
+../Source/Game/AlgebraKart/beat/Beat.h
 
-../Source/Game/TrafficCity/beat/Recorder.h
+../Source/Game/AlgebraKart/beat/Recorder.h
 Urho3D/Container/Vector.h
 -
 Urho3D/Audio/Sound.h
@@ -366,13 +366,13 @@ Urho3D/Scene/LogicComponent.h
 Urho3D/Database/Database.h
 -
 Beat.h
-../Source/Game/TrafficCity/beat/Beat.h
+../Source/Game/AlgebraKart/beat/Beat.h
 BufferData.h
-../Source/Game/TrafficCity/beat/BufferData.h
+../Source/Game/AlgebraKart/beat/BufferData.h
 Urho3D/Core/Context.h
-../Source/Game/TrafficCity/beat/Urho3D/Core/Context.h
+../Source/Game/AlgebraKart/beat/Urho3D/Core/Context.h
 
-../Source/Game/TrafficCity/beat/Sampler.h
+../Source/Game/AlgebraKart/beat/Sampler.h
 Urho3D/Container/Str.h
 -
 Urho3D/Container/Vector.h
@@ -384,13 +384,13 @@ Urho3D/Audio/SoundSource3D.h
 Urho3D/Scene/LogicComponent.h
 -
 
-../Source/Game/TrafficCity/beat/Sequencer.h
+../Source/Game/AlgebraKart/beat/Sequencer.h
 Beat.h
-../Source/Game/TrafficCity/beat/Beat.h
+../Source/Game/AlgebraKart/beat/Beat.h
 Recorder.h
-../Source/Game/TrafficCity/beat/Recorder.h
+../Source/Game/AlgebraKart/beat/Recorder.h
 Synthesizer.h
-../Source/Game/TrafficCity/beat/Synthesizer.h
+../Source/Game/AlgebraKart/beat/Synthesizer.h
 Urho3D/Container/Str.h
 -
 Urho3D/Container/Vector.h
@@ -398,7 +398,7 @@ Urho3D/Container/Vector.h
 Urho3D/Scene/LogicComponent.h
 -
 
-../Source/Game/TrafficCity/beat/Synthesizer.h
+../Source/Game/AlgebraKart/beat/Synthesizer.h
 Urho3D/Container/Str.h
 -
 Urho3D/Container/Vector.h
@@ -412,27 +412,27 @@ Urho3D/Scene/LogicComponent.h
 Urho3D/Audio/BufferedSoundStream.h
 -
 
-../Source/Game/TrafficCity/network/ClientObj.h
+../Source/Game/AlgebraKart/network/ClientObj.h
 Urho3D/Scene/LogicComponent.h
 -
 Urho3D/Core/Variant.h
 -
 Urho3D/Input/Controls.h
 -
-TrafficCity/beat/Sequencer.h
+AlgebraKart/beat/Sequencer.h
 -
 
-../Source/Game/TrafficCity/network/NetworkActor.h
+../Source/Game/AlgebraKart/network/NetworkActor.h
 Urho3D/UI/Text3D.h
 -
 ClientObj.h
-../Source/Game/TrafficCity/network/ClientObj.h
+../Source/Game/AlgebraKart/network/ClientObj.h
 Vehicle.h
-../Source/Game/TrafficCity/network/Vehicle.h
-TrafficCity/beat/Sequencer.h
+../Source/Game/AlgebraKart/network/Vehicle.h
+AlgebraKart/beat/Sequencer.h
 -
 ../GameController.h
-../Source/Game/TrafficCity/GameController.h
+../Source/Game/AlgebraKart/GameController.h
 ../../../Urho3D/Graphics/AnimatedModel.h
 ../Source/Urho3D/Graphics/AnimatedModel.h
 ../../../Urho3D/Graphics/AnimationController.h
@@ -440,9 +440,9 @@ TrafficCity/beat/Sequencer.h
 ../../../Urho3D/Scene/SplinePath.h
 ../Source/Urho3D/Scene/SplinePath.h
 
-../Source/Game/TrafficCity/network/Vehicle.h
+../Source/Game/AlgebraKart/network/Vehicle.h
 Vehicle.h
-../Source/Game/TrafficCity/network/Vehicle.h
+../Source/Game/AlgebraKart/network/Vehicle.h
 Urho3D/Core/Context.h
 -
 Urho3D/Graphics/DebugRenderer.h
@@ -476,21 +476,21 @@ Urho3D/Resource/ResourceCache.h
 Urho3D/Scene/Scene.h
 -
 Urho3D/Input/Controls.h
-../Source/Game/TrafficCity/network/Urho3D/Input/Controls.h
+../Source/Game/AlgebraKart/network/Urho3D/Input/Controls.h
 Urho3D/Scene/LogicComponent.h
-../Source/Game/TrafficCity/network/Urho3D/Scene/LogicComponent.h
+../Source/Game/AlgebraKart/network/Urho3D/Scene/LogicComponent.h
 Urho3D/Audio/SoundSource3D.h
-../Source/Game/TrafficCity/network/Urho3D/Audio/SoundSource3D.h
+../Source/Game/AlgebraKart/network/Urho3D/Audio/SoundSource3D.h
 Urho3D/Audio/Sound.h
-../Source/Game/TrafficCity/network/Urho3D/Audio/Sound.h
+../Source/Game/AlgebraKart/network/Urho3D/Audio/Sound.h
 Urho3D/Graphics/StaticModel.h
-../Source/Game/TrafficCity/network/Urho3D/Graphics/StaticModel.h
+../Source/Game/AlgebraKart/network/Urho3D/Graphics/StaticModel.h
 Urho3D/Physics/CollisionShape.h
-../Source/Game/TrafficCity/network/Urho3D/Physics/CollisionShape.h
+../Source/Game/AlgebraKart/network/Urho3D/Physics/CollisionShape.h
 Urho3D/Network/Connection.h
-../Source/Game/TrafficCity/network/Urho3D/Network/Connection.h
+../Source/Game/AlgebraKart/network/Urho3D/Network/Connection.h
 ClientObj.h
-../Source/Game/TrafficCity/network/ClientObj.h
+../Source/Game/AlgebraKart/network/ClientObj.h
 ../../../Urho3D/Physics/RaycastVehicleBase.h
 ../Source/Urho3D/Physics/RaycastVehicleBase.h
 Urho3D/Physics/RigidBody.h
@@ -500,31 +500,31 @@ Urho3D/Input/Controls.h
 Urho3D/Physics/PhysicsUtils.h
 -
 
-../Source/Game/TrafficCity/network/csp/CSP_Client.h
+../Source/Game/AlgebraKart/network/csp/CSP_Client.h
 CSP_messages.h
-../Source/Game/TrafficCity/network/csp/CSP_messages.h
+../Source/Game/AlgebraKart/network/csp/CSP_messages.h
 StateSnapshot.h
-../Source/Game/TrafficCity/network/csp/StateSnapshot.h
+../Source/Game/AlgebraKart/network/csp/StateSnapshot.h
 Urho3D/Scene/Component.h
 -
 vector
 -
 
-../Source/Game/TrafficCity/network/csp/CSP_Server.h
+../Source/Game/AlgebraKart/network/csp/CSP_Server.h
 CSP_Server.h
-../Source/Game/TrafficCity/network/csp/CSP_Server.h
+../Source/Game/AlgebraKart/network/csp/CSP_Server.h
 CSP_messages.h
-../Source/Game/TrafficCity/network/csp/CSP_messages.h
+../Source/Game/AlgebraKart/network/csp/CSP_messages.h
 StateSnapshot.h
-../Source/Game/TrafficCity/network/csp/StateSnapshot.h
+../Source/Game/AlgebraKart/network/csp/StateSnapshot.h
 Urho3D/Scene/Component.h
 -
 vector
 -
 
-../Source/Game/TrafficCity/network/csp/CSP_messages.h
+../Source/Game/AlgebraKart/network/csp/CSP_messages.h
 
-../Source/Game/TrafficCity/network/csp/StateSnapshot.h
+../Source/Game/AlgebraKart/network/csp/StateSnapshot.h
 Urho3D/Scene/Scene.h
 -
 Urho3D/IO/MemoryBuffer.h
@@ -532,7 +532,7 @@ Urho3D/IO/MemoryBuffer.h
 Urho3D/IO/Log.h
 -
 
-../Source/Game/TrafficCity/shared_libs.h
+../Source/Game/AlgebraKart/shared_libs.h
 string
 -
 list
@@ -570,19 +570,19 @@ sys/types.h
 dirent.h
 -
 ai/genotype.h
-../Source/Game/TrafficCity/ai/genotype.h
+../Source/Game/AlgebraKart/ai/genotype.h
 ai/neural_layer.h
-../Source/Game/TrafficCity/ai/neural_layer.h
+../Source/Game/AlgebraKart/ai/neural_layer.h
 ai/genetic_algorithm.h
-../Source/Game/TrafficCity/ai/genetic_algorithm.h
+../Source/Game/AlgebraKart/ai/genetic_algorithm.h
 ai/neural_network.h
-../Source/Game/TrafficCity/ai/neural_network.h
+../Source/Game/AlgebraKart/ai/neural_network.h
 ai/agent.h
-../Source/Game/TrafficCity/ai/agent.h
+../Source/Game/AlgebraKart/ai/agent.h
 ai/evolution_manager.h
-../Source/Game/TrafficCity/ai/evolution_manager.h
+../Source/Game/AlgebraKart/ai/evolution_manager.h
 
-../Source/Game/TrafficCity/types.h
+../Source/Game/AlgebraKart/types.h
 future
 -
 unordered_map
@@ -604,9 +604,9 @@ stdint.h
 Urho3D/Math/Vector3.h
 -
 
-../Source/Game/TrafficCity/util/copy_node.h
+../Source/Game/AlgebraKart/util/copy_node.h
 
-../Source/Game/TrafficCity/util/event.h
+../Source/Game/AlgebraKart/util/event.h
 functional
 -
 vector
@@ -616,7 +616,7 @@ memory
 iostream
 -
 
-../Source/Game/TrafficCity/util/file_utility.h
+../Source/Game/AlgebraKart/util/file_utility.h
 filesystem
 -
 string
@@ -624,7 +624,7 @@ string
 iostream
 -
 
-../Source/Game/TrafficCity/util/semaphore.h
+../Source/Game/AlgebraKart/util/semaphore.h
 mutex
 -
 condition_variable
@@ -896,7 +896,7 @@ cstddef
 ../Scene/Node.h
 ../Source/Urho3D/Scene/Node.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/GameController.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/GameController.cpp
 Urho3D/Core/ProcessUtils.h
 -
 Urho3D/Graphics/Graphics.h
@@ -916,15 +916,15 @@ SDL/SDL_joystick.h
 cstdio
 -
 GameController.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/GameController.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/GameController.h
 Urho3D/DebugNew.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/GameController.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/GameController.h
 Urho3D/Core/Object.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/Missile.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/Missile.cpp
 Urho3D/Core/Context.h
 -
 Urho3D/Resource/ResourceCache.h
@@ -958,19 +958,19 @@ Urho3D/Container/Vector.h
 Urho3D/Math/Quaternion.h
 -
 Missile.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/Missile.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/Missile.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/Missile.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/Missile.h
 Urho3D/Scene/LogicComponent.h
 -
 Urho3D/Graphics/StaticModel.h
 -
 Urho3D/Graphics/ParticleEmitter.h
 -
-TrafficCity/network/NetworkActor.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/TrafficCity/network/NetworkActor.h
+AlgebraKart/network/NetworkActor.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/AlgebraKart/network/NetworkActor.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/Pickup.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/Pickup.cpp
 Urho3D/Core/Context.h
 -
 Urho3D/Resource/ResourceCache.h
@@ -1004,23 +1004,23 @@ Urho3D/Container/Vector.h
 Urho3D/Math/Quaternion.h
 -
 Pickup.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/Pickup.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/Pickup.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/Pickup.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/Pickup.h
 Urho3D/Scene/LogicComponent.h
 -
 Urho3D/Graphics/StaticModel.h
 -
 Urho3D/Graphics/ParticleEmitter.h
 -
-TrafficCity/network/NetworkActor.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/TrafficCity/network/NetworkActor.h
+AlgebraKart/network/NetworkActor.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/AlgebraKart/network/NetworkActor.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/PixelImage.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/PixelImage.cpp
 PixelImage.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/PixelImage.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/PixelImage.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/PixelImage.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/PixelImage.h
 Urho3D/Urho3D.h
 -
 Urho3D/Core/Context.h
@@ -1048,17 +1048,17 @@ Urho3D/Resource/Image.h
 SDL/SDL_log.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/SmoothStep.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/SmoothStep.cpp
 SmoothStep.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/SmoothStep.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/SmoothStep.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/SmoothStep.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/SmoothStep.h
 Urho3D/Math/Vector3.h
 -
 Urho3D/Math/Quaternion.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/TrafficCity.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/AlgebraKart.cpp
 sstream
 -
 string
@@ -1208,11 +1208,11 @@ Urho3D/Urho2D/TmxFile2D.h
 Urho3D/Scene/ValueAnimation.h
 -
 network/Server.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Server.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Server.h
 network/ClientObj.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/ClientObj.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/ClientObj.h
 network/NetworkActor.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/NetworkActor.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/NetworkActor.h
 Urho3D/Physics/RaycastVehicle.h
 -
 Urho3D/Physics/RigidBody.h
@@ -1256,17 +1256,17 @@ Urho3D/Urho2D/ParticleEmitter2D.h
 Urho3D/DebugNew.h
 -
 GameController.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/GameController.h
-TrafficCity.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/TrafficCity.h
-TrafficCity/ai/evolution_manager.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/GameController.h
+AlgebraKart.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/AlgebraKart.h
+AlgebraKart/ai/evolution_manager.h
 -
-TrafficCity/network/Vehicle.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/TrafficCity/network/Vehicle.h
+AlgebraKart/network/Vehicle.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/AlgebraKart/network/Vehicle.h
 WheelTrackModel.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/WheelTrackModel.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/WheelTrackModel.h
 SmoothStep.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/SmoothStep.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/SmoothStep.h
 vector
 -
 cstdint
@@ -1279,18 +1279,18 @@ sstream
 -
 limits
 -
-TrafficCity/beat/AudioSpectrumAnalyzer.h
+AlgebraKart/beat/AudioSpectrumAnalyzer.h
 -
-TrafficCity/beat/AudioSpectrumAxis.h
+AlgebraKart/beat/AudioSpectrumAxis.h
 -
-TrafficCity/beat/AudioSpectrumRender.h
+AlgebraKart/beat/AudioSpectrumRender.h
 -
-TrafficCity/beat/AudioSpectrumCapture.h
+AlgebraKart/beat/AudioSpectrumCapture.h
 -
 shared_libs.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/shared_libs.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/shared_libs.h
 types.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/types.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/types.h
 ../../Urho3D/Input/Controls.h
 /code/dev/algebrakart/v1/Source/Urho3D/Input/Controls.h
 ../../Urho3D/Scene/SplinePath.h
@@ -1298,12 +1298,12 @@ types.h
 ../../Urho3D/Resource/ResourceEvents.h
 /code/dev/algebrakart/v1/Source/Urho3D/Resource/ResourceEvents.h
 Missile.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/Missile.h
-TrafficCity/beat/BufferData.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/TrafficCity/beat/BufferData.h
-TrafficCity/PixelImage.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/Missile.h
+AlgebraKart/beat/BufferData.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/AlgebraKart/beat/BufferData.h
+AlgebraKart/PixelImage.h
 -
-TrafficCity/Constants.h
+AlgebraKart/Constants.h
 -
 stdio.h
 -
@@ -1322,7 +1322,7 @@ string
 utility
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/TrafficCity.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/AlgebraKart.h
 Urho3D/Core/CoreEvents.h
 -
 Urho3D/Engine/Engine.h
@@ -1369,34 +1369,34 @@ Urho3D/UI/UIEvents.h
 -
 Urho3D/Scene/SmoothedTransform.h
 -
-TrafficCity/beat/AudioSpectrumAnalyzer.h
+AlgebraKart/beat/AudioSpectrumAnalyzer.h
 -
-TrafficCity/beat/AudioSpectrumAxis.h
+AlgebraKart/beat/AudioSpectrumAxis.h
 -
-TrafficCity/beat/AudioSpectrumRender.h
+AlgebraKart/beat/AudioSpectrumRender.h
 -
-TrafficCity/beat/AudioSpectrumCapture.h
+AlgebraKart/beat/AudioSpectrumCapture.h
 -
-TrafficCity/ai/evolution_manager.h
+AlgebraKart/ai/evolution_manager.h
 -
 Urho3D/UI/Window.h
 -
-TrafficCity/network/NetworkActor.h
+AlgebraKart/network/NetworkActor.h
 -
-TrafficCity/network/csp/CSP_Client.h
+AlgebraKart/network/csp/CSP_Client.h
 -
-TrafficCity/network/csp/CSP_Server.h
+AlgebraKart/network/csp/CSP_Server.h
 -
-TrafficCity/network/csp/CSP_messages.h
+AlgebraKart/network/csp/CSP_messages.h
 -
 Game.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/Game.h
-TrafficCity/network/Vehicle.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/TrafficCity/network/Vehicle.h
-TrafficCity/PixelImage.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/Game.h
+AlgebraKart/network/Vehicle.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/AlgebraKart/network/Vehicle.h
+AlgebraKart/PixelImage.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/WheelTrackModel.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/WheelTrackModel.cpp
 Urho3D/Urho3D.h
 -
 Urho3D/Core/Context.h
@@ -1420,157 +1420,157 @@ Urho3D/Graphics/DebugRenderer.h
 SDL/SDL_log.h
 -
 WheelTrackModel.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/WheelTrackModel.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/WheelTrackModel.h
 Urho3D/DebugNew.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/WheelTrackModel.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/WheelTrackModel.h
 Urho3D/Urho3D.h
 -
 Urho3D/Core/Object.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent.cpp
 ../shared_libs.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/shared_libs.h
-TrafficCity/Constants.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/shared_libs.h
+AlgebraKart/Constants.h
 -
 Urho3D/IO/Log.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent.h
 ../shared_libs.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/shared_libs.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/shared_libs.h
 ../util/event.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/event.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/event.h
 Urho3D/Math/MathDefs.h
 -
 Urho3D/Math/Vector3.h
 -
 Urho3D/Math/Quaternion.h
 -
-TrafficCity/network/NetworkActor.h
+AlgebraKart/network/NetworkActor.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent_controller.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent_controller.cpp
 ../shared_libs.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/shared_libs.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/shared_libs.h
 agent_fsm.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent_fsm.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent_fsm.h
 ../util/math_helper.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/math_helper.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/math_helper.h
 agent_controller.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent_controller.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent_controller.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent_controller.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent_controller.h
 genotype.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/genotype.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/genotype.h
 neural_layer.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/neural_layer.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/neural_layer.h
 genetic_algorithm.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/genetic_algorithm.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/genetic_algorithm.h
 neural_network.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/neural_network.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/neural_network.h
 sensor.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/sensor.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/sensor.h
 flag.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/flag.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/flag.h
 agent_fsm.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent_fsm.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent_fsm.h
 agent.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent.h
 agent_movement.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent_movement.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent_movement.h
 ../shared_libs.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/shared_libs.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/shared_libs.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent_fsm.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent_fsm.cpp
 agent_fsm.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent_fsm.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent_fsm.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent_fsm.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent_fsm.h
 fsm_event_data.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/fsm_event_data.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/fsm_event_data.h
 fsm.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/fsm.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/fsm.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent_movement.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent_movement.cpp
 ../shared_libs.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/shared_libs.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/shared_libs.h
 Urho3D/Math/Vector3.h
 -
 Urho3D/Math/Quaternion.h
 -
 Urho3D/IO/Log.h
 -
-TrafficCity/network/NetworkActor.h
+AlgebraKart/network/NetworkActor.h
 -
 algorithm
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent_movement.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent_movement.h
 agent_controller.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent_controller.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent_controller.h
 Urho3D/Math/Vector3.h
 -
 Urho3D/Math/Quaternion.h
 -
-TrafficCity/network/NetworkActor.h
+AlgebraKart/network/NetworkActor.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/evolution_manager.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/evolution_manager.cpp
 evolution_manager.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/evolution_manager.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/evolution_manager.h
 ../shared_libs.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/shared_libs.h
-TrafficCity/Constants.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/shared_libs.h
+AlgebraKart/Constants.h
 -
-TrafficCity/util/file_utility.h
+AlgebraKart/util/file_utility.h
 -
 Urho3D/Math/MathDefs.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/evolution_manager.h
-TrafficCity/network/NetworkActor.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/evolution_manager.h
+AlgebraKart/network/NetworkActor.h
 -
 genetic_algorithm.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/genetic_algorithm.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/genetic_algorithm.h
 agent_controller.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent_controller.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent_controller.h
 ../util/event.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/event.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/event.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/flag.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/flag.cpp
 flag.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/flag.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/flag.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/flag.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/flag.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/fsm.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/fsm.cpp
 assert.h
 -
 fsm.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/fsm.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/fsm.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/fsm.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/fsm.h
 stdio.h
 -
 fsm_event_data.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/fsm_event_data.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/fsm_event_data.h
 ../util/semaphore.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/semaphore.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/semaphore.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/fsm_event_data.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/fsm_event_data.cpp
 fsm_event_data.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/fsm_event_data.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/fsm_event_data.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/fsm_event_data.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/fsm_event_data.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/genetic_algorithm.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/genetic_algorithm.cpp
 algorithm
 -
 ../shared_libs.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/shared_libs.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/shared_libs.h
 Urho3D/Math/Vector3.h
 -
 Urho3D/Math/Quaternion.h
@@ -1578,23 +1578,23 @@ Urho3D/Math/Quaternion.h
 Urho3D/IO/Log.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/genetic_algorithm.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/genetic_algorithm.h
 genotype.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/genotype.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/genotype.h
 ../util/event.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/event.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/event.h
 evolution_manager.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/evolution_manager.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/evolution_manager.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/genotype.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/genotype.cpp
 genotype.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/genotype.h
-TrafficCity/Constants.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/genotype.h
+AlgebraKart/Constants.h
 -
 Urho3D/Math/MathDefs.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/genotype.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/genotype.h
 string
 -
 iostream
@@ -1608,13 +1608,13 @@ fstream
 vector
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/neural_layer.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/neural_layer.cpp
 neural_layer.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/neural_layer.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/neural_layer.h
 Urho3D/Math/MathDefs.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/neural_layer.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/neural_layer.h
 string
 -
 functional
@@ -1622,17 +1622,17 @@ functional
 stdlib.h
 -
 ../util/math_helper.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/math_helper.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/math_helper.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/neural_network.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/neural_network.cpp
 neural_network.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/neural_network.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/neural_network.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/neural_network.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/neural_network.h
 neural_layer.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/neural_layer.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/neural_layer.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/sensor.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/sensor.cpp
 cstring
 -
 Urho3D/Math/Ray.h
@@ -1652,29 +1652,29 @@ Urho3D/Graphics/DebugRenderer.h
 Urho3D/Core/Variant.h
 -
 sensor.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/sensor.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/sensor.h
 evolution_manager.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/evolution_manager.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/evolution_manager.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/sensor.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/sensor.h
 string
 -
 stdlib.h
 -
 ../util/math_helper.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/math_helper.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/math_helper.h
 agent.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent.h
 Urho3D/Math/Vector3.h
 -
 Urho3D/Math/Quaternion.h
 -
-TrafficCity/network/NetworkActor.h
+AlgebraKart/network/NetworkActor.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Beat.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Beat.cpp
 Beat.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Beat.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Beat.h
 Urho3D/IO/Log.h
 -
 Urho3D/Core/Context.h
@@ -1682,9 +1682,9 @@ Urho3D/Core/Context.h
 Urho3D/Core/Object.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Beat.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Beat.h
 Sampler.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Sampler.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Sampler.h
 Urho3D/Container/Str.h
 -
 Urho3D/Container/Vector.h
@@ -1692,9 +1692,9 @@ Urho3D/Container/Vector.h
 Urho3D/Audio/Sound.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/BeatTime.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/BeatTime.cpp
 BeatTime.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/BeatTime.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/BeatTime.h
 Urho3D/IO/Log.h
 -
 Urho3D/Core/Context.h
@@ -1702,15 +1702,15 @@ Urho3D/Core/Context.h
 Urho3D/Core/Object.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/BeatTime.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/BeatTime.h
 Urho3D/Container/Vector.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/BufferData.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/BufferData.cpp
 BufferData.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/BufferData.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/BufferData.h
 BeatTime.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/BeatTime.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/BeatTime.h
 Urho3D/IO/Log.h
 -
 Urho3D/Core/Context.h
@@ -1718,7 +1718,7 @@ Urho3D/Core/Context.h
 Urho3D/Core/Object.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/BufferData.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/BufferData.h
 Urho3D/Container/Str.h
 -
 Urho3D/Container/Vector.h
@@ -1732,13 +1732,13 @@ Urho3D/Scene/LogicComponent.h
 Urho3D/Database/Database.h
 -
 BeatTime.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/BeatTime.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/BeatTime.h
 Beat.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Beat.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Beat.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Recorder.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Recorder.cpp
 Recorder.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Recorder.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Recorder.h
 Urho3D/IO/Log.h
 -
 Urho3D/Core/Context.h
@@ -1750,7 +1750,7 @@ Urho3D/Database/Database.h
 Urho3D/Database/DatabaseEvents.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Recorder.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Recorder.h
 Urho3D/Container/Vector.h
 -
 Urho3D/Audio/Sound.h
@@ -1762,21 +1762,21 @@ Urho3D/Scene/LogicComponent.h
 Urho3D/Database/Database.h
 -
 Beat.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Beat.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Beat.h
 BufferData.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/BufferData.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/BufferData.h
 Urho3D/Core/Context.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Urho3D/Core/Context.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Urho3D/Core/Context.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Sampler.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Sampler.cpp
 Sampler.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Sampler.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Sampler.h
 Sequencer.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Sequencer.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Sequencer.h
 Beat.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Beat.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Beat.h
 Urho3D/Resource/ResourceCache.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Urho3D/Resource/ResourceCache.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Urho3D/Resource/ResourceCache.h
 Urho3D/Scene/Scene.h
 -
 Urho3D/IO/Log.h
@@ -1786,7 +1786,7 @@ Urho3D/Core/Context.h
 Urho3D/Core/Object.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Sampler.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Sampler.h
 Urho3D/Container/Str.h
 -
 Urho3D/Container/Vector.h
@@ -1798,11 +1798,11 @@ Urho3D/Audio/SoundSource3D.h
 Urho3D/Scene/LogicComponent.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Sequencer.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Sequencer.cpp
 Sequencer.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Sequencer.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Sequencer.h
 Beat.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Beat.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Beat.h
 vector
 -
 string
@@ -1824,13 +1824,13 @@ Urho3D/Resource/ResourceCache.h
 Urho3D/Container/HashMap.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Sequencer.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Sequencer.h
 Beat.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Beat.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Beat.h
 Recorder.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Recorder.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Recorder.h
 Synthesizer.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Synthesizer.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Synthesizer.h
 Urho3D/Container/Str.h
 -
 Urho3D/Container/Vector.h
@@ -1838,9 +1838,9 @@ Urho3D/Container/Vector.h
 Urho3D/Scene/LogicComponent.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Synthesizer.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Synthesizer.cpp
 Synthesizer.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Synthesizer.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Synthesizer.h
 Urho3D/Resource/ResourceCache.h
 -
 Urho3D/Audio/BufferedSoundStream.h
@@ -1854,7 +1854,7 @@ Urho3D/Core/Context.h
 Urho3D/Core/Object.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/beat/Synthesizer.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/beat/Synthesizer.h
 Urho3D/Container/Str.h
 -
 Urho3D/Container/Vector.h
@@ -1868,7 +1868,7 @@ Urho3D/Scene/LogicComponent.h
 Urho3D/Audio/BufferedSoundStream.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/ClientObj.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/ClientObj.cpp
 Urho3D/Core/Context.h
 -
 Urho3D/Core/CoreEvents.h
@@ -1884,21 +1884,21 @@ Urho3D/Network/NetworkEvents.h
 Urho3D/Input/Controls.h
 -
 ClientObj.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/ClientObj.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/ClientObj.h
 Urho3D/DebugNew.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/ClientObj.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/ClientObj.h
 Urho3D/Scene/LogicComponent.h
 -
 Urho3D/Core/Variant.h
 -
 Urho3D/Input/Controls.h
 -
-TrafficCity/beat/Sequencer.h
+AlgebraKart/beat/Sequencer.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/NetworkActor.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/NetworkActor.cpp
 Urho3D/Core/Context.h
 -
 Urho3D/Scene/Scene.h
@@ -1936,27 +1936,27 @@ Urho3D/Graphics/DebugRenderer.h
 Urho3D/Core/Variant.h
 -
 NetworkActor.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/NetworkActor.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/NetworkActor.h
 Urho3D/IO/MemoryBuffer.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/IO/MemoryBuffer.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/IO/MemoryBuffer.h
 Urho3D/DebugNew.h
 -
-TrafficCity/Missile.h
+AlgebraKart/Missile.h
 -
-TrafficCity/Pickup.h
+AlgebraKart/Pickup.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/NetworkActor.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/NetworkActor.h
 Urho3D/UI/Text3D.h
 -
 ClientObj.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/ClientObj.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/ClientObj.h
 Vehicle.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Vehicle.h
-TrafficCity/beat/Sequencer.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Vehicle.h
+AlgebraKart/beat/Sequencer.h
 -
 ../GameController.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/GameController.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/GameController.h
 ../../../Urho3D/Graphics/AnimatedModel.h
 /code/dev/algebrakart/v1/Source/Urho3D/Graphics/AnimatedModel.h
 ../../../Urho3D/Graphics/AnimationController.h
@@ -1964,7 +1964,7 @@ TrafficCity/beat/Sequencer.h
 ../../../Urho3D/Scene/SplinePath.h
 /code/dev/algebrakart/v1/Source/Urho3D/Scene/SplinePath.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Server.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Server.cpp
 Urho3D/Core/CoreEvents.h
 -
 Urho3D/Scene/Scene.h
@@ -1992,63 +1992,63 @@ Urho3D/IO/FileSystem.h
 Urho3D/IO/Log.h
 -
 Server.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Server.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Server.h
 ClientObj.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/ClientObj.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/ClientObj.h
 Vehicle.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Vehicle.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Vehicle.h
 Urho3D/DebugNew.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Server.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Server.h
 Urho3D/Core/Object.h
 -
 Urho3D/Input/Controls.h
 -
 Vehicle.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Vehicle.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Vehicle.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Vehicle.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Vehicle.cpp
 Urho3D/Urho3D.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Urho3D.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Urho3D.h
 Urho3D/Physics/CollisionShape.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Physics/CollisionShape.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Physics/CollisionShape.h
 Urho3D/Physics/Constraint.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Physics/Constraint.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Physics/Constraint.h
 Urho3D/Core/Context.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Core/Context.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Core/Context.h
 Urho3D/Graphics/Material.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Graphics/Material.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Graphics/Material.h
 Urho3D/Graphics/Model.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Graphics/Model.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Graphics/Model.h
 Urho3D/Physics/PhysicsEvents.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Physics/PhysicsEvents.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Physics/PhysicsEvents.h
 Urho3D/Physics/PhysicsWorld.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Physics/PhysicsWorld.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Physics/PhysicsWorld.h
 Urho3D/Physics/PhysicsUtils.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Physics/PhysicsUtils.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Physics/PhysicsUtils.h
 Urho3D/Resource/ResourceCache.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Resource/ResourceCache.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Resource/ResourceCache.h
 Urho3D/Physics/RigidBody.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Physics/RigidBody.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Physics/RigidBody.h
 Urho3D/Scene/Scene.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Scene/Scene.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Scene/Scene.h
 Urho3D/Graphics/StaticModel.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Graphics/StaticModel.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Graphics/StaticModel.h
 Urho3D/Graphics/DebugRenderer.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Graphics/DebugRenderer.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Graphics/DebugRenderer.h
 Urho3D/Graphics/ParticleEmitter.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Graphics/ParticleEmitter.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Graphics/ParticleEmitter.h
 Urho3D/Graphics/ParticleEffect.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Graphics/ParticleEffect.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Graphics/ParticleEffect.h
 Urho3D/Audio/SoundSource3D.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Audio/SoundSource3D.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Audio/SoundSource3D.h
 Urho3D/Audio/Sound.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Audio/Sound.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Audio/Sound.h
 Urho3D/IO/Log.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/IO/Log.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/IO/Log.h
 Vehicle.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Vehicle.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Vehicle.h
 Urho3D/Core/Context.h
 -
 Urho3D/Graphics/DebugRenderer.h
@@ -2083,18 +2083,18 @@ Urho3D/Scene/Scene.h
 -
 Urho3D/Physics/RigidBody.h
 -
-TrafficCity/WheelTrackModel.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/TrafficCity/WheelTrackModel.h
-TrafficCity/types.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/TrafficCity/types.h
-TrafficCity/Missile.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/TrafficCity/Missile.h
+AlgebraKart/WheelTrackModel.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/AlgebraKart/WheelTrackModel.h
+AlgebraKart/types.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/AlgebraKart/types.h
+AlgebraKart/Missile.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/AlgebraKart/Missile.h
 NetworkActor.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/NetworkActor.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/NetworkActor.h
 Urho3D/ThirdParty/SDL/SDL_log.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/ThirdParty/SDL/SDL_log.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/ThirdParty/SDL/SDL_log.h
 Urho3D/DebugNew.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/DebugNew.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/DebugNew.h
 ../../../ThirdParty/Bullet/src/BulletDynamics/Vehicle/btWheelInfo.h
 /code/dev/algebrakart/v1/Source/ThirdParty/Bullet/src/BulletDynamics/Vehicle/btWheelInfo.h
 vector
@@ -2102,9 +2102,9 @@ vector
 string
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Vehicle.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Vehicle.h
 Vehicle.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Vehicle.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Vehicle.h
 Urho3D/Core/Context.h
 -
 Urho3D/Graphics/DebugRenderer.h
@@ -2138,21 +2138,21 @@ Urho3D/Resource/ResourceCache.h
 Urho3D/Scene/Scene.h
 -
 Urho3D/Input/Controls.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Input/Controls.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Input/Controls.h
 Urho3D/Scene/LogicComponent.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Scene/LogicComponent.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Scene/LogicComponent.h
 Urho3D/Audio/SoundSource3D.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Audio/SoundSource3D.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Audio/SoundSource3D.h
 Urho3D/Audio/Sound.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Audio/Sound.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Audio/Sound.h
 Urho3D/Graphics/StaticModel.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Graphics/StaticModel.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Graphics/StaticModel.h
 Urho3D/Physics/CollisionShape.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Physics/CollisionShape.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Physics/CollisionShape.h
 Urho3D/Network/Connection.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/Urho3D/Network/Connection.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/Urho3D/Network/Connection.h
 ClientObj.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/ClientObj.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/ClientObj.h
 ../../../Urho3D/Physics/RaycastVehicleBase.h
 /code/dev/algebrakart/v1/Source/Urho3D/Physics/RaycastVehicleBase.h
 Urho3D/Physics/RigidBody.h
@@ -2162,11 +2162,11 @@ Urho3D/Input/Controls.h
 Urho3D/Physics/PhysicsUtils.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/CSP_Client.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/CSP_Client.cpp
 CSP_Client.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/CSP_Client.h
-TrafficCity/util/copy_node.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/TrafficCity/util/copy_node.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/CSP_Client.h
+AlgebraKart/util/copy_node.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/AlgebraKart/util/copy_node.h
 Urho3D/Core/Context.h
 -
 Urho3D/Core/CoreEvents.h
@@ -2194,21 +2194,21 @@ Urho3D/Scene/SmoothedTransform.h
 algorithm
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/CSP_Client.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/CSP_Client.h
 CSP_messages.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/CSP_messages.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/CSP_messages.h
 StateSnapshot.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/StateSnapshot.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/StateSnapshot.h
 Urho3D/Scene/Component.h
 -
 vector
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/CSP_Server.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/CSP_Server.cpp
 CSP_Server.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/CSP_Server.h
-TrafficCity/util/copy_node.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/TrafficCity/util/copy_node.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/CSP_Server.h
+AlgebraKart/util/copy_node.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/AlgebraKart/util/copy_node.h
 Urho3D/Core/Context.h
 -
 Urho3D/Core/CoreEvents.h
@@ -2230,21 +2230,21 @@ Urho3D/Scene/Scene.h
 Urho3D/Scene/SceneEvents.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/CSP_Server.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/CSP_Server.h
 CSP_Server.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/CSP_Server.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/CSP_Server.h
 CSP_messages.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/CSP_messages.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/CSP_messages.h
 StateSnapshot.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/StateSnapshot.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/StateSnapshot.h
 Urho3D/Scene/Component.h
 -
 vector
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/CSP_messages.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/CSP_messages.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/network/csp/StateSnapshot.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/network/csp/StateSnapshot.h
 Urho3D/Scene/Scene.h
 -
 Urho3D/IO/MemoryBuffer.h
@@ -2252,7 +2252,7 @@ Urho3D/IO/MemoryBuffer.h
 Urho3D/IO/Log.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/shared_libs.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/shared_libs.h
 string
 -
 list
@@ -2290,19 +2290,19 @@ sys/types.h
 dirent.h
 -
 ai/genotype.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/genotype.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/genotype.h
 ai/neural_layer.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/neural_layer.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/neural_layer.h
 ai/genetic_algorithm.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/genetic_algorithm.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/genetic_algorithm.h
 ai/neural_network.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/neural_network.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/neural_network.h
 ai/agent.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/agent.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/agent.h
 ai/evolution_manager.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/ai/evolution_manager.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/ai/evolution_manager.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/types.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/types.h
 future
 -
 unordered_map
@@ -2324,11 +2324,11 @@ stdint.h
 Urho3D/Math/Vector3.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/event.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/event.cpp
 event.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/event.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/event.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/event.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/event.h
 functional
 -
 vector
@@ -2338,7 +2338,7 @@ memory
 iostream
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/file_utility.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/file_utility.cpp
 filesystem
 -
 string
@@ -2346,9 +2346,9 @@ string
 iostream
 -
 file_utility.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/file_utility.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/file_utility.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/file_utility.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/file_utility.h
 filesystem
 -
 string
@@ -2356,17 +2356,17 @@ string
 iostream
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/math_helper.cpp
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/math_helper.cpp
 math_helper.h
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/math_helper.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/math_helper.h
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/math_helper.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/math_helper.h
 string
 -
 math.h
 -
 
-/code/dev/algebrakart/v1/Source/Game/TrafficCity/util/semaphore.h
+/code/dev/algebrakart/v1/Source/Game/AlgebraKart/util/semaphore.h
 mutex
 -
 condition_variable

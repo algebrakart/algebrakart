@@ -25,6 +25,7 @@ e2bec0fb56a1b735bcd801e36e80cffe Source/Urho3D/CMakeFiles/tolua++
 6aa5370e99f4d51499d1b97fe80ea721 Source/Urho3D/CMakeFiles/tolua++-complete
 e9b0979b6ac7448ae186f353525534cc Source/Urho3D/LuaScript/generated/AudioLuaAPI.cpp
 f06372eb9432b7de91f53d5454a13a6f Source/Urho3D/LuaScript/generated/CoreLuaAPI.cpp
+076e061eae73bec5ba87140da7ab2be4 Source/Urho3D/LuaScript/generated/DatabaseLuaAPI.cpp
 774aa9b9c35a310bf554c426964f7696 Source/Urho3D/LuaScript/generated/EngineLuaAPI.cpp
 7e95fdb711fbc6ded493b4ceb4179b6c Source/Urho3D/LuaScript/generated/GraphicsLuaAPI.cpp
 ceecdd8330975d172cb3ff9d02b477c3 Source/Urho3D/LuaScript/generated/IKLuaAPI.cpp
@@ -42,7 +43,7 @@ f094b88ff7558af5cbf74a6f2644ce36 Source/Urho3D/LuaScript/generated/SceneLuaAPI.c
 68ce3aedeba4d96f8aafcc3d2700fdaf Source/Urho3D/Precompiled.h.Release.pch.trigger
 8b933c9972a6dc92033b11751758ffca Source/Urho3D/librevision.h
 c8032fd4ebcb829d594ca19d9fd37b1e Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-build
-b6623f522326ac208f3d112da877b757 Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-configure
+19cdc56e816c74e5a314ddf2ab65f35e Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-configure
 03561c03223ecc1e1f9e66fa04a24b55 Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-download
 0c8d72cdbdfc4ef5ae0c6bcf53da9be4 Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-install
 0d3b205d91c6babb8bf6963f34c95322 Source/Urho3D/tolua++-prefix/src/tolua++-stamp/tolua++-mkdir
