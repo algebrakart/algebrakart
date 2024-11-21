@@ -12,10 +12,6 @@ Algebra Kart
 - Group sound synthesis through drum machines for each networked player and server-side
 - Server-side recorder of drum machines - logging music sequence data to database
 
-![Beat module](mayascape_beatmodule.png)
-
-
-
 ## Development Updates
 
 - Real-time physics world.
@@ -33,3 +29,10 @@ IN-PROGRESS:
 - Server/client sound synthesis through networked drum sequencers
 
 
+- R1
+  - Update steering, faster
+  - Smaller vehicles? Or camera change
+  - Setup CA server
+  - Ranking system
+  - Login system
+  - 
