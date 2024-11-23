@@ -74,7 +74,7 @@ void Game::Setup() {
     serverIP_ = "";
 
     //1920 x 1080
-    engineParameters_[EP_LOG_NAME] = GetSubsystem<FileSystem>()->GetProgramDir() + "mayascape.log";
+    engineParameters_[EP_LOG_NAME] = GetSubsystem<FileSystem>()->GetProgramDir() + "algebrakart.log";
 //    engineParameters_[EP_LOG_NAME]     = GetSubsystem<FileSystem>()->GetAppPreferencesDir("urho3d", "logs") + GetTypeName() + ".log";
     engineParameters_[EP_FULL_SCREEN] = false;
     engineParameters_[EP_SOUND] = true;
@@ -138,10 +138,9 @@ void Game::Setup() {
         engineParameters_[EP_SOUND] = false;
     }
 
-    //engineParameters_[EP_HEADLESS] = headless_;
-// DO NOT USE URHO3D HEADLESS WILL DISABLE too much
-    //engineParameters_[EP_HEADLESS] = true;
-    engineParameters_[EP_HEADLESS] = false; // TODO: Investigate how to use true headless
+    engineParameters_[EP_HEADLESS] = false;
+    // DO NOT USE URHO3D HEADLESS WILL DISABLE too much
+
     engineParameters_[EP_WINDOW_RESIZABLE] = true;
 
     if (autoStartServer_) {
@@ -256,7 +255,7 @@ void Game::CreateLogo()
 {
     // Get logo texture
     ResourceCache* cache = GetSubsystem<ResourceCache>();
-    Texture2D* logoTexture = cache->GetResource<Texture2D>("Textures/logo.png");
+    Texture2D* logoTexture = cache->GetResource<Texture2D>("Textures/ak-box-cover.png");
     if (!logoTexture)
         return;
 
@@ -271,7 +270,8 @@ void Game::CreateLogo()
     int textureHeight = logoTexture->GetHeight();
 
     // Set logo sprite scale
-    logoSprite_->SetScale(256.0f / textureWidth);
+    //logoSprite_->SetScale(f / textureWidth);
+    logoSprite_->SetScale(2.0f);
 
     // Set logo sprite size
     logoSprite_->SetSize(textureWidth, textureHeight);
@@ -319,7 +319,7 @@ void Game::SetWindowTitleAndIcon()
 
         std::string s;
         char buffer[100];
-        sprintf(buffer, "%s %.1f.", APP_TITLE, VERSION);
+        sprintf(buffer, "%s %.1f", APP_TITLE, VERSION);
         s = s.append(buffer);
         graphics->SetWindowTitle(s.c_str());
     }

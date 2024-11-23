@@ -139,12 +139,11 @@ class GameResourceRouter : public ResourceRouter
 };
 
 
-/*
-  __   __
- /  \/  \
-/__/ /__/ AYA SCAPE
+/* /\
+  /  \
+ / || \ lgebraKart.com
+ --- ---
 
-Written by Ajay Bhaga 2021-2022
 */
 class AlgebraKart : public Game
 {

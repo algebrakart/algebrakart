@@ -180,12 +180,8 @@ const int MSG_NODE_ERROR = 156;
 
 std::vector<std::string> gameServers = {
         "localhost", // local game server
-    "www.monkeymaya.com", // remote game server (default)
-    "10.0.2.2", // android server address
-    "192.168.4.58", // neko (dev)
-    "192.168.4.77", // lady (remote local game server)
-    "192.168.4.99", // guinea
-    "192.168.4.27", // studio
+        "www.algebrakart.com", // remote game server (default)
+        "10.0.2.2", // android server address
 };
 
 std::vector<std::string> bzRadioTracksArtistName = {
@@ -3931,8 +3927,8 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
 
                                                 }
 
-                                                //steerPath->DrawDebugGeometry(dbgRenderer, true);
-                                                // steerSplinePath->DrawDebugGeometry(dbgRenderer, true);
+ //                                               steerPath->DrawDebugGeometry(dbgRenderer, true);
+                                                 steerSplinePath->DrawDebugGeometry(dbgRenderer, true);
 
                                                 if (steerSplinePath->getControlPoints().Size() > 3) {
 
@@ -4776,7 +4772,8 @@ void AlgebraKart::CreateUI() {
     textureHeight = logoTexture->GetHeight();
 
     // Set logo sprite scale
-    logoSprite_->SetScale(256.0f / textureWidth);
+    //logoSprite_->SetScale(256.0f / textureWidth);
+    //logoSprite_->SetScale(256.0f / textureWidth);
 
     // Set logo sprite size
     logoSprite_->SetSize(textureWidth, textureHeight);
