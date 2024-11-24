@@ -1879,7 +1879,7 @@ void Vehicle::ApplyDownwardForce()
 
 
 
-        float pushMag = 240.0f + raycastVehicle_->GetBody()->GetLinearVelocity().LengthSquared() * 20.0f + raycastVehicle_->GetRPM()*10.0f;
+        float pushMag = 0.0f + raycastVehicle_->GetBody()->GetLinearVelocity().LengthSquared() * 20.0f + raycastVehicle_->GetRPM()*10.0f;
         pushMag = Clamp( pushMag, MIN_DOWN_FORCE, MAX_DOWN_FORCE );
 
 /*
@@ -2095,7 +2095,8 @@ void Vehicle::UpdateDrift()
     const float slipConditon0 = 0.00f; // ice
     const float slipConditon1 = 0.01f; // wet pavement
     const float slipConditon2 = 0.02f; // loose dirt
-    const float slipConditon3 = 0.04f; // dirt
+    //const float slipConditon3 = 0.04f; // dirt
+    const float slipConditon3 = 0.41f; // sticky dirt
     const float slipConditon4 = 0.06f; // pavement
 
     // set slip
@@ -2103,7 +2104,7 @@ void Vehicle::UpdateDrift()
     const float slipMax = MAX_REAR_SLIP;
 
     // for demo purpose, limit the drift speed to provide high speed steering experience w/o any drifting
-    const float maxDriftSpeed = 70.0f;
+    const float maxDriftSpeed = 10.0f;
     const float absSteeringVal = Abs( raycastVehicle_->GetSteeringValue(0) );
     const float curSpdMph = GetSpeedMPH();
 
