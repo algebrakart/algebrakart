@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2021-2022 Monkey Maya Studios.
+# Copyright (c) 2024 Bad Zindagi Music
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
 #
 
 # Set project name
-project (MayaScape)
+project (AlgebraKart)
 
 # Enable ODBC Database (Server logging)
 set(ODBC_INCLUDE_DIRS "/usr/include/")
@@ -32,7 +32,7 @@ find_package (Urho3D REQUIRED)
 include_directories (${URHO3D_INCLUDE_DIRS})
 
 # Define target name
-set (TARGET_NAME MayaScape)
+set (TARGET_NAME AlgebraKart)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CUDA_STANDARD 14)
@@ -49,4 +49,4 @@ setup_main_executable ()
 
 # Setup test cases
 setup_test ()
-target_link_libraries (MayaScape muFFT)
+target_link_libraries (AlgebraKart muFFT)

@@ -3906,16 +3906,16 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                                     // Apply vehicle steering
                                                     actor->vehicle_->setDesiredSteer(desiredSteer);
 */
-                                                    dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition(), actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()+actor->vehicle_->GetRaycastVehicle()->GetNode()->GetRotation() * Vector3::FORWARD*15.0f,
-                                                                         Color(0.0f, 1.0, 0.0));
+                                                    //dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition(), actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()+actor->vehicle_->GetRaycastVehicle()->GetNode()->GetRotation() * Vector3::FORWARD*15.0f,
+                                                    //                     Color(0.0f, 1.0, 0.0));
 
 
 /*                                                    dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition(), actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()+steerProj * Vector3::FORWARD*15.0f,
                                                                          Color(1.0f, 0.0, 0.0));
 */
 
-                                                    dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition(), actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()+actor->vehicle_->GetRaycastVehicle()->GetNode()->GetRotation() * Vector3::RIGHT*15.0f*actor->vehicle_->getDesiredSteer(),
-                                                                         Color(0.0f, 0.0, 1.0));
+                                                    //dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition(), actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()+actor->vehicle_->GetRaycastVehicle()->GetNode()->GetRotation() * Vector3::RIGHT*15.0f*actor->vehicle_->getDesiredSteer(),
+                                                    //                     Color(0.0f, 0.0, 1.0));
 
                                                  /*   dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetBody()->GetPosition(), Quaternion(90.0f, Vector3::UP) * actor->vehicle_->GetRaycastVehicle()->GetBody()->GetPosition() * Vector3::FORWARD * 35.0,
                                                                          Color(1.0f, 1.0, 1.0));
@@ -3928,7 +3928,7 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                                 }
 
  //                                               steerPath->DrawDebugGeometry(dbgRenderer, true);
-                                                 steerSplinePath->DrawDebugGeometry(dbgRenderer, true);
+                                                  //steerSplinePath->DrawDebugGeometry(dbgRenderer, true);
 
                                                 if (steerSplinePath->getControlPoints().Size() > 3) {
 
