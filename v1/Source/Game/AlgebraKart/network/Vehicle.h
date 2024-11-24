@@ -68,7 +68,7 @@ class WheelTrackModel;
 //=============================================================================
 
 const float YAW_SENSITIVITY = 0.1f;
-const float ENGINE_POWER = 10.0f;
+const float ENGINE_POWER = 30.0f;
 const float DOWN_FORCE = 10.0f;
 const float MAX_WHEEL_ANGLE = 22.5f;
 

@@ -135,7 +135,7 @@ Vehicle::Vehicle(Context* context)
     emittersCreated = false;
 
     // Working
-    m_fmaxEngineForce = 6400.0f;//950.f;
+    m_fmaxEngineForce = 11600.0f;//950.f;
   //  m_fmaxEngineForce = 4200.0f;//5400.0f;//950.f;
 
     m_fmaxBreakingForce = 800.f;
@@ -1855,9 +1855,9 @@ void Vehicle::ApplyDownwardForce()
         // Apply normal force relative to vehicle
         // small arbitrary multiplier
         //const float velocityMultiplyer = 0.92f;
-        const float velocityMultiplyer = 1.12f;
+        const float velocityMultiplyer = 100.12f;
         //const float velocityMultiplyer = 1.24f;
-        Vector3 downNormal = node_->GetUp() * -1.0f;
+        Vector3 downNormal = node_->GetUp() * 1.0f;
         float velocityMag = raycastVehicle_->GetBody()->GetLinearVelocity().LengthSquared() * velocityMultiplyer;
         velocityMag = Clamp( velocityMag, MIN_DOWN_FORCE, MAX_DOWN_FORCE );
         Vector3 force = velocityMag * downNormal;
@@ -1879,7 +1879,7 @@ void Vehicle::ApplyDownwardForce()
 
 
 
-        float pushMag = 10.0f + raycastVehicle_->GetBody()->GetLinearVelocity().LengthSquared() * 20.0f + raycastVehicle_->GetRPM()*10.0f;
+        float pushMag = 240.0f + raycastVehicle_->GetBody()->GetLinearVelocity().LengthSquared() * 20.0f + raycastVehicle_->GetRPM()*10.0f;
         pushMag = Clamp( pushMag, MIN_DOWN_FORCE, MAX_DOWN_FORCE );
 
 /*

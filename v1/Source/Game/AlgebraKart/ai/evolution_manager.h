@@ -98,5 +98,5 @@ private:
     bool firstRun_;
 };
 
-#define POPULATION_SIZE 2 // Population
+#define POPULATION_SIZE 9 // Population
 #define NO_WHEEL_CONTACT_DIE_TIME 60.0f // How long for agent to die, when no wheel contact
