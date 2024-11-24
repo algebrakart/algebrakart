@@ -1,7 +1,7 @@
 /*
      Algebra Kart - algebrakart.com
      MIT LICENSE, Copyright 2024, Bad Zindagi Music
-     Written by Ajay Bhaga 2024
+
 */
 #include <sstream>
 #include <string>
@@ -170,10 +170,16 @@ const int MSG_CHAT = 153;
 const int MSG_NODE_ERROR = 156;
 
 
-#define INGAME_FONT "Fonts/m6x11.ttf"
-#define INGAME_FONT2 "Fonts/SinsGold.ttf"
+//#define INGAME_FONT "Fonts/m6x11.ttf"
+//#define INGAME_FONT "Fonts/RulerGold.ttf"
+//#define INGAME_FONT2 "Fonts/SinsGold.ttf"
+//#define INGAME_FONT3 "Fonts/RulerGold.ttf"
+//#define INGAME_FONT4 "Fonts/HopeGold.ttf"
+
+#define INGAME_FONT "Fonts/RulerGold.ttf"
+#define INGAME_FONT2 "Fonts/RulerGold.ttf"
 #define INGAME_FONT3 "Fonts/RulerGold.ttf"
-#define INGAME_FONT4 "Fonts/HopeGold.ttf"
+#define INGAME_FONT4 "Fonts/RulerGold.ttf"
 
 
 #define SHOW_STATS 1
@@ -4599,12 +4605,12 @@ void AlgebraKart::CreateUI() {
     // Construct the instructions text element
     versionText_ = ui->GetRoot()->CreateChild<Text>();
     versionText_->SetText(STUDIO_VERSION);
-    versionText_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 25);
+    versionText_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
     versionText_->SetColor(Color::GRAY);
 
     auto versionText2_ = ui->GetRoot()->CreateChild<Text>();
     versionText2_->SetText(STUDIO_VERSION);
-    versionText2_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 25);
+    versionText2_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
     versionText2_->SetColor(Color::YELLOW);
     versionText2_->SetParent(versionText_);
 
@@ -4623,7 +4629,7 @@ void AlgebraKart::CreateUI() {
     // Construct the instructions text element
     gameNameText_ = ui->GetRoot()->CreateChild<Text>();
     gameNameText_->SetText(GAME_NAME);
-    gameNameText_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 60);
+    gameNameText_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
     gameNameText_->SetColor(Color::GRAY);
     // Position the text relative to the screen center
     gameNameText_->SetAlignment(HA_CENTER, VA_TOP);
@@ -4632,7 +4638,7 @@ void AlgebraKart::CreateUI() {
 
     auto gameNameText2_ = ui->GetRoot()->CreateChild<Text>();
     gameNameText2_->SetText(GAME_NAME);
-    gameNameText2_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 60);
+    gameNameText2_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
     gameNameText2_->SetColor(Color::WHITE);
     // Position the text relative to the screen center
     gameNameText2_->SetAlignment(HA_CENTER, VA_TOP);
@@ -6720,7 +6726,7 @@ void AlgebraKart::CreateClientUI() {
         rankText_[i] = ui->GetRoot()->CreateChild<Text>("RankText");
         rankText_[i]->SetAlignment(HA_LEFT, VA_CENTER);
         rankText_[i]->SetPosition(10.0f, 10.0 + (i * 50));
-        rankText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT3), 30);
+        rankText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
         rankText_[i]->SetTextEffect(TE_SHADOW);
         rankText_[i]->SetVisible(false);
         std::string debugData1;
@@ -6733,7 +6739,7 @@ void AlgebraKart::CreateClientUI() {
         debugText_[i] = ui->GetRoot()->CreateChild<Text>("DebugText");
         debugText_[i]->SetAlignment(HA_LEFT, VA_CENTER);
         debugText_[i]->SetPosition(10.0f, 500.0 + (i * 40));
-        debugText_[i]->SetFont(font, 21);
+        debugText_[i]->SetFont(font, 12);
         debugText_[i]->SetTextEffect(TE_SHADOW);
         debugText_[i]->SetVisible(false);
         std::string debugData1;
@@ -6764,7 +6770,7 @@ void AlgebraKart::CreateClientUI() {
         radioText_[i]->SetPosition(-38.0f, 20 + (i * 20));
         radioText_[i]->SetVisible(true);
         radioText_[i]->SetColor(Color(235/255.0f, 217/255.0f, 255/255));
-        radioText_[i]->SetFont(font4, 19);
+        radioText_[i]->SetFont(font4, 16);
         radioText_[i]->SetTextEffect(TE_SHADOW);
         radioText_[i]->SetVisible(true);
         std::string debugData1;
@@ -7056,7 +7062,7 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
         debugText_[i] = ui->GetRoot()->CreateChild<Text>("DebugText");
         debugText_[i]->SetAlignment(HA_LEFT, VA_CENTER);
         debugText_[i]->SetPosition(10.0f, 10.0 + (i * 40));
-        debugText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT2), 22);
+        debugText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT2), 12);
         debugText_[i]->SetTextEffect(TE_SHADOW);
         debugText_[i]->SetVisible(false);
         std::string debugData1;
@@ -7069,7 +7075,7 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
         rankText_[i] = ui->GetRoot()->CreateChild<Text>("RankText");
         rankText_[i]->SetAlignment(HA_LEFT, VA_CENTER);
         rankText_[i]->SetPosition(10.0f, 10.0 + (i * 50));
-        rankText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT3), 30);
+        rankText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
         rankText_[i]->SetTextEffect(TE_SHADOW);
         rankText_[i]->SetVisible(false);
         std::string debugData1;
