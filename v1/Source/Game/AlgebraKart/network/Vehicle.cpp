@@ -2144,7 +2144,7 @@ void Vehicle::DebugDraw() {
         if (dbgRenderer) {
             if (raycastVehicle_) {
                 // Call parent debug draw
-                this->raycastVehicle_->DebugDraw(dbgRenderer);
+                //this->raycastVehicle_->DebugDraw(dbgRenderer);
 
             }
         }
