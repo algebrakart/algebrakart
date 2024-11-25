@@ -5770,10 +5770,10 @@ void AlgebraKart::DoStartServer() {
     network->SetUpdateFps(30);
 
     // Server load level
-    LoadLevel(8);
+    //LoadLevel(8);
     //LoadLevel(4);
-    //LoadLevel(5);
-    //LoadLevel(6);
+    //LoadLevel(6); // big world track
+    LoadLevel(8); // sky track
     //LoadLevel(7);
     //LoadLevel(8);
 }
