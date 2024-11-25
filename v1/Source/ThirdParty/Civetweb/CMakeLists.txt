@@ -81,7 +81,7 @@ if (URHO3D_SSL)
         )
         if (LIBDL_FOUND)
             if (NOT TARGET LIBDL::LIBDL)
-                add_library(LIBDL::LIBDL UNKNOWN IMPORTED ../../Game/MayaScape/network/csp/StateSnapshot.h)
+                add_library(LIBDL::LIBDL UNKNOWN IMPORTED ../../Game/algebrakart/network/csp/StateSnapshot.h)
                 set_target_properties(LIBDL::LIBDL PROPERTIES
                     IMPORTED_LOCATION "${LIBDL_LIBRARIES}"
                     INTERFACE_INCLUDE_DIRECTORIES "${LIBDL_INCLUDE_DIRS}"

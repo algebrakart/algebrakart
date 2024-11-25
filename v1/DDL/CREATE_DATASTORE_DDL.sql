@@ -6,7 +6,7 @@
 ---
 
 
-CREATE DATABASE mayascape;
+CREATE DATABASE algebrakart;
 
 -- DROP SCHEMA world1;
 

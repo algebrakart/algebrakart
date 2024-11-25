@@ -1,4 +1,4 @@
-# Install script for directory: /code/dev/MayaScape/src/Urho3D/Source/Game
+# Install script for directory: /code/dev/algebrakart/src/Urho3D/Source/Game
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,8 +39,8 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/code/dev/algebrakart/src/Urho3D/Source/Game/MayaScape/cmake_install.cmake")
-  include("/code/dev/algebrakart/src/Urho3D/Source/Game/MayaScape/terrain/cmake_install.cmake")
+  include("/code/dev/algebrakart/src/Urho3D/Source/Game/algebrakart/cmake_install.cmake")
+  include("/code/dev/algebrakart/src/Urho3D/Source/Game/algebrakart/terrain/cmake_install.cmake")
 
 endif()
 

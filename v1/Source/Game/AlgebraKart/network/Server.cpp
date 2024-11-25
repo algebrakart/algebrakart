@@ -40,7 +40,7 @@ void Server::RegisterScene(Scene *scene)
 void Server::InitializeScene(File &file)
 {
     scene_->InstantiateXML(file, Vector3::ZERO, Quaternion());
-    File saveFile(context_, GetSubsystem<FileSystem>()->GetProgramDir() + "Data/Scenes/" + "MayaScape-ServerSceneInit.xml", FILE_WRITE);
+    File saveFile(context_, GetSubsystem<FileSystem>()->GetProgramDir() + "Data/Scenes/" + "algebrakart-ServerSceneInit.xml", FILE_WRITE);
     scene_->SaveXML(saveFile);
     URHO3D_LOGINFOF("InitializeScene: Scene checksum -> %s", ToStringHex(scene_->GetChecksum()).CString());
 }
@@ -278,7 +278,7 @@ void Server::HandleClientDisconnected(StringHash eventType, VariantMap& eventDat
 
 void Server::HandleClientObjectID(StringHash eventType, VariantMap& eventData)
 {
-    // CLIENT CODE (Called before the MayaScape HandleClientObjectID)
+    // CLIENT CODE (Called before the algebrakart HandleClientObjectID)
 
     if (eventType == E_CLIENTOBJECTID) {
         // CLIENT: Read data and store client object id information

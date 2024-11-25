@@ -1137,24 +1137,24 @@ void NetworkActor::DebugDraw() {
 
 
             //dbgRenderer->AddLine(localCenter, (localCenter+GetNode()->GetDirection()*40.0f), Color(1.0f, 0.0, 0.0));
-            dbgRenderer->AddLine(localCenter, (localCenter+lastImpulse_*40.0f), Color(1.0f, 0.0, 0.0));
+            //dbgRenderer->AddLine(localCenter, (localCenter+lastImpulse_*40.0f), Color(1.0f, 0.0, 0.0));
 
             // TO VEHICLE
-            dbgRenderer->AddLine(localCenter, vehicle_->GetRaycastVehicle()->GetBody()->GetPosition(), Color(0.0f, 0.0, 1.0));
+            //dbgRenderer->AddLine(localCenter, vehicle_->GetRaycastVehicle()->GetBody()->GetPosition(), Color(0.0f, 0.0, 1.0));
 
             //Vector3 nodePos = GetNode()->GetPosition();
             //dbgRenderer->AddLine(localCenter, toTarget_, Color(1.0f, 1.0, 0.0));
 
 
             //Vector3 nodePos = GetNode()->GetPosition();
-            dbgRenderer->AddLine(localCenter, toTarget_, Color(1.0f, 0.0, 1.0));
+            //dbgRenderer->AddLine(localCenter, toTarget_, Color(1.0f, 0.0, 1.0));
 
 
 
 
             if (vehicle_->GetDragBrake().Length() > 0) {
 //            dragBrake_
-                dbgRenderer->AddLine(localCenter, localCenter + vehicle_->GetDragBrake() * 1.0f, Color(1.0f, 1.0, 0.0));
+            //    dbgRenderer->AddLine(localCenter, localCenter + vehicle_->GetDragBrake() * 1.0f, Color(1.0f, 1.0, 0.0));
             }
             /// DRAW COLLISION LINES
             //dbgRenderer->AddLine(nodePos, nodePos+lastCollVel_*300.0f, Color(0.0f, 1.0, 0.0));
@@ -1405,14 +1405,6 @@ void NetworkActor::UsePickup() {
 
                 // }
             }
-
-
-
-
-
-
-
-
             used = true;
             break;
         case 2:

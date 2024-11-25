@@ -1,8 +1,8 @@
-MAYASCAPE
+algebrakart
 
-![MayaScape](https://github.com/ajaybhaga/MonkeyMaya_com/blob/main/website/content/mm-demo11.gif)
+![algebrakart](https://github.com/ajaybhaga/MonkeyMaya_com/blob/main/website/content/mm-demo11.gif)
 
-# MayaScape: What is it?
+# algebrakart: What is it?
 
 - A co-creation time-space
 - Real-time networked world - actors, vehicles, physics, interaction
@@ -11,11 +11,11 @@ MAYASCAPE
 - Group sound synthesis through drum machines for each networked player and server-side
 - Server-side recorder of drum machines - logging music sequence data to database
 
-![Beat module](mayascape_beatmodule.png)
+![Beat module](algebrakart_beatmodule.png)
 
 
 
-# MayaScape Development Updates
+# algebrakart Development Updates
 
 - Real-time physics world.
 - Clients can join server session.

@@ -9,7 +9,7 @@
 #include <Urho3D/Audio/Sound.h>
 #include <Urho3D/Audio/SoundSource3D.h>
 #include <Urho3D/Scene/LogicComponent.h>
-#ifdef MAYASCAPE_SERVER
+#ifdef algebrakart_SERVER
 #include <Urho3D/Database/Database.h>
 #endif
 #include "BeatTime.h"

@@ -5,7 +5,7 @@
 #include <Urho3D/Core/Object.h>
 
 
-#ifdef MAYASCAPE_SERVER
+#ifdef algebrakart_SERVER
 #include <Urho3D/Database/Database.h>
 #include <Urho3D/Database/DatabaseEvents.h>
 #else
@@ -25,9 +25,9 @@ void Recorder::RegisterObject(Context *context)
 
 Recorder::Recorder(Context *context) : Object(context), currSeqId_(0) {
 
-#ifdef MAYASCAPE_SERVER
+#ifdef algebrakart_SERVER
 
-    String dsn = "MAYASCAPE";
+    String dsn = "algebrakart";
     db_ = GetSubsystem<Database>();
     cxn_ = db_->Connect("DSN=" + dsn);
 
@@ -161,7 +161,7 @@ void Recorder::Persist() {
 
 }
 
-#ifdef MAYASCAPE_SERVER
+#ifdef algebrakart_SERVER
 void Recorder::HandleDBCursor(StringHash eventType, VariantMap& eventData) {
 
     using namespace DbCursor;
@@ -185,7 +185,7 @@ void Recorder::HandleDBCursor(StringHash eventType, VariantMap& eventData) {
 #endif
 
 void Recorder::CreateSequence(String name) {
-#ifdef MAYASCAPE_SERVER
+#ifdef algebrakart_SERVER
     if (!cxn_)
         return;
 

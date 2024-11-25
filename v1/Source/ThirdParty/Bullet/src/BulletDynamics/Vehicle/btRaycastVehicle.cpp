@@ -9,7 +9,7 @@
  * It is provided "as is" without express or implied warranty.
 */
 
-// MayaScape mod
+// algebrakart mod
 // Extended for applying custom impulses
 
 

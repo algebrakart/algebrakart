@@ -1226,7 +1226,8 @@ void Vehicle::Init(Node* node) {
 
 
                     connectionHeight = -0.2f; // Kart
-                    wheelSpace = 24.1f * scaleF; // Kart
+                    //wheelSpace = 24.1f * scaleF; // Kart
+                    wheelSpace = 1.1f * scaleF; // Kart
                     wheelX = ((2.6f / 2.0f) + wheelWidth_); // Kart
 
 

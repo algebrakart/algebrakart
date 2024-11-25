@@ -6,5 +6,5 @@ CXX_FLAGS = -mtune=generic  -std=gnu++11 -Wno-invalid-offsetof -march=native -ff
 
 CXX_DEFINES = -DURHO3D_ANGELSCRIPT -DURHO3D_FILEWATCHER -DURHO3D_IK -DURHO3D_LOGGING -DURHO3D_LUA -DURHO3D_NAVIGATION -DURHO3D_NETWORK -DURHO3D_PHYSICS -DURHO3D_PROFILING -DURHO3D_STATIC_DEFINE -DURHO3D_THREADING -DURHO3D_URHO2D -DURHO3D_WEBP
 
-CXX_INCLUDES = -I/code/dev/MayaScape/src/Urho3D/include -I/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty -I/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty/Bullet -I/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty/Lua -I/code/dev/MayaScape/src/Urho3D/Source/Game 
+CXX_INCLUDES = -I/code/dev/algebrakart/src/Urho3D/include -I/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty -I/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty/Bullet -I/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty/Lua -I/code/dev/MayaScape/src/Urho3D/Source/Game
 

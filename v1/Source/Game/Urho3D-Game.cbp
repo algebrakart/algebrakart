@@ -5,21 +5,21 @@
 		<Option title="Urho3D-Game"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
-		<Option virtualFolders="CMake Files\;CMake Files\Source\;CMake Files\Source\ThirdParty\;CMake Files\Source\ThirdParty\Assimp\;CMake Files\Source\ThirdParty\Assimp\include\;CMake Files\Source\ThirdParty\Assimp\include\assimp\;CMake Files\Source\ThirdParty\Assimp\contrib\;CMake Files\Source\ThirdParty\Assimp\contrib\zlib\;CMake Files\Source\ThirdParty\Assimp\code\;CMake Files\Source\ThirdParty\Assimp\cmake-modules\;CMake Files\Source\ThirdParty\FreeType\;CMake Files\Source\ThirdParty\LZ4\;CMake Files\Source\ThirdParty\PugiXml\;CMake Files\Source\ThirdParty\rapidjson\;CMake Files\Source\ThirdParty\SDL\;CMake Files\Source\ThirdParty\SDL\cmake\;CMake Files\Source\ThirdParty\SDL\include\;CMake Files\Source\ThirdParty\StanHull\;CMake Files\Source\ThirdParty\STB\;CMake Files\Source\ThirdParty\AngelScript\;CMake Files\Source\ThirdParty\Lua\;CMake Files\Source\ThirdParty\toluapp\;CMake Files\Source\ThirdParty\toluapp\src\;CMake Files\Source\ThirdParty\toluapp\src\lib\;CMake Files\Source\ThirdParty\toluapp\src\bin\;CMake Files\Source\ThirdParty\Civetweb\;CMake Files\Source\ThirdParty\kNet\;CMake Files\Source\ThirdParty\ik\;CMake Files\Source\ThirdParty\ik\include\;CMake Files\Source\ThirdParty\ik\include\ik\;CMake Files\Source\ThirdParty\Detour\;CMake Files\Source\ThirdParty\DetourCrowd\;CMake Files\Source\ThirdParty\DetourTileCache\;CMake Files\Source\ThirdParty\Recast\;CMake Files\Source\ThirdParty\Box2D\;CMake Files\Source\ThirdParty\WebP\;CMake Files\Source\ThirdParty\Bullet\;CMake Files\Source\ThirdParty\GLEW\;CMake Files\Source\Urho3D\;CMake Files\Source\Tools\;CMake Files\Source\Tools\Urho3DPlayer\;CMake Files\Source\Tools\AssetImporter\;CMake Files\Source\Tools\OgreImporter\;CMake Files\Source\Tools\PackageTool\;CMake Files\Source\Tools\RampGenerator\;CMake Files\Source\Tools\SpritePacker\;CMake Files\Source\Tools\ScriptCompiler\;CMake Files\Source\Game\;CMake Files\Source\Game\MayaScape\;CMake Files\Source\Game\MayaScape\terrain\;CMake Files\CMake\;CMake Files\CMake\Modules\;CMake Files\Docs\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\Source\;CMake Files\Source\ThirdParty\;CMake Files\Source\ThirdParty\Assimp\;CMake Files\Source\ThirdParty\Assimp\include\;CMake Files\Source\ThirdParty\Assimp\include\assimp\;CMake Files\Source\ThirdParty\Assimp\contrib\;CMake Files\Source\ThirdParty\Assimp\contrib\zlib\;CMake Files\Source\ThirdParty\Assimp\code\;CMake Files\Source\ThirdParty\Assimp\cmake-modules\;CMake Files\Source\ThirdParty\FreeType\;CMake Files\Source\ThirdParty\LZ4\;CMake Files\Source\ThirdParty\PugiXml\;CMake Files\Source\ThirdParty\rapidjson\;CMake Files\Source\ThirdParty\SDL\;CMake Files\Source\ThirdParty\SDL\cmake\;CMake Files\Source\ThirdParty\SDL\include\;CMake Files\Source\ThirdParty\StanHull\;CMake Files\Source\ThirdParty\STB\;CMake Files\Source\ThirdParty\AngelScript\;CMake Files\Source\ThirdParty\Lua\;CMake Files\Source\ThirdParty\toluapp\;CMake Files\Source\ThirdParty\toluapp\src\;CMake Files\Source\ThirdParty\toluapp\src\lib\;CMake Files\Source\ThirdParty\toluapp\src\bin\;CMake Files\Source\ThirdParty\Civetweb\;CMake Files\Source\ThirdParty\kNet\;CMake Files\Source\ThirdParty\ik\;CMake Files\Source\ThirdParty\ik\include\;CMake Files\Source\ThirdParty\ik\include\ik\;CMake Files\Source\ThirdParty\Detour\;CMake Files\Source\ThirdParty\DetourCrowd\;CMake Files\Source\ThirdParty\DetourTileCache\;CMake Files\Source\ThirdParty\Recast\;CMake Files\Source\ThirdParty\Box2D\;CMake Files\Source\ThirdParty\WebP\;CMake Files\Source\ThirdParty\Bullet\;CMake Files\Source\ThirdParty\GLEW\;CMake Files\Source\Urho3D\;CMake Files\Source\Tools\;CMake Files\Source\Tools\Urho3DPlayer\;CMake Files\Source\Tools\AssetImporter\;CMake Files\Source\Tools\OgreImporter\;CMake Files\Source\Tools\PackageTool\;CMake Files\Source\Tools\RampGenerator\;CMake Files\Source\Tools\SpritePacker\;CMake Files\Source\Tools\ScriptCompiler\;CMake Files\Source\Game\;CMake Files\Source\Game\algebrakart\;CMake Files\Source\Game\algebrakart\terrain\;CMake Files\CMake\;CMake Files\CMake\Modules\;CMake Files\Docs\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/code/dev/MayaScape/src/Urho3D/Source/Game"/>
+				<Option working_dir="/code/dev/algebrakart/src/Urho3D/Source/Game"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/bin/gmake -f &quot;/code/dev/MayaScape/src/Urho3D/Source/Game/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/bin/gmake -f &quot;/code/dev/MayaScape/src/Urho3D/Source/Game/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/bin/gmake -f &quot;/code/dev/MayaScape/src/Urho3D/Source/Game/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/bin/gmake -f &quot;/code/dev/MayaScape/src/Urho3D/Source/Game/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/bin/gmake -f &quot;/code/dev/algebrakart/src/Urho3D/Source/Game/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/bin/gmake -f &quot;/code/dev/algebrakart/src/Urho3D/Source/Game/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/bin/gmake -f &quot;/code/dev/algebrakart/src/Urho3D/Source/Game/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/bin/gmake -f &quot;/code/dev/algebrakart/src/Urho3D/Source/Game/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="MayaScape">
-				<Option output="/code/dev/MayaScape/src/Urho3D/bin/MayaScape" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/code/dev/MayaScape/src/Urho3D/bin"/>
+			<Target title="algebrakart">
+				<Option output="/code/dev/algebrakart/src/Urho3D/bin/algebrakart" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/code/dev/algebrakart/src/Urho3D/bin"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -37,22 +37,22 @@
 					<Add option="-DURHO3D_THREADING"/>
 					<Add option="-DURHO3D_URHO2D"/>
 					<Add option="-DURHO3D_WEBP"/>
-					<Add directory="/code/dev/MayaScape/src/Urho3D/include"/>
-					<Add directory="/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty"/>
-					<Add directory="/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty/Bullet"/>
-					<Add directory="/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty/Lua"/>
-					<Add directory="/code/dev/MayaScape/src/Urho3D/Source/Game"/>
+					<Add directory="/code/dev/algebrakart/src/Urho3D/include"/>
+					<Add directory="/code/dev/algebrakart/src/Urho3D/include/Urho3D/ThirdParty"/>
+					<Add directory="/code/dev/algebrakart/src/Urho3D/include/Urho3D/ThirdParty/Bullet"/>
+					<Add directory="/code/dev/algebrakart/src/Urho3D/include/Urho3D/ThirdParty/Lua"/>
+					<Add directory="/code/dev/algebrakart/src/Urho3D/Source/Game"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/bin/gmake -f &quot;/code/dev/MayaScape/src/Urho3D/Source/Game/MayaScape/Makefile&quot;  VERBOSE=1 MayaScape"/>
-					<CompileFile command="/bin/gmake -f &quot;/code/dev/MayaScape/src/Urho3D/Source/Game/MayaScape/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/bin/gmake -f &quot;/code/dev/MayaScape/src/Urho3D/Source/Game/MayaScape/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/bin/gmake -f &quot;/code/dev/MayaScape/src/Urho3D/Source/Game/MayaScape/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/bin/gmake -f &quot;/code/dev/algebrakart/src/Urho3D/Source/Game/algebrakart/Makefile&quot;  VERBOSE=1 algebrakart"/>
+					<CompileFile command="/bin/gmake -f &quot;/code/dev/algebrakart/src/Urho3D/Source/Game/algebrakart/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/bin/gmake -f &quot;/code/dev/algebrakart/src/Urho3D/Source/Game/algebrakart/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/bin/gmake -f &quot;/code/dev/algebrakart/src/Urho3D/Source/Game/algebrakart/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
-			<Target title="MayaScape/fast">
-				<Option output="/code/dev/MayaScape/src/Urho3D/bin/MayaScape" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/code/dev/MayaScape/src/Urho3D/bin"/>
+			<Target title="algebrakart/fast">
+				<Option output="/code/dev/algebrakart/src/Urho3D/bin/algebrakart" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/code/dev/algebrakart/src/Urho3D/bin"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -70,22 +70,22 @@
 					<Add option="-DURHO3D_THREADING"/>
 					<Add option="-DURHO3D_URHO2D"/>
 					<Add option="-DURHO3D_WEBP"/>
-					<Add directory="/code/dev/MayaScape/src/Urho3D/include"/>
-					<Add directory="/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty"/>
-					<Add directory="/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty/Bullet"/>
-					<Add directory="/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty/Lua"/>
-					<Add directory="/code/dev/MayaScape/src/Urho3D/Source/Game"/>
+					<Add directory="/code/dev/algebrakart/src/Urho3D/include"/>
+					<Add directory="/code/dev/algebrakart/src/Urho3D/include/Urho3D/ThirdParty"/>
+					<Add directory="/code/dev/algebrakart/src/Urho3D/include/Urho3D/ThirdParty/Bullet"/>
+					<Add directory="/code/dev/algebrakart/src/Urho3D/include/Urho3D/ThirdParty/Lua"/>
+					<Add directory="/code/dev/algebrakart/src/Urho3D/Source/Game"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/bin/gmake -f &quot;/code/dev/MayaScape/src/Urho3D/Source/Game/MayaScape/Makefile&quot;  VERBOSE=1 MayaScape/fast"/>
-					<CompileFile command="/bin/gmake -f &quot;/code/dev/MayaScape/src/Urho3D/Source/Game/MayaScape/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/bin/gmake -f &quot;/code/dev/MayaScape/src/Urho3D/Source/Game/MayaScape/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/bin/gmake -f &quot;/code/dev/MayaScape/src/Urho3D/Source/Game/MayaScape/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/bin/gmake -f &quot;/code/dev/algebrakart/src/Urho3D/Source/Game/algebrakart/Makefile&quot;  VERBOSE=1 algebrakart/fast"/>
+					<CompileFile command="/bin/gmake -f &quot;/code/dev/algebrakart/src/Urho3D/Source/Game/algebrakart/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/bin/gmake -f &quot;/code/dev/algebrakart/src/Urho3D/Source/Game/algebrakart/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/bin/gmake -f &quot;/code/dev/algebrakart/src/Urho3D/Source/Game/algebrakart/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="39_CrowdNavigation">
-				<Option output="/code/dev/MayaScape/src/Urho3D/bin/39_CrowdNavigation" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/code/dev/MayaScape/src/Urho3D/bin"/>
+				<Option output="/code/dev/algebrakart/src/Urho3D/bin/39_CrowdNavigation" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/code/dev/algebrakart/src/Urho3D/bin"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -103,7 +103,7 @@
 					<Add option="-DURHO3D_THREADING"/>
 					<Add option="-DURHO3D_URHO2D"/>
 					<Add option="-DURHO3D_WEBP"/>
-					<Add directory="/code/dev/MayaScape/src/Urho3D/include"/>
+					<Add directory="/code/dev/algebrakart/src/Urho3D/include"/>
 					<Add directory="/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty"/>
 					<Add directory="/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty/Bullet"/>
 					<Add directory="/code/dev/MayaScape/src/Urho3D/include/Urho3D/ThirdParty/Lua"/>

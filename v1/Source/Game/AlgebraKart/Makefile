@@ -114,7 +114,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target package_source
 package_source:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	cd /code/dev/MayaScape/src/Urho3D && /usr/bin/cpack --config ./CPackSourceConfig.cmake /code/dev/MayaScape/src/Urho3D/CPackSourceConfig.cmake
+	cd /code/dev/algebrakart/src/Urho3D && /usr/bin/cpack --config ./CPackSourceConfig.cmake /code/dev/algebrakart/src/Urho3D/CPackSourceConfig.cmake
 .PHONY : package_source
 
 # Special rule for the target package_source
@@ -158,7 +158,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target package
 package: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool..."
-	cd /code/dev/MayaScape/src/Urho3D && /usr/bin/cpack --config ./CPackConfig.cmake
+	cd /code/dev/algebrakart/src/Urho3D && /usr/bin/cpack --config ./CPackConfig.cmake
 .PHONY : package
 
 # Special rule for the target package
