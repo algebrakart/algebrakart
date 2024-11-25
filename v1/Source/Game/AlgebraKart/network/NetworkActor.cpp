@@ -544,7 +544,8 @@ void NetworkActor::FixedUpdate(float timeStep) {
 
             if (onVehicle_ && entered_) {
                 // Align network actor orientation once entered vehicle
-                body_->SetPosition(vehicle_->GetRaycastVehicle()->GetBody()->GetPosition());
+                Vector3 bodyOffset = Vector3(-2.3f, 0.4f, 0.0f);
+                body_->SetPosition(vehicle_->GetRaycastVehicle()->GetBody()->GetPosition()+bodyOffset);
                 body_->SetRotation(vehicle_->GetRaycastVehicle()->GetBody()->GetRotation());
             }
 
