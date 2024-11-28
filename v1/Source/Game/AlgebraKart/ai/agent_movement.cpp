@@ -52,7 +52,7 @@ void AgentMovement::applyInput(float deltaTime) {
     float wyPtSteer = networkActor_->vehicle_->getDesiredSteer();
 
 
-    float steerVar = Random(0.0f, 0.3f);
+    float steerVar = Random(0.0f, 0.4f);
     // Apply more acceleration force when desired steer set
     float accControl = accelInputNorm_ * deltaTime;// * abs(networkActor_->vehicle_->getDesiredSteer());
     // float steerControl = ((steerInputNorm_ * deltaTime)*w1)+(wyPtSteer*deltaTime*w2);

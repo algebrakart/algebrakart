@@ -835,9 +835,10 @@ void Vehicle::Init(Node* node) {
         //int carType = Random(5,12);
         //int carType = 11;//Random(8,9); police
 
-        //int carType = 6; // Yugo
-        int carType = 12; // Kart
-
+        int carType = 6; // Yugo
+        if (Random(1,3) == 1) {
+            carType = 12; // Kart
+        }
 
 
         v3BoxExtents.x_ *= 1.3f;
@@ -916,8 +917,36 @@ void Vehicle::Init(Node* node) {
 
 
             case 3 ... 5: {
-                hullObject->SetModel(cache->GetResource<Model>("Models/Vehicles/Offroad/Models/body-car.mdl"));
+////
+                // CAR TYPE: JEEP
 
+                float scaleF = 0.3f;
+                float scaleF2 = 0.4f;
+
+                adjNode->SetScale(Vector3(scaleF, scaleF, scaleF));
+                adjNode->SetRotation(Quaternion(0,0,0));
+
+                v3BoxExtents.x_ *= 3.0f * scaleF2;
+                v3BoxExtents.y_ *= 1.3f * scaleF2;
+                v3BoxExtents.z_ *= 2.82f * scaleF2;
+
+
+                //XMLFile *f = cache->GetResource<XMLFile>("Objects/Kart_Vehicle.xml");
+                //Vector3 pos = Vector3(0, 0, 0.0f); // Yugo
+                //Quaternion q = Quaternion(0, 90, 0);
+                //Node *vehiclePrefab_ = GetScene()->InstantiateXML(f->GetRoot(), pos, q, REPLICATED);
+                //vehiclePrefab_->SetParent(node_);
+
+                //wheelSpace = 24.1f * scaleF; // Kart
+                wheelSpace = 1.1f * scaleF; // Kart
+                wheelX = ((2.6f / 2.0f) + wheelWidth_); // Kart
+
+                hullColShape_->SetBox(v3BoxExtents);
+
+                // Important for vehicle physics balancing
+                //node_->SetScale(Vector3(3.3, 2.6f, 3.3f));
+////
+                hullObject->SetModel(cache->GetResource<Model>("Models/Vehicles/Offroad/Models/body-car.mdl"));
 
                 if (carType == 3) {
                     hullObject->ApplyMaterialList("Models/Vehicles/Offroad/Models/body-car-t1.txt");
@@ -927,14 +956,14 @@ void Vehicle::Init(Node* node) {
                     hullObject->ApplyMaterialList("Models/Vehicles/Offroad/Models/body-car-t3.txt");
                 }
 
-
                 // Important for vehicle physics balancing
                 //node_->SetScale(Vector3(3.3, 2.6f, 3.3f));
                 node_->SetScale(Vector3(3.5, 2.6f, 3.3f));
-                adjNode->SetPosition(Vector3(node_->GetPosition().x_, node_->GetPosition().y_+3.0f, node_->GetPosition().z_));
+
+                adjNode->SetPosition(Vector3(node_->GetPosition().x_, node_->GetPosition().y_+1.2f, node_->GetPosition().z_));
 
                 wheelX = (CHASSIS_WIDTH / 2.0f) + wheelWidth_;
-                wheelSpace = 10.0f;
+                wheelSpace = 6.3f;
                 connectionHeight = -5.1f;
                 // Front left
                 connectionPoints_[0] = Vector3(-wheelX, connectionHeight,  wheelSpace + GetWheelRadius() * 2.0f);
@@ -944,11 +973,8 @@ void Vehicle::Init(Node* node) {
                 connectionPoints_[2] = Vector3(-wheelX, connectionHeight,  -wheelSpace - GetWheelRadius() * 2.0f);
                 // Back right
                 connectionPoints_[3] = Vector3(wheelX, connectionHeight,  -wheelSpace - GetWheelRadius() * 2.0f);
-
-
                 break;
             }
-
 
             case 6 ... 12: {
 
@@ -1104,10 +1130,28 @@ void Vehicle::Init(Node* node) {
                     //wheelSpace = 17.1f*scaleF; // Sahin
                     //wheelX = ((2.6f / 2.0f) + wheelWidth_); // Sahin
 
-                    connectionHeight = -1.4f;//-2.2f; // Yugo
-                    wheelSpace = 24.1f * scaleF; // Yugo
-                    wheelX = ((2.6f / 2.0f) + wheelWidth_); // Yugo
 
+                    connectionHeight = -0.2f; // Kart
+                    //wheelSpace = 24.1f * scaleF; // Kart
+                    wheelSpace = 1.1f * scaleF; // Kart
+                    wheelX = ((2.6f / 2.0f) + wheelWidth_); // Kart
+
+
+                    hullColShape_->SetBox(v3BoxExtents);
+
+                    // Important for vehicle physics balancing
+                    //node_->SetScale(Vector3(3.3, 2.6f, 3.3f));
+                    node_->SetScale(Vector3(0.4f, 0.35f, 0.4f));
+
+
+                    // Front left
+                    connectionPoints_[0] = Vector3(-wheelX, connectionHeight, wheelSpace + GetWheelRadius() * 2.0f);
+                    // Front right
+                    connectionPoints_[1] = Vector3(wheelX, connectionHeight, wheelSpace + GetWheelRadius() * 2.0f);
+                    // Back left
+                    connectionPoints_[2] = Vector3(-wheelX, connectionHeight, -wheelSpace - GetWheelRadius() * 2.0f);
+                    // Back right
+                    connectionPoints_[3] = Vector3(wheelX, connectionHeight, -wheelSpace - GetWheelRadius() * 2.0f);
 
 
                 } else if (carType == 7) {
@@ -1275,13 +1319,13 @@ void Vehicle::Init(Node* node) {
             // Set tires for car type
             switch (carType) {
                 case 0 ... 5: {
-                    scale = 3.3f;
+                    scale = 0.6f;
                     //scale = 0.132f; //SetScale(Vector3(0.04f,0.04f,0.04f))
                     Model *tireModel = cache->GetResource<Model>("Models/Vehicles/Offroad/Models/wheel-fl.mdl");
                     pWheel->SetModel(tireModel);
                     pWheel->ApplyMaterialList("Models/Vehicles/Offroad/Models/wheel-fl.txt");
                     pWheel->SetMaterial(cache->GetResource<Material>("Offroad/Models/Materials/Tire.xml"));
-                    wheelNode->SetScale(Vector3(scale/1.2f, scale, scale));
+                    wheelNode->SetScale(Vector3(scale, scale, scale));
                     wheelNode->SetRotation(connectionPoint.x_ >= 0.0 ? Quaternion(0.0f, 0.0f, 180.0f) : Quaternion(0.0f, 0.0f, -0.0f));
                     wheelNode->SetWorldPosition(node_->GetWorldPosition() + node_->GetWorldRotation() * connectionPoints_[id]);
                     //wheelNode->SetWorldPosition(node_->GetWorldPosition() + node_->GetWorldRotation() * connectionPoints_[id]);
