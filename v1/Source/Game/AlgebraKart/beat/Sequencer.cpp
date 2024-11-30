@@ -55,7 +55,7 @@ void Sequencer::Start()
     playSource_->SetFarDistance(6000);  // distance from where the volume is at 0%
     playSource_->SetSoundType(SOUND_MUSIC);
     sampler_->SetPlaySource(playSource_);
-    synth_->SetPlaySource(playSource_);
+    //synth_->SetPlaySource(playSource_);
     beatTime_ = 0.0f;
 
 }
@@ -87,7 +87,7 @@ Sequencer::Sequencer(Context *context) : LogicComponent(context), length_(16) {
     sampler_ = context->CreateObject<Sampler>();
 
     // Create a new synth
-    synth_ = context->CreateObject<Synthesizer>();
+    //synth_ = context->CreateObject<Synthesizer>();
 
     int idx;
 
@@ -154,8 +154,8 @@ Sequencer::~Sequencer() {
     if (playSource_)
         playSource_->ReleaseRef();
 
-    if (synth_)
-        synth_->ReleaseRef();
+    //if (synth_)
+    //    synth_->ReleaseRef();
 
     if (sampler_)
         sampler_->ReleaseRef();
@@ -211,10 +211,10 @@ void Sequencer::Play(float timeStep, SharedPtr<Recorder> recorder_) {
 
     // Assigns scene node to sound modules for creating SoundSource
     sampler_->Reset(GetScene());
-    synth_->Reset(GetScene());
+    //synth_->Reset(GetScene());
 
     // Create base sound in buffer, if not existing
-    synth_->CreateSound();
+    //synth_->CreateSound();
 
     // Sequencer moves forward
     // Mapping of instruction set to timeStep (beat)
@@ -225,7 +225,7 @@ void Sequencer::Play(float timeStep, SharedPtr<Recorder> recorder_) {
     barTime_ += timeStep;
 
     // Update sound buffer
-    synth_->UpdateSound();
+    //synth_->UpdateSound();
 
 
     // If time accumulation is past

@@ -5543,6 +5543,15 @@ void AlgebraKart::HandleLevelLoaded(StringHash eventType, VariantMap& eventData)
     if (steerSpline) {
         steerSpline->GetChildren(steerMarks_);
         splineSize_ = steerMarks_.Size();
+        for (int i = 0; i < aiActorMap_.Size(); i++) {
+            auto *actor = dynamic_cast<NetworkActor *>(aiActorMap_[i].Get());
+            if (actor) {
+                if (actor->vehicle_) {
+                    actor->vehicle_->setSteerIndex(splineSize_-2);
+                }
+            }
+        }
+
     }
 
     /// Retrieve pickups
@@ -6998,7 +7007,7 @@ NetworkActor *AlgebraKart::SpawnPlayer(unsigned int id) {
     vehicle->Init(vehicleNode);
     actor->SetClientInfo(username, Random(1,100), Vector3(actor->GetPosition()));
     vehicleNode->SetPosition(Vector3(actor->GetPosition()));
-    vehicleNode->SetRotation(Quaternion(0.0f, Random(0.0f, 360.0f), 0.0f));
+    vehicleNode->SetRotation(Quaternion(0.0f, -90.0f, 0.0f));
     // Attach vehicle to actor
     actor->vehicle_ = vehicle;
 

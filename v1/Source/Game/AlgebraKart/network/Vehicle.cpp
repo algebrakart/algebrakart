@@ -1124,10 +1124,10 @@ void Vehicle::Init(Node* node) {
                     //wheelX = ((2.6f / 2.0f) + wheelWidth_); // Sahin
 
 
-                    connectionHeight = -1.4f; // Kart
+                    connectionHeight = -1.1f; // Kart
                     //wheelSpace = 24.1f * scaleF; // Kart
-                    wheelSpace = 29.1f * scaleF; // Kart
-                    wheelX = ((5.4f / 2.0f) + wheelWidth_); // Kart
+                    wheelSpace = 33.1f * scaleF; // Kart
+                    wheelX = ((6.1f / 2.0f) + wheelWidth_); // Kart
 
 
                     hullColShape_->SetBox(v3BoxExtents);
@@ -1328,9 +1328,9 @@ void Vehicle::Init(Node* node) {
                 case 6 ... 12: {
                     //scale = 0.1f;
                     //scale = 0.04f; //SetScale(Vector3(0.04f,0.04f,0.04f))
-                    scale = 6.2f; //SetScale(Vector3(0.04f,0.04f,0.04f))
+                    scale = 6.6f; //SetScale(Vector3(0.04f,0.04f,0.04f))
                     //Model *tireModel = cache->GetResource<Model>("Models/Vehicles/SetA/Models/Wheels_4.mdl");
-                    if (carType == 6) scale = 4.1;
+                    if (carType == 6) scale = 6.3;
 
                     Model *tireModel = cache->GetResource<Model>("Models/Vehicles/Yugo/Models/wheel.mdl");
                     pWheel->SetModel(tireModel);
