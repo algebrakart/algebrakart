@@ -3641,7 +3641,7 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                     // Once vehicle hits waypoint, move to next waypoint after 1.5 secs
                                     if (distToWypt < 120.0f && actor->lastWaypoint_ > 1.5f) {
                                         // Check for last lap
-                                        int nextWaypt = (actor->vehicle_->getSteerIndex()+1) % splineSize_;
+                                        int nextWaypt = (actor->vehicle_->getSteerIndex() > 0) ? (actor->vehicle_->getSteerIndex()-1) : splineSize_-1;
                                         if (nextWaypt == 0) {
                                             // FINISH LAP
                                             actor->lapNum_++;
@@ -3649,7 +3649,7 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                             actor->lapTimes_.Push(actor->lapTime_);
                                             actor->lapTime_ = 0;
                                         }
-                                        actor->vehicle_->setSteerIndex((actor->vehicle_->getSteerIndex()+1) % splineSize_);
+                                        actor->vehicle_->setSteerIndex((actor->vehicle_->getSteerIndex() > 0) ? (actor->vehicle_->getSteerIndex()-1) : splineSize_-1);
                                         actor->lastWaypoint_ = 0;
                                     }
                                     Vector3 vDir = (actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()+actor->vehicle_->GetRaycastVehicle()->GetNode()->GetRotation() * Vector3::RIGHT*1.0f) - actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition();
@@ -3864,8 +3864,6 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                                 using namespace Update;
                                                 // Take the frame time step, which is stored as a float
                                                 float timeStep = eventData[P_TIMESTEP].GetFloat();
-
-
                                                 // Loop back to start
                                                 if (steerSplinePath->IsFinished()) { steerSplinePath->Reset(); }
 

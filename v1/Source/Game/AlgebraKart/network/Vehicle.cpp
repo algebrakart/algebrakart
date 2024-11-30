@@ -767,8 +767,6 @@ void Vehicle::Init(Node* node) {
         raycastVehicle_ = node_->CreateComponent<RaycastVehicleBase>(LOCAL);
         raycastVehicle_->Init();
 
-
-
         // Store the raycast vehicle body
         body_ = node_->GetComponent<RigidBody>();
         //body_->DrawDebugGeometry(dbgRenderer, true);
@@ -787,11 +785,7 @@ void Vehicle::Init(Node* node) {
         body_->SetCollisionLayer(2);
         // Shifting the Center of Mass forward, increasing stability
         body_->SetPosition(Vector3(0.0f,0.0f,0.0f));
-
-
         //body_->SetPosition();
-
-
         // This function is called only from the main program when initially creating the vehicle, not on scene load
         auto* cache = GetSubsystem<ResourceCache>();
 
@@ -917,7 +911,7 @@ void Vehicle::Init(Node* node) {
 
 
             case 3 ... 5: {
-////
+
                 // CAR TYPE: JEEP
 
                 float scaleF = 0.3f;
@@ -1001,12 +995,9 @@ void Vehicle::Init(Node* node) {
 *
  */
 
-
                     v3BoxExtents.x_ *= 3.0f * scaleF2;
                     v3BoxExtents.y_ *= 1.3f * scaleF2;
                     v3BoxExtents.z_ *= 2.82f * scaleF2;
-
-
                     XMLFile *f = cache->GetResource<XMLFile>("Objects/Yugo_Vehicle.xml");
 //                    XMLFile *f = cache->GetResource<XMLFile>("Objects/Sahin_Vehicle.xml");
                     //Vector3 pos = Vector3(0,0,42.0f); // Sahin
@@ -1015,6 +1006,8 @@ void Vehicle::Init(Node* node) {
                     Node *vehiclePrefab_ = GetScene()->InstantiateXML(f->GetRoot(), pos, q, REPLICATED);
 
                     vehiclePrefab_->SetParent(node_);
+                    float vScale = 1.13f;
+                    vehiclePrefab_->SetScale(Vector3(vScale, vScale, vScale*1.2));
 
                     //gilza_->SetWorldScale(Vector3(0.11f, 0.11f, 0.11f)); LifeTime* lt = gilza_->CreateComponent<LifeTime>(); lt->SetLifeTime(5.0f)
 /*
@@ -1091,7 +1084,7 @@ void Vehicle::Init(Node* node) {
 */
 
 
-
+/*
                     Node *adjNode2 = adjNode->CreateChild("Model");
                     hullObjectTurrent_ = adjNode2->CreateComponent<StaticModel>();
                     hullObjectTurrent_->SetCastShadows(true);
@@ -1105,7 +1098,7 @@ void Vehicle::Init(Node* node) {
                                                  node_->GetPosition().z_ - forwardWeightOffset - 4.0f));
                     adjNode2->SetPosition(Vector3(-14.0f, -220.0f, 0.0f));
                     adjNode2->SetScale(Vector3(0.4f, 0.4f, 0.4f));
-
+*/
                     //towards_ = Vector3(towards_.x_*cos(turningVelocity_*timeStep) - towards_.y_*sin(turningVelocity_*timeStep), towards_.x_*sin(turningVelocity_*timeStep) + towards_.y_*cos(turningVelocity_*timeStep), 0.0f);
                     //node->Rotate2D(turningVelocity_*timeStep);
                     // The angle between rotation2d and x-axis
@@ -1113,7 +1106,7 @@ void Vehicle::Init(Node* node) {
 
 
                     // apply to x
-                    adjNode2->SetRotation(Quaternion(-90.0f, 180.0f, 0.0f));
+                    //adjNode2->SetRotation(Quaternion(-90.0f, 180.0f, 0.0f));
 
 /*
                     //connectionHeight = -4.74f;
@@ -1131,10 +1124,10 @@ void Vehicle::Init(Node* node) {
                     //wheelX = ((2.6f / 2.0f) + wheelWidth_); // Sahin
 
 
-                    connectionHeight = -0.2f; // Kart
+                    connectionHeight = -1.4f; // Kart
                     //wheelSpace = 24.1f * scaleF; // Kart
-                    wheelSpace = 1.1f * scaleF; // Kart
-                    wheelX = ((2.6f / 2.0f) + wheelWidth_); // Kart
+                    wheelSpace = 29.1f * scaleF; // Kart
+                    wheelX = ((5.4f / 2.0f) + wheelWidth_); // Kart
 
 
                     hullColShape_->SetBox(v3BoxExtents);
@@ -1268,7 +1261,6 @@ void Vehicle::Init(Node* node) {
 
                     vehiclePrefab_->SetParent(node_);
 
-
                     connectionHeight = -0.2f; // Kart
                     //wheelSpace = 24.1f * scaleF; // Kart
                     wheelSpace = 1.1f * scaleF; // Kart
@@ -1336,8 +1328,9 @@ void Vehicle::Init(Node* node) {
                 case 6 ... 12: {
                     //scale = 0.1f;
                     //scale = 0.04f; //SetScale(Vector3(0.04f,0.04f,0.04f))
-                    scale = 5.0f; //SetScale(Vector3(0.04f,0.04f,0.04f))
+                    scale = 6.2f; //SetScale(Vector3(0.04f,0.04f,0.04f))
                     //Model *tireModel = cache->GetResource<Model>("Models/Vehicles/SetA/Models/Wheels_4.mdl");
+                    if (carType == 6) scale = 4.1;
 
                     Model *tireModel = cache->GetResource<Model>("Models/Vehicles/Yugo/Models/wheel.mdl");
                     pWheel->SetModel(tireModel);

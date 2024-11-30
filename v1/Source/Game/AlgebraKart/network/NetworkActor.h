@@ -84,6 +84,23 @@ public:
         waypoints_ = newWPs;
     }
 
+    void ReverseWaypoints(const Vector<Vector3>* waypoints) {
+
+        if (waypoints_) {
+            delete waypoints_;
+            waypoints_ = nullptr;
+        }
+
+        Vector<Vector3>* newWPs = new Vector<Vector3>();
+        // Copy waypoints into local list
+        for (int i = waypoints->Size(); i > 0; i--) {
+            newWPs->Push(Vector3(waypoints->At(i)));
+        }
+
+        waypoints_ = newWPs;
+    }
+
+
     void SetTarget(Vector3 toTarget) {
         toTarget_ = toTarget;
     }
