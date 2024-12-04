@@ -120,22 +120,21 @@ NetworkActor::~NetworkActor() {
 }
 
 void NetworkActor::Kill() {
-    //SetEnabled(false);
+    if (this) {
+        URHO3D_LOGINFOF("**** DESTROYING NetworkActor OBJECT -> %d", this->id_);
+        if (vehicle_) {
+            vehicle_->SetEnabled(false);
+            vehicle_->Kill();
+        }
 
-    SetUpdateEventMask(USE_NO_EVENT);
+        if (node_) {
+            URHO3D_LOGINFOF("**** DESTROYING CLIENT NODE OBJECT -> %d", this->id_);
+            //node_->RemoveAllChildren();
+            node_->Remove();
+        }
 
-    URHO3D_LOGINFOF("**** DESTROYING NetworkActor OBJECT -> %d", this->id_);
-    if (vehicle_) {
-        vehicle_->SetEnabled(false);
-        vehicle_->Kill();
+        this->killed_ = true;
     }
-
-    if (node_) {
-        URHO3D_LOGINFOF("**** DESTROYING CLIENT NODE OBJECT -> %d", this->id_);
-        //node_->RemoveAllChildren();
-        node_->Remove();
-    }
-
 }
 
 void NetworkActor::SetScene(Scene *scene) {

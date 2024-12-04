@@ -1087,14 +1087,27 @@ void AlgebraKart::HandleAI(float timeStep) {
             // Process sensor inputs through ffn and apply calculated inputs
             controller->update(timeStep);
 
+            if (controller->isAlive()) {
+                if (EvolutionManager::getInstance()->getNetworkActors()[i]) {
+                    float speed = EvolutionManager::getInstance()->getNetworkActors()[i]->vehicle_->GetSpeedKmH();
+                    float SPEED_KILL_LIMIT = 400.0f;
+                    if (speed > SPEED_KILL_LIMIT) {
+                        dead = true;
+                    }
+                }
+            }
+
             if (!controller->isAlive()) {
                 if (EvolutionManager::getInstance()->getNetworkActors()[i]) {
+
                     EvolutionManager::getInstance()->getNetworkActors()[i]->Kill();
                     EvolutionManager::getInstance()->getNetworkActors()[i] = nullptr;
                     scene_->MarkNetworkUpdate();
                 }
             }
-        } else {
+        }
+
+        if (dead) {
             // dead
 
             // Found a dead agent, respawn
@@ -1104,6 +1117,8 @@ void AlgebraKart::HandleAI(float timeStep) {
 
             if (agents[i]->getRespawnTime() > 30.0f) {
                 // respawn?
+                EvolutionManager::getInstance()->getNetworkActors()[i]->Kill();
+                EvolutionManager::getInstance()->getNetworkActors()[i] = nullptr;
                 URHO3D_LOGDEBUGF("CreateAgents -> SpawnPlayer: %d", (i));
                 // Spawn ai bot and generate NetworkActor
                 EvolutionManager::getInstance()->getNetworkActors()[i] = SpawnPlayer(i);
@@ -3697,76 +3712,90 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                             // Increment timers
                             actor->lastWaypoint_ += timeStep;
 
-                            if (actor->vehicle_) {
-                                Node *node = actor->vehicle_->GetNode();
+                            if (!actor->killed_) {
+                                if (actor->vehicle_) {
+                                    Node * node = actor->vehicle_->GetNode();
 
-                                // Apply time increment
-                                actor->totalTime_ += timeStep;
-                                actor->lapTime_ += timeStep;
+                                    // Apply time increment
+                                    actor->totalTime_ += timeStep;
+                                    actor->lapTime_ += timeStep;
 
-                                Vector3 center = steerMarks_[actor->vehicle_->getSteerIndex()]->GetWorldPosition();
-                                actor->SetTarget(center);
-                                actor->setSteerSet(true);
+                                    Vector3 center = steerMarks_[actor->vehicle_->getSteerIndex()]->GetWorldPosition();
+                                    actor->SetTarget(center);
+                                    actor->setSteerSet(true);
 
-                                // Apply auto steering
-                                if (actor->isSteerSet()) {
+                                    // Apply auto steering
+                                    if (actor->isSteerSet()) {
+                                        // Towards steer waypoint
+                                        Vector3 towardsWaypt = (
+                                                actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition() -
+                                                actor->getToTarget()).Normalized();
+                                        float distToWypt = (
+                                                actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition() -
+                                                actor->getToTarget()).Length();
+                                        //URHO3D_LOGDEBUGF("getSteerIndex()=%d,distToWypt=%f, actor->lastWaypoint_=%f", actor->vehicle_->getSteerIndex(), distToWypt, actor->lastWaypoint_);
 
-                                    // Towards steer waypoint
-                                    Vector3 towardsWaypt = (actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition() -
-                                                            actor->getToTarget()).Normalized();
-                                    float distToWypt = (actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition() -
-                                                        actor->getToTarget()).Length();
-                                    //URHO3D_LOGDEBUGF("getSteerIndex()=%d,distToWypt=%f, actor->lastWaypoint_=%f", actor->vehicle_->getSteerIndex(), distToWypt, actor->lastWaypoint_);
-
-                                    // Once vehicle hits waypoint, move to next waypoint after 1.5 secs
-                                    if (distToWypt < 120.0f && actor->lastWaypoint_ > 1.5f) {
-                                        // Check for last lap
-                                        int nextWaypt = (actor->vehicle_->getSteerIndex() > 0) ? (actor->vehicle_->getSteerIndex()-1) : splineSize_-1;
-                                        if (nextWaypt == 0) {
-                                            // FINISH LAP
-                                            actor->lapNum_++;
-                                            // Store lap time
-                                            actor->lapTimes_.Push(actor->lapTime_);
-                                            actor->lapTime_ = 0;
+                                        // Once vehicle hits waypoint, move to next waypoint after 1.5 secs
+                                        if (distToWypt < 120.0f && actor->lastWaypoint_ > 1.5f) {
+                                            // Check for last lap
+                                            int nextWaypt = (actor->vehicle_->getSteerIndex() > 0) ? (
+                                                    actor->vehicle_->getSteerIndex() - 1) : splineSize_ - 1;
+                                            if (nextWaypt == 0) {
+                                                // FINISH LAP
+                                                actor->lapNum_++;
+                                                // Store lap time
+                                                actor->lapTimes_.Push(actor->lapTime_);
+                                                actor->lapTime_ = 0;
+                                            }
+                                            actor->vehicle_->setSteerIndex((actor->vehicle_->getSteerIndex() > 0) ? (
+                                                    actor->vehicle_->getSteerIndex() - 1) : splineSize_ - 1);
+                                            actor->lastWaypoint_ = 0;
                                         }
-                                        actor->vehicle_->setSteerIndex((actor->vehicle_->getSteerIndex() > 0) ? (actor->vehicle_->getSteerIndex()-1) : splineSize_-1);
-                                        actor->lastWaypoint_ = 0;
-                                    }
-                                    Vector3 vDir = (actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()+actor->vehicle_->GetRaycastVehicle()->GetNode()->GetRotation() * Vector3::RIGHT*1.0f) - actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition();
-                                    vDir = vDir.Normalized();
-                                    float steerProj = towardsWaypt.DotProduct(vDir);
-                                    // steer projection represents delta from 0 steer
-                                    //  steerProj = 1.0f; // Right
-                                    //  steerProj = -1.0f; // Left
-                                    float desiredSteer;
-                                    Vector3 v1 = (actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()+actor->vehicle_->GetRaycastVehicle()->GetNode()->GetRotation() * Vector3::FORWARD*1.0f)-actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition();
-                                    Vector3 v2 = (actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()+actor->vehicle_->GetRaycastVehicle()->GetNode()->GetRotation() * Vector3::RIGHT*1.0f*actor->vehicle_->getDesiredSteer())-actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition();
+                                        Vector3 vDir = (actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition() +
+                                                        actor->vehicle_->GetRaycastVehicle()->GetNode()->GetRotation() *
+                                                        Vector3::RIGHT * 1.0f) -
+                                                       actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition();
+                                        vDir = vDir.Normalized();
+                                        float steerProj = towardsWaypt.DotProduct(vDir);
+                                        // steer projection represents delta from 0 steer
+                                        //  steerProj = 1.0f; // Right
+                                        //  steerProj = -1.0f; // Left
+                                        float desiredSteer;
+                                        Vector3 v1 = (actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition() +
+                                                      actor->vehicle_->GetRaycastVehicle()->GetNode()->GetRotation() *
+                                                      Vector3::FORWARD * 1.0f) -
+                                                     actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition();
+                                        Vector3 v2 = (actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition() +
+                                                      actor->vehicle_->GetRaycastVehicle()->GetNode()->GetRotation() *
+                                                      Vector3::RIGHT * 1.0f * actor->vehicle_->getDesiredSteer()) -
+                                                     actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition();
 
-                                    // v1 and v2 are perpendicular, the dot product is always zero
+                                        // v1 and v2 are perpendicular, the dot product is always zero
 //                                                    float v12proj = v1.DotProduct(v2);
 
-                                    // Amplify the steering projection in inverse
-                                    desiredSteer = -steerProj*360.0f;
+                                        // Amplify the steering projection in inverse
+                                        desiredSteer = -steerProj * 360.0f;
 
-                                    // Apply vehicle steering
-                                    actor->vehicle_->setDesiredSteer(desiredSteer);
+                                        // Apply vehicle steering
+                                        actor->vehicle_->setDesiredSteer(desiredSteer);
 
 
-                                    /*   dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetBody()->GetPosition(), Quaternion(90.0f, Vector3::UP) * actor->vehicle_->GetRaycastVehicle()->GetBody()->GetPosition() * Vector3::FORWARD * 35.0,
-                                                            Color(1.0f, 1.0, 1.0));
-                        */
+                                        /*   dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetBody()->GetPosition(), Quaternion(90.0f, Vector3::UP) * actor->vehicle_->GetRaycastVehicle()->GetBody()->GetPosition() * Vector3::FORWARD * 35.0,
+                                                                Color(1.0f, 1.0, 1.0));
+                            */
 
-                                    /*              dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition(), actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()-towardsWaypt*15.0f,
-                                                                       Color(1.0f, 0.0, 0.0));
-                        */
+                                        /*              dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition(), actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()-towardsWaypt*15.0f,
+                                                                           Color(1.0f, 0.0, 0.0));
+                            */
 
+                                    }
+                                    //if (!node) return;
+
+                                    //  Vector3 camPos = actor->vehicle_->GetNode()->GetPosition();
+                                    //Vector3 camPos = actor->GetNode()->GetPosition();
+                                    // Store ai actor vehicle position for server cam
+                                    //    camPosList.Push(camPos);
                                 }
-                                //if (!node) return;
-
-                              //  Vector3 camPos = actor->vehicle_->GetNode()->GetPosition();
-                                //Vector3 camPos = actor->GetNode()->GetPosition();
-                                // Store ai actor vehicle position for server cam
-                            //    camPosList.Push(camPos);
                             }
                         }
 

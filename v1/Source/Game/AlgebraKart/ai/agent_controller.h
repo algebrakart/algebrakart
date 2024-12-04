@@ -84,5 +84,5 @@ private:
     float frontHitTime_ = 0;
     bool steerSet_ = false;
     float steerChoice_ = 0;
-    bool dieAllowed_ = false;
+    bool dieAllowed_ = true;
 };
