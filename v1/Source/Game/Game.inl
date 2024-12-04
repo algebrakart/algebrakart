@@ -312,7 +312,7 @@ void Game::SetWindowTitleAndIcon()
 {
     ResourceCache* cache = GetSubsystem<ResourceCache>();
     Graphics* graphics = GetSubsystem<Graphics>();
-    Image* icon = cache->GetResource<Image>("Textures/UrhoIcon.png");
+    Image* icon = cache->GetResource<Image>("Textures/ak-box-cover.png");
 
     if (graphics) {
         graphics->SetWindowIcon(icon);

@@ -522,6 +522,15 @@ private:
     /// Velocity Bkg P1 sprite.
     SharedPtr<Sprite> velBarBkgP1Sprite_;
 
+    /// HUD vehicle damage sprite.
+    SharedPtr<Sprite> vDamageSprite_;
+    Vector<SharedPtr<Sprite>> vDamage_FL_LineSprites_; // Front left wheel
+    Vector<SharedPtr<Sprite>> vDamage_FR_LineSprites_; // Front rear wheel
+    Vector<SharedPtr<Sprite>> vDamage_BL_LineSprites_; // Back left wheel
+    Vector<SharedPtr<Sprite>> vDamage_BR_LineSprites_; // Back right wheel
+    Vector<SharedPtr<Sprite>> vDamage_FA_LineSprites_; // Front axle
+    Vector<SharedPtr<Sprite>> vDamage_RA_LineSprites_; // Rear axle
+
     Vector<Texture2D*> hudPickupItemTextures_;
     /// HUD pick up sprite.
     SharedPtr<Sprite> pickupSprite_;

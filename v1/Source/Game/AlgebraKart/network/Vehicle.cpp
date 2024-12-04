@@ -135,7 +135,7 @@ Vehicle::Vehicle(Context* context)
     emittersCreated = false;
 
     // Working
-    m_fmaxEngineForce = 11600.0f;//950.f;
+    m_fmaxEngineForce = 14600.0f;//950.f;
   //  m_fmaxEngineForce = 4200.0f;//5400.0f;//950.f;
 
     m_fmaxBreakingForce = 800.f;
@@ -525,6 +525,7 @@ void Vehicle::PostUpdate(float timeStep)
 
             //normWheel0*pushMag
             // Force line
+            /*
             debug->AddLine(normPosWheel0,
                            normPosWheel0 + (normWheel0*pushMag), Color(Urho3D::Color::BLACK));
 
@@ -532,6 +533,8 @@ void Vehicle::PostUpdate(float timeStep)
             // Force line
             debug->AddLine(normPosWheel1,
                            normPosWheel1 + (normWheel1*pushMag), Color(Urho3D::Color::WHITE));
+
+             */
 
             bool groundFL = false;
             bool groundFR = false;
@@ -833,6 +836,9 @@ void Vehicle::Init(Node* node) {
         if (Random(1,3) == 1) {
             carType = 12; // Kart
         }
+        if (Random(1,4) == 2) {
+            carType = 7; // Sahin
+        }
 
 
         v3BoxExtents.x_ *= 1.3f;
@@ -999,7 +1005,7 @@ void Vehicle::Init(Node* node) {
                     v3BoxExtents.y_ *= 1.3f * scaleF2;
                     v3BoxExtents.z_ *= 2.82f * scaleF2;
                     XMLFile *f = cache->GetResource<XMLFile>("Objects/Yugo_Vehicle.xml");
-//                    XMLFile *f = cache->GetResource<XMLFile>("Objects/Sahin_Vehicle.xml");
+                    //XMLFile *f = cache->GetResource<XMLFile>("Objects/Sahin_Vehicle.xml");
                     //Vector3 pos = Vector3(0,0,42.0f); // Sahin
                     Vector3 pos = Vector3(0, 0, 0.0f); // Yugo
                     Quaternion q = Quaternion(0, 90, 0);
@@ -1148,17 +1154,161 @@ void Vehicle::Init(Node* node) {
 
 
                 } else if (carType == 7) {
-                    v3BoxExtents.x_ *= 15.0f;
-                    v3BoxExtents.y_ *= 15.0f;
-                    v3BoxExtents.z_ *= 12.0f;
 
-                    hullObject->SetModel(cache->GetResource<Model>("Models/Vehicles/SetA/Models/Car_Sport_1_2.mdl"));
-                    hullObject->ApplyMaterialList("Models/Vehicles/SetA/Models/Car_Sport_1_2.txt");
-                    adjNode->SetPosition(Vector3(node_->GetPosition().x_ - 58.0f, node_->GetPosition().y_ + 3.0f,
-                                                 node_->GetPosition().z_ - 14.0f));
-                    connectionHeight = -16.7f;
-                    wheelSpace = 19.0f;
-                    wheelX = 11.0f + (CHASSIS_WIDTH / 2.0f) + wheelWidth_;
+                    // CAR TYPE: SAHIN
+                    float scaleF = 0.1f;
+                    float scaleF2 = 0.4f;
+
+
+                    v3BoxExtents.x_ *= 3.0f * scaleF2;
+                    v3BoxExtents.y_ *= 1.3f * scaleF2;
+                    v3BoxExtents.z_ *= 2.82f * scaleF2;
+                    XMLFile *f = cache->GetResource<XMLFile>("Objects/Sahin_Vehicle.xml");
+                    //Vector3 pos = Vector3(0,0,42.0f); // Sahin
+                    Vector3 pos = Vector3(0, 0, 0.0f); // Yugo
+                    Quaternion q = Quaternion(0, 90, 0);
+                    Node *vehiclePrefab_ = GetScene()->InstantiateXML(f->GetRoot(), pos, q, REPLICATED);
+
+                    vehiclePrefab_->SetParent(node_);
+                    float vScale = 1.13f;
+                    vehiclePrefab_->SetScale(Vector3(vScale, vScale, vScale*1.2));
+
+                    //gilza_->SetWorldScale(Vector3(0.11f, 0.11f, 0.11f)); LifeTime* lt = gilza_->CreateComponent<LifeTime>(); lt->SetLifeTime(5.0f)
+/*
+                    // Top of Car Body
+
+                    //hullObject->SetModel(cache->GetResource<Model>("Models/Vehicles/SetA/Models/Jeep.mdl"));
+                    hullObject->SetModel(cache->GetResource<Model>("Models/Vehicles/Sahin/Models/Car_Body_Frame.mdl"));
+                    hullObject->ApplyMaterialList("Models/Vehicles/SetA/Models/Car_Body_Frame.txt");
+                    //
+                    //code/dev/MonkeyMaya_com/bin/Data/
+                    //hullObject->ApplyMaterialList("Models/Vehicles/SetA/Models/Jeep.txt");
+
+                    Node* node;
+                    StaticModel* model;
+
+                    // Bottom Trim of Body and Inner Parts
+
+                    // Create new child node
+                    node = adjNode->CreateChild("Model");
+                    model = node->CreateComponent<StaticModel>();
+                    model->SetCastShadows(true);
+                    //adjNode3->SetRotation(Quaternion(0.0f, -180.0f, -90.0f));
+                    model->SetModel(cache->GetResource<Model>("Models/Vehicles/Sahin/Models/Car_Body_Trim.mdl"));
+                    model->ApplyMaterialList("Models/Vehicles/Sahin/Models/Car_Body_Trim.txt");
+                    node->SetPosition(Vector3(0,0,0));
+
+                    // Doors
+
+                    // Front Left Door
+
+                    // Create new child node
+                    node = adjNode->CreateChild("Model");
+                    model = node->CreateComponent<StaticModel>();
+                    model->SetCastShadows(true);
+                    //adjNode3->SetRotation(Quaternion(0.0f, -180.0f, -90.0f));
+                    model->SetModel(cache->GetResource<Model>("Models/Vehicles/Sahin/Models/Door_FL.mdl"));
+                    model->ApplyMaterialList("Models/Vehicles/Sahin/Models/Door_FL.txt");
+                    node->SetPosition(Vector3(0,0,0));
+
+                    // Front Right Door
+
+                    // Create new child node
+                    node = adjNode->CreateChild("Model");
+                    model = node->CreateComponent<StaticModel>();
+                    model->SetCastShadows(true);
+                    //adjNode3->SetRotation(Quaternion(0.0f, -180.0f, -90.0f));
+                    model->SetModel(cache->GetResource<Model>("Models/Vehicles/Sahin/Models/Door_FR.mdl"));
+                    model->ApplyMaterialList("Models/Vehicles/Sahin/Models/Door_FR.txt");
+                    node->SetPosition(Vector3(0,0,0));
+
+                    // Back Left Door
+
+                    // Create new child node
+                    node = adjNode->CreateChild("Model");
+                    model = node->CreateComponent<StaticModel>();
+                    model->SetCastShadows(true);
+                    //adjNode3->SetRotation(Quaternion(0.0f, -180.0f, -90.0f));
+                    model->SetModel(cache->GetResource<Model>("Models/Vehicles/Sahin/Models/Door_BL.mdl"));
+                    model->ApplyMaterialList("Models/Vehicles/Sahin/Models/Door_BL.txt");
+                    node->SetPosition(Vector3(0,0,0));
+
+                    // Back Right Door
+
+                    // Create new child node
+                    node = adjNode->CreateChild("Model");
+                    model = node->CreateComponent<StaticModel>();
+                    model->SetCastShadows(true);
+                    //adjNode3->SetRotation(Quaternion(0.0f, -180.0f, -90.0f));
+                    model->SetModel(cache->GetResource<Model>("Models/Vehicles/Sahin/Models/Door_BR.mdl"));
+                    model->ApplyMaterialList("Models/Vehicles/Sahin/Models/Door_BR.txt");
+                    node->SetPosition(Vector3(0,0,0));
+
+
+*/
+
+
+/*
+                    Node *adjNode2 = adjNode->CreateChild("Model");
+                    hullObjectTurrent_ = adjNode2->CreateComponent<StaticModel>();
+                    hullObjectTurrent_->SetCastShadows(true);
+//                    hullObjectTurrent->SetModel(cache->GetResource<Model>("Models/AssetPack/sherman-gun.mdl"));
+                    //                  hullObjectTurrent->ApplyMaterialList("Models/AssetPack/sherman-gun.txt");
+
+                    //adjNode3->SetRotation(Quaternion(0.0f, -180.0f, -90.0f));
+                    hullObjectTurrent_->SetModel(cache->GetResource<Model>("Models/Vehicles/SetA/Models/Turrent.mdl"));
+                    hullObjectTurrent_->ApplyMaterialList("Models/Vehicles/SetA/Models/Turrent.txt");
+                    adjNode->SetPosition(Vector3(node_->GetPosition().x_, node_->GetPosition().y_ + 2.3f,
+                                                 node_->GetPosition().z_ - forwardWeightOffset - 4.0f));
+                    adjNode2->SetPosition(Vector3(-14.0f, -220.0f, 0.0f));
+                    adjNode2->SetScale(Vector3(0.4f, 0.4f, 0.4f));
+*/
+                    //towards_ = Vector3(towards_.x_*cos(turningVelocity_*timeStep) - towards_.y_*sin(turningVelocity_*timeStep), towards_.x_*sin(turningVelocity_*timeStep) + towards_.y_*cos(turningVelocity_*timeStep), 0.0f);
+                    //node->Rotate2D(turningVelocity_*timeStep);
+                    // The angle between rotation2d and x-axis
+                    //float angle = 90.0f + node->GetRotation2D();
+
+
+                    // apply to x
+                    //adjNode2->SetRotation(Quaternion(-90.0f, 180.0f, 0.0f));
+
+/*
+                    //connectionHeight = -4.74f;
+                    //connectionHeight = -4.2f;
+                    connectionHeight = -1.4f;//-2.2f;
+                    //wheelSpace = 2.4f;
+                    wheelSpace = 17.1f*scaleF;
+                    // chassis width -> 35 * 20% -> 7
+                    //wheelX = ((7 / 2.0f) + wheelWidth_);
+                    wheelX = ((2.6f / 2.0f) + wheelWidth_);
+*/
+
+                    //connectionHeight = -1.4f;//-2.2f; // Sahin
+                    //wheelSpace = 17.1f*scaleF; // Sahin
+                    //wheelX = ((2.6f / 2.0f) + wheelWidth_); // Sahin
+
+
+                    connectionHeight = -1.1f; // Kart
+                    //wheelSpace = 24.1f * scaleF; // Kart
+                    wheelSpace = 33.1f * scaleF; // Kart
+                    wheelX = ((6.1f / 2.0f) + wheelWidth_); // Kart
+
+
+                    hullColShape_->SetBox(v3BoxExtents);
+
+                    // Important for vehicle physics balancing
+                    //node_->SetScale(Vector3(3.3, 2.6f, 3.3f));
+                    node_->SetScale(Vector3(0.4f, 0.35f, 0.4f));
+
+
+                    // Front left
+                    connectionPoints_[0] = Vector3(-wheelX, connectionHeight, wheelSpace + GetWheelRadius() * 2.0f);
+                    // Front right
+                    connectionPoints_[1] = Vector3(wheelX, connectionHeight, wheelSpace + GetWheelRadius() * 2.0f);
+                    // Back left
+                    connectionPoints_[2] = Vector3(-wheelX, connectionHeight, -wheelSpace - GetWheelRadius() * 2.0f);
+                    // Back right
+                    connectionPoints_[3] = Vector3(wheelX, connectionHeight, -wheelSpace - GetWheelRadius() * 2.0f);
 
                 } else if (carType == 8) {
                     v3BoxExtents.x_ *= 14.0f;

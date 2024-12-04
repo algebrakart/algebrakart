@@ -176,10 +176,10 @@ const int MSG_NODE_ERROR = 156;
 //#define INGAME_FONT3 "Fonts/RulerGold.ttf"
 //#define INGAME_FONT4 "Fonts/HopeGold.ttf"
 
-#define INGAME_FONT "Fonts/RulerGold.ttf"
-#define INGAME_FONT2 "Fonts/RulerGold.ttf"
-#define INGAME_FONT3 "Fonts/RulerGold.ttf"
-#define INGAME_FONT4 "Fonts/RulerGold.ttf"
+#define INGAME_FONT "Fonts/Poppins-Regular.ttf"
+#define INGAME_FONT2 "Fonts/Poppins-Regular.ttf"
+#define INGAME_FONT3 "Fonts/Poppins-Regular.ttf"
+#define INGAME_FONT4 "Fonts/Poppins-Black.ttf"
 
 
 #define SHOW_STATS 1
@@ -524,6 +524,8 @@ void AlgebraKart::UpdateUIState(bool state) {
             //markerMapBkgSprite_->SetVisible(state);
             steerWheelSprite_->SetVisible(state);
             steerActorSprite_->SetVisible(state);
+            vDamageSprite_->SetVisible(state);
+
 
 
             // Create the UI for displaying the remaining lifes
@@ -2206,10 +2208,58 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
                                          steerActorSprite_->SetVisible(false);
                                          steerWheelSprite_->SetRotation(360.0f * steering);
                                      }
+
+                                     // Vehicle Damage
+                                     if (vDamageSprite_) {
+                                         vDamageSprite_->SetVisible(true);
+                                         int numLines = 20;
+                                         for (int i = 0; i < numLines; i++) {
+                                             // TODO ADD v damage list
+                                             SharedPtr<Sprite> sprite_;
+                                             sprite_ = vDamage_FL_LineSprites_.At(i);
+                                             sprite_->SetAlignment(HA_LEFT, VA_TOP);
+                                             sprite_->SetPosition(Vector2(12.0f, 333.0f+(i*5.0f)));
+                                             sprite_->SetOpacity(0.9f);
+                                             // Set a low priority so that other UI elements can be drawn on top
+                                             sprite_->SetPriority(-100);
+                                             sprite_->SetVisible(true);
+
+                                             sprite_ = vDamage_FR_LineSprites_.At(i);
+                                             sprite_->SetAlignment(HA_LEFT, VA_TOP);
+                                             sprite_->SetPosition(Vector2(145.0f, 40.0f+(i*5.0f)));
+                                             sprite_->SetOpacity(0.9f);
+                                             // Set a low priority so that other UI elements can be drawn on top
+                                             sprite_->SetPriority(-100);
+                                             sprite_->SetVisible(true);
+
+                                             sprite_ = vDamage_BL_LineSprites_.At(i);
+                                             sprite_->SetAlignment(HA_LEFT, VA_TOP);
+                                             sprite_->SetPosition(Vector2(12.0f, 40.0f+(i*5.0f)));
+                                             sprite_->SetOpacity(0.9f);
+                                             // Set a low priority so that other UI elements can be drawn on top
+                                             sprite_->SetPriority(-100);
+                                             sprite_->SetVisible(true);
+
+                                             sprite_ = vDamage_BR_LineSprites_.At(i);
+                                             sprite_->SetAlignment(HA_LEFT, VA_TOP);
+                                             sprite_->SetPosition(Vector2(145.0f, 333.0f+(i*5.0f)));
+                                             sprite_->SetOpacity(0.9f);
+                                             // Set a low priority so that other UI elements can be drawn on top
+                                             sprite_->SetPriority(-100);
+                                             sprite_->SetVisible(true);
+
+
+                                         }
+                                     }
                                  }
                              } else {
                                  if (steerActorSprite_) {
                                      steerWheelSprite_->SetVisible(false);
+
+                                     // Vehicle Damage
+                                     if (vDamageSprite_) {
+                                         vDamageSprite_->SetVisible(false);
+                                     }
 
                                      // Detect move vector and visible only on non-zero
                                      if (joySteer_.LengthSquared() > 0) {
@@ -2233,8 +2283,9 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
                             }
 
                             //URHO3D_LOGDEBUGF("pickupItemState=%d", pickupItemState);
-
                                  // Update Client UI bars
+
+                                 // Pickups
                                  if (pickupSprite_) {
                                      // Update player powerbar
                                      IntVector2 v = pickupSprite_->GetSize();
@@ -3183,8 +3234,12 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
 
                     }
                 }
+
                 // This stays the same
-                float totalSamples = _radioStream->GetSound()->GetSampleSize() * _radioStream->GetSound()->GetFrequency();
+                float totalSamples = 0;
+                if (_radioStream->GetSound()) {
+                    _radioStream->GetSound()->GetSampleSize() * _radioStream->GetSound()->GetFrequency();
+                }
 
 
                 //float totalSamples = _radioStream->GetSound()->GetSampleSize() * _radioStream->GetSound()->GetFrequency();
@@ -3210,16 +3265,17 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
                     fs = "0";
                 }
 
-                int ind = (t*totalSamples)/_radioStream->GetSound()->GetDataSize();
-
-                String playTime = " " + String(fm)  + String(m) + ":" + String(fs) + String(s) + " ";
                 String progressBar = "[";
+                String playTime = " " + String(fm) + String(m) + ":" + String(fs) + String(s) + " ";
+                if (_radioStream->GetSound()) {
+                    int ind = (t * totalSamples) / _radioStream->GetSound()->GetDataSize();
 
-                for (int i = 0; i < 11; i++) {
-                    if (ind == i) {
-                        progressBar += "|";
-                    } else {
-                        progressBar += "-";
+                    for (int i = 0; i < 11; i++) {
+                        if (ind == i) {
+                            progressBar += "|";
+                        } else {
+                            progressBar += "-";
+                        }
                     }
                 }
                 progressBar += "]";
@@ -3233,40 +3289,64 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
             /* NEXT QUEUE
             RadioTrack nextTrack = radioTrackInfoQueue_[nextRadioTrack_];
             */
+            if (_radioStream->GetSound()) {
+                // Process stream data
+                SharedArrayPtr stream = SharedArrayPtr(_radioStream->GetSound()->GetData());
+                int streamSize = _radioStream->GetSound()->GetDataSize();
+                capturer_->getBuffer()->Resize(streamSize);
+                capturer_->data->readCount = 0;
+                float t = _radioStream->GetTimePosition();
 
-            // Process stream data
-            SharedArrayPtr stream = SharedArrayPtr(_radioStream->GetSound()->GetData());
-            int streamSize = _radioStream->GetSound()->GetDataSize();
-            capturer_->getBuffer()->Resize(streamSize);
-            capturer_->data->readCount = 0;
-            float t = _radioStream->GetTimePosition();
+                for (size_t i = 0; i < streamSize; i++) {
 
-            for (size_t i = 0; i < streamSize; i++) {
-
-                if (stream.Get()[(int)i]) {
-                    float v = stream.Get()[(int)i] / 128.0f;
-                    capturer_->getBuffer()->At(i) = v;
-                    capturer_->data->readCount++;
-//                    URHO3D_LOGDEBUGF("readCount=%d,v=%f",capturer_->data->readCount, v);
+                    if (stream.Get()[(int) i]) {
+                        float v = stream.Get()[(int) i] / 128.0f;
+                        capturer_->getBuffer()->At(i) = v;
+                        capturer_->data->readCount++;
+                        //                    URHO3D_LOGDEBUGF("readCount=%d,v=%f",capturer_->data->readCount, v);
+                    }
                 }
+
+
+                //URHO3D_LOGDEBUGF("readCount=%d",capturer_->data->readCount);
+
+                if (audioSpectrumOptions_.inputSize < capturer_->bufferReadCount()) {
+                    // Update analyzer
+                    analyzer_->update(capturer_->getBuffer(), capturer_->bufferHeadIndex(),
+                                      audioSpectrumOptions_.bottomLevel,
+                                      audioSpectrumOptions_.topLevel, audioSpectrumOptions_.minFreq,
+                                      audioSpectrumOptions_.maxFreq, audioSpectrumOptions_.axisLogBase);
+                    //String renderStr = renderer_->draw(analyzer_->spectrum(), audioSpectrumOptions_.windowSize, audioSpectrumOptions_.smoothing, true);
+                    //  URHO3D_LOGDEBUGF("renderStr -> %s", renderStr.CString());
+                }
+
+                // Draw wave
+                DrawWave(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_,
+                         _radioStream->GetTimePosition(), Color(75.0f / 255.0f, 247.0f / 255.0f, 48.0f / 255.0f));
+                // DrawFFT(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_, Color(247.0f/255.0f,48.0f/255.0f,148.0f/255.0f));
             }
 
 
-//URHO3D_LOGDEBUGF("readCount=%d",capturer_->data->readCount);
 
-            if (audioSpectrumOptions_.inputSize < capturer_->bufferReadCount()) {
-                // Update analyzer
-                analyzer_->update(capturer_->getBuffer(), capturer_->bufferHeadIndex(),
-                                  audioSpectrumOptions_.bottomLevel,
-                                  audioSpectrumOptions_.topLevel, audioSpectrumOptions_.minFreq,
-                                  audioSpectrumOptions_.maxFreq, audioSpectrumOptions_.axisLogBase);
-                //String renderStr = renderer_->draw(analyzer_->spectrum(), audioSpectrumOptions_.windowSize, audioSpectrumOptions_.smoothing, true);
-              //  URHO3D_LOGDEBUGF("renderStr -> %s", renderStr.CString());
-            }
 
-            // Draw wave
-            DrawWave(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_, _radioStream->GetTimePosition(), Color(75.0f/255.0f,247.0f/255.0f,48.0f/255.0f));
-           // DrawFFT(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_, Color(247.0f/255.0f,48.0f/255.0f,148.0f/255.0f));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         }
         else
@@ -4004,6 +4084,7 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                                                                                     cameraRayLength,
                                                                                                     NETWORKACTOR_COL_LAYER);
                                             } else {
+                                                // cameraRayLength == 240.0001404 crash
                                                 scene_->GetComponent<PhysicsWorld>()->RaycastSingleSegmented(result,
                                                                                                              cameraRay,
                                                                                                              cameraRayLength,
@@ -4710,7 +4791,7 @@ void AlgebraKart::CreateUI() {
         // Construct the text element
         SharedPtr<Text> hudText_ = static_cast<SharedPtr<Text>>(ui->GetRoot()->CreateChild<Text>());
         hudText_->SetText("");
-        hudText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), 17);
+        hudText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 17);
         hudText_->SetColor(Color::WHITE);
         // Position the text relative to the screen center
         hudText_->SetHorizontalAlignment(HA_CENTER);
@@ -6275,7 +6356,7 @@ void AlgebraKart::CreateClientUI() {
     // Client will non-authoratively managed physics locally based on server copy
     clientPhysicsWorld_ = scene_->CreateComponent<PhysicsWorld>(LOCAL);
     clientPhysicsWorld_->SetFps(60);
-    clientPhysicsWorld_->DrawDebugGeometry(true);
+    clientPhysicsWorld_->DrawDebugGeometry(false);
     clientPhysicsWorld_->SetDebugRenderer(dbgRenderer);
     // Disable interpolation (need determinism)
     clientPhysicsWorld_->SetInterpolation(false);
@@ -6288,7 +6369,7 @@ void AlgebraKart::CreateClientUI() {
     packetsIn_ = ui->GetRoot()->CreateChild<Text>();
     packetsIn_->SetText("Packets in : 0");
     packetsIn_->SetColor(Color(0.7, 0.5, 0.9));
-    packetsIn_->SetFont(cache->GetResource<Font>(INGAME_FONT4), 15);
+    packetsIn_->SetFont(cache->GetResource<Font>(INGAME_FONT), 15);
     packetsIn_->SetHorizontalAlignment(HA_CENTER);
     packetsIn_->SetVerticalAlignment(VA_BOTTOM);
     packetsIn_->SetPosition(310, -32);
@@ -6296,7 +6377,7 @@ void AlgebraKart::CreateClientUI() {
     packetsOut_ = ui->GetRoot()->CreateChild<Text>();
     packetsOut_->SetText("Packets out: 0");
     packetsOut_->SetColor(Color(0.7, 0.5, 0.9));
-    packetsOut_->SetFont(cache->GetResource<Font>(INGAME_FONT4), 15);
+    packetsOut_->SetFont(cache->GetResource<Font>(INGAME_FONT), 15);
     packetsOut_->SetHorizontalAlignment(HA_CENTER);
     packetsOut_->SetVerticalAlignment(VA_BOTTOM);
     packetsOut_->SetPosition(310, -18);
@@ -6304,7 +6385,7 @@ void AlgebraKart::CreateClientUI() {
 
     // Set the default UI style and font
     //ui->GetRoot()->SetDefaultStyle(cache->GetResource<XMLFile>("UI/DefaultStyle.xml"));
-    auto *font = cache->GetResource<Font>(INGAME_FONT2);
+    auto *font = cache->GetResource<Font>("INGAME_FONT2");
     auto *font2 = cache->GetResource<Font>(INGAME_FONT);
     auto *font3 = cache->GetResource<Font>(INGAME_FONT3);
     auto *font4 = cache->GetResource<Font>(INGAME_FONT4);
@@ -6337,6 +6418,16 @@ void AlgebraKart::CreateClientUI() {
     // Get velocity bar background texture
     Texture2D *velBarBkgTexture = cache->GetResource<Texture2D>("Textures/powerbar-bk.png");
     if (!rpmBarBkgTexture)
+        return;
+
+    // Get HUD vehicle damage background texture
+    Texture2D *hudVDamageTexture = cache->GetResource<Texture2D>("Textures/hud_v-damage.png");
+    if (!hudVDamageTexture)
+        return;
+
+    // Get HUD vehicle damage indicator line texture
+    Texture2D *hudVDamageLineTexture = cache->GetResource<Texture2D>("Textures/hud_vdamage-line.png");
+    if (!hudVDamageLineTexture)
         return;
 
     // Get HUD pickup background texture
@@ -6406,6 +6497,92 @@ void AlgebraKart::CreateClientUI() {
     rpmBarBkgP1Sprite_ = ui->GetRoot()->CreateChild<Sprite>();
     velBarP1Sprite_ = ui->GetRoot()->CreateChild<Sprite>();
     velBarBkgP1Sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+
+    // Vehicle damage HUD
+    vDamageSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+    // Indicator Lines
+    SharedPtr<Sprite> sprite_;
+    int numLines = 20;
+    for (int i = 0; i < numLines; i++) {
+        sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        sprite_->SetTexture(hudVDamageLineTexture);
+        sprite_->SetScale(1.0f);
+        sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetAlignment(HA_LEFT, VA_TOP);
+        sprite_->SetPosition(Vector2(0, 0));
+        sprite_->SetOpacity(0.9f);
+        // Set a low priority so that other UI elements can be drawn on top
+        sprite_->SetPriority(-100);
+        sprite_->SetVisible(false);
+        vDamage_FL_LineSprites_.Push(sprite_);
+
+        sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        sprite_->SetTexture(hudVDamageLineTexture);
+        sprite_->SetScale(1.0f);
+        sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetAlignment(HA_LEFT, VA_TOP);
+        sprite_->SetPosition(Vector2(0, 0));
+        sprite_->SetOpacity(0.9f);
+        // Set a low priority so that other UI elements can be drawn on top
+        sprite_->SetPriority(-100);
+        sprite_->SetVisible(false);
+        vDamage_FR_LineSprites_.Push(sprite_);
+
+        sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        sprite_->SetTexture(hudVDamageLineTexture);
+        sprite_->SetScale(1.0f);
+        sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetAlignment(HA_LEFT, VA_TOP);
+        sprite_->SetPosition(Vector2(0, 0));
+        sprite_->SetOpacity(0.9f);
+        // Set a low priority so that other UI elements can be drawn on top
+        sprite_->SetPriority(-100);
+        sprite_->SetVisible(false);
+        vDamage_BL_LineSprites_.Push(sprite_);
+
+        sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        sprite_->SetTexture(hudVDamageLineTexture);
+        sprite_->SetScale(1.0f);
+        sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetAlignment(HA_LEFT, VA_TOP);
+        sprite_->SetPosition(Vector2(0, 0));
+        sprite_->SetOpacity(0.9f);
+        // Set a low priority so that other UI elements can be drawn on top
+        sprite_->SetPriority(-100);
+        sprite_->SetVisible(false);
+        vDamage_BR_LineSprites_.Push(sprite_);
+
+        sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        sprite_->SetTexture(hudVDamageLineTexture);
+        sprite_->SetScale(1.0f);
+        sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetAlignment(HA_LEFT, VA_TOP);
+        sprite_->SetPosition(Vector2(0, 0));
+        sprite_->SetOpacity(0.9f);
+        // Set a low priority so that other UI elements can be drawn on top
+        sprite_->SetPriority(-100);
+        sprite_->SetVisible(false);
+        vDamage_FA_LineSprites_.Push(sprite_);
+
+        sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        sprite_->SetTexture(hudVDamageLineTexture);
+        sprite_->SetScale(1.0f);
+        sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetAlignment(HA_LEFT, VA_TOP);
+        sprite_->SetPosition(Vector2(0, 0));
+        sprite_->SetOpacity(0.9f);
+        // Set a low priority so that other UI elements can be drawn on top
+        sprite_->SetPriority(-100);
+        sprite_->SetVisible(false);
+        vDamage_RA_LineSprites_.Push(sprite_);
+    }
+
     pickupSprite_ = ui->GetRoot()->CreateChild<Sprite>();
     pickupItemSprite_ = ui->GetRoot()->CreateChild<Sprite>();
     //miniMapP1Sprite_ = ui->GetRoot()->CreateChild<Sprite>();
@@ -6430,6 +6607,7 @@ void AlgebraKart::CreateClientUI() {
     rpmBarBkgP1Sprite_->SetTexture(rpmBarBkgTexture);
     velBarP1Sprite_->SetTexture(velBarTexture);
     velBarBkgP1Sprite_->SetTexture(rpmBarBkgTexture);
+    vDamageSprite_->SetTexture(hudVDamageTexture);
     pickupSprite_->SetTexture(hudPickupTexture);
     pickupItemSprite_->SetTexture(hudPickupItemTextures_[0]);
     //miniMapP1Sprite_->SetTexture(miniMapP1Texture);
@@ -6447,7 +6625,7 @@ void AlgebraKart::CreateClientUI() {
     powerBarText_ = ui->GetRoot()->CreateChild<Text>("powerBarText");
     powerBarText_->SetAlignment(HA_LEFT, VA_TOP);
     powerBarText_->SetPosition(10.0f, 23.0);
-    powerBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
+    powerBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 16);
     powerBarText_->SetTextEffect(TE_SHADOW);
     powerBarText_->SetText(String("HEALTH"));
     powerBarText_->SetVisible(true);
@@ -6456,7 +6634,7 @@ void AlgebraKart::CreateClientUI() {
     powerBarProgBarText_ = ui->GetRoot()->CreateChild<Text>("powerBarText");
     powerBarProgBarText_->SetAlignment(HA_LEFT, VA_TOP);
     powerBarProgBarText_->SetPosition(90.0f, 14.0);
-    powerBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 30);
+    powerBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), 30);
     powerBarProgBarText_->SetTextEffect(TE_SHADOW);
     powerBarProgBarText_->SetText(String(""));
     powerBarProgBarText_->SetVisible(true);
@@ -6492,7 +6670,7 @@ void AlgebraKart::CreateClientUI() {
     rpmBarText_ = ui->GetRoot()->CreateChild<Text>("rpmBarText");
     rpmBarText_->SetAlignment(HA_LEFT, VA_TOP);
     rpmBarText_->SetPosition(10.0f, 122.5);
-    rpmBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
+    rpmBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 16);
     rpmBarText_->SetTextEffect(TE_SHADOW);
     rpmBarText_->SetText(String("RPM"));
     rpmBarText_->SetVisible(true);
@@ -6500,7 +6678,7 @@ void AlgebraKart::CreateClientUI() {
     rpmBarProgBarText_ = ui->GetRoot()->CreateChild<Text>("rpmBarText");
     rpmBarProgBarText_->SetAlignment(HA_LEFT, VA_TOP);
     rpmBarProgBarText_->SetPosition(90.0f, 113);
-    rpmBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 30);
+    rpmBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), 30);
     rpmBarProgBarText_->SetTextEffect(TE_SHADOW);
     rpmBarProgBarText_->SetText(String(""));
     rpmBarProgBarText_->SetVisible(true);
@@ -6535,7 +6713,7 @@ void AlgebraKart::CreateClientUI() {
     velBarText_ = ui->GetRoot()->CreateChild<Text>("velBarText");
     velBarText_->SetAlignment(HA_LEFT, VA_TOP);
     velBarText_->SetPosition(10.0f, 72.5);
-    velBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
+    velBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 16);
     velBarText_->SetTextEffect(TE_SHADOW);
     velBarText_->SetText(String("SPEED"));
     velBarText_->SetVisible(true);
@@ -6543,7 +6721,7 @@ void AlgebraKart::CreateClientUI() {
     velBarProgBarText_ = ui->GetRoot()->CreateChild<Text>("velBarText");
     velBarProgBarText_->SetAlignment(HA_LEFT, VA_TOP);
     velBarProgBarText_->SetPosition(90.0f, 65);
-    velBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 30);
+    velBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), 30);
     velBarProgBarText_->SetTextEffect(TE_SHADOW);
     velBarProgBarText_->SetText(String(""));
     velBarProgBarText_->SetVisible(true);
@@ -6552,15 +6730,15 @@ void AlgebraKart::CreateClientUI() {
     pranaBarText_ = ui->GetRoot()->CreateChild<Text>("pranaBarText");
     pranaBarText_->SetAlignment(HA_LEFT, VA_TOP);
     pranaBarText_->SetPosition(10.0f, 171.5);
-    pranaBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
+    pranaBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 16);
     pranaBarText_->SetTextEffect(TE_SHADOW);
-    pranaBarText_->SetText(String("PRANA"));
+    pranaBarText_->SetText(String("ENERGY"));
     pranaBarText_->SetVisible(true);
 
     pranaBarProgBarText_ = ui->GetRoot()->CreateChild<Text>("pranaBarText");
     pranaBarProgBarText_->SetAlignment(HA_LEFT, VA_TOP);
     pranaBarProgBarText_->SetPosition(90.0f, 164);
-    pranaBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 30);
+    pranaBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), 30);
     pranaBarProgBarText_->SetTextEffect(TE_SHADOW);
     pranaBarProgBarText_->SetText(String(""));
     pranaBarProgBarText_->SetVisible(true);
@@ -6592,6 +6770,15 @@ void AlgebraKart::CreateClientUI() {
     velBarP1Sprite_->SetVisible(false);
     velBarBkgP1Sprite_->SetVisible(false);
 
+    vDamageSprite_->SetScale(1.0f);
+    vDamageSprite_->SetSize(hudVDamageTexture->GetWidth(), hudVDamageTexture->GetHeight());
+    vDamageSprite_->SetHotSpot(hudVDamageTexture->GetWidth(), hudVDamageTexture->GetHeight());
+    vDamageSprite_->SetAlignment(HA_LEFT, VA_TOP);
+    vDamageSprite_->SetPosition(Vector2(145.0f, 333.0f));
+    vDamageSprite_->SetOpacity(0.9f);
+    // Set a low priority so that other UI elements can be drawn on top
+    vDamageSprite_->SetPriority(-100);
+    vDamageSprite_->SetVisible(false);
 
     pickupSprite_->SetScale(1.0f);
     pickupSprite_->SetSize(hudPickupTexture->GetWidth(), hudPickupTexture->GetHeight());
