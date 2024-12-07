@@ -164,7 +164,7 @@ void AgentController::update(float duration) {
 
     // Eliminate agent which has had no wheel contact for too long
     if (timeSinceNoWheelContact > NO_WHEEL_CONTACT_DIE_TIME) {
-        die();
+        //die();
     }
 
     if (numWheelsContact > 0) {
@@ -391,7 +391,7 @@ void AgentController::update(float duration) {
 
     // Agent timed out, death by timeout
     if (timeSinceLastCheckpoint > MAX_CHECKPOINT_DELAY) {
-        die();
+        //die();
     }
 }
 

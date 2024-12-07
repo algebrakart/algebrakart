@@ -1088,11 +1088,26 @@ void AlgebraKart::HandleAI(float timeStep) {
             controller->update(timeStep);
 
             if (controller->isAlive()) {
-                if (EvolutionManager::getInstance()->getNetworkActors()[i]) {
-                    float speed = EvolutionManager::getInstance()->getNetworkActors()[i]->vehicle_->GetSpeedKmH();
+                NetworkActor* actor = EvolutionManager::getInstance()->getNetworkActors()[i];
+                if (actor) {
+                    float speed = actor->vehicle_->GetSpeedKmH();
                     float SPEED_KILL_LIMIT = 400.0f;
                     if (speed > SPEED_KILL_LIMIT) {
-                        dead = true;
+
+                        /*
+                        controller->die();
+                        actor->Kill();
+
+                        // respawn?
+                        EvolutionManager::getInstance()->getNetworkActors()[i]->Kill();
+                        EvolutionManager::getInstance()->getNetworkActors()[i] = nullptr;
+                        URHO3D_LOGDEBUGF("CreateAgents -> SpawnPlayer: %d", (i));
+                        // Spawn ai bot and generate NetworkActor
+                        EvolutionManager::getInstance()->getNetworkActors()[i] = SpawnPlayer(i);
+                        agents[i]->setRespawnTime(0);
+                        scene_->MarkNetworkUpdate();
+                        */
+
                     }
                 }
             }
@@ -1107,6 +1122,7 @@ void AlgebraKart::HandleAI(float timeStep) {
             }
         }
 
+        /*
         if (dead) {
             // dead
 
@@ -1124,7 +1140,7 @@ void AlgebraKart::HandleAI(float timeStep) {
                 EvolutionManager::getInstance()->getNetworkActors()[i] = SpawnPlayer(i);
                 agents[i]->setRespawnTime(0);
             }
-        }
+        }*/
     }
 
 }
@@ -4737,7 +4753,7 @@ void AlgebraKart::CreateUI() {
     // Construct the instructions text element
     gameNameText_ = ui->GetRoot()->CreateChild<Text>();
     gameNameText_->SetText(GAME_NAME);
-    gameNameText_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
+    gameNameText_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 12);
     gameNameText_->SetColor(Color::GRAY);
     // Position the text relative to the screen center
     gameNameText_->SetAlignment(HA_CENTER, VA_TOP);
@@ -4746,7 +4762,7 @@ void AlgebraKart::CreateUI() {
 
     auto gameNameText2_ = ui->GetRoot()->CreateChild<Text>();
     gameNameText2_->SetText(GAME_NAME);
-    gameNameText2_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
+    gameNameText2_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 12);
     gameNameText2_->SetColor(Color::WHITE);
     // Position the text relative to the screen center
     gameNameText2_->SetAlignment(HA_CENTER, VA_TOP);
@@ -7364,29 +7380,35 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
         //zoneNode->SetNetPositionAttr(Vector3(40, 50, 70));
 
 
-/*
+
 
     using namespace std;
 
     // Create heightmap terrain with collision
     Node *terrainNode = scene_->CreateChild("Terrain", REPLICATED);
-    terrainNode->SetPosition(Vector3::ZERO);
+    terrainNode->SetPosition(Vector3(0.0f,-340.0f,0.0f));
 
     terrain_ = terrainNode->CreateComponent<Terrain>(REPLICATED);
-    terrain_->SetPatchSize(128);
-    terrain_->SetSpacing(Vector3(2.8f, 0.2f, 2.8f));
+    terrain_->SetPatchSize(64);
+    terrain_->SetSpacing(Vector3(2.8f, 0.12f, 2.8f));
 //    terrain->SetSpacing(Vector3(3.0f, 0.1f, 3.0f)); // Spacing between vertices and vertical resolution of the height map
    // terrainNode->SetNetPositionAttr(Vector3::ZERO);
 
-    //    terrain->SetHeightMap(cache->GetResource<Image>("Offroad/Terrain/HeightMapRace-257.png"));
-//    terrain->SetMaterial(cache->GetResource<Material>("Offroad/Terrain/TerrainRace-256.xml"));
+        terrain_->SetHeightMap(cache->GetResource<Image>("Offroad/Terrain/HeightMapRace-257.png"));
+        terrain_->SetMaterial(cache->GetResource<Material>("Offroad/Terrain/TerrainRace-256.xml"));
     //terrain_->SetMarkerMap(cache->GetResource<Image>("Textures/MarkerMap.png"));
-    terrain_->SetHeightMap(cache->GetResource<Image>("Textures/HeightMap.png"));
-    terrain_->SetMaterial(cache->GetResource<Material>("Materials/Terrain.xml"));
-    terrain_->GetNode()->SetScale(15.0f);
+    //terrain_->SetHeightMap(cache->GetResource<Image>("Textures/HeightMap.png"));
+    //terrain_->SetMaterial(cache->GetResource<Material>("Materials/Terrain.xml"));
+    terrain_->GetNode()->SetScale(12.0f);
 
     terrain_->SetOccluder(true);
-*/////
+
+
+    RigidBody* body = terrainNode->CreateComponent<RigidBody>();
+    body->SetCollisionLayer(2); // Use layer bitmask 2 for static geometry
+    CollisionShape* shape = terrainNode->CreateComponent<CollisionShape>();
+    shape->SetTerrain();
+
 
 
     // TRACK MARKER
