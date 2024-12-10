@@ -2230,6 +2230,52 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
                              bodyPos = body->GetPosition();
                              rotation = na->GetNode()->GetRotation();
 
+                             // Vehicle Damage
+                             if (vDamageSprite_) {
+                                 vDamageSprite_->SetVisible(true);
+                                 int numLines = 8;
+                                 for (int i = 0; i < numLines; i++) {
+                                     // TODO ADD v damage list
+                                     SharedPtr<Sprite> sprite_;
+                                     sprite_ = vDamage_FL_LineSprites_.At(i);
+                                     sprite_->SetAlignment(HA_LEFT, VA_TOP);
+                                     sprite_->SetPosition(Vector2(30.0f, 333.0f+(i*5.0f)));
+                                     sprite_->SetOpacity(0.9f);
+                                     // Set a low priority so that other UI elements can be drawn on top
+                                     sprite_->SetPriority(-100);
+                                     sprite_->SetVisible(true);
+
+                                     sprite_ = vDamage_FR_LineSprites_.At(i);
+                                     sprite_->SetAlignment(HA_LEFT, VA_TOP);
+                                     sprite_->SetPosition(Vector2(145.0f, 410.0f+(i*5.0f)));
+                                     sprite_->SetOpacity(0.9f);
+                                     // Set a low priority so that other UI elements can be drawn on top
+                                     sprite_->SetPriority(-100);
+                                     sprite_->SetVisible(true);
+
+                                     sprite_ = vDamage_BL_LineSprites_.At(i);
+                                     sprite_->SetAlignment(HA_LEFT, VA_TOP);
+                                     sprite_->SetPosition(Vector2(30.0f, 140.0f+(i*5.0f)));
+                                     sprite_->SetOpacity(0.9f);
+                                     // Set a low priority so that other UI elements can be drawn on top
+                                     sprite_->SetPriority(-100);
+                                     sprite_->SetVisible(true);
+
+                                     sprite_ = vDamage_BR_LineSprites_.At(i);
+                                     sprite_->SetAlignment(HA_LEFT, VA_TOP);
+                                     sprite_->SetPosition(Vector2(145.0f, 333.0f+(i*5.0f)));
+                                     sprite_->SetOpacity(0.9f);
+                                     // Set a low priority so that other UI elements can be drawn on top
+                                     sprite_->SetPriority(-100);
+                                     sprite_->SetVisible(true);
+
+                                     // ? left
+                                     // 90 middle
+                                     // ? right
+
+
+                                 }
+                             }
 
                              if (na->entered_) {
                                  if (v) {
@@ -2240,48 +2286,6 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
                                          steerWheelSprite_->SetRotation(360.0f * steering);
                                      }
 
-                                     // Vehicle Damage
-                                     if (vDamageSprite_) {
-                                         vDamageSprite_->SetVisible(true);
-                                         int numLines = 20;
-                                         for (int i = 0; i < numLines; i++) {
-                                             // TODO ADD v damage list
-                                             SharedPtr<Sprite> sprite_;
-                                             sprite_ = vDamage_FL_LineSprites_.At(i);
-                                             sprite_->SetAlignment(HA_LEFT, VA_TOP);
-                                             sprite_->SetPosition(Vector2(12.0f, 333.0f+(i*5.0f)));
-                                             sprite_->SetOpacity(0.9f);
-                                             // Set a low priority so that other UI elements can be drawn on top
-                                             sprite_->SetPriority(-100);
-                                             sprite_->SetVisible(true);
-
-                                             sprite_ = vDamage_FR_LineSprites_.At(i);
-                                             sprite_->SetAlignment(HA_LEFT, VA_TOP);
-                                             sprite_->SetPosition(Vector2(145.0f, 40.0f+(i*5.0f)));
-                                             sprite_->SetOpacity(0.9f);
-                                             // Set a low priority so that other UI elements can be drawn on top
-                                             sprite_->SetPriority(-100);
-                                             sprite_->SetVisible(true);
-
-                                             sprite_ = vDamage_BL_LineSprites_.At(i);
-                                             sprite_->SetAlignment(HA_LEFT, VA_TOP);
-                                             sprite_->SetPosition(Vector2(12.0f, 40.0f+(i*5.0f)));
-                                             sprite_->SetOpacity(0.9f);
-                                             // Set a low priority so that other UI elements can be drawn on top
-                                             sprite_->SetPriority(-100);
-                                             sprite_->SetVisible(true);
-
-                                             sprite_ = vDamage_BR_LineSprites_.At(i);
-                                             sprite_->SetAlignment(HA_LEFT, VA_TOP);
-                                             sprite_->SetPosition(Vector2(145.0f, 333.0f+(i*5.0f)));
-                                             sprite_->SetOpacity(0.9f);
-                                             // Set a low priority so that other UI elements can be drawn on top
-                                             sprite_->SetPriority(-100);
-                                             sprite_->SetVisible(true);
-
-
-                                         }
-                                     }
                                  }
                              } else {
                                  if (steerActorSprite_) {
@@ -2289,7 +2293,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
 
                                      // Vehicle Damage
                                      if (vDamageSprite_) {
-                                         vDamageSprite_->SetVisible(false);
+//                                         vDamageSprite_->SetVisible(false);
                                      }
 
                                      // Detect move vector and visible only on non-zero
@@ -4836,7 +4840,7 @@ void AlgebraKart::CreateUI() {
         // Construct the text element
         SharedPtr<Text> hudText_ = static_cast<SharedPtr<Text>>(ui->GetRoot()->CreateChild<Text>());
         hudText_->SetText("");
-        hudText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 17);
+        hudText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 13);
         hudText_->SetColor(Color::WHITE);
         // Position the text relative to the screen center
         hudText_->SetHorizontalAlignment(HA_CENTER);
@@ -5297,14 +5301,14 @@ void AlgebraKart::MoveCamera(float timeStep) {
                                     float velLen = lVel.Length();
 
                                     // Zoom up on body velocity increase
-                                    cameraTargetPos =
-                                            pos + Vector3::UP * 3.3f - forward *
+                                    cameraTargetPos = pos + Vector3::UP * 187.3f;
+                                            /*Vector3::UP * 3.3f - forward *
                                                                        Vector3(0.0f + velLen *
                                                                                       velMult * 0.07,
-                                                                               CAMERA_RAY_DISTANCE_LIMIT / 14,
+                                                                               CAMERA_RAY_DISTANCE_LIMIT / 20,
                                                                                78.0f + velLen *
                                                                                        velMult) * 0.11f;
-
+*/
 
                                     lookAtObject = naBody->GetPosition();
 
@@ -6547,7 +6551,7 @@ void AlgebraKart::CreateClientUI() {
     vDamageSprite_ = ui->GetRoot()->CreateChild<Sprite>();
     // Indicator Lines
     SharedPtr<Sprite> sprite_;
-    int numLines = 20;
+    int numLines = 8;
     for (int i = 0; i < numLines; i++) {
         sprite_ = ui->GetRoot()->CreateChild<Sprite>();
         sprite_->SetTexture(hudVDamageLineTexture);
@@ -6644,6 +6648,7 @@ void AlgebraKart::CreateClientUI() {
     sprite_->SetHotSpot(Vector2(info.file_->pivotX_, info.file_->pivotY_));
 */
 
+    int progBarSize = 15;
 
     // Set sprite texture
     powerBarP1Sprite_->SetTexture(powerBarTexture);
@@ -6678,8 +6683,8 @@ void AlgebraKart::CreateClientUI() {
 
     powerBarProgBarText_ = ui->GetRoot()->CreateChild<Text>("powerBarText");
     powerBarProgBarText_->SetAlignment(HA_LEFT, VA_TOP);
-    powerBarProgBarText_->SetPosition(90.0f, 14.0);
-    powerBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), 30);
+    powerBarProgBarText_->SetPosition(120.0f, 24.0);
+    powerBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), progBarSize);
     powerBarProgBarText_->SetTextEffect(TE_SHADOW);
     powerBarProgBarText_->SetText(String(""));
     powerBarProgBarText_->SetVisible(true);
@@ -6722,8 +6727,8 @@ void AlgebraKart::CreateClientUI() {
 
     rpmBarProgBarText_ = ui->GetRoot()->CreateChild<Text>("rpmBarText");
     rpmBarProgBarText_->SetAlignment(HA_LEFT, VA_TOP);
-    rpmBarProgBarText_->SetPosition(90.0f, 113);
-    rpmBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), 30);
+    rpmBarProgBarText_->SetPosition(120.0f, 123);
+    rpmBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), progBarSize);
     rpmBarProgBarText_->SetTextEffect(TE_SHADOW);
     rpmBarProgBarText_->SetText(String(""));
     rpmBarProgBarText_->SetVisible(true);
@@ -6765,8 +6770,8 @@ void AlgebraKart::CreateClientUI() {
 
     velBarProgBarText_ = ui->GetRoot()->CreateChild<Text>("velBarText");
     velBarProgBarText_->SetAlignment(HA_LEFT, VA_TOP);
-    velBarProgBarText_->SetPosition(90.0f, 65);
-    velBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), 30);
+    velBarProgBarText_->SetPosition(120.0f, 75);
+    velBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), progBarSize);
     velBarProgBarText_->SetTextEffect(TE_SHADOW);
     velBarProgBarText_->SetText(String(""));
     velBarProgBarText_->SetVisible(true);
@@ -6782,8 +6787,8 @@ void AlgebraKart::CreateClientUI() {
 
     pranaBarProgBarText_ = ui->GetRoot()->CreateChild<Text>("pranaBarText");
     pranaBarProgBarText_->SetAlignment(HA_LEFT, VA_TOP);
-    pranaBarProgBarText_->SetPosition(90.0f, 164);
-    pranaBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), 30);
+    pranaBarProgBarText_->SetPosition(120.0f, 174);
+    pranaBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), progBarSize);
     pranaBarProgBarText_->SetTextEffect(TE_SHADOW);
     pranaBarProgBarText_->SetText(String(""));
     pranaBarProgBarText_->SetVisible(true);
@@ -6829,7 +6834,7 @@ void AlgebraKart::CreateClientUI() {
     pickupSprite_->SetSize(hudPickupTexture->GetWidth(), hudPickupTexture->GetHeight());
     pickupSprite_->SetHotSpot(hudPickupTexture->GetWidth(), hudPickupTexture->GetHeight());
     pickupSprite_->SetAlignment(HA_LEFT, VA_TOP);
-    pickupSprite_->SetPosition(Vector2(425.0f, 133.0f));
+    pickupSprite_->SetPosition(Vector2(625.0f, 133.0f));
     pickupSprite_->SetOpacity(0.9f);
     // Set a low priority so that other UI elements can be drawn on top
     pickupSprite_->SetPriority(-100);
@@ -6840,7 +6845,7 @@ void AlgebraKart::CreateClientUI() {
     pickupItemSprite_->SetSize(hudPickupTexture->GetWidth(), hudPickupTexture->GetHeight());
     pickupItemSprite_->SetHotSpot(hudPickupTexture->GetWidth(), hudPickupTexture->GetHeight());
     pickupItemSprite_->SetAlignment(HA_LEFT, VA_TOP);
-    pickupItemSprite_->SetPosition(Vector2(428.0f, 143.0f));
+    pickupItemSprite_->SetPosition(Vector2(628.0f, 143.0f));
     pickupItemSprite_->SetOpacity(0.9f);
     // Set a low priority so that other UI elements can be drawn on top
     pickupItemSprite_->SetPriority(-100);
