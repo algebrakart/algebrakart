@@ -56,6 +56,8 @@
 #define SOUND_FX_ENGINE_BRAKE 6
 #define SOUND_FX_ENGINE_BOOST 7
 
+#define SOUND_FX_DIALOGUE_START_GAME 0
+
 std::vector<std::string> driveAudioEffect = {
         "drive/v1-engine-start.ogg",
         "drive/v1-engine-loop.ogg",
@@ -65,6 +67,10 @@ std::vector<std::string> driveAudioEffect = {
         "drive/v1-engine-skid3.ogg",
         "drive/v1-engine-brake.ogg",
         "drive/v1-engine-boost.ogg"
+};
+
+std::vector<std::string> dialogueAudioEffect = {
+        "dialogue/algebrakart-s0.ogg"
 };
 
 

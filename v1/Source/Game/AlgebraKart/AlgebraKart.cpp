@@ -2234,36 +2234,37 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
                              if (vDamageSprite_) {
                                  vDamageSprite_->SetVisible(true);
                                  int numLines = 8;
+                                 float height = 3.0f;
                                  for (int i = 0; i < numLines; i++) {
                                      // TODO ADD v damage list
                                      SharedPtr<Sprite> sprite_;
                                      sprite_ = vDamage_FL_LineSprites_.At(i);
-                                     sprite_->SetAlignment(HA_LEFT, VA_TOP);
-                                     sprite_->SetPosition(Vector2(30.0f, 333.0f+(i*5.0f)));
+                                     sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+                                     sprite_->SetPosition(Vector2(-130.0f, -100.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
                                      sprite_->SetVisible(true);
 
                                      sprite_ = vDamage_FR_LineSprites_.At(i);
-                                     sprite_->SetAlignment(HA_LEFT, VA_TOP);
-                                     sprite_->SetPosition(Vector2(145.0f, 410.0f+(i*5.0f)));
+                                     sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+                                     sprite_->SetPosition(Vector2(-45.0f, -100.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
                                      sprite_->SetVisible(true);
 
                                      sprite_ = vDamage_BL_LineSprites_.At(i);
-                                     sprite_->SetAlignment(HA_LEFT, VA_TOP);
-                                     sprite_->SetPosition(Vector2(30.0f, 140.0f+(i*5.0f)));
+                                     sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+                                     sprite_->SetPosition(Vector2(-130.0f, -10.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
                                      sprite_->SetVisible(true);
 
                                      sprite_ = vDamage_BR_LineSprites_.At(i);
-                                     sprite_->SetAlignment(HA_LEFT, VA_TOP);
-                                     sprite_->SetPosition(Vector2(145.0f, 333.0f+(i*5.0f)));
+                                     sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+                                     sprite_->SetPosition(Vector2(-45.0f, -10.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
@@ -6105,11 +6106,11 @@ void AlgebraKart::ShowChatText(const String &row) {
 
         auto *font = cache->GetResource<Font>(INGAME_FONT3);
         chatHistoryText_ = ui->GetRoot()->CreateChild<Text>();
-        chatHistoryText_->SetPosition(-200,380);
+        chatHistoryText_->SetPosition(23,380);
         chatHistoryText_->SetFixedWidth(300);
-        chatHistoryText_->SetHorizontalAlignment(Urho3D::HA_RIGHT);
-        chatHistoryText_->SetFont(font, 14);
-        chatHistoryText_->SetColor(Color(0.6f,0.8f,0.4f));
+        chatHistoryText_->SetHorizontalAlignment(Urho3D::HA_LEFT);
+        chatHistoryText_->SetFont(font, 10);
+        chatHistoryText_->SetColor(Color(0.8f,0.8f,0.7f));
         chatHistoryText_->SetVisible(true);
     }
 
@@ -6418,18 +6419,16 @@ void AlgebraKart::CreateClientUI() {
     packetsIn_ = ui->GetRoot()->CreateChild<Text>();
     packetsIn_->SetText("Packets in : 0");
     packetsIn_->SetColor(Color(0.7, 0.5, 0.9));
-    packetsIn_->SetFont(cache->GetResource<Font>(INGAME_FONT), 15);
-    packetsIn_->SetHorizontalAlignment(HA_CENTER);
-    packetsIn_->SetVerticalAlignment(VA_BOTTOM);
-    packetsIn_->SetPosition(310, -32);
+    packetsIn_->SetFont(cache->GetResource<Font>(INGAME_FONT), 9);
+    packetsIn_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+    packetsIn_->SetPosition(-100, -32);
 
     packetsOut_ = ui->GetRoot()->CreateChild<Text>();
     packetsOut_->SetText("Packets out: 0");
     packetsOut_->SetColor(Color(0.7, 0.5, 0.9));
-    packetsOut_->SetFont(cache->GetResource<Font>(INGAME_FONT), 15);
-    packetsOut_->SetHorizontalAlignment(HA_CENTER);
-    packetsOut_->SetVerticalAlignment(VA_BOTTOM);
-    packetsOut_->SetPosition(310, -18);
+    packetsOut_->SetFont(cache->GetResource<Font>(INGAME_FONT), 9);
+    packetsOut_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+    packetsOut_->SetPosition(-100, -18);
 
 
     // Set the default UI style and font
@@ -6558,7 +6557,6 @@ void AlgebraKart::CreateClientUI() {
         sprite_->SetScale(1.0f);
         sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
         sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
-        sprite_->SetAlignment(HA_LEFT, VA_TOP);
         sprite_->SetPosition(Vector2(0, 0));
         sprite_->SetOpacity(0.9f);
         // Set a low priority so that other UI elements can be drawn on top
@@ -6571,7 +6569,6 @@ void AlgebraKart::CreateClientUI() {
         sprite_->SetScale(1.0f);
         sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
         sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
-        sprite_->SetAlignment(HA_LEFT, VA_TOP);
         sprite_->SetPosition(Vector2(0, 0));
         sprite_->SetOpacity(0.9f);
         // Set a low priority so that other UI elements can be drawn on top
@@ -6584,7 +6581,6 @@ void AlgebraKart::CreateClientUI() {
         sprite_->SetScale(1.0f);
         sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
         sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
-        sprite_->SetAlignment(HA_LEFT, VA_TOP);
         sprite_->SetPosition(Vector2(0, 0));
         sprite_->SetOpacity(0.9f);
         // Set a low priority so that other UI elements can be drawn on top
@@ -6597,7 +6593,6 @@ void AlgebraKart::CreateClientUI() {
         sprite_->SetScale(1.0f);
         sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
         sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
-        sprite_->SetAlignment(HA_LEFT, VA_TOP);
         sprite_->SetPosition(Vector2(0, 0));
         sprite_->SetOpacity(0.9f);
         // Set a low priority so that other UI elements can be drawn on top
@@ -6610,7 +6605,6 @@ void AlgebraKart::CreateClientUI() {
         sprite_->SetScale(1.0f);
         sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
         sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
-        sprite_->SetAlignment(HA_LEFT, VA_TOP);
         sprite_->SetPosition(Vector2(0, 0));
         sprite_->SetOpacity(0.9f);
         // Set a low priority so that other UI elements can be drawn on top
@@ -6623,7 +6617,6 @@ void AlgebraKart::CreateClientUI() {
         sprite_->SetScale(1.0f);
         sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
         sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
-        sprite_->SetAlignment(HA_LEFT, VA_TOP);
         sprite_->SetPosition(Vector2(0, 0));
         sprite_->SetOpacity(0.9f);
         // Set a low priority so that other UI elements can be drawn on top
@@ -6823,8 +6816,8 @@ void AlgebraKart::CreateClientUI() {
     vDamageSprite_->SetScale(1.0f);
     vDamageSprite_->SetSize(hudVDamageTexture->GetWidth(), hudVDamageTexture->GetHeight());
     vDamageSprite_->SetHotSpot(hudVDamageTexture->GetWidth(), hudVDamageTexture->GetHeight());
-    vDamageSprite_->SetAlignment(HA_LEFT, VA_TOP);
-    vDamageSprite_->SetPosition(Vector2(145.0f, 333.0f));
+    vDamageSprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+    vDamageSprite_->SetPosition(Vector2(-24.0f, -123.0f));
     vDamageSprite_->SetOpacity(0.9f);
     // Set a low priority so that other UI elements can be drawn on top
     vDamageSprite_->SetPriority(-100);
@@ -6968,9 +6961,9 @@ void AlgebraKart::CreateClientUI() {
     // Rank text
     for (int i = 0; i < NUM_RANK_FIELDS; i++) {
         rankText_[i] = ui->GetRoot()->CreateChild<Text>("RankText");
-        rankText_[i]->SetAlignment(HA_LEFT, VA_CENTER);
-        rankText_[i]->SetPosition(10.0f, 10.0 + (i * 50));
-        rankText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
+        rankText_[i]->SetAlignment(HA_RIGHT, VA_CENTER);
+        rankText_[i]->SetPosition(-10.0f, 10.0 + (i * 50));
+        rankText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT3), 8);
         rankText_[i]->SetTextEffect(TE_SHADOW);
         rankText_[i]->SetVisible(false);
         std::string debugData1;
@@ -6981,9 +6974,9 @@ void AlgebraKart::CreateClientUI() {
     // Debug text
     for (int i = 0; i < NUM_DEBUG_FIELDS; i++) {
         debugText_[i] = ui->GetRoot()->CreateChild<Text>("DebugText");
-        debugText_[i]->SetAlignment(HA_LEFT, VA_CENTER);
+        debugText_[i]->SetAlignment(HA_RIGHT, VA_CENTER);
         debugText_[i]->SetPosition(10.0f, 500.0 + (i * 40));
-        debugText_[i]->SetFont(font, 12);
+        debugText_[i]->SetFont(font, 8);
         debugText_[i]->SetTextEffect(TE_SHADOW);
         debugText_[i]->SetVisible(false);
         std::string debugData1;
@@ -7014,7 +7007,7 @@ void AlgebraKart::CreateClientUI() {
         radioText_[i]->SetPosition(-38.0f, 20 + (i * 20));
         radioText_[i]->SetVisible(true);
         radioText_[i]->SetColor(Color(235/255.0f, 217/255.0f, 255/255));
-        radioText_[i]->SetFont(font4, 16);
+        radioText_[i]->SetFont(font4, 11);
         radioText_[i]->SetTextEffect(TE_SHADOW);
         radioText_[i]->SetVisible(true);
         std::string debugData1;
@@ -7289,24 +7282,24 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
 
     packetsIn_ = ui->GetRoot()->CreateChild<Text>();
     packetsIn_->SetText("Packets in : 0");
-    packetsIn_->SetFont(cache->GetResource<Font>(INGAME_FONT2), 12);
-    packetsIn_->SetHorizontalAlignment(HA_LEFT);
-    packetsIn_->SetVerticalAlignment(VA_CENTER);
-    packetsIn_->SetPosition(-50, -10);
+    packetsIn_->SetFont(cache->GetResource<Font>(INGAME_FONT2), 9);
+    packetsIn_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+    packetsIn_->SetPosition(-50, -20);
 
     packetsOut_ = ui->GetRoot()->CreateChild<Text>();
     packetsOut_->SetText("Packets out: 0");
-    packetsOut_->SetFont(cache->GetResource<Font>(INGAME_FONT2), 12);
+    packetsOut_->SetFont(cache->GetResource<Font>(INGAME_FONT2), 9);
+    packetsOut_->SetAlignment(HA_RIGHT, VA_BOTTOM);
     packetsOut_->SetHorizontalAlignment(HA_LEFT);
     packetsOut_->SetVerticalAlignment(VA_CENTER);
-    packetsOut_->SetPosition(-50, 10);
+    packetsOut_->SetPosition(-50, -10);
 
     // Debug text
     for (int i = 0; i < NUM_DEBUG_FIELDS; i++) {
         debugText_[i] = ui->GetRoot()->CreateChild<Text>("DebugText");
         debugText_[i]->SetAlignment(HA_LEFT, VA_CENTER);
         debugText_[i]->SetPosition(10.0f, 10.0 + (i * 40));
-        debugText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT2), 12);
+        debugText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT2), 10);
         debugText_[i]->SetTextEffect(TE_SHADOW);
         debugText_[i]->SetVisible(false);
         std::string debugData1;
@@ -7319,7 +7312,7 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
         rankText_[i] = ui->GetRoot()->CreateChild<Text>("RankText");
         rankText_[i]->SetAlignment(HA_LEFT, VA_CENTER);
         rankText_[i]->SetPosition(10.0f, 10.0 + (i * 50));
-        rankText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
+        rankText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT3), 10);
         rankText_[i]->SetTextEffect(TE_SHADOW);
         rankText_[i]->SetVisible(false);
         std::string debugData1;
@@ -7332,7 +7325,7 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
         genAlgStatsText_[i] = ui->GetRoot()->CreateChild<Text>("GenAlgStatsText");
         genAlgStatsText_[i]->SetAlignment(HA_LEFT, VA_TOP);
         genAlgStatsText_[i]->SetPosition(10.0f, 1.0 + (i * 12));
-        genAlgStatsText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT2), 12);
+        genAlgStatsText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT2), 10);
         genAlgStatsText_[i]->SetTextEffect(TE_SHADOW);
         genAlgStatsText_[i]->SetVisible(false);
         std::string statData1;
@@ -7391,7 +7384,7 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
 
     // Create heightmap terrain with collision
     Node *terrainNode = scene_->CreateChild("Terrain", REPLICATED);
-    terrainNode->SetPosition(Vector3(0.0f,-340.0f,0.0f));
+    terrainNode->SetPosition(Vector3(0.0f,-870.0f,0.0f));
 
     terrain_ = terrainNode->CreateComponent<Terrain>(REPLICATED);
     terrain_->SetPatchSize(64);
@@ -8104,6 +8097,10 @@ void AlgebraKart::HandlePlayerLoaded(StringHash eventType, VariantMap &eventData
     renderer->SetViewport(2, nullptr);
 
     URHO3D_LOGINFOF("HandlePlayerLoaded");
+
+    // Play first dialogue
+    PlaySoundEffectLocal(dialogueAudioEffect[SOUND_FX_DIALOGUE_START_GAME].c_str());
+
 
 }
 
