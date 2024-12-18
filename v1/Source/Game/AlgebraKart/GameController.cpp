@@ -276,5 +276,3 @@ void GameController::HandleJoystickDisconnected(StringHash eventType, VariantMap
 
     URHO3D_LOGINFOF("HandleJoystickDisconnected: id=%d", joystickID);
 }
-
-

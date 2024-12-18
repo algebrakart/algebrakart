@@ -34,6 +34,16 @@ static const unsigned NTWK_CTRL_JUMP     = (1<<8);
 static const unsigned NETWORKACTOR_COL_LAYER = 2;
 static const int MAX_MAT_COUNT = 9;
 
+
+// Car type definitions
+#define CAR_TYPE_JEEP1 3
+#define CAR_TYPE_JEEP2 4
+#define CAR_TYPE_JEEP3 5
+#define CAR_TYPE_YUGO 6
+#define CAR_TYPE_KART 12
+#define CAR_TYPE_SAHIN 7
+
+
 //=============================================================================
 //=============================================================================
 class NetworkActor : public ClientObj

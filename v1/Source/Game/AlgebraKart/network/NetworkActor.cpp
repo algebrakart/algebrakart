@@ -543,7 +543,26 @@ void NetworkActor::FixedUpdate(float timeStep) {
 
             if (onVehicle_ && entered_) {
                 // Align network actor orientation once entered vehicle
-                Vector3 bodyOffset = Vector3(-0.0f, 0.4f, 0.0f);
+
+                Vector3 bodyOffset = Vector3(-0.0f, 0.4f, -0.0f);
+                switch (vehicle_->getCarType()) {
+                    case CAR_TYPE_JEEP1:
+                        break;
+                    case CAR_TYPE_JEEP2:
+                        break;
+                    case CAR_TYPE_JEEP3:
+                        break;
+                    case CAR_TYPE_KART:
+                        bodyOffset = Vector3(-0.0f, 0.4f, -0.0f);
+                        break;
+                    case CAR_TYPE_SAHIN:
+                        bodyOffset = Vector3(-0.0f, 0.4f, 3.2f);
+                        break;
+                    case CAR_TYPE_YUGO:
+                        bodyOffset = Vector3(-0.0f, 0.4f, 3.2f);
+                        break;
+                }
+
                 body_->SetPosition(vehicle_->GetRaycastVehicle()->GetBody()->GetPosition()+bodyOffset);
                 body_->SetRotation(vehicle_->GetRaycastVehicle()->GetBody()->GetRotation());
             }
@@ -761,6 +780,7 @@ void NetworkActor::FixedUpdate(float timeStep) {
                     if (controls_.buttons_ & NTWK_CTRL_FIRE) {
                         // Fire uses pick up
                         UsePickup();
+                        Fire();
                         lastFire_ = 0;
                     }
                 }

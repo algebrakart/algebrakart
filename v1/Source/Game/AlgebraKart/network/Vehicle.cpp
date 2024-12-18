@@ -105,8 +105,6 @@ std::vector<std::string> driveAudioEffect_ = {
 #define MAX_REAR_SLIP           0.04f
 
 
-
-
 //=============================================================================
 //=============================================================================
 Vehicle::Vehicle(Context* context)
@@ -832,12 +830,12 @@ void Vehicle::Init(Node* node) {
         //int carType = Random(5,12);
         //int carType = 11;//Random(8,9); police
 
-        int carType = 6; // Yugo
+        int carType = CAR_TYPE_YUGO; // Yugo
         if (Random(1,3) == 1) {
-            carType = 12; // Kart
+            carType = CAR_TYPE_KART; // Kart
         }
         if (Random(1,4) == 2) {
-            carType = 7; // Sahin
+            carType = CAR_TYPE_SAHIN; // Sahin
         }
 
 
@@ -847,6 +845,7 @@ void Vehicle::Init(Node* node) {
         hullColShape_->SetBox(v3BoxExtents);
         adjNode->SetRotation(Quaternion(0.0f, 90.0f, -90.0f));
 
+        this->carType = carType;
         switch (carType) {
             case 0: {
                 hullObject->SetModel(cache->GetResource<Model>("Models/Vehicles/Offroad/Models/Hatchback.mdl"));
@@ -978,7 +977,7 @@ void Vehicle::Init(Node* node) {
 
             case 6 ... 12: {
 
-                if (carType == 6) {
+                if (carType == CAR_TYPE_YUGO) {
                     // CAR TYPE: YUGO
 
 
@@ -1007,7 +1006,7 @@ void Vehicle::Init(Node* node) {
                     XMLFile *f = cache->GetResource<XMLFile>("Objects/Yugo_Vehicle.xml");
                     //XMLFile *f = cache->GetResource<XMLFile>("Objects/Sahin_Vehicle.xml");
                     //Vector3 pos = Vector3(0,0,42.0f); // Sahin
-                    Vector3 pos = Vector3(0, 0, 0.0f); // Yugo
+                    Vector3 pos = Vector3(0, 4.0f, 0.0f); // Yugo
                     Quaternion q = Quaternion(0, 90, 0);
                     Node *vehiclePrefab_ = GetScene()->InstantiateXML(f->GetRoot(), pos, q, REPLICATED);
 
@@ -1153,7 +1152,7 @@ void Vehicle::Init(Node* node) {
                     connectionPoints_[3] = Vector3(wheelX, connectionHeight, -wheelSpace - GetWheelRadius() * 2.0f);
 
 
-                } else if (carType == 7) {
+                } else if (carType == CAR_TYPE_SAHIN) {
 
                     // CAR TYPE: SAHIN
                     float scaleF = 0.1f;
@@ -1165,7 +1164,7 @@ void Vehicle::Init(Node* node) {
                     v3BoxExtents.z_ *= 2.82f * scaleF2;
                     XMLFile *f = cache->GetResource<XMLFile>("Objects/Sahin_Vehicle.xml");
                     //Vector3 pos = Vector3(0,0,42.0f); // Sahin
-                    Vector3 pos = Vector3(0, 0, 0.0f); // Yugo
+                    Vector3 pos = Vector3(0, 2.8f, 0.0f); // Sahin
                     Quaternion q = Quaternion(0, 90, 0);
                     Node *vehiclePrefab_ = GetScene()->InstantiateXML(f->GetRoot(), pos, q, REPLICATED);
 
@@ -1405,7 +1404,7 @@ void Vehicle::Init(Node* node) {
 
 
                     XMLFile *f = cache->GetResource<XMLFile>("Objects/Kart_Vehicle.xml");
-                    Vector3 pos = Vector3(0, 0, 0.0f); // Yugo
+                    Vector3 pos = Vector3(0, 0.0f, 0.0f); // Yugo
                     Quaternion q = Quaternion(0, 90, 0);
                     Node *vehiclePrefab_ = GetScene()->InstantiateXML(f->GetRoot(), pos, q, REPLICATED);
 
@@ -1457,48 +1456,112 @@ void Vehicle::Init(Node* node) {
             auto* pWheel = wheelNode->CreateComponent<StaticModel>();
 
             float scale = 1;
+            Model *tireModel;
 
             // Set tires for car type
             switch (carType) {
-                case 0 ... 5: {
-                    scale = 0.6f;
-                    //scale = 0.132f; //SetScale(Vector3(0.04f,0.04f,0.04f))
-                    Model *tireModel = cache->GetResource<Model>("Models/Vehicles/Offroad/Models/wheel-fl.mdl");
-                    pWheel->SetModel(tireModel);
-                    pWheel->ApplyMaterialList("Models/Vehicles/Offroad/Models/wheel-fl.txt");
-                    pWheel->SetMaterial(cache->GetResource<Material>("Offroad/Models/Materials/Tire.xml"));
-                    wheelNode->SetScale(Vector3(scale, scale, scale));
-                    wheelNode->SetRotation(connectionPoint.x_ >= 0.0 ? Quaternion(0.0f, 0.0f, 180.0f) : Quaternion(0.0f, 0.0f, -0.0f));
-                    wheelNode->SetWorldPosition(node_->GetWorldPosition() + node_->GetWorldRotation() * connectionPoints_[id]);
-                    //wheelNode->SetWorldPosition(node_->GetWorldPosition() + node_->GetWorldRotation() * connectionPoints_[id]);
 
-                    break;
-                }
-
-                case 6 ... 12: {
+                case CAR_TYPE_JEEP1:
                     //scale = 0.1f;
                     //scale = 0.04f; //SetScale(Vector3(0.04f,0.04f,0.04f))
                     scale = 6.6f; //SetScale(Vector3(0.04f,0.04f,0.04f))
-                    //Model *tireModel = cache->GetResource<Model>("Models/Vehicles/SetA/Models/Wheels_4.mdl");
+                    tireModel = cache->GetResource<Model>("Models/Vehicles/SetA/Models/Wheels_4.mdl");
                     if (carType == 6) scale = 6.3;
+                    scale = 0.06f;
 
-                    Model *tireModel = cache->GetResource<Model>("Models/Vehicles/Yugo/Models/wheel.mdl");
+                    //Model *tireModel = cache->GetResource<Model>("Models/Vehicles/Yugo/Models/wheel.mdl");
                     pWheel->SetModel(tireModel);
-                    //pWheel->ApplyMaterialList("Models/Vehicles/SetA/Models/Wheels_4.txt");
+                    pWheel->ApplyMaterialList("Models/Vehicles/SetA/Models/Wheels_4.txt");
 //                    pWheel->ApplyMaterialList("Models/Vehicles/Sahin/Models/Wheel_FL.txt");
-                    pWheel->ApplyMaterialList("Models/Vehicles/Yugo/Models/wheel.txt");
+                    //pWheel->ApplyMaterialList("Models/Vehicles/Yugo/Models/wheel.txt");
 
 
                     //pWheel->SetMaterial(cache->GetResource<Material>("Offroad/Models/Materials/Tire.xml"));
-//                    wheelNode->SetScale(Vector3(scale/1.2f, scale, scale));
-                    wheelNode->SetScale(Vector3(scale, scale, scale));
-//                    wheelNode->SetRotation(connectionPoint.x_ >= 0.0 ? Quaternion(0.0f, 0.0f, 180.0f) : Quaternion(0.0f, 0.0f, -0.0f));
-                    wheelNode->SetRotation(connectionPoint.x_ >= 0.0 ? Quaternion(0.0f, 90.0f, 180.0f) : Quaternion(0.0f, 90.0f, -0.0f));
+                    wheelNode->SetScale(Vector3(scale/1.2f, scale, scale));
+//                    wheelNode->SetScale(Vector3(scale, scale, scale));
+                    wheelNode->SetRotation(connectionPoint.x_ >= 0.0 ? Quaternion(0.0f, 0.0f, 180.0f) : Quaternion(0.0f, 0.0f, -0.0f));
+                    //wheelNode->SetRotation(connectionPoint.x_ >= 0.0 ? Quaternion(0.0f, 90.0f, 180.0f) : Quaternion(0.0f, 90.0f, -0.0f));
                     wheelNode->SetWorldPosition(Vector3(0,0,2.0f-forwardWeightOffset)+node_->GetWorldPosition() + node_->GetWorldRotation() * connectionPoints_[id]);
                     //wheelNode->SetWorldPosition(node_->GetWorldPosition() + node_->GetWorldRotation() * connectionPoints_[id]);
 
                     break;
-                }
+                case CAR_TYPE_JEEP2:
+                    break;
+                case CAR_TYPE_JEEP3:
+                    break;
+                case CAR_TYPE_KART:
+                    //scale = 0.1f;
+                    //scale = 0.04f; //SetScale(Vector3(0.04f,0.04f,0.04f))
+                    scale = 6.6f; //SetScale(Vector3(0.04f,0.04f,0.04f))
+                    tireModel = cache->GetResource<Model>("Models/Vehicles/SetA/Models/Wheels_4.mdl");
+                    if (carType == 6) scale = 6.3;
+                    scale = 0.06f;
+
+                    //Model *tireModel = cache->GetResource<Model>("Models/Vehicles/Yugo/Models/wheel.mdl");
+                    pWheel->SetModel(tireModel);
+                    pWheel->ApplyMaterialList("Models/Vehicles/SetA/Models/Wheels_4.txt");
+//                    pWheel->ApplyMaterialList("Models/Vehicles/Sahin/Models/Wheel_FL.txt");
+                    //pWheel->ApplyMaterialList("Models/Vehicles/Yugo/Models/wheel.txt");
+
+
+                    //pWheel->SetMaterial(cache->GetResource<Material>("Offroad/Models/Materials/Tire.xml"));
+                    wheelNode->SetScale(Vector3(scale/1.2f, scale, scale));
+//                    wheelNode->SetScale(Vector3(scale, scale, scale));
+                    wheelNode->SetRotation(connectionPoint.x_ >= 0.0 ? Quaternion(0.0f, 0.0f, 180.0f) : Quaternion(0.0f, 0.0f, -0.0f));
+                    //wheelNode->SetRotation(connectionPoint.x_ >= 0.0 ? Quaternion(0.0f, 90.0f, 180.0f) : Quaternion(0.0f, 90.0f, -0.0f));
+                    wheelNode->SetWorldPosition(Vector3(0,0,2.0f-forwardWeightOffset)+node_->GetWorldPosition() + node_->GetWorldRotation() * connectionPoints_[id]);
+                    //wheelNode->SetWorldPosition(node_->GetWorldPosition() + node_->GetWorldRotation() * connectionPoints_[id]);
+
+                    break;
+                case CAR_TYPE_SAHIN:
+                    //scale = 0.1f;
+                    //scale = 0.04f; //SetScale(Vector3(0.04f,0.04f,0.04f))
+                    scale = 6.6f; //SetScale(Vector3(0.04f,0.04f,0.04f))
+                    tireModel = cache->GetResource<Model>("Models/Vehicles/SetA/Models/Wheels_4.mdl");
+                    if (carType == 6) scale = 6.3;
+                    scale = 0.06f;
+
+                    //Model *tireModel = cache->GetResource<Model>("Models/Vehicles/Yugo/Models/wheel.mdl");
+                    pWheel->SetModel(tireModel);
+                    pWheel->ApplyMaterialList("Models/Vehicles/SetA/Models/Wheels_4.txt");
+//                    pWheel->ApplyMaterialList("Models/Vehicles/Sahin/Models/Wheel_FL.txt");
+                    //pWheel->ApplyMaterialList("Models/Vehicles/Yugo/Models/wheel.txt");
+
+
+                    //pWheel->SetMaterial(cache->GetResource<Material>("Offroad/Models/Materials/Tire.xml"));
+                    wheelNode->SetScale(Vector3(scale/1.2f, scale, scale));
+//                    wheelNode->SetScale(Vector3(scale, scale, scale));
+                    wheelNode->SetRotation(connectionPoint.x_ >= 0.0 ? Quaternion(0.0f, 0.0f, 180.0f) : Quaternion(0.0f, 0.0f, -0.0f));
+                    //wheelNode->SetRotation(connectionPoint.x_ >= 0.0 ? Quaternion(0.0f, 90.0f, 180.0f) : Quaternion(0.0f, 90.0f, -0.0f));
+                    wheelNode->SetWorldPosition(Vector3(0,0,2.0f-forwardWeightOffset)+node_->GetWorldPosition() + node_->GetWorldRotation() * connectionPoints_[id]);
+                    //wheelNode->SetWorldPosition(node_->GetWorldPosition() + node_->GetWorldRotation() * connectionPoints_[id]);
+
+                    break;
+                case CAR_TYPE_YUGO:
+                    //scale = 0.1f;
+                    //scale = 0.04f; //SetScale(Vector3(0.04f,0.04f,0.04f))
+                    scale = 6.6f; //SetScale(Vector3(0.04f,0.04f,0.04f))
+                    tireModel = cache->GetResource<Model>("Models/Vehicles/SetA/Models/Wheels_4.mdl");
+                    if (carType == 6) scale = 6.3;
+                    scale = 0.06f;
+
+                    //Model *tireModel = cache->GetResource<Model>("Models/Vehicles/Yugo/Models/wheel.mdl");
+                    pWheel->SetModel(tireModel);
+                    pWheel->ApplyMaterialList("Models/Vehicles/SetA/Models/Wheels_4.txt");
+//                    pWheel->ApplyMaterialList("Models/Vehicles/Sahin/Models/Wheel_FL.txt");
+                    //pWheel->ApplyMaterialList("Models/Vehicles/Yugo/Models/wheel.txt");
+
+
+                    //pWheel->SetMaterial(cache->GetResource<Material>("Offroad/Models/Materials/Tire.xml"));
+                    wheelNode->SetScale(Vector3(scale/1.2f, scale, scale));
+//                    wheelNode->SetScale(Vector3(scale, scale, scale));
+                    wheelNode->SetRotation(connectionPoint.x_ >= 0.0 ? Quaternion(0.0f, 0.0f, 180.0f) : Quaternion(0.0f, 0.0f, -0.0f));
+                    //wheelNode->SetRotation(connectionPoint.x_ >= 0.0 ? Quaternion(0.0f, 90.0f, 180.0f) : Quaternion(0.0f, 90.0f, -0.0f));
+                    wheelNode->SetWorldPosition(Vector3(0,0,2.0f-forwardWeightOffset)+node_->GetWorldPosition() + node_->GetWorldRotation() * connectionPoints_[id]);
+                    //wheelNode->SetWorldPosition(node_->GetWorldPosition() + node_->GetWorldRotation() * connectionPoints_[id]);
+
+
+                    break;
 
 
             }
@@ -2368,4 +2431,8 @@ float Vehicle::getWheelContactTime() const {
 
 void Vehicle::setEnableControls(bool enableControls) {
     enableControls_ = enableControls;
+}
+
+int Vehicle::getCarType() const {
+    return carType;
 }

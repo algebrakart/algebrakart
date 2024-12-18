@@ -3800,14 +3800,16 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                         // Apply vehicle steering
                                         actor->vehicle_->setDesiredSteer(desiredSteer);
 
+                                        DebugRenderer *dbgRenderer = scene_->GetComponent<DebugRenderer>(REPLICATED);
 
-                                        /*   dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetBody()->GetPosition(), Quaternion(90.0f, Vector3::UP) * actor->vehicle_->GetRaycastVehicle()->GetBody()->GetPosition() * Vector3::FORWARD * 35.0,
-                                                                Color(1.0f, 1.0, 1.0));
-                            */
+                                          dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition(), actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()-towardsWaypt*15.0f,
+                                                               Color(1.0f, 0.0, 0.0));
 
-                                        /*              dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition(), actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()-towardsWaypt*15.0f,
-                                                                           Color(1.0f, 0.0, 0.0));
-                            */
+
+                                        dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition(), actor->getToTarget(),
+                                                             Color(1.0f, 0.0, 1.0));
+
+
 
                                     }
                                     //if (!node) return;
@@ -7384,11 +7386,11 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
 
     // Create heightmap terrain with collision
     Node *terrainNode = scene_->CreateChild("Terrain", REPLICATED);
-    terrainNode->SetPosition(Vector3(0.0f,-870.0f,0.0f));
+    terrainNode->SetPosition(Vector3(0.0f,-720.0f,0.0f));
 
     terrain_ = terrainNode->CreateComponent<Terrain>(REPLICATED);
     terrain_->SetPatchSize(64);
-    terrain_->SetSpacing(Vector3(2.8f, 0.12f, 2.8f));
+    terrain_->SetSpacing(Vector3(2.8f, 0.28f, 2.8f));
 //    terrain->SetSpacing(Vector3(3.0f, 0.1f, 3.0f)); // Spacing between vertices and vertical resolution of the height map
    // terrainNode->SetNetPositionAttr(Vector3::ZERO);
 

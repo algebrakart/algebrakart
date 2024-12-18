@@ -267,8 +267,6 @@ void AgentController::update(float duration) {
     // SENSOR #3: (PURPLE) RIGHT
 
 
-    // TODO: Fix ai waypoint steering - currently steering away
-
 
     float sensorSteer = 0;
     float sensorSteerTarget = 0;

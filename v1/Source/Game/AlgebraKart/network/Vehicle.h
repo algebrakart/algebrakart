@@ -210,6 +210,12 @@ private:
     /// Wheel roll influence (how much car will turn sidewise)
     float rollInfluence_;
 
+    // Vehicle
+    int carType;
+public:
+    int getCarType() const;
+
+private:
 
     // Lumak
     float   m_fVehicleMass;
