@@ -632,8 +632,6 @@ void Vehicle::PostUpdate(float timeStep)
 
             }
 
-
-
             /*
             // Body box
             debug->AddBoundingBox(
