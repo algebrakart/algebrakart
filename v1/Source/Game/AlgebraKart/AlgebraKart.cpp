@@ -2895,10 +2895,14 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
         float vertScale = 26.0f;
         float vAlignRank = 260.0f;
         for (int r = 0; r < rankList.size(); r++) {
-            rankText_[r]->SetAlignment(HA_LEFT, VA_TOP);
-            rankText_[r]->SetPosition(10.0f, vAlignRank + (r * vertScale));
-            rankText_[r]->SetVisible(true);
-            rankText_[r]->SetText(String("[") + String(r) + String("] ") + String(rankList.at(r).second) + String(": ") + String(rankList.at(r).first));
+            if (rankText_) {
+                rankText_[r]->SetAlignment(HA_LEFT, VA_TOP);
+                rankText_[r]->SetPosition(10.0f, vAlignRank + (r * vertScale));
+                rankText_[r]->SetVisible(true);
+                rankText_[r]->SetText(
+                        String("[") + String(r) + String("] ") + String(rankList.at(r).second) + String(": ") +
+                        String(rankList.at(r).first));
+            }
         }
 
 
