@@ -316,6 +316,13 @@ void NetworkActor::Create() {
     // Default pick up: battery
     LoadPickup(3, 0); // Battery
     LoadPickup(1, 0); // Balloon
+    LoadPickup(1, 0); // Balloon
+    LoadPickup(1, 0); // Balloon
+    LoadPickup(1, 0); // Balloon
+    LoadPickup(1, 0); // Balloon
+    LoadPickup(1, 0); // Balloon
+    LoadPickup(1, 0); // Balloon
+
     // Update pickup attributes
     numPickups_ = pickups_->Size();
     if (numPickups_ == 0) {
@@ -780,7 +787,6 @@ void NetworkActor::FixedUpdate(float timeStep) {
                     if (controls_.buttons_ & NTWK_CTRL_FIRE) {
                         // Fire uses pick up
                         UsePickup();
-                        Fire();
                         lastFire_ = 0;
                     }
                 }
@@ -1421,6 +1427,8 @@ void NetworkActor::UsePickup() {
                                  newM->GetNode()->GetPosition().x_,
                                  newM->GetNode()->GetPosition().y_,
                                  newM->GetNode()->GetPosition().z_);
+
+                Fire();
 
 
                 // }
