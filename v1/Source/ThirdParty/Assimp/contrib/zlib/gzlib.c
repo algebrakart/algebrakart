@@ -5,15 +5,9 @@
 
 #include "gzguts.h"
 
-#if defined(_WIN32) && !defined(__BORLANDC__)
-#  define LSEEK _lseeki64
-#else
-#if defined(_LARGEFILE64_SOURCE) && _LFS64_LARGEFILE-0
-#  define LSEEK lseek64
-#else
-#  define LSEEK lseek
-#endif
-#endif
+#define _LARGEFILE64_SOURCE     /* See feature_test_macros(7) */
+#include <sys/types.h>
+#include <unistd.h>
 
 /* Local functions */
 local void gz_reset OF((gz_statep));

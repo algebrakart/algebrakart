@@ -20,6 +20,8 @@
 # THE SOFTWARE.
 #
 
+set (EMSCRIPTEN_ROOT_PATH "/code/dev/emsdk/upstream/emscripten/")
+
 # Workaround try_compile() limitation where it cannot yet see cache variables during initial configuration
 get_property (IN_TRY_COMPILE GLOBAL PROPERTY IN_TRY_COMPILE)
 if (IN_TRY_COMPILE)

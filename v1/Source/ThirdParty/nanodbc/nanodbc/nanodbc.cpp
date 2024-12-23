@@ -24,7 +24,7 @@
 #include <iomanip>
 #include <map>
 #include <type_traits>
-
+#include <limits>
 #ifndef __clang__
 #include <cstdint>
 #endif

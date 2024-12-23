@@ -3755,6 +3755,9 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                                 actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition() -
                                                 actor->getToTarget()).Length();
                                         //URHO3D_LOGDEBUGF("getSteerIndex()=%d,distToWypt=%f, actor->lastWaypoint_=%f", actor->vehicle_->getSteerIndex(), distToWypt, actor->lastWaypoint_);
+                                        if (distToWypt > 1000.0f) {
+                                            actor->Restart();
+                                        }
 
                                         // Once vehicle hits waypoint, move to next waypoint after 1.5 secs
                                         if (distToWypt < 120.0f && actor->lastWaypoint_ > 1.5f) {
@@ -3957,8 +3960,46 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                 }
                             } else {
                                 // Heli cam
-                                serverCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 0.0f));
+                                serverCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 90.0f));
+
+                                Vector3 avgMid = Vector3(0, 0, 0);
+                                Vector3 avgSum = Vector3(0, 0, 0);
+
+                                for (int b = 0; b < aiActorMap_.Size(); b++) {
+                                    // Get ai cluster position
+                                    if (aiActorMap_[b]) {
+                                        auto *actor = dynamic_cast<NetworkActor *>(aiActorMap_[b].Get());
+                                        if (actor) {
+                                            if (actor->vehicle_) {
+                                                String username = actor->GetUserName();
+                                                float botSpeedKm = round(
+                                                        abs(actor->vehicle_->GetRaycastVehicle()->GetSpeedKm()));
+                                                // Back wheel points forward
+                                                Quaternion forward = actor->vehicle_->GetNode()->GetRotation();
+
+                                                avgSum += actor->vehicle_->GetBody()->GetPosition();
+
+                                            }
+                                        }
+                                    }
+                                }
+                                avgMid = avgSum / aiActorMap_.Size() + (Vector3(0,780.0f,0));
+                                heliCamView_ = avgMid;
+
+                                ///
+                                ///
+                                ///
+                                ///
+
+
+
+///
+///
+//////
+
+
                                 serverCam_->GetNode()->SetPosition(heliCamView_);
+
                             }
                 } // End of Server: Move Camera (Player Cam)
                         break;
@@ -6372,7 +6413,7 @@ SharedPtr<Node> AlgebraKart::SpawnPlayer() {
 
 
     // Define server cam views
-    heliCamView_ = Vector3(0.0f,14000.0f,0.0f);
+    heliCamView_ = Vector3(0.0f,2200.0f,0.0f);
 
     // Set camera node
     cameraNode_ = scene_->CreateChild("Camera", LOCAL);
@@ -6382,7 +6423,7 @@ SharedPtr<Node> AlgebraKart::SpawnPlayer() {
     serverCam_->SetFillMode(Urho3D::FILL_SOLID);
     //serverCam_->SetFillMode(Urho3D::FILL_WIREFRAME);
     serverCam_->GetNode()->SetPosition(heliCamView_);
-    serverCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 0.0f));
+    serverCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 90.0f));
 
     // Enable for 3D sounds to work (attach to camera node)
     //SoundListener *listener = serverCam_->GetNode()->CreateComponent<SoundListener>();
@@ -7394,11 +7435,11 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
 //    terrain->SetSpacing(Vector3(3.0f, 0.1f, 3.0f)); // Spacing between vertices and vertical resolution of the height map
    // terrainNode->SetNetPositionAttr(Vector3::ZERO);
 
-        terrain_->SetHeightMap(cache->GetResource<Image>("Offroad/Terrain/HeightMapRace-257.png"));
-        terrain_->SetMaterial(cache->GetResource<Material>("Offroad/Terrain/TerrainRace-256.xml"));
+        //terrain_->SetHeightMap(cache->GetResource<Image>("Offroad/Terrain/HeightMapRace-257.png"));
+        //terrain_->SetMaterial(cache->GetResource<Material>("Offroad/Terrain/TerrainRace-256.xml"));
     //terrain_->SetMarkerMap(cache->GetResource<Image>("Textures/MarkerMap.png"));
-    //terrain_->SetHeightMap(cache->GetResource<Image>("Textures/HeightMap.png"));
-    //terrain_->SetMaterial(cache->GetResource<Material>("Materials/Terrain.xml"));
+    terrain_->SetHeightMap(cache->GetResource<Image>("Textures/HeightMap.png"));
+    terrain_->SetMaterial(cache->GetResource<Material>("Materials/Terrain.xml"));
     terrain_->GetNode()->SetScale(12.0f);
 
     terrain_->SetOccluder(true);
