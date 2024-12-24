@@ -1041,6 +1041,24 @@ void NetworkActor::Fire() {
 
 }
 
+void NetworkActor::Respawn() {
+    // Retrieve client network actor data
+    Node* modelNode = node_->GetChild("Actor", REPLICATED);
+    //node_ = modelNode;
+    //model_ = modelNode->GetComponent<AnimatedModel>();
+    //body_ = modelNode->GetComponent<RigidBody>();
+
+    modelNode->SetPosition(Vector3(0, 0, 0));
+
+    // Submit updated attributes over network
+    Urho3D::Component::MarkNetworkUpdate();
+}
+
+void NetworkActor::RespawnVehicle() {
+
+}
+
+
 void NetworkActor::Fire(Vector3 target) {
 
     if (!node_)

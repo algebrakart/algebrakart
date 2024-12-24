@@ -161,8 +161,8 @@ public:
     void FindTargetByWaypoint(int id);
     void FindTargetByProximity();
 
-
-        /// Fight
+    void Respawn();
+    void RespawnVehicle();
     void Fire(Vector3 target);
     void Fire();
 

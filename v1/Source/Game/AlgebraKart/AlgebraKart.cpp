@@ -3756,7 +3756,10 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                                 actor->getToTarget()).Length();
                                         //URHO3D_LOGDEBUGF("getSteerIndex()=%d,distToWypt=%f, actor->lastWaypoint_=%f", actor->vehicle_->getSteerIndex(), distToWypt, actor->lastWaypoint_);
                                         if (distToWypt > 1000.0f) {
-                                            actor->Restart();
+                                            //actor->Restart();
+                                            if (!actor->onGround_) {
+                                                actor->Respawn();
+                                            }
                                         }
 
                                         // Once vehicle hits waypoint, move to next waypoint after 1.5 secs
