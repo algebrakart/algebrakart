@@ -2240,7 +2240,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
                                      SharedPtr<Sprite> sprite_;
                                      sprite_ = vDamage_FL_LineSprites_.At(i);
                                      sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(-130.0f, -100.0f+(i*height)));
+                                     sprite_->SetPosition(Vector2(-124.0f, -200.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
@@ -2248,7 +2248,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
 
                                      sprite_ = vDamage_FR_LineSprites_.At(i);
                                      sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(-45.0f, -100.0f+(i*height)));
+                                     sprite_->SetPosition(Vector2(-37.0f, -200.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
@@ -2256,7 +2256,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
 
                                      sprite_ = vDamage_BL_LineSprites_.At(i);
                                      sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(-130.0f, -10.0f+(i*height)));
+                                     sprite_->SetPosition(Vector2(-124.0f, -100.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
@@ -2264,7 +2264,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
 
                                      sprite_ = vDamage_BR_LineSprites_.At(i);
                                      sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(-45.0f, -10.0f+(i*height)));
+                                     sprite_->SetPosition(Vector2(-37.0f, -100.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
@@ -6926,14 +6926,14 @@ void AlgebraKart::CreateClientUI() {
     textureWidth = steerWheelTexture->GetWidth();
     textureHeight = steerWheelTexture->GetHeight();
 
-    float steerWheelX = 496.0f;
-    float steerWheelY = 77.0f;
+    float steerWheelX = -196.0f;
+    float steerWheelY = -70.0f;
 
 
     steerWheelSprite_->SetScale((256.0f / textureWidth)*0.49f);
     steerWheelSprite_->SetSize(textureWidth, textureHeight);
     steerWheelSprite_->SetHotSpot(textureWidth / 2, textureHeight / 2);
-    steerWheelSprite_->SetAlignment(HA_LEFT, VA_TOP);
+    steerWheelSprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
     steerWheelSprite_->SetPosition(Vector2(steerWheelX, steerWheelY));
     steerWheelSprite_->SetOpacity(0.5f);
     // Set a low priority so that other UI elements can be drawn on top

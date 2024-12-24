@@ -315,13 +315,9 @@ void NetworkActor::Create() {
 
     // Default pick up: battery
     LoadPickup(3, 0); // Battery
-    LoadPickup(1, 0); // Balloon
-    LoadPickup(1, 0); // Balloon
-    LoadPickup(1, 0); // Balloon
-    LoadPickup(1, 0); // Balloon
-    LoadPickup(1, 0); // Balloon
-    LoadPickup(1, 0); // Balloon
-    LoadPickup(1, 0); // Balloon
+    for (int i = 0; i < 100; i++) {
+        LoadPickup(1, 0); // Balloon
+    }
 
     // Update pickup attributes
     numPickups_ = pickups_->Size();
@@ -1062,7 +1058,7 @@ void NetworkActor::Fire(Vector3 target) {
         Node *bullet0 = scene->CreateChild("bullet", REPLICATED);
         Missile *newM = bullet0->CreateComponent<Missile>();
         // Set the position and rotation of the bullet
-        bullet0->SetWorldPosition(body_->GetPosition() + Vector3(0,50.0f,0));
+        bullet0->SetWorldPosition(body_->GetPosition() + Vector3(0,0.0f,0.0f));
         //   bullet0->SetWorldRotation(Quaternion(Vector3::UP, towards_));
 //		bullet0->GetComponent<RigidBody2D>()->SetLinearVelocity(Vector2(towards_.x_, towards_.y_).Normalized() * 10.0f);
 
@@ -1108,7 +1104,7 @@ void NetworkActor::Fire(Vector3 target) {
         Node *bullet0 = scene->CreateChild("bullet", REPLICATED);
         Missile *newM = bullet0->CreateComponent<Missile>();
         // Set the position and rotation of the bullet
-        bullet0->SetWorldPosition(body_->GetPosition() + Vector3(0,50.0f,0));
+        bullet0->SetWorldPosition(body_->GetPosition() + Vector3(0,0.0f,0.0f));
      //   bullet0->SetWorldRotation(Quaternion(Vector3::UP, towards_));
 //		bullet0->GetComponent<RigidBody2D>()->SetLinearVelocity(Vector2(towards_.x_, towards_.y_).Normalized() * 10.0f);
 
@@ -1135,7 +1131,7 @@ void NetworkActor::Fire(Vector3 target) {
         newM->AddTarget(SharedPtr<Node>(tgt));
         // Assign the producer node
         newM->AssignProducer(vehicle_->GetNode()->GetID(),
-                             vehicle_->GetRaycastVehicle()->GetNode()->GetPosition() + Vector3(40.0f, 2.0f, 0.0f));
+                             vehicle_->GetRaycastVehicle()->GetNode()->GetPosition() + Vector3(0.0f, 0.0f, 0.0f));
         URHO3D_LOGDEBUGF("NetworkActor::Fire() [%d] -> [%f,%f,%f]", vehicle_->GetNode()->GetID(),
                          newM->GetNode()->GetPosition().x_,
                          newM->GetNode()->GetPosition().y_,
