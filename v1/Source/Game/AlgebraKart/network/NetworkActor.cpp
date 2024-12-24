@@ -1086,7 +1086,7 @@ void NetworkActor::Fire(Vector3 target) {
         newM->AddTarget(SharedPtr<Node>(tgt));
         // Assign the producer node
         newM->AssignProducer(GetNode()->GetID(),
-                             GetNode()->GetPosition() + Vector3(40.0f, 2.0f, 0.0f));
+                             GetNode()->GetPosition() + Vector3(0.0f, 0.0f, 0.0f));
         URHO3D_LOGDEBUGF("NetworkActor::Fire() [%d] -> [%f,%f,%f]", GetNode()->GetID(),
                          newM->GetNode()->GetPosition().x_,
                          newM->GetNode()->GetPosition().y_,
@@ -1097,7 +1097,7 @@ void NetworkActor::Fire(Vector3 target) {
     }
 
 
-    if (vehicle_) {
+    if (vehicle_ && !entered_) {
         Scene *scene = GetScene();
 
         SharedPtr<Node> n;
