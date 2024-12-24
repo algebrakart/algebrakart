@@ -581,7 +581,7 @@ private:
     // Debug text
     Text* debugText_[NUM_DEBUG_FIELDS];
 
-    #define NUM_RANK_FIELDS 200
+    #define NUM_RANK_FIELDS 10
     // Rank text
     Text* rankText_[NUM_RANK_FIELDS];
 

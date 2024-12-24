@@ -2240,7 +2240,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
                                      SharedPtr<Sprite> sprite_;
                                      sprite_ = vDamage_FL_LineSprites_.At(i);
                                      sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(-124.0f, -200.0f+(i*height)));
+                                     sprite_->SetPosition(Vector2(-130.0f, -100.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
@@ -2248,7 +2248,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
 
                                      sprite_ = vDamage_FR_LineSprites_.At(i);
                                      sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(-37.0f, -200.0f+(i*height)));
+                                     sprite_->SetPosition(Vector2(-45.0f, -100.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
@@ -2256,7 +2256,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
 
                                      sprite_ = vDamage_BL_LineSprites_.At(i);
                                      sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(-124.0f, -100.0f+(i*height)));
+                                     sprite_->SetPosition(Vector2(-130.0f, -10.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
@@ -2264,7 +2264,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
 
                                      sprite_ = vDamage_BR_LineSprites_.At(i);
                                      sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(-37.0f, -100.0f+(i*height)));
+                                     sprite_->SetPosition(Vector2(-45.0f, -10.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
@@ -2895,14 +2895,10 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
         float vertScale = 26.0f;
         float vAlignRank = 260.0f;
         for (int r = 0; r < rankList.size(); r++) {
-            if (rankText_) {
-                rankText_[r]->SetAlignment(HA_LEFT, VA_TOP);
-                rankText_[r]->SetPosition(10.0f, vAlignRank + (r * vertScale));
-                rankText_[r]->SetVisible(true);
-                rankText_[r]->SetText(
-                        String("[") + String(r) + String("] ") + String(rankList.at(r).second) + String(": ") +
-                        String(rankList.at(r).first));
-            }
+            rankText_[r]->SetAlignment(HA_LEFT, VA_TOP);
+            rankText_[r]->SetPosition(10.0f, vAlignRank + (r * vertScale));
+            rankText_[r]->SetVisible(true);
+            rankText_[r]->SetText(String("[") + String(r) + String("] ") + String(rankList.at(r).second) + String(": ") + String(rankList.at(r).first));
         }
 
 
@@ -3759,6 +3755,12 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                                 actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition() -
                                                 actor->getToTarget()).Length();
                                         //URHO3D_LOGDEBUGF("getSteerIndex()=%d,distToWypt=%f, actor->lastWaypoint_=%f", actor->vehicle_->getSteerIndex(), distToWypt, actor->lastWaypoint_);
+                                        if (distToWypt > 1000.0f) {
+                                            //actor->Restart();
+                                            if (!actor->onGround_) {
+                                                actor->Respawn();
+                                            }
+                                        }
 
                                         // Once vehicle hits waypoint, move to next waypoint after 1.5 secs
                                         if (distToWypt < 120.0f && actor->lastWaypoint_ > 1.5f) {
@@ -3961,8 +3963,46 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                 }
                             } else {
                                 // Heli cam
-                                serverCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 0.0f));
+                                serverCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 90.0f));
+
+                                Vector3 avgMid = Vector3(0, 0, 0);
+                                Vector3 avgSum = Vector3(0, 0, 0);
+
+                                for (int b = 0; b < aiActorMap_.Size(); b++) {
+                                    // Get ai cluster position
+                                    if (aiActorMap_[b]) {
+                                        auto *actor = dynamic_cast<NetworkActor *>(aiActorMap_[b].Get());
+                                        if (actor) {
+                                            if (actor->vehicle_) {
+                                                String username = actor->GetUserName();
+                                                float botSpeedKm = round(
+                                                        abs(actor->vehicle_->GetRaycastVehicle()->GetSpeedKm()));
+                                                // Back wheel points forward
+                                                Quaternion forward = actor->vehicle_->GetNode()->GetRotation();
+
+                                                avgSum += actor->vehicle_->GetBody()->GetPosition();
+
+                                            }
+                                        }
+                                    }
+                                }
+                                avgMid = avgSum / aiActorMap_.Size() + (Vector3(0,780.0f,0));
+                                heliCamView_ = avgMid;
+
+                                ///
+                                ///
+                                ///
+                                ///
+
+
+
+///
+///
+//////
+
+
                                 serverCam_->GetNode()->SetPosition(heliCamView_);
+
                             }
                 } // End of Server: Move Camera (Player Cam)
                         break;
@@ -6376,7 +6416,7 @@ SharedPtr<Node> AlgebraKart::SpawnPlayer() {
 
 
     // Define server cam views
-    heliCamView_ = Vector3(0.0f,14000.0f,0.0f);
+    heliCamView_ = Vector3(0.0f,2200.0f,0.0f);
 
     // Set camera node
     cameraNode_ = scene_->CreateChild("Camera", LOCAL);
@@ -6386,7 +6426,7 @@ SharedPtr<Node> AlgebraKart::SpawnPlayer() {
     serverCam_->SetFillMode(Urho3D::FILL_SOLID);
     //serverCam_->SetFillMode(Urho3D::FILL_WIREFRAME);
     serverCam_->GetNode()->SetPosition(heliCamView_);
-    serverCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 0.0f));
+    serverCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 90.0f));
 
     // Enable for 3D sounds to work (attach to camera node)
     //SoundListener *listener = serverCam_->GetNode()->CreateComponent<SoundListener>();
@@ -6926,14 +6966,14 @@ void AlgebraKart::CreateClientUI() {
     textureWidth = steerWheelTexture->GetWidth();
     textureHeight = steerWheelTexture->GetHeight();
 
-    float steerWheelX = -196.0f;
-    float steerWheelY = -70.0f;
+    float steerWheelX = 496.0f;
+    float steerWheelY = 77.0f;
 
 
     steerWheelSprite_->SetScale((256.0f / textureWidth)*0.49f);
     steerWheelSprite_->SetSize(textureWidth, textureHeight);
     steerWheelSprite_->SetHotSpot(textureWidth / 2, textureHeight / 2);
-    steerWheelSprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+    steerWheelSprite_->SetAlignment(HA_LEFT, VA_TOP);
     steerWheelSprite_->SetPosition(Vector2(steerWheelX, steerWheelY));
     steerWheelSprite_->SetOpacity(0.5f);
     // Set a low priority so that other UI elements can be drawn on top
@@ -7398,11 +7438,11 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
 //    terrain->SetSpacing(Vector3(3.0f, 0.1f, 3.0f)); // Spacing between vertices and vertical resolution of the height map
    // terrainNode->SetNetPositionAttr(Vector3::ZERO);
 
-        terrain_->SetHeightMap(cache->GetResource<Image>("Offroad/Terrain/HeightMapRace-257.png"));
-        terrain_->SetMaterial(cache->GetResource<Material>("Offroad/Terrain/TerrainRace-256.xml"));
+        //terrain_->SetHeightMap(cache->GetResource<Image>("Offroad/Terrain/HeightMapRace-257.png"));
+        //terrain_->SetMaterial(cache->GetResource<Material>("Offroad/Terrain/TerrainRace-256.xml"));
     //terrain_->SetMarkerMap(cache->GetResource<Image>("Textures/MarkerMap.png"));
-    //terrain_->SetHeightMap(cache->GetResource<Image>("Textures/HeightMap.png"));
-    //terrain_->SetMaterial(cache->GetResource<Material>("Materials/Terrain.xml"));
+    terrain_->SetHeightMap(cache->GetResource<Image>("Textures/HeightMap.png"));
+    terrain_->SetMaterial(cache->GetResource<Material>("Materials/Terrain.xml"));
     terrain_->GetNode()->SetScale(12.0f);
 
     terrain_->SetOccluder(true);

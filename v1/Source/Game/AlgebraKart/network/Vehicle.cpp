@@ -78,7 +78,7 @@ std::vector<std::string> driveAudioEffect_ = {
 #define MIN_IDLE_RPM            1000.0f
 
 #define MIN_DOWN_FORCE          10.0f
-#define MAX_DOWN_FORCE          1e4f
+#define MAX_DOWN_FORCE          10e4f
 //#define MAX_ANGULAR_VEL_LIMIT   80.0f
 #define MAX_ANGULAR_VEL_LIMIT   300.0f
 //10.0f
@@ -133,7 +133,7 @@ Vehicle::Vehicle(Context* context)
     emittersCreated = false;
 
     // Working
-    m_fmaxEngineForce = 14600.0f;//950.f;
+    m_fmaxEngineForce = 22000.0f;//950.f;
   //  m_fmaxEngineForce = 4200.0f;//5400.0f;//950.f;
 
     m_fmaxBreakingForce = 800.f;
@@ -631,6 +631,8 @@ void Vehicle::PostUpdate(float timeStep)
                 }
 
             }
+
+
 
             /*
             // Body box

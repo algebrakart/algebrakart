@@ -74,6 +74,14 @@ void Pickup::Start()
         pCollisionShape_->GetNode()->SetScale(scale);
 */
 
+        // particle emitter
+        Node *pNodeEmitter = GetScene()->CreateChild();
+//    pNodeEmitter->SetPosition( emitPos );
+        pParticleEmitter_ = pNodeEmitter->CreateComponent<ParticleEmitter>();
+        pParticleEmitter_->SetEffect(cache->GetResource<ParticleEffect>("Offroad/Particles/Dust.xml"));
+        pParticleEmitter_->SetEmitting(false);
+
+//    particleEmitterNodeList_.Push( pNodeEmitter );
 
         // node collision
         SubscribeToEvent(GetNode(), E_NODECOLLISION, URHO3D_HANDLER(Pickup, HandlePickupCollision));
@@ -119,6 +127,9 @@ void Pickup::FixedUpdate(float timeStep)
 	Vector3 lockTarget;
 
     if (pRigidBody_) {
+
+        pParticleEmitter_->GetNode()->SetPosition(node_->GetPosition());
+        pParticleEmitter_->SetEmitting(true);
 
         // Set Rotation
         Vector3 velocity = Vector3(pRigidBody_->GetLinearVelocity());
