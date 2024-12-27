@@ -115,6 +115,10 @@ public:
         toTarget_ = toTarget;
     }
 
+    void SetProjectileTarget(Vector3 hitTarget) {
+        hitTarget_ = hitTarget;
+    }
+
     int getAgentIndex() const {
         return agentIndex;
     }
@@ -165,6 +169,7 @@ public:
     void RespawnVehicle();
     void Fire(Vector3 target);
     void Fire();
+    void CreateProjectile(Vector3 source, Quaternion q, Vector3 target);
 
     void Kill();
 
@@ -214,6 +219,7 @@ public:
     String bulletType_;
     Vector<Vector3>* waypoints_ = nullptr;
     Vector3 toTarget_ = Vector3::ZERO;
+    Vector3 hitTarget_ = Vector3::ZERO;
 
     const Vector3 &getToTarget() const;
 

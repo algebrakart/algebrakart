@@ -129,6 +129,7 @@ public:
 
     void SetTurrentAngle(float angle);
     float GetTurrentAngle();
+    Node* GetTurrent();
 
         float GetSpeedKmH() const       { return raycastVehicle_->GetSpeedKm(); }
     float GetSpeedMPH() const       { return raycastVehicle_->GetSpeedKm()*KMH_TO_MPH; }
@@ -307,7 +308,7 @@ protected:
     SharedPtr<RigidBody> body_;
     SharedPtr<CollisionShape> hullColShape_;
     SharedPtr<StaticModel> hullObject_;
-    SharedPtr<StaticModel> hullObjectTurrent_;
+    SharedPtr<StaticModel> turrent_;
     HashMap<int, WeakPtr<Node> > wheels_;
 
     // wheel contacts

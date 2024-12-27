@@ -2710,6 +2710,32 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
                             float lapTime = actor->lapTime_;
                             float totalTime = actor->totalTime_;
 
+                            Vector3 closestAiAgent;
+                            Vector<float> distances;
+                            // Retrieve ai actors
+                            for (int i = 0; i < aiActorMap_.Size(); i++) {
+                                auto *aiActor = dynamic_cast<NetworkActor *>(aiActorMap_[i].Get());
+                                if (aiActor) {
+                                    if (aiActor->vehicle_) {
+                                        Node * node = aiActor->vehicle_->GetNode();
+
+                                        if (!node) return;
+
+                                        String username = aiActor->GetUserName();
+                                        float botDistance = aiActor->vehicle_->GetRaycastVehicle()->GetDistanceOnGround();
+
+                                        Vector3 distToActor = aiActor->GetBody()->GetPosition()-actor->GetBody()->GetPosition();
+                                        distances.Push(distToActor.Length());
+                                        // Set the actor to the closest ai target
+                                        actor->SetProjectileTarget(aiActor->GetBody()->GetPosition());
+
+                                    }
+                                }
+                            }
+
+
+
+
                             rankArr[c].playerId = username;
                             rankArr[c].lapNum = lapNum;
                             rankArr[c].lapTime = lapTime;
