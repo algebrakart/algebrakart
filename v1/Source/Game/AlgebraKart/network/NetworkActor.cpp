@@ -780,7 +780,7 @@ void NetworkActor::FixedUpdate(float timeStep) {
                     if (controls_.buttons_ & NTWK_CTRL_FIRE) {
                         // Fire uses pick up
                         UsePickup();
-                        Fire();
+                        //Fire();
                         lastFire_ = 0;
                     }
                 }

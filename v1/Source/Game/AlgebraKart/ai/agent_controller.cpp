@@ -363,7 +363,7 @@ void AgentController::update(float duration) {
 
     //sensorAccel = 1.0f;
     double controlInputsSensors[3];
-    float accelMult = 42700.17f;
+    float accelMult = 1.00f;
     controlInputsSensors[0] = sensorSteer; // steering
     controlInputsSensors[1] = sensorAccel * accelMult; // acceleration
     //controlInputsSensors[0] = steer; // action state
@@ -380,6 +380,8 @@ void AgentController::update(float duration) {
     controlInputs[0] = controlInputsFFN[0]*ffnW + controlInputsSensors[0]*senW;
     controlInputs[1] = controlInputsFFN[1]*ffnW + controlInputsSensors[1]*senW;
     controlInputs[2] = controlInputsFFN[2]*ffnW + controlInputsSensors[2]*senW;
+
+    controlInputs[1] = 17.0f;
 
 
     // Resultant data from sensor processing is used for controlling the agent movement
