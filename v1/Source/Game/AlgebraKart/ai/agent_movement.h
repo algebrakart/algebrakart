@@ -27,6 +27,8 @@ public:
     void setInputs(double *input, NetworkActor *actor);
     void applyVelocity(float deltaTime);
     void applyFriction(float deltaTime);
+    void setTarget(Vector3 target);
+    Vector3 getTarget();
     void stop();
     double getSteerInput() const {
         return steerInputNorm_;
@@ -55,6 +57,8 @@ private:
     // The current rotation of the agent.
     Urho3D::Quaternion rotation;
 
+    // Vector to target
+    Urho3D::Vector3 toTarget;
 
     // Min/max for normalization
     double steerInputMin_;

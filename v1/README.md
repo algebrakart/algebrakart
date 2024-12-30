@@ -1,4 +1,4 @@
-algebrakart
+Algebrakart
 
 ![algebrakart](https://github.com/ajaybhaga/MonkeyMaya_com/blob/main/website/content/mm-demo11.gif)
 

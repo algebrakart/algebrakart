@@ -780,7 +780,7 @@ void NetworkActor::FixedUpdate(float timeStep) {
                     if (controls_.buttons_ & NTWK_CTRL_FIRE) {
                         // Fire uses pick up
                         UsePickup();
-                        Fire();
+                        //Fire();
                         lastFire_ = 0;
                     }
                 }
@@ -1037,7 +1037,8 @@ void NetworkActor::Fire() {
     //Quaternion modRot = vehicle_->GetRaycastVehicle()->GetBody()->GetRotation() * Quaternion(0,90,0);
     //vehicle_->GetRaycastVehicle()->GetBody()->SetRotation(modRot);
 
-    Fire(toTarget_);
+//    Fire(toTarget_);
+    Fire(this->hitTarget_);
 
 }
 
@@ -1058,6 +1059,27 @@ void NetworkActor::RespawnVehicle() {
 
 }
 
+void NetworkActor::CreateProjectile(Vector3 source, Quaternion q, Vector3 target) {
+    Scene *scene = GetScene();
+    SharedPtr<Node> n;
+    Node *proj0 = scene->CreateChild("projectile", REPLICATED);
+    Missile *newM = proj0->CreateComponent<Missile>();
+    // Set the position and rotation of the projectile
+    //proj0->SetWorldPosition(this->GetPosition());
+    proj0->SetWorldRotation(q);
+    newM->SetProducer(vehicle_->GetNode()->GetID());
+
+    Node *tgt = scene->CreateChild("missileTarget", REPLICATED);
+    tgt->SetPosition(target);
+    newM->AddTarget(SharedPtr<Node>(tgt));
+    // Assign the producer node
+    newM->AssignProducer(vehicle_->GetNode()->GetID(),
+                         source);
+    URHO3D_LOGDEBUGF("NetworkActor::Fire() [%d] -> [%f,%f,%f]", vehicle_->GetNode()->GetID(),
+                     newM->GetNode()->GetPosition().x_,
+                     newM->GetNode()->GetPosition().y_,
+                     newM->GetNode()->GetPosition().z_);
+}
 
 void NetworkActor::Fire(Vector3 target) {
 
@@ -1066,95 +1088,14 @@ void NetworkActor::Fire(Vector3 target) {
 
     // Not on vehicle
     if (!entered_) {
-        Scene *scene = GetScene();
-
-        // On-foot fire
-
-        SharedPtr<Node> n;
-        Node *bullet0 = scene->CreateChild("bullet", REPLICATED);
-        Missile *newM = bullet0->CreateComponent<Missile>();
-        // Set the position and rotation of the bullet
-        bullet0->SetWorldPosition(body_->GetPosition() + Vector3(0,50.0f,0));
-        //   bullet0->SetWorldRotation(Quaternion(Vector3::UP, towards_));
-//		bullet0->GetComponent<RigidBody2D>()->SetLinearVelocity(Vector2(towards_.x_, towards_.y_).Normalized() * 10.0f);
-
-
-        newM->SetProducer(node_->GetID());
-
-
-        // Store local missile list
-        //missileList_.Push(vehicle_->GetNode()->GetID());
-
-//        VariantMap& eventData = GetNode()->GetEventDataMap();
-//        eventData["owner"] = SharedPtr<Player>(this);
-
-//        eventData["missileOwner"] = this->GetID();
-        //       vehicle_->SendEvent(E_NODECOLLISION, eventData);
-
-
-
-        // Set the ownership of the bullet to the Player
-//        bullet0->GetComponent<Missile>()->SetProducer(SharedPtr<Node>(vehicle_->GetNode()));
-
-        Node *tgt = scene->CreateChild("missileTarget", REPLICATED);
-        //tgt->>SetPosition(0f,0f,0f);
-        tgt->SetPosition(target);
-        newM->AddTarget(SharedPtr<Node>(tgt));
-        // Assign the producer node
-        newM->AssignProducer(GetNode()->GetID(),
-                             GetNode()->GetPosition() + Vector3(40.0f, 2.0f, 0.0f));
-        URHO3D_LOGDEBUGF("NetworkActor::Fire() [%d] -> [%f,%f,%f]", GetNode()->GetID(),
-                         newM->GetNode()->GetPosition().x_,
-                         newM->GetNode()->GetPosition().y_,
-                         newM->GetNode()->GetPosition().z_);
-
-
-        // }
     }
 
-
     if (vehicle_) {
-        Scene *scene = GetScene();
-
-        SharedPtr<Node> n;
-        Node *bullet0 = scene->CreateChild("bullet", REPLICATED);
-        Missile *newM = bullet0->CreateComponent<Missile>();
-        // Set the position and rotation of the bullet
-        bullet0->SetWorldPosition(body_->GetPosition() + Vector3(0,50.0f,0));
-     //   bullet0->SetWorldRotation(Quaternion(Vector3::UP, towards_));
-//		bullet0->GetComponent<RigidBody2D>()->SetLinearVelocity(Vector2(towards_.x_, towards_.y_).Normalized() * 10.0f);
-
-        newM->SetProducer(vehicle_->GetNode()->GetID());
-
-
-        // Store local missile list
-        //missileList_.Push(vehicle_->GetNode()->GetID());
-
-//        VariantMap& eventData = GetNode()->GetEventDataMap();
-//        eventData["owner"] = SharedPtr<Player>(this);
-
-//        eventData["missileOwner"] = this->GetID();
-        //       vehicle_->SendEvent(E_NODECOLLISION, eventData);
-
-
-
-        // Set the ownership of the bullet to the Player
-//        bullet0->GetComponent<Missile>()->SetProducer(SharedPtr<Node>(vehicle_->GetNode()));
-
-        Node *tgt = scene->CreateChild("missileTarget", REPLICATED);
-        //tgt->>SetPosition(0f,0f,0f);
-        tgt->SetPosition(target);
-        newM->AddTarget(SharedPtr<Node>(tgt));
-        // Assign the producer node
-        newM->AssignProducer(vehicle_->GetNode()->GetID(),
-                             vehicle_->GetRaycastVehicle()->GetNode()->GetPosition() + Vector3(40.0f, 2.0f, 0.0f));
-        URHO3D_LOGDEBUGF("NetworkActor::Fire() [%d] -> [%f,%f,%f]", vehicle_->GetNode()->GetID(),
-                         newM->GetNode()->GetPosition().x_,
-                         newM->GetNode()->GetPosition().y_,
-                         newM->GetNode()->GetPosition().z_);
-
-
-        // }
+        Vector3 source = body_->GetPosition();
+        if (entered_) {
+            source = vehicle_->GetTurrent()->GetPosition();
+        }
+        CreateProjectile(source, body_->GetRotation(), target);
     }
 }
 

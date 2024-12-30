@@ -35,6 +35,14 @@ void AgentMovement::update(float deltaTime) {
 void AgentMovement::checkInput() {
 }
 
+void AgentMovement::setTarget(Urho3D::Vector3 target) {
+    toTarget = target;
+}
+
+Vector3 AgentMovement::getTarget() {
+    return toTarget;
+}
+
 void AgentMovement::applyInput(float deltaTime) {
 
     // Set control block for AI bot
@@ -50,6 +58,10 @@ void AgentMovement::applyInput(float deltaTime) {
     float w1 = 0.0f;
     float w2 = 1.0f;
     float wyPtSteer = networkActor_->vehicle_->getDesiredSteer();
+    float dist = toTarget.Length();
+    // Towards steer waypoint
+    Vector3 towardsWaypt = toTarget.Normalized();
+    float speed = dist / 0.3f;
 
 
     float steerVar = Random(0.0f, 0.4f);
@@ -58,7 +70,6 @@ void AgentMovement::applyInput(float deltaTime) {
     // float steerControl = ((steerInputNorm_ * deltaTime)*w1)+(wyPtSteer*deltaTime*w2);
     float steerControl = (wyPtSteer*deltaTime*w2)*steerVar;
     float actControl = actionNorm_ * deltaTime;
-
 
 
     //if (!ui->GetFocusElement()) {}

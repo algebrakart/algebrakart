@@ -747,13 +747,17 @@ void Vehicle::Create() {
 }
 
 void Vehicle::SetTurrentAngle(float angle) {
-    if (!hullObjectTurrent_) return;
-    hullObjectTurrent_->GetNode()->SetRotation(Quaternion(angle, 180.0f, 0.0f));
+    if (!turrent_) return;
+    turrent_->GetNode()->SetRotation(Quaternion(angle, 180.0f, 0.0f));
 }
 
 float Vehicle::GetTurrentAngle() {
-    if (!hullObjectTurrent_) return 0;
-    return hullObjectTurrent_->GetNode()->GetRotation().EulerAngles().x_;
+    if (!turrent_) return 0;
+    return turrent_->GetNode()->GetRotation().EulerAngles().x_;
+}
+
+Node* Vehicle::GetTurrent() {
+    return turrent_->GetNode();
 }
 
 void Vehicle::Init(Node* node) {
@@ -779,7 +783,7 @@ void Vehicle::Init(Node* node) {
         node_->SetPosition(Vector3(0,0,forwardWeightOffset));
 //        m_fVehicleMass = 425.0f;
         // Set body attributes
-        body_->SetMass(425.0f);
+        body_->SetMass(525.0f);
         //body_->SetMass(m_fVehicleMass);
         body_->SetLinearDamping(0.12f); // Some air resistance
         body_->SetAngularDamping(0.3f);
@@ -1089,21 +1093,7 @@ void Vehicle::Init(Node* node) {
 */
 
 
-/*
-                    Node *adjNode2 = adjNode->CreateChild("Model");
-                    hullObjectTurrent_ = adjNode2->CreateComponent<StaticModel>();
-                    hullObjectTurrent_->SetCastShadows(true);
-//                    hullObjectTurrent->SetModel(cache->GetResource<Model>("Models/AssetPack/sherman-gun.mdl"));
-                    //                  hullObjectTurrent->ApplyMaterialList("Models/AssetPack/sherman-gun.txt");
 
-                    //adjNode3->SetRotation(Quaternion(0.0f, -180.0f, -90.0f));
-                    hullObjectTurrent_->SetModel(cache->GetResource<Model>("Models/Vehicles/SetA/Models/Turrent.mdl"));
-                    hullObjectTurrent_->ApplyMaterialList("Models/Vehicles/SetA/Models/Turrent.txt");
-                    adjNode->SetPosition(Vector3(node_->GetPosition().x_, node_->GetPosition().y_ + 2.3f,
-                                                 node_->GetPosition().z_ - forwardWeightOffset - 4.0f));
-                    adjNode2->SetPosition(Vector3(-14.0f, -220.0f, 0.0f));
-                    adjNode2->SetScale(Vector3(0.4f, 0.4f, 0.4f));
-*/
                     //towards_ = Vector3(towards_.x_*cos(turningVelocity_*timeStep) - towards_.y_*sin(turningVelocity_*timeStep), towards_.x_*sin(turningVelocity_*timeStep) + towards_.y_*cos(turningVelocity_*timeStep), 0.0f);
                     //node->Rotate2D(turningVelocity_*timeStep);
                     // The angle between rotation2d and x-axis
@@ -1438,6 +1428,25 @@ void Vehicle::Init(Node* node) {
             }
 
         }
+
+        Vector3 pos = Vector3(0, 4.0f, 0.0f); // Yugo
+        Quaternion q = Quaternion(0, 90, 0);
+
+        Node *turrentNode = GetNode()->CreateChild("Model");
+        turrent_ = turrentNode->CreateComponent<StaticModel>();
+        turrent_->SetCastShadows(true);
+        turrent_->SetModel(cache->GetResource<Model>("Models/AssetPack/sherman-gun.mdl"));
+        turrent_->ApplyMaterialList("Models/AssetPack/sherman-gun.txt");
+
+        //adjNode3->SetRotation(Quaternion(0.0f, -180.0f, -90.0f));
+        //turrent_->SetModel(cache->GetResource<Model>("Models/Vehicles/SetA/Models/Turrent.mdl"));
+        //turrent_->ApplyMaterialList("Models/Vehicles/SetA/Models/Turrent.txt");
+        adjNode->SetPosition(Vector3(0,0,0));
+        turrentNode->SetPosition(Vector3(-0.0f, 5.0f, 0.0f));
+        turrentNode->SetRotation(GetNode()->GetWorldRotation());
+        float scale = 12.0f;
+        turrentNode->SetScale(Vector3(1.0f*scale, 1.0f*scale, 1.0f*scale));
+
 
 
         const Color LtBrown(0.972f, 0.780f, 0.412f);

@@ -2710,6 +2710,32 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
                             float lapTime = actor->lapTime_;
                             float totalTime = actor->totalTime_;
 
+                            Vector3 closestAiAgent;
+                            Vector<float> distances;
+                            // Retrieve ai actors
+                            for (int i = 0; i < aiActorMap_.Size(); i++) {
+                                auto *aiActor = dynamic_cast<NetworkActor *>(aiActorMap_[i].Get());
+                                if (aiActor) {
+                                    if (aiActor->vehicle_) {
+                                        Node * node = aiActor->vehicle_->GetNode();
+
+                                        if (!node) return;
+
+                                        String username = aiActor->GetUserName();
+                                        float botDistance = aiActor->vehicle_->GetRaycastVehicle()->GetDistanceOnGround();
+
+                                        Vector3 distToActor = aiActor->GetBody()->GetPosition()-actor->GetBody()->GetPosition();
+                                        distances.Push(distToActor.Length());
+                                        // Set the actor to the closest ai target
+                                        actor->SetProjectileTarget(aiActor->GetBody()->GetPosition());
+
+                                    }
+                                }
+                            }
+
+
+
+
                             rankArr[c].playerId = username;
                             rankArr[c].lapNum = lapNum;
                             rankArr[c].lapTime = lapTime;
@@ -3784,6 +3810,8 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                                        actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition();
                                         vDir = vDir.Normalized();
                                         float steerProj = towardsWaypt.DotProduct(vDir);
+                                        float dist = (towardsWaypt - actor->GetPosition()).Length();
+                                        float speed = dist / 0.3f;
                                         // steer projection represents delta from 0 steer
                                         //  steerProj = 1.0f; // Right
                                         //  steerProj = -1.0f; // Left
@@ -3802,14 +3830,13 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
 
                                         // Amplify the steering projection in inverse
                                         desiredSteer = -steerProj * 360.0f;
-
                                         // Apply vehicle steering
                                         actor->vehicle_->setDesiredSteer(desiredSteer);
 
                                         DebugRenderer *dbgRenderer = scene_->GetComponent<DebugRenderer>(REPLICATED);
 
-                                          dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition(), actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()-towardsWaypt*15.0f,
-                                                               Color(1.0f, 0.0, 0.0));
+                                          //dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition(), actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition()-towardsWaypt*15.0f,
+                                            //                   Color(1.0f, 0.0, 0.0));
 
 
                                         dbgRenderer->AddLine(actor->vehicle_->GetRaycastVehicle()->GetNode()->GetPosition(), actor->getToTarget(),
@@ -7282,7 +7309,7 @@ NetworkActor *AlgebraKart::SpawnPlayer(unsigned int id) {
     Vehicle *vehicle = vehicleNode->CreateComponent<Vehicle>(REPLICATED);
     vehicle->Init(vehicleNode);
     actor->SetClientInfo(username, Random(1,100), Vector3(actor->GetPosition()));
-    vehicleNode->SetPosition(Vector3(actor->GetPosition()));
+    vehicleNode->SetPosition(Vector3(actor->GetPosition())+Vector3(0,-30.0f,0));
     vehicleNode->SetRotation(Quaternion(0.0f, -90.0f, 0.0f));
     // Attach vehicle to actor
     actor->vehicle_ = vehicle;
