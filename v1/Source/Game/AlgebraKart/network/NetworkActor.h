@@ -27,8 +27,9 @@ static const unsigned NTWK_CTRL_FORWARD    = (1<<1);
 static const unsigned NTWK_CTRL_LEFT    = (1<<2);
 static const unsigned NTWK_CTRL_RIGHT   = (1<<3);
 static const unsigned NTWK_CTRL_ENTER     = (1<<5);
+static const unsigned NTWK_CTRL_JUMP     = (1<<6);
 static const unsigned NTWK_CTRL_FIRE     = (1<<7);
-static const unsigned NTWK_CTRL_JUMP     = (1<<8);
+static const unsigned NTWK_CTRL_USE     = (1<<8);
 
 
 static const unsigned NETWORKACTOR_COL_LAYER = 2;

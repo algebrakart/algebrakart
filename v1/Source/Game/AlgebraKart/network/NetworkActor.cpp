@@ -785,6 +785,14 @@ void NetworkActor::FixedUpdate(float timeStep) {
                     }
                 }
             }
+
+            if (controls_.buttons_ & NTWK_CTRL_JUMP) {
+                URHO3D_LOGDEBUGF("**NETWORK ACTOR JUMP** -> %l", controls_.buttons_);
+            }
+
+            if (controls_.buttons_ & NTWK_CTRL_USE) {
+                URHO3D_LOGDEBUGF("**NETWORK ACTOR USE** -> %l", controls_.buttons_);
+            }
         }
 
         float enterLimit = 0.15f;

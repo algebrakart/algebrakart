@@ -959,10 +959,10 @@ Controls AlgebraKart::SampleCSPControls()
     ntwkControls_.extraData_["steerLevel"] = lAxisVal.x_;
 
     bool accel = (input->GetKeyDown(Urho3D::KEY_AC_FORWARD) || input->GetKeyDown(KEY_W) || ntwkControls_.IsDown(BUTTON_B) || (actorAccel < -0.9f));
-    bool fire = input->GetKeyDown(KEY_SPACE) || ntwkControls_.IsDown(BUTTON_X);
+    bool use = input->GetKeyDown(KEY_SPACE) || ntwkControls_.IsDown(BUTTON_X);
     bool enter = input->GetKeyDown(KEY_F) || ntwkControls_.IsDown(BUTTON_Y);
     bool brake = (input->GetKeyDown(KEY_S) || ntwkControls_.IsDown(BUTTON_A));
-    bool jump = (input->GetKeyDown(Urho3D::KEY_ALT) || ntwkControls_.IsDown(BUTTON_A));
+    bool fire = (input->GetKeyDown(Urho3D::KEY_B) || ntwkControls_.IsDown(BUTTON_B));
 
 
 
@@ -1025,12 +1025,13 @@ Controls AlgebraKart::SampleCSPControls()
                         } else {
                             // Outside vehicle
 
-                            // JUMP
+                            /*
+                            // jump
                             if (jump) {
                                 // Jump
                                 SoundSource3D *snd = PlaySoundEffectLocal(driveAudioEffect[SOUND_FX_ENGINE_BOOST].c_str());
                                 lastSnd_ = snd;
-                            }
+                            }*/
                         }
                     }
                 }
@@ -1061,7 +1062,8 @@ Controls AlgebraKart::SampleCSPControls()
     ntwkControls_.Set(NTWK_CTRL_RIGHT, right);
     ntwkControls_.Set(NTWK_CTRL_ENTER, enter);
     ntwkControls_.Set(NTWK_CTRL_FIRE, fire);
-    ntwkControls_.Set(NTWK_CTRL_JUMP, jump);
+    ntwkControls_.Set(NTWK_CTRL_USE, use);
+
 
     // Set controls to updated ntwkControls
     controls = ntwkControls_;
@@ -7318,12 +7320,12 @@ NetworkActor *AlgebraKart::SpawnPlayer(unsigned int id) {
     Node *plyFltTextNode = vehicleNode->CreateChild("Actor FloatText", REPLICATED);
     Text3D *plyFltText_ = plyFltTextNode->CreateComponent<Text3D>();
     aiActorTextMap_[id] = plyFltText_;
-    plyFltText_->SetColor(Color(77.0f/255.0f,0.23f,1.0f));
+    plyFltText_->SetColor(Color(77.0f/255.0f,0.73f,1.0f));
     plyFltText_->SetEffectColor(Color::BLACK);
     plyFltText_->GetNode()->SetScale(18.0f);
-    plyFltText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 16);
+    plyFltText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), 24);
     plyFltText_->SetFaceCameraMode(FC_ROTATE_XYZ);
-    plyFltText_->GetNode()->SetPosition(Vector3(0,19.0f,-CHASSIS_WIDTH / 2.0f)*0.9f);
+    plyFltText_->GetNode()->SetPosition(Vector3(-6.0f,19.0f,0.0f-CHASSIS_WIDTH / 2.0f)*0.9f);
     plyFltText_->SetText(username);
     //Vector3(0, 50.0f, CHASSIS_WIDTH / 2.0f));
 
