@@ -467,8 +467,11 @@ void NetworkActor::ApplyMovement(float timeStep) {
         //body_->ApplyImpulse(rot * move_ * (softGrounded ? MOVE_FORCE : INAIR_MOVE_FORCE));
 //        const float MOVE_FORCE = 0.45f;
         //const float MOVE_FORCE = 13.5f;
-        const float MOVE_FORCE = 588.5f;
-
+        //const float MOVE_FORCE = 588.5f;
+        // MOVE_FORCE will be follow spring -> LERP?
+        // Press Use key -> start running and accelerating.
+        float speedModifier = 1.0f;
+        float MOVE_FORCE = 1000.0f * speedModifier * useButtonDownTime_;
 
         Vector3 impulse;
         if (controls_.yaw_ < 0) {
@@ -791,7 +794,10 @@ void NetworkActor::FixedUpdate(float timeStep) {
             }
 
             if (controls_.buttons_ & NTWK_CTRL_USE) {
-                URHO3D_LOGDEBUGF("**NETWORK ACTOR USE** -> %l", controls_.buttons_);
+                URHO3D_LOGDEBUGF("**NETWORK ACTOR USE** -> %l %f", controls_.buttons_, useButtonDownTime_);
+                useButtonDownTime_ += timeStep;
+            } else {
+                useButtonDownTime_ = 0;
             }
         }
 

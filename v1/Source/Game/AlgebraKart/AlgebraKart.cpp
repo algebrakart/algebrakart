@@ -5377,7 +5377,7 @@ void AlgebraKart::MoveCamera(float timeStep) {
                                     float velLen = lVel.Length();
 
                                     // Zoom up on body velocity increase
-                                    cameraTargetPos = pos + Vector3::UP * 187.3f;
+                                    cameraTargetPos = (pos-(Vector3::FORWARD*77.0f)) + Vector3::UP * 57.3f;
                                             /*Vector3::UP * 3.3f - forward *
                                                                        Vector3(0.0f + velLen *
                                                                                       velMult * 0.07,

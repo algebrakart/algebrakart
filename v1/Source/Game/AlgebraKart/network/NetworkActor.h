@@ -201,6 +201,7 @@ public:
     /// Movement controls. Assigned by the main program each physics update step.
     bool disconnected_;
     Controls controls_;
+    float useButtonDownTime_;
     WeakPtr<Connection> connection_;
     WeakPtr<Scene> scene_;
     Timer updateTimer_;
