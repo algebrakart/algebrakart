@@ -1443,8 +1443,8 @@ void Vehicle::Init(Node* node) {
         //turrent_->ApplyMaterialList("Models/Vehicles/SetA/Models/Turrent.txt");
         adjNode->SetPosition(Vector3(0,0,0));
         turrentNode->SetPosition(Vector3(-0.0f, 5.0f, 0.0f));
-        turrentNode->SetRotation(GetNode()->GetWorldRotation());
-        float scale = 12.0f;
+        turrentNode->SetRotation(body_->GetRotation());
+        float scale = 0.4f;
         turrentNode->SetScale(Vector3(1.0f*scale, 1.0f*scale, 1.0f*scale));
 
 

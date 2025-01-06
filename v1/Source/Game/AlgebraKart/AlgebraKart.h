@@ -577,6 +577,8 @@ private:
     /// Particle pool
     ParticlePool particlePool_[20];
 
+    #define VDAMAGE_BODY_NUM_LINES 8
+
     #define NUM_DEBUG_FIELDS 16
     // Debug text
     Text* debugText_[NUM_DEBUG_FIELDS];

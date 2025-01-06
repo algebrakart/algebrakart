@@ -2235,14 +2235,15 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
                              // Vehicle Damage
                              if (vDamageSprite_) {
                                  vDamageSprite_->SetVisible(true);
-                                 int numLines = 8;
                                  float height = 3.0f;
-                                 for (int i = 0; i < numLines; i++) {
+                                 for (int i = 0; i < VDAMAGE_BODY_NUM_LINES; i++) {
                                      // TODO ADD v damage list
+                                     float centerX = 6.0f;
+                                     float centerY = -142.0f;
                                      SharedPtr<Sprite> sprite_;
                                      sprite_ = vDamage_FL_LineSprites_.At(i);
                                      sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(-130.0f, -100.0f+(i*height)));
+                                     sprite_->SetPosition(Vector2(centerX-130.0f, centerY-90.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
@@ -2250,7 +2251,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
 
                                      sprite_ = vDamage_FR_LineSprites_.At(i);
                                      sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(-45.0f, -100.0f+(i*height)));
+                                     sprite_->SetPosition(Vector2(centerX-48.0f, centerY-90.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
@@ -2258,7 +2259,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
 
                                      sprite_ = vDamage_BL_LineSprites_.At(i);
                                      sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(-130.0f, -10.0f+(i*height)));
+                                     sprite_->SetPosition(Vector2(centerX-130.0f, centerY-10.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
@@ -2266,7 +2267,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
 
                                      sprite_ = vDamage_BR_LineSprites_.At(i);
                                      sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(-45.0f, -10.0f+(i*height)));
+                                     sprite_->SetPosition(Vector2(centerX-48.0f, centerY-10.0f+(i*height)));
                                      sprite_->SetOpacity(0.9f);
                                      // Set a low priority so that other UI elements can be drawn on top
                                      sprite_->SetPriority(-100);
@@ -2307,6 +2308,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
 
                                          steerActorSprite_->SetVisible(true);
                                          steerActorSprite_->SetRotation(body->GetRotation().YawAngle());
+                                         steerActorSprite_->SetPosition(Vector2(-90, -90));
                                      } else {
                                          steerActorSprite_->SetVisible(false);
                                      }
@@ -3769,7 +3771,12 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                     actor->totalTime_ += timeStep;
                                     actor->lapTime_ += timeStep;
 
-                                    Vector3 center = steerMarks_[actor->vehicle_->getSteerIndex()]->GetWorldPosition();
+                                    Vector3 center = Vector3(0,0,0);
+                                    if (!steerMarks_.Empty()) {
+                                        if (steerMarks_.Size() >= actor->vehicle_->getSteerIndex()) {
+                                            center = steerMarks_[actor->vehicle_->getSteerIndex()]->GetWorldPosition();
+                                        }
+                                    }
                                     actor->SetTarget(center);
                                     actor->setSteerSet(true);
 
@@ -5442,7 +5449,19 @@ void AlgebraKart::MoveCamera(float timeStep) {
 
                                     // Calculate camera distance
                                     clientCam_->GetNode()->SetPosition(weightedSum);
+                                    Quaternion lastRot = clientCam_->GetNode()->GetRotation();
+                                    // Take average from look at object
+                                    Vector3 cameraLook;
                                     clientCam_->GetNode()->LookAt(lookAtObject);
+                                    Quaternion nextRot = clientCam_->GetNode()->GetRotation();
+
+                                    float t = 1.0f;
+                                    Quaternion q = lastRot*(1-t)-nextRot*t;
+
+                                    // lerp(q0,q1,t)=q0(1−t)+q1t;
+                                    clientCam_->GetNode()->SetRotation(q);
+
+
 
                                     //clientCam_->GetNode()->SetPosition(cameraTargetPos);
                                     //clientCam_->GetNode()->SetRotation(dir);
@@ -5984,9 +6003,9 @@ void AlgebraKart::DoStartServer() {
 
     // Server load level
     //LoadLevel(8);
-    //LoadLevel(4);
+    LoadLevel(9);
     //LoadLevel(6); // big world track
-    LoadLevel(8); // sky track
+    //LoadLevel(8); // sky track
     //LoadLevel(7);
     //LoadLevel(8);
 }
@@ -6625,8 +6644,7 @@ void AlgebraKart::CreateClientUI() {
     vDamageSprite_ = ui->GetRoot()->CreateChild<Sprite>();
     // Indicator Lines
     SharedPtr<Sprite> sprite_;
-    int numLines = 8;
-    for (int i = 0; i < numLines; i++) {
+    for (int i = 0; i < VDAMAGE_BODY_NUM_LINES; i++) {
         sprite_ = ui->GetRoot()->CreateChild<Sprite>();
         sprite_->SetTexture(hudVDamageLineTexture);
         sprite_->SetScale(1.0f);
@@ -7010,10 +7028,12 @@ void AlgebraKart::CreateClientUI() {
     steerWheelSprite_->SetVisible(true);
 
 
+
+
     steerActorSprite_->SetScale((256.0f / textureWidth)*0.56f);
     steerActorSprite_->SetSize(textureWidth, textureHeight);
     steerActorSprite_->SetHotSpot(textureWidth / 2, textureHeight / 2);
-    steerActorSprite_->SetAlignment(HA_LEFT, VA_TOP);
+    steerActorSprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
     steerActorSprite_->SetPosition(Vector2(steerWheelX, steerWheelY));
     steerActorSprite_->SetOpacity(0.5f);
     // Set a low priority so that other UI elements can be drawn on top

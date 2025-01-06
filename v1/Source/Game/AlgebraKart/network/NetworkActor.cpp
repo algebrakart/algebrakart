@@ -276,7 +276,8 @@ void NetworkActor::Init(Node* node) {
         body_->SetCollisionLayer(2);
         body_->SetAngularRestThreshold(0.0f);
 
-        //body_->SetUseGravity(false);
+        body_->SetUseGravity(true);
+        body_->SetGravityOverride(Vector3(0,-98.0f,0));
 
         // Set rigid body kinematic mode. In kinematic mode forces are not applied to the rigid body.
         // Disable physics
@@ -467,11 +468,11 @@ void NetworkActor::ApplyMovement(float timeStep) {
         //body_->ApplyImpulse(rot * move_ * (softGrounded ? MOVE_FORCE : INAIR_MOVE_FORCE));
 //        const float MOVE_FORCE = 0.45f;
         //const float MOVE_FORCE = 13.5f;
-        //const float MOVE_FORCE = 588.5f;
+        //const float MOVE_FORCE  588.5f;
         // MOVE_FORCE will be follow spring -> LERP?
         // Press Use key -> start running and accelerating.
         float speedModifier = 1.0f;
-        float MOVE_FORCE = 1000.0f * speedModifier * useButtonDownTime_;
+        float MOVE_FORCE = 1000.0f * speedModifier * Max(useButtonDownTime_, 1.0f);
 
         Vector3 impulse;
         if (controls_.yaw_ < 0) {
@@ -1062,8 +1063,8 @@ void NetworkActor::Respawn() {
     //node_ = modelNode;
     //model_ = modelNode->GetComponent<AnimatedModel>();
     //body_ = modelNode->GetComponent<RigidBody>();
-
-    modelNode->SetPosition(Vector3(0, 0, 0));
+    if (modelNode)
+        modelNode->SetPosition(Vector3(0, 0, 0));
 
     // Submit updated attributes over network
     Urho3D::Component::MarkNetworkUpdate();
