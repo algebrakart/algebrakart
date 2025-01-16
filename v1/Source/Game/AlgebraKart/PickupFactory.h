@@ -17,7 +17,7 @@ public:
     // Reset all stored data.
     void Reset();
     // Initialize pickup factory.
-    void Initialize(const PODVector<Pickup>& pickupElements);
+    void Initialize(const PODVector<Pickup>& pickups);
 
     // Add pickup
     void AddPickup(int type, Vector3 location);
