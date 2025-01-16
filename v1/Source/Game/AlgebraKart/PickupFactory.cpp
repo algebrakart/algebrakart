@@ -20,8 +20,13 @@ void PickupFactory::Reset()
     pickupSize_ = 0;
 }
 
-void PickupFactory::Initialize(const PODVector<Pickup>& pickups, bool largeIndices)
+void PickupFactory::Initialize(const PODVector<Pickup>& pickups)
 {
     Reset();
     pickups_ = pickups;
+}
+
+void PickupFactory::AddPickup(int type, Urho3D::Vector3 location) {
+    // Create pickup
+    // Deploy pickup at location
 }
