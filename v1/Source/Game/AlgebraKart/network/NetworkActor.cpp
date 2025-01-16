@@ -709,6 +709,12 @@ void NetworkActor::FixedUpdate(float timeStep) {
             doJump_ = false;
         }
 
+        if (entered_) {
+            animCtrl_->PlayExclusive(victoryAniFile, 1, false, 0.15f);
+            animCtrl_->SetAnimationTime(7.7f);
+            animCtrl_->SetStartBone(victoryAniFile, "Ctrl_all");
+        }
+
 
 
 

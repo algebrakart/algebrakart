@@ -889,8 +889,8 @@ void RaycastVehicleBase::DebugDraw(DebugRenderer *dbgRenderer) {
                 vehicle->getWheelInfo(v).m_worldTransform.getBasis()[2][vehicle->getUpAxis()]);
 
         // Wheel movement lines
-        //dbgRenderer->AddLine(Vector3(wheelPosWS), Vector3(wheelPosWS + (wheelSpin*23.0f)), Color(Urho3D::Color::YELLOW));
-        //dbgRenderer->AddLine(Vector3(wheelPosWS), Vector3(vehicle->getWheelInfo(v).m_raycastInfo.m_contactPointWS), Color(Urho3D::Color::CYAN));
+        dbgRenderer->AddLine(Vector3(wheelPosWS), Vector3(wheelPosWS + (wheelSpin*23.0f)), Color(Urho3D::Color::YELLOW));
+        dbgRenderer->AddLine(Vector3(wheelPosWS), Vector3(vehicle->getWheelInfo(v).m_raycastInfo.m_contactPointWS), Color(Urho3D::Color::CYAN));
     }
 
 }

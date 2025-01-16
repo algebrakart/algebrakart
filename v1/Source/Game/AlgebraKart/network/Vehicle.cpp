@@ -1501,10 +1501,10 @@ void Vehicle::Init(Node* node) {
                 case CAR_TYPE_KART:
                     //scale = 0.1f;
                     //scale = 0.04f; //SetScale(Vector3(0.04f,0.04f,0.04f))
-                    scale = 6.6f; //SetScale(Vector3(0.04f,0.04f,0.04f))
+                    scale = 5.6f; //SetScale(Vector3(0.04f,0.04f,0.04f))
                     tireModel = cache->GetResource<Model>("Models/Vehicles/SetA/Models/Wheels_4.mdl");
                     if (carType == 6) scale = 6.3;
-                    scale = 0.06f;
+                    scale = 0.05f;
 
                     //Model *tireModel = cache->GetResource<Model>("Models/Vehicles/Yugo/Models/wheel.mdl");
                     pWheel->SetModel(tireModel);
@@ -1525,10 +1525,10 @@ void Vehicle::Init(Node* node) {
                 case CAR_TYPE_SAHIN:
                     //scale = 0.1f;
                     //scale = 0.04f; //SetScale(Vector3(0.04f,0.04f,0.04f))
-                    scale = 6.6f; //SetScale(Vector3(0.04f,0.04f,0.04f))
+                    scale = 4.6f; //SetScale(Vector3(0.04f,0.04f,0.04f))
                     tireModel = cache->GetResource<Model>("Models/Vehicles/SetA/Models/Wheels_4.mdl");
                     if (carType == 6) scale = 6.3;
-                    scale = 0.06f;
+                    scale = 0.05f;
 
                     //Model *tireModel = cache->GetResource<Model>("Models/Vehicles/Yugo/Models/wheel.mdl");
                     pWheel->SetModel(tireModel);
@@ -1549,10 +1549,10 @@ void Vehicle::Init(Node* node) {
                 case CAR_TYPE_YUGO:
                     //scale = 0.1f;
                     //scale = 0.04f; //SetScale(Vector3(0.04f,0.04f,0.04f))
-                    scale = 6.6f; //SetScale(Vector3(0.04f,0.04f,0.04f))
+                    scale = 4.6f; //SetScale(Vector3(0.04f,0.04f,0.04f))
                     tireModel = cache->GetResource<Model>("Models/Vehicles/SetA/Models/Wheels_4.mdl");
                     if (carType == 6) scale = 6.3;
-                    scale = 0.06f;
+                    scale = 0.05f;
 
                     //Model *tireModel = cache->GetResource<Model>("Models/Vehicles/Yugo/Models/wheel.mdl");
                     pWheel->SetModel(tireModel);
@@ -2403,7 +2403,7 @@ void Vehicle::DebugDraw() {
         if (dbgRenderer) {
             if (raycastVehicle_) {
                 // Call parent debug draw
-                //this->raycastVehicle_->DebugDraw(dbgRenderer);
+                this->raycastVehicle_->DebugDraw(dbgRenderer);
 
             }
         }

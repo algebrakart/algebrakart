@@ -5338,7 +5338,7 @@ void AlgebraKart::MoveCamera(float timeStep) {
                                             pos = vBody->GetPosition();
                                             rot = vBody->GetRotation();
                                             lVel = vBody->GetLinearVelocity();
-                                            lookAtObject = vBody->GetPosition();;
+                                            lookAtObject = vBody->GetPosition();
 
                                         }
 
@@ -5374,6 +5374,15 @@ void AlgebraKart::MoveCamera(float timeStep) {
                                                           -50.0f + -velLen *
                                                                    velMult) * 0.6f;
 
+                                    // IN-CAR VIEW
+                                    // Dashboard view
+                                    cameraTargetPos =
+                                            pos + (Vector3::UP * 3.0f) + forward *
+                                                  Vector3(0.0f,
+                                                          0,
+                                                          0.0f);
+
+                                    lookAtObject = pos + na->GetBody()->GetRotation() * Vector3::FORWARD*15.0f;
 
                                 } else {
                                     // On foot
@@ -5455,7 +5464,7 @@ void AlgebraKart::MoveCamera(float timeStep) {
                                     clientCam_->GetNode()->LookAt(lookAtObject);
                                     Quaternion nextRot = clientCam_->GetNode()->GetRotation();
 
-                                    float t = 1.0f;
+                                    float t = 0.8f;
                                     Quaternion q = lastRot*(1-t)-nextRot*t;
 
                                     // lerp(q0,q1,t)=q0(1−t)+q1t;
@@ -6002,8 +6011,8 @@ void AlgebraKart::DoStartServer() {
     network->SetUpdateFps(30);
 
     // Server load level
+    LoadLevel(6);
     //LoadLevel(8);
-    LoadLevel(9);
     //LoadLevel(6); // big world track
     //LoadLevel(8); // sky track
     //LoadLevel(7);
@@ -7163,7 +7172,8 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
     String name = String(String("actor-") + username);
     // Create a new network actor for the player
     SharedPtr<Node> networkActorNode(scene_->CreateChild(name, REPLICATED));
-    networkActorNode->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+    Vector3 randLoc = Vector3(Random(-4000,4000), Random(-4000,4000), Random(-4000,4000));
+    networkActorNode->SetPosition(randLoc);
 
     NetworkActor *actor = networkActorNode->CreateComponent<NetworkActor>(REPLICATED);
     actor->Init(networkActorNode);
@@ -7172,6 +7182,7 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
     Server *server = GetSubsystem<Server>();
     SharedPtr<Recorder> serverRec_ = server->GetRecorder();
     actor->GetSequencer()->SetServerRec(serverRec_);
+
 
     //actor->SetClientInfo(name, Random(1,100), Vector3(Random(-400.0f,400.0f),Random(20.0f,80.0f),Random(-400.0f,400.0f)));
 
@@ -7193,9 +7204,11 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
         // Clamp y to start marker
         //actorPos.y_ = starAMarker_.y_;
 
+    } else {
+        actor->GetBody()->SetPosition(randLoc);
     }
 
-    actor->SetClientInfo(username, Random(1,100), Vector3(actor->GetPosition()));
+    actor->SetClientInfo(username, Random(1,100), Vector3(actor->GetBody()->GetPosition()));
     // Unmute sequencer -> turn to true to hear drum machine
     actor->GetSequencer()->SetMute(false);
 
