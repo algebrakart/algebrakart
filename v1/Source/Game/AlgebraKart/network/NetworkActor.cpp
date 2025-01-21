@@ -24,6 +24,7 @@
 #include <Urho3D/DebugNew.h>
 #include <AlgebraKart/Missile.h>
 #include <AlgebraKart/Pickup.h>
+#include <AlgebraKart/PickupFactory.h>
 
 #define PI 3.1415926
 
@@ -145,6 +146,7 @@ void NetworkActor::RegisterObject(Context *context) {
     context->RegisterFactory<NetworkActor>();
     context->RegisterFactory<Missile>();
     context->RegisterFactory<Pickup>();
+    context->RegisterFactory<PickupFactory>();
 
     URHO3D_COPY_BASE_ATTRIBUTES(ClientObj);
 
@@ -324,10 +326,10 @@ void NetworkActor::Create() {
     } else {
         activePickup_ = pickups_->Back().type;
     }
+
+
     // Submit updated attributes over network
     Urho3D::Component::MarkNetworkUpdate();
-
-
 
     // Register update
     SetUpdateEventMask(USE_UPDATE | USE_FIXEDUPDATE);
@@ -528,6 +530,13 @@ void NetworkActor::FixedUpdate(float timeStep) {
 
     // DEBUG DRAW
     DebugDraw();
+
+    /*
+    if (pickupTime_ < 1.0f) {
+        CreatePickup(3, GetBody()->GetPosition());
+        CreatePickup(3, GetBody()->GetPosition() + Vector3(30, 0, 0));
+        CreatePickup(0, GetBody()->GetPosition() + Vector3(0, 500, 0));
+    }*/
 
     // Sequencer update: play time step
     //sequencer_->Play(timeStep); // should happen automatic -> with sequencer to object -> update mask set
@@ -1078,6 +1087,21 @@ void NetworkActor::Respawn() {
 
 void NetworkActor::RespawnVehicle() {
 
+}
+
+void NetworkActor::CreatePickup(int type, Vector3 location) {
+    Scene *scene = GetScene();
+    SharedPtr<Node> n;
+    Node *pickup0 = scene->CreateChild("pickup", REPLICATED);
+    Pickup *newP = pickup0->CreateComponent<Pickup>();
+    // Set the position of the pickup
+    pickup0->SetWorldPosition(location);
+
+    newP->SetProducer(this->GetNode()->GetID());
+    URHO3D_LOGDEBUGF("NetworkActor::Pickup generated [%d] -> [%f,%f,%f]", this->GetNode()->GetID(),
+                     newP->GetNode()->GetPosition().x_,
+                     newP->GetNode()->GetPosition().y_,
+                     newP->GetNode()->GetPosition().z_);
 }
 
 void NetworkActor::CreateProjectile(Vector3 source, Quaternion q, Vector3 target) {

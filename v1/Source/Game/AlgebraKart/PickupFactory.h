@@ -22,6 +22,8 @@ public:
     // Add pickup
     void AddPickup(int type, Vector3 location);
 
+    // Add pickup circle
+    void AddCircle(Vector3 center);
 private:
     // Pickup elements
     PODVector<Pickup> pickups_;

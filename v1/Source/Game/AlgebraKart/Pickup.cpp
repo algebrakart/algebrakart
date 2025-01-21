@@ -25,7 +25,7 @@ Pickup::Pickup(Context* context) : LogicComponent(context)
 {
     type_ = 0;
     fuel_ = 18.0f;
-	SetThrust(11.0f);
+	SetThrust(0);
 	SetDetectionRange(3.0f);
 	SetBoomRange(0.3f);
 	SetDamage(20.0f);
@@ -55,13 +55,13 @@ void Pickup::Start()
     pRigidBody_->SetEnabled(false);
     pObject_->SetEnabled(false);
 
-    float scale = 56.0f;
+    float scale = 32.0f;
 
     if (type_ == 0) {
-        Model *projModel = cache->GetResource<Model>("Models/pickup_Balloon.mdl");
+        Model *projModel = cache->GetResource<Model>("Models/pickup_Wings.mdl");
 
         pObject_->SetModel(projModel);
-        pObject_->ApplyMaterialList("Models/pickup_Balloon.txt");
+        pObject_->ApplyMaterialList("Models/pickup_Wings.txt");
         pObject_->SetCastShadows(true);
 
 
@@ -87,6 +87,9 @@ void Pickup::Start()
         SubscribeToEvent(GetNode(), E_NODECOLLISION, URHO3D_HANDLER(Pickup, HandlePickupCollision));
 //    SubscribeToEvent(GetNode(), E_NODECOLLISIONSTART, URHO3D_HANDLER(Missile, HandleNodeCollision));
     }
+    // register
+    SetUpdateEventMask(USE_UPDATE | USE_FIXEDUPDATE);
+
 }
 
 void Pickup::AssignProducer(int producerId) {
@@ -118,68 +121,25 @@ void Pickup::Update(float timeStep)
 void Pickup::FixedUpdate(float timeStep)
 {
 
-//    float MissileLife = 10.0f;
-	/// Update the duration
+	// Update the duration
 	duration_ += timeStep;
-	// Clear the missiles 
-//	if (duration_ > MissileLife) node_->Remove();
-
-	Vector3 lockTarget;
 
     if (pRigidBody_) {
+        pRigidBody_->SetRotation(pRigidBody_->GetRotation()+Quaternion(0.01f*timeStep, 0, 0));
 
-        pParticleEmitter_->GetNode()->SetPosition(node_->GetPosition());
-        pParticleEmitter_->SetEmitting(true);
-
+        if (pParticleEmitter_) {
+            if (node_) {
+                //pParticleEmitter_->GetNode()->SetPosition(node_->GetPosition());
+                //pParticleEmitter_->SetEmitting(true);
+            }
+        }
         // Set Rotation
-        Vector3 velocity = Vector3(pRigidBody_->GetLinearVelocity());
-      //  node_->
-//edit
+        //Vector3 velocity = Vector3(pRigidBody_->GetLinearVelocity());
+
         //	node_->SetWorldRotation(Quaternion(Vector3::UP, velocity));
         // Apply thrust to the missile
 //        pRigidBody_->ApplyForce(velocity.Normalized() * thrust);
-
-        // Calculate the force
-        //Vector3 force = lockTarget - node_->GetPosition();
-        //force.Normalize();
-        float fuelUsage = timeStep * 0.9f;
-        fuel_ -= fuelUsage;
-        Vector3 force = Vector3(0.0f, 0.04f, 0.0f);
-        pRigidBody_->ApplyForce(force * thrust);
-//            pRigidBody_->ApplyForce(velocity.Normalized()*thrust);
-
-        // Tracking targets
-
-        for (int i = 0; i < targetnodes_.Size(); i++) {
-            //Toolkit::Print(targetnodes_[i]->GetName());
-
-
-            //HeatSource *heatsource = targetnodes_[i]->GetComponent<HeatSource>();
-            //float attraction = heatsource->GetAttraction();
-            float attraction = 10.0f;
-
- //           pRigidBody_->ApplyForce(velocity.Normalized()*100.0f);
-
-
-//            URHO3D_LOGDEBUGF("Missile::FixedUpdate(): pRigidBody_->ApplyForce -> [%s, %f,%f]", attraction, force);
-
-/*
-            // If the target is in the boomrange,then boom!
-            float distance = (node_->GetPosition() - targetnodes_[i]->GetPosition()).Length();
-            if (distance < GetBoomRange()) {
-                LogicComponent *targetobject = targetnodes_[i]->GetDerivedComponent<LogicComponent>();
-
-                if (targetobject) {
-//                    targetobject->Damaged(GetDamage());
-                }
-                UnsubscribeFromAllEvents();
-                node_->Remove();
-
-            }
-*/
-        }
     }
-
 }
 
 /*

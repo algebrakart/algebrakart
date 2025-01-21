@@ -171,6 +171,7 @@ public:
     void Fire(Vector3 target);
     void Fire();
     void CreateProjectile(Vector3 source, Quaternion q, Vector3 target);
+    void CreatePickup(int type, Vector3 location);
 
     void Kill();
 

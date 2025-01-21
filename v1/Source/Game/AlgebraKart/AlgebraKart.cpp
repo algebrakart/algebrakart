@@ -2925,10 +2925,14 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
         float vertScale = 26.0f;
         float vAlignRank = 260.0f;
         for (int r = 0; r < rankList.size(); r++) {
-            rankText_[r]->SetAlignment(HA_LEFT, VA_TOP);
-            rankText_[r]->SetPosition(10.0f, vAlignRank + (r * vertScale));
-            rankText_[r]->SetVisible(true);
-            rankText_[r]->SetText(String("[") + String(r) + String("] ") + String(rankList.at(r).second) + String(": ") + String(rankList.at(r).first));
+            if (rankText_[r]) {
+                rankText_[r]->SetAlignment(HA_LEFT, VA_TOP);
+                rankText_[r]->SetPosition(10.0f, vAlignRank + (r * vertScale));
+                rankText_[r]->SetVisible(true);
+                rankText_[r]->SetText(
+                        String("[") + String(r) + String("] ") + String(rankList.at(r).second) + String(": ") +
+                        String(rankList.at(r).first));
+            }
         }
 
 
@@ -3365,14 +3369,14 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
 
                 for (size_t i = 0; i < streamSize; i++) {
 
+                    // bug: streamSize is longer than available?
                     if (stream.Get()[(int) i]) {
                         float v = stream.Get()[(int) i] / 128.0f;
                         capturer_->getBuffer()->At(i) = v;
                         capturer_->data->readCount++;
-                        //                    URHO3D_LOGDEBUGF("readCount=%d,v=%f",capturer_->data->readCount, v);
+                        //URHO3D_LOGDEBUGF("readCount=%d,v=%f",capturer_->data->readCount, v);
                     }
                 }
-
 
                 //URHO3D_LOGDEBUGF("readCount=%d",capturer_->data->readCount);
 
