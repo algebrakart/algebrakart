@@ -22,7 +22,7 @@ struct StateSnapshot {
         scene_ = scene;
 
         // TOOD: Do something with CSP snapshot?
-        URHO3D_LOGDEBUGF("StateSnapshot::readState(%s, %d)", buf->GetData(), scene->GetID());
+        //URHO3D_LOGDEBUGF("StateSnapshot::readState(%s, %d)", buf->GetData(), scene->GetID());
     }
 
     void addNode(Node* node) {
