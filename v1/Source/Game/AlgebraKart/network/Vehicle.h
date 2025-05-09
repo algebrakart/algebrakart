@@ -63,6 +63,7 @@ const float CHASSIS_WIDTH = 35.0f;
 using namespace Urho3D;
 
 class WheelTrackModel;
+class SFXModel;
 
 //=============================================================================
 //=============================================================================
@@ -104,6 +105,8 @@ public:
     //void Init();
     void Init(Node* node);
 
+    void CreateSfx(Vector3 place);
+    void CreateSkidTrack(Vector3 place);
 
     /// Handle physics world update. Called by LogicComponent base class.
     void FixedUpdate(float timeStep) override;
@@ -269,6 +272,9 @@ public:
     void setEnableControls(bool enableControls);
 
 private:
+
+    SharedPtr<WheelTrackModel> wheelTrackList_[4];
+    SharedPtr<SFXModel> sfxList_[4];
 
     /// Emitter data for saving.
     Vector<Node*> particleEmitterNodeList_;

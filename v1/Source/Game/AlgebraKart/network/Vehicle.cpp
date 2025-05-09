@@ -42,6 +42,7 @@
 
 
 #include "AlgebraKart/WheelTrackModel.h"
+#include "AlgebraKart/SFXModel.h"
 #include "AlgebraKart/types.h"
 #include "AlgebraKart/Missile.h"
 
@@ -261,6 +262,54 @@ void Vehicle::CreateEmitter(Vector3 place)
     emitter->SetTemporary(true);
 }
 
+void Vehicle::CreateSfx(Vector3 place) {
+    auto *cache = GetSubsystem<ResourceCache>();
+    float wheelDim = m_fwheelRadius*2.0f;
+    float wheelThickness = 1.0f;
+    Model *tireModel = cache->GetResource<Model>("Offroad/Models/tire.mdl");
+    BoundingBox tirebbox = tireModel->GetBoundingBox();
+    float tireScaleXZ = wheelDim/tirebbox.Size().x_;
+    const Color LtBrown(0.972f,0.780f,0.412f );
+    Model *trackModel = cache->GetResource<Model>("Offroad/Models/wheelTrack.mdl");
+
+    for ( int i = 0; i < raycastVehicle_->GetNumWheels(); i++ ) {
+        // track
+        Node * trackNode = GetScene()->CreateChild();;
+        wheelTrackList_[i] = trackNode->CreateComponent<WheelTrackModel>();
+        wheelTrackList_[i]->SetModel(trackModel->Clone());
+        wheelTrackList_[i]->SetMaterial(cache->GetResource<Material>("Offroad/Models/Materials/TireTrack.xml"));
+
+        wheelTrackList_[i]->SetParentNode(node_);
+        wheelTrackList_[i]->SetColor(LtBrown);
+        wheelTrackList_[i]->SetWidth(tirebbox.Size().y_);
+        wheelTrackList_[i]->ValidateBufferElements();
+    }
+}
+
+void Vehicle::CreateSkidTrack(Vector3 place) {
+    auto *cache = GetSubsystem<ResourceCache>();
+    float wheelDim = m_fwheelRadius*2.0f;
+    float wheelThickness = 1.0f;
+    Model *tireModel = cache->GetResource<Model>("Offroad/Models/tire.mdl");
+    BoundingBox tirebbox = tireModel->GetBoundingBox();
+    float tireScaleXZ = wheelDim/tirebbox.Size().x_;
+    const Color LtBrown(0.972f,0.780f,0.412f );
+    Model *trackModel = cache->GetResource<Model>("Offroad/Models/wheelTrack.mdl");
+
+    for ( int i = 0; i < raycastVehicle_->GetNumWheels(); i++ ) {
+        // track
+        Node * trackNode = GetScene()->CreateChild();;
+        wheelTrackList_[i] = trackNode->CreateComponent<WheelTrackModel>();
+        wheelTrackList_[i]->SetModel(trackModel->Clone());
+        wheelTrackList_[i]->SetMaterial(cache->GetResource<Material>("Offroad/Models/Materials/TireTrack.xml"));
+
+        wheelTrackList_[i]->SetParentNode(node_);
+        wheelTrackList_[i]->SetColor(LtBrown);
+        wheelTrackList_[i]->SetWidth(tirebbox.Size().y_);
+        wheelTrackList_[i]->ValidateBufferElements();
+    }
+}
+
 /// Applying attributes
 void Vehicle::ApplyAttributes()
 {
@@ -270,6 +319,10 @@ void Vehicle::ApplyAttributes()
             return;
         for (const auto &connectionPoint: connectionPoints_) {
             CreateEmitter(connectionPoint);
+
+
+
+
         }
         emittersCreated = true;
     }
@@ -1574,11 +1627,10 @@ void Vehicle::Init(Node* node) {
 
 
             }
-
+            pWheel->SetMaterial(cache->GetResource<Material>("Offroad/Models/Materials/Tire.xml"));
             pWheel->SetCastShadows(true);
             CreateEmitter(connectionPoints_[id]);
             pWheel->DrawDebugGeometry(dbgRenderer, true);
-
 
             raycastVehicle_->AddWheel(wheelNode, wheelDirection, wheelAxle, suspensionRestLength_, wheelRadius_, isFrontWheel);
             numWheels_ = raycastVehicle_->GetNumWheels();
@@ -1590,9 +1642,7 @@ void Vehicle::Init(Node* node) {
             raycastVehicle_->SetWheelFrictionSlip(id, wheelFriction_);
             raycastVehicle_->SetWheelRollInfluence(id, rollInfluence_);
 
-
             prevWheelInContact_[id] = false;
-
             //front: 0.8f
             //rear: 0.04f
             // side friction stiffness is different for front and rear wheels
@@ -1606,9 +1656,6 @@ void Vehicle::Init(Node* node) {
                 m_fRearSlip = MAX_REAR_SLIP;
                 raycastVehicle_->SetWheelSideFrictionStiffness(id, MAX_REAR_SLIP);
             }
-
-
-
         }
         emittersCreated = true;
         raycastVehicle_->ResetWheels();

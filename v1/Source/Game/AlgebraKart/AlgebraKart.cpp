@@ -3996,7 +3996,7 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                                     serverCam_->GetNode()->GetPosition() * w1 + cameraTargetPos * w2;
 
                                             // Calculate camera distance
-                                            serverCam_->GetNode()->SetPosition(weightedSum);
+                                            //serverCam_->GetNode()->SetPosition(weightedSum);
                                             serverCam_->GetNode()->LookAt(lookAtObject);
                                         }
                                     }
@@ -4251,8 +4251,8 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                                     serverCam_->GetNode()->GetPosition() * w1 + cameraTargetPos * w2;
 
                                             // Calculate camera distance
-                                            serverCam_->GetNode()->SetPosition(weightedSum);
-                                            serverCam_->GetNode()->LookAt(camPosList[camMode_ - 1]);
+                                            //serverCam_->GetNode()->SetPosition(weightedSum);
+                                            //serverCam_->GetNode()->LookAt(camPosList[camMode_ - 1]);
 
                                         }
                                     }
@@ -5135,6 +5135,7 @@ void AlgebraKart::SetupGameViewports()
         // Create camera opposite
         Node* node = serverCam_->GetNode()->CreateChild("RearCamera", LOCAL);
         rearCam = node->CreateComponent<Camera>();
+        //rearCam->SetOrthographic(true);
         rearCam->GetNode()->SetRotation(Quaternion(0, 180, 0));
         rearCam->SetFarClip(48000.0f);
         rearCam->SetFillMode(Urho3D::FILL_SOLID);
@@ -5145,6 +5146,7 @@ void AlgebraKart::SetupGameViewports()
         // Create camera opposite
         Node* node = clientCam_->GetNode()->CreateChild("RearCamera", LOCAL);
         rearCam = node->CreateComponent<Camera>();
+        //rearCam->SetOrthographic(true);
         rearCam->GetNode()->SetRotation(Quaternion(0, 180, 0));
         rearCam->GetNode()->SetPosition(Vector3(0.0f,-0.3f,0.0f));
         rearCam->SetFarClip(48000.0f);
@@ -5883,6 +5885,7 @@ void AlgebraKart::DoConnect() {
         // Set camera node for viewport
         cameraNode_ = scene_->CreateChild("Camera", LOCAL);
         clientCam_ = cameraNode_->CreateComponent<Camera>();
+        //clientCam_->SetOrthographic(true);
         clientCam_->SetFarClip(24000.0f);
         //clientCam_->SetFillMode(Urho3D::FILL_WIREFRAME);
         cameraNode_->SetPosition(Vector3(heliCamView_));
@@ -6015,12 +6018,12 @@ void AlgebraKart::DoStartServer() {
     network->SetUpdateFps(30);
 
     // Server load level
-    LoadLevel(6);
+    //LoadLevel(6);
     //LoadLevel(8);
     //LoadLevel(6); // big world track
     //LoadLevel(8); // sky track
     //LoadLevel(7);
-    //LoadLevel(8);
+    LoadLevel(8);
 }
 
 void AlgebraKart::HandleStartServer(StringHash eventType, VariantMap &eventData) {
@@ -6477,17 +6480,24 @@ SharedPtr<Node> AlgebraKart::SpawnPlayer() {
 
 
     // Define server cam views
-    heliCamView_ = Vector3(0.0f,2200.0f,0.0f);
+    //heliCamView_ = Vector3(0.0f,2200.0f,0.0f);
+    heliCamView_ = Vector3(0.0f,50.0f,0.0f);
+
 
     // Set camera node
     cameraNode_ = scene_->CreateChild("Camera", LOCAL);
     serverCam_ = cameraNode_->CreateComponent<Camera>();
-    serverCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 0.0f));
-    serverCam_->SetFarClip(48000.0f);
+    //serverCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 0.0f));
+    serverCam_->SetOrthographic(true);
+    serverCam_->SetOrthoSize(180.0);
+//    serverCam_->SetFarClip(48000.0f);
+    serverCam_->SetFarClip(960000.0f);
+
     serverCam_->SetFillMode(Urho3D::FILL_SOLID);
     //serverCam_->SetFillMode(Urho3D::FILL_WIREFRAME);
     serverCam_->GetNode()->SetPosition(heliCamView_);
-    serverCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 90.0f));
+//    serverCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 90.0f));
+//    serverCam_->GetNode()->SetRotation(Quaternion(0.0f, 30.0f, 0.0f));
 
     // Enable for 3D sounds to work (attach to camera node)
     //SoundListener *listener = serverCam_->GetNode()->CreateComponent<SoundListener>();

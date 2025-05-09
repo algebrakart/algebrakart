@@ -1,25 +1,3 @@
-//
-// Copyright (c) 2008-2018 Lumak.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
-
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Core/Context.h>
 #include <Urho3D/Resource/ResourceCache.h>
@@ -128,7 +106,7 @@ void SFXModel::AddStrip(const Vector3 &cpos, const Vector3 &normal)
         dir.Normalize();
         Vector3 right = normal.CrossProduct(dir).Normalized();
 
-        GeomData geomData[ VERTS_PER_STRIP ];
+        SfxGeomData geomData[ VERTS_PER_STRIP ];
 
         geomData[0].pos = pos - right * m_fHalfWidth;
         geomData[1].pos = pos + right * m_fHalfWidth;
@@ -168,47 +146,47 @@ void SFXModel::AddStrip(const Vector3 &cpos, const Vector3 &normal)
         m_firstStripPoint.v[1] = geomData[1].pos;
 
         // shift vbuff elements to the right by 4
-        if ( m_vSkidGeom.Size() < VERTS_PER_STRIP * MAX_SKID_STRIPS )
+        if ( m_vSfxGeom.Size() < VERTS_PER_STRIP * MAX_SKID_STRIPS )
         {
-            m_vSkidGeom.Resize(m_vSkidGeom.Size() + VERTS_PER_STRIP);
+            m_vSfxGeom.Resize(m_vSfxGeom.Size() + VERTS_PER_STRIP);
         }
-        for ( int i = (int)m_vSkidGeom.Size() - 1; i >= 0; --i )
+        for ( int i = (int)m_vSfxGeom.Size() - 1; i >= 0; --i )
         {
             if ( i - VERTS_PER_STRIP >= 0 )
             {
                 // shift
-                memcpy( &m_vSkidGeom[i], &m_vSkidGeom[i - VERTS_PER_STRIP], sizeof(GeomData) );
+                memcpy( &m_vSfxGeom[i], &m_vSfxGeom[i - VERTS_PER_STRIP], sizeof(SfxGeomData) );
 
-                //GeomData &geData = m_vSkidGeom[i];
+                //GeomData &geData = m_vSfxGeom[i];
 
                 // fade alpha by a small bit every shift
                 // Color::ToUInt() = (a << 24) | (b << 16) | (g << 8) | r;
-                //unsigned a = (m_vSkidGeom[i].color >> 24);
+                //unsigned a = (m_vSfxGeom[i].color >> 24);
                 //a = ((unsigned)Clamp((int)( (float)a * SMALL_BIT ), 0, 255)) << 24;
                 //a = 0xff << 24;
-                //m_vSkidGeom[i].color = (m_vSkidGeom[i].color & 0x00ffffff) | a;
+                //m_vSfxGeom[i].color = (m_vSfxGeom[i].color & 0x00ffffff) | a;
             }
         }
 
         // copy new geom
-        memcpy( &m_vSkidGeom[0], geomData, sizeof(geomData) );
+        memcpy( &m_vSfxGeom[0], geomData, sizeof(geomData) );
 
         // shift indexbuff to the right by 6
-        if ( m_vSkidIndex.Size() < INDECES_PER_STRIP * MAX_SKID_STRIPS )
+        if ( m_vSfxIndex.Size() < INDECES_PER_STRIP * MAX_SKID_STRIPS )
         {
-            m_vSkidIndex.Resize(m_vSkidIndex.Size() + INDECES_PER_STRIP);
+            m_vSfxIndex.Resize(m_vSfxIndex.Size() + INDECES_PER_STRIP);
         }
-        for ( int i = (int)m_vSkidIndex.Size() - 1; i >= 0; --i )
+        for ( int i = (int)m_vSfxIndex.Size() - 1; i >= 0; --i )
         {
             if ( i - INDECES_PER_STRIP >= 0 )
             {
                 // need to add +4 offset(for newly added verts) to indeces being shifted
-                m_vSkidIndex[i] = m_vSkidIndex[i - INDECES_PER_STRIP] + VERTS_PER_STRIP;
+                m_vSfxIndex[i] = m_vSfxIndex[i - INDECES_PER_STRIP] + VERTS_PER_STRIP;
             }
         }
 
         // copy new indeces
-        memcpy( &m_vSkidIndex[0], triIdx, sizeof(triIdx) );
+        memcpy( &m_vSfxIndex[0], triIdx, sizeof(triIdx) );
 
         //=================================
         // copy to vertex/index buffers
@@ -224,14 +202,14 @@ void SFXModel::CopyToBuffer()
     const unsigned uElementMask = pVbuffer->GetElementMask();
     bool brangeChanged = false;
 
-    if ( pVbuffer->GetVertexCount() != m_vSkidGeom.Size() )
+    if ( pVbuffer->GetVertexCount() != m_vSfxGeom.Size() )
     {
-        pVbuffer->SetSize(m_vSkidGeom.Size(), uElementMask);
+        pVbuffer->SetSize(m_vSfxGeom.Size(), uElementMask);
         brangeChanged = true;
     }
-    if ( pIbuffer->GetIndexCount() != m_vSkidIndex.Size() )
+    if ( pIbuffer->GetIndexCount() != m_vSfxIndex.Size() )
     {
-        pIbuffer->SetSize(m_vSkidIndex.Size(), false);
+        pIbuffer->SetSize(m_vSfxIndex.Size(), false);
         brangeChanged = true;
     }
 
@@ -240,8 +218,8 @@ void SFXModel::CopyToBuffer()
 
     if ( pVertexData && pIndexData )
     {
-        memcpy( pVertexData, &m_vSkidGeom[0], sizeof(GeomData) * m_vSkidGeom.Size() );
-        memcpy( pIndexData, &m_vSkidIndex[0], sizeof(unsigned short) * m_vSkidIndex.Size() );
+        memcpy( pVertexData, &m_vSfxGeom[0], sizeof(SfxGeomData) * m_vSfxGeom.Size() );
+        memcpy( pIndexData, &m_vSfxIndex[0], sizeof(unsigned short) * m_vSfxIndex.Size() );
 
         pVbuffer->Unlock();
         pIbuffer->Unlock();
@@ -249,7 +227,7 @@ void SFXModel::CopyToBuffer()
         // update draw range
         if ( brangeChanged )
         {
-            pGeometry->SetDrawRange(TRIANGLE_LIST, 0, m_vSkidIndex.Size());
+            pGeometry->SetDrawRange(TRIANGLE_LIST, 0, m_vSfxIndex.Size());
         }
     }
 }
@@ -270,13 +248,13 @@ bool SFXModel::InSkidState() const
 
 void SFXModel::DebugRender(DebugRenderer *dbgRender, const Color &color)
 {
-    for ( unsigned i = 0; i < m_vSkidGeom.Size(); i += VERTS_PER_STRIP )
+    for ( unsigned i = 0; i < m_vSfxGeom.Size(); i += VERTS_PER_STRIP )
     {
-        dbgRender->AddLine( m_vSkidGeom[i+0].pos, m_vSkidGeom[i+1].pos, color );
-        dbgRender->AddLine( m_vSkidGeom[i+0].pos, m_vSkidGeom[i+2].pos, color );
-        dbgRender->AddLine( m_vSkidGeom[i+1].pos, m_vSkidGeom[i+2].pos, color );
-        dbgRender->AddLine( m_vSkidGeom[i+1].pos, m_vSkidGeom[i+3].pos, color );
-        dbgRender->AddLine( m_vSkidGeom[i+2].pos, m_vSkidGeom[i+3].pos, color );
+        dbgRender->AddLine( m_vSfxGeom[i+0].pos, m_vSfxGeom[i+1].pos, color );
+        dbgRender->AddLine( m_vSfxGeom[i+0].pos, m_vSfxGeom[i+2].pos, color );
+        dbgRender->AddLine( m_vSfxGeom[i+1].pos, m_vSfxGeom[i+2].pos, color );
+        dbgRender->AddLine( m_vSfxGeom[i+1].pos, m_vSfxGeom[i+3].pos, color );
+        dbgRender->AddLine( m_vSfxGeom[i+2].pos, m_vSfxGeom[i+3].pos, color );
     }
 }
 

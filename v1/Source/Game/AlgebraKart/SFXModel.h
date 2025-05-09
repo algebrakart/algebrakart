@@ -14,9 +14,9 @@ namespace Urho3D
 
 //=============================================================================
 //=============================================================================
-struct SkidStrip
+struct SfxStrip
 {
-    SkidStrip() : vertsArrayValid(false), lastPosCnt(0), valid(false){}
+    SfxStrip() : vertsArrayValid(false), lastPosCnt(0), valid(false){}
 
     Vector3     pos;
     Vector3     normal;
@@ -28,7 +28,7 @@ struct SkidStrip
     bool        valid;
 };
 
-struct GeomData
+struct SfxGeomData
 {
     Vector3     pos;
     Vector3     normal;
@@ -79,9 +79,9 @@ public:
     void ClearStrip();
     bool InSkidState() const;
 
-    const PODVector<GeomData>& GetGeomVector() 
+    const PODVector<SfxGeomData>& GetGeomVector()
     {
-        return m_vSkidGeom;
+        return m_vSfxGeom;
     }
 
     void DebugRender(DebugRenderer *dbgRender, const Color &color);
@@ -93,10 +93,10 @@ protected:
     WeakPtr<Node> m_pParentNode;
 
     // strip
-    PODVector<GeomData>         m_vSkidGeom;
-    PODVector<unsigned short>   m_vSkidIndex;
+    PODVector<SfxGeomData>         m_vSfxGeom;
+    PODVector<unsigned short>   m_vSfxIndex;
 
-    SkidStrip   m_firstStripPoint;
+    SfxStrip   m_firstStripPoint;
     Color       m_Color;
     unsigned    m_unsignedColor;
     float       m_fWidth;
