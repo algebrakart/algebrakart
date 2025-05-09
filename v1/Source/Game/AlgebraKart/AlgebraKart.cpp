@@ -4008,7 +4008,9 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                 Vector3 avgMid = Vector3(0, 0, 0);
                                 Vector3 avgSum = Vector3(0, 0, 0);
 
-                                for (int b = 0; b < aiActorMap_.Size(); b++) {
+//                                for (int b = 0; b < aiActorMap_.Size(); b++) {
+                                    int b = Random(0, aiActorMap_.Size());
+                                    b = 0;
                                     // Get ai cluster position
                                     if (aiActorMap_[b]) {
                                         auto *actor = dynamic_cast<NetworkActor *>(aiActorMap_[b].Get());
@@ -4021,13 +4023,13 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                                 Quaternion forward = actor->vehicle_->GetNode()->GetRotation();
 
                                                 avgSum += actor->vehicle_->GetBody()->GetPosition();
+                                                heliCamView_ = actor->vehicle_->GetBody()->GetPosition() + (Vector3(0,380.0f,0));
 
                                             }
                                         }
                                     }
-                                }
-                                avgMid = avgSum / aiActorMap_.Size() + (Vector3(0,780.0f,0));
-                                heliCamView_ = avgMid;
+  //                              }
+//                                avgMid = avgSum / aiActorMap_.Size() + (Vector3(0,380.0f,0));
 
                                 ///
                                 ///
@@ -6489,7 +6491,7 @@ SharedPtr<Node> AlgebraKart::SpawnPlayer() {
     serverCam_ = cameraNode_->CreateComponent<Camera>();
     //serverCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 0.0f));
     serverCam_->SetOrthographic(true);
-    serverCam_->SetOrthoSize(180.0);
+    serverCam_->SetOrthoSize(230.0);
 //    serverCam_->SetFarClip(48000.0f);
     serverCam_->SetFarClip(960000.0f);
 
