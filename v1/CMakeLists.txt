@@ -25,6 +25,12 @@ cmake_minimum_required (VERSION 3.10.2)
 
 # Set project name
 project (Urho3D)
+
+# Set C++ standard
+if (NOT DEFINED CMAKE_CXX_STANDARD)
+    set (CMAKE_CXX_STANDARD 17)
+endif ()
+
 # Enable ODBC Database (Server logging)
 set(ODBC_INCLUDE_DIRS "/usr/include/")
 set (URHO3D_DATABASE_ODBC 1)
