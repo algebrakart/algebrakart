@@ -52,44 +52,44 @@ public:
     // Static methods
     void buildPopulation();
 
-     static void defaultPopulationInitialization(std::vector<Genotype*> population);
-     static void asyncEvaluation(std::vector<Genotype*> currentPopulation);
-     static void defaultFitnessCalculation(std::vector<Genotype*> currentPopulation);
+     static void defaultPopulationInitialization(std::vector<std::unique_ptr<Genotype>> population);
+     static void asyncEvaluation(std::vector<std::unique_ptr<Genotype>> currentPopulation);
+     static void defaultFitnessCalculation(std::vector<std::unique_ptr<Genotype>> currentPopulation);
      //static std::vector<Genotype*> *defaultSelectionOperator(std::vector<Genotype*> currentPopulation);
-     static std::vector<Genotype *> *remainderStochasticSampling(std::vector<Genotype *> currentPopulation);
+     static std::vector<std::unique_ptr<Genotype>> *remainderStochasticSampling(std::vector<std::unique_ptr<Genotype>> currentPopulation);
     // Mutates all members of the new population with the default probability, while leaving the first 2 genotypes in the list.
-    static void mutateAllButBestTwo(std::vector<Genotype *> newPopulation);
-    static void mutateAll(std::vector<Genotype *> newPopulation);
-    static std::vector<Genotype *> *randomRecombination(std::vector<Genotype *> intermediatePopulation, int newPopulationSize);
-    static std::vector<Genotype*> *defaultRecombinationOperator(std::vector<Genotype*> intermediatePopulation, int newPopulationSize);
+    static void mutateAllButBestTwo(std::vector<std::unique_ptr<Genotype>> newPopulation);
+    static void mutateAll(std::vector<std::unique_ptr<Genotype>> newPopulation);
+    static std::vector<std::unique_ptr<Genotype>> *randomRecombination(std::vector<std::unique_ptr<Genotype>> intermediatePopulation, int newPopulationSize);
+    static std::vector<std::unique_ptr<Genotype>> *defaultRecombinationOperator(std::vector<std::unique_ptr<Genotype>> intermediatePopulation, int newPopulationSize);
 
 
 
-     static void defaultMutationOperator(std::vector<Genotype*> newPopulation);
-     static void completeCrossover(Genotype *parent1, Genotype *parent2, float swapChance, Genotype* &offspring1, Genotype* &offspring2);
-     static void mutateGenotype(Genotype *genotype, float mutationProb, float mutationAmount);
-     static bool defaultTermination(std::vector<Genotype*> currentPopulation);
+     static void defaultMutationOperator(std::vector<std::unique_ptr<Genotype>> newPopulation);
+     static void completeCrossover(std::unique_ptr<Genotype> parent1, std::unique_ptr<Genotype> parent2, float swapChance, std::unique_ptr<Genotype> &offspring1, std::unique_ptr<Genotype> &offspring2);
+     static void mutateGenotype(std::unique_ptr<Genotype> genotype, float mutationProb, float mutationAmount);
+     static bool defaultTermination(std::vector<std::unique_ptr<Genotype>> currentPopulation);
 
     // Use to initialize the initial population.
-    typedef std::function<void (std::vector<Genotype*> initialPopulation)> InitializationOperator;
+    typedef std::function<void (std::vector<std::unique_ptr<Genotype>> initialPopulation)> InitializationOperator;
 
     // Used to evaluate (or start the evaluation process of) the current population.
-    typedef std::function<void (std::vector<Genotype*> currentPopulation)> EvaluationOperator;
+    typedef std::function<void (std::vector<std::unique_ptr<Genotype>> currentPopulation)> EvaluationOperator;
 
     // Used to calculate the fitness value of each genotype of the current population.
-    typedef std::function<void (std::vector<Genotype*> currentPopulation)> FitnessCalculation;
+    typedef std::function<void (std::vector<std::unique_ptr<Genotype>> currentPopulation)> FitnessCalculation;
 
     // Used to select genotypes of the current population and create the intermediate population.
-    typedef std::function<std::vector<Genotype*> *(std::vector<Genotype*> currentPopulation)> SelectionOperator;
+    typedef std::function<std::vector<std::unique_ptr<Genotype>> *(std::vector<std::unique_ptr<Genotype>> currentPopulation)> SelectionOperator;
 
     // Used to recombine the intermediate population to generate a new population.
-    typedef std::function<std::vector<Genotype*> *(std::vector<Genotype*> intermediatePopulation, int newPopulationSize)> RecombinationOperator;
+    typedef std::function<std::vector<std::unique_ptr<Genotype>> *(std::vector<std::unique_ptr<Genotype>> intermediatePopulation, int newPopulationSize)> RecombinationOperator;
 
     // Used to mutate the new population.
-    typedef std::function<void (std::vector<Genotype*> newPopulation)> MutationOperator;
+    typedef std::function<void (std::vector<std::unique_ptr<Genotype>> newPopulation)> MutationOperator;
 
     // Used to check whether any termination criterion has been met.
-    typedef std::function<bool (std::vector<Genotype*> currentPopulation)> CheckTerminationCriterion;
+    typedef std::function<bool (std::vector<std::unique_ptr<Genotype>> currentPopulation)> CheckTerminationCriterion;
 
     // std::function<void(int)> f1 = [](int x){ return C::f(x); };
     // Operators
@@ -101,8 +101,8 @@ public:
     MutationOperator mutation = defaultMutationOperator;
     CheckTerminationCriterion checkTermination = defaultTermination;
 
-    const std::vector<Genotype*> &getCurrentPopulation() const;
-    const std::vector<Genotype*> &getPrevPopulation() const;
+    const std::vector<std::unique_ptr<Genotype>> &getCurrentPopulation() const;
+    const std::vector<std::unique_ptr<Genotype>> &getPrevPopulation() const;
 
     // The amount of genotypes in a population.
     int populationSize_;
@@ -130,7 +130,7 @@ public:
     }
 
 private:
-    std::vector<Genotype*> currentPopulation_;
-    std::vector<Genotype*> prevPopulation_;
+    std::vector<std::unique_ptr<Genotype>> currentPopulation_;
+    std::vector<std::unique_ptr<Genotype>> prevPopulation_;
 
 };

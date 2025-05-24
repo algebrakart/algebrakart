@@ -41,12 +41,12 @@ public:
     static void checkForTrackFinished();
     static bool checkGenerationTermination();
     static void onGATermination();
-    static void startEvaluation(std::vector<Genotype*> currentPopulation);
+    static void startEvaluation(std::vector<std::unique_ptr<Genotype>> currentPopulation);
     static void onAgentDied();
-    static std::vector<Genotype*> *remainderStochasticSampling(std::vector<Genotype*> currentPopulation);
-    static std::vector<Genotype*> *randomRecombination(std::vector<Genotype*> intermediatePopulation, int newPopulationSize);
-    static void mutateAllButBestTwo(std::vector<Genotype*> newPopulation);
-    static void mutateAll(std::vector<Genotype*> newPopulation);
+    static std::vector<Genotype*> *remainderStochasticSampling(std::vector<std::unique_ptr<Genotype>> currentPopulation);
+    static std::vector<Genotype*> *randomRecombination(std::vector<std::unique_ptr<Genotype>> intermediatePopulation, int newPopulationSize);
+    static void mutateAllButBestTwo(std::vector<std::unique_ptr<Genotype>> newPopulation);
+    static void mutateAll(std::vector<std::unique_ptr<Genotype>> newPopulation);
     static void evalFinished();
 
     // The amount of agents that are currently alive.
@@ -55,12 +55,12 @@ public:
     // Event for when all agents have died.
     static SimpleEvent::Event allAgentsDied;
 
-    const std::vector<Agent*> &getAgents() const;
-    const std::vector<AgentController*> &getAgentControllers() const;
-    static std::vector<NetworkActor *> &getNetworkActors();
+    const std::vector<std::unique_ptr<Agent>> &getAgents() const;
+    const std::vector<std::unique_ptr<AgentController>> &getAgentControllers() const;
+    static std::vector<std::shared_ptr<NetworkActor>> &getNetworkActors();
 
 
-        // Whether or not the results of each generation shall be written to file.
+    // Whether or not the results of each generation shall be written to file.
     static bool saveStatistics;
     static std::string statisticsFileName;
     static std::ofstream statisticsFile;
@@ -82,14 +82,13 @@ public:
     static int* ffnTopology;
 
     // The current population agents.
-    static std::vector<Agent*> agents;
+    static std::vector<std::unique_ptr<Agent>> agents;
 
     // The current population agents.
-    static std::vector<AgentController*> agentControllers;
+    static std::vector<std::unique_ptr<AgentController>> agentControllers;
 
     // The current population NetworkActors.
-    static std::vector<NetworkActor*> networkActors;
-
+    static std::vector<std::shared_ptr<NetworkActor>> networkActors;
     static GeneticAlgorithm *geneticAlgorithm;
 
 private:

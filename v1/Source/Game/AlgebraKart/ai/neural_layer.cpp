@@ -21,19 +21,12 @@ void NeuralLayer::initLayers(int nodeCount, int outputCount) {
     this->outputCount = outputCount;
 
     // Allocate dynamic 2D array for weights
-    this->weights = new double*[nodeCount + 1]; // + 1 for bias node
-    for (int i = 0; i < nodeCount + 1; i++) {
-        this->weights[i] = new double[outputCount];
-    }
+    // + 1 for bias node
+    this->weights = std::vector<std::vector<double>>(nodeCount + 1, std::vector<double>(outputCount));
 }
 
 
 NeuralLayer::~NeuralLayer() {
-
-    for (int i = 0; i < this->neuronCount + 1; i++) {
-        delete [] this->weights[i];
-    }
-    delete [] this->weights;
 }
 
 
@@ -96,15 +89,9 @@ double *NeuralLayer::processInputs(double *inputs) {
 
 // Copies this NeuralLayer including its weights.
 NeuralLayer NeuralLayer::deepCopy() {
-
-    // Copy weights
-    double **copiedWeights;
-
-    // Allocate dynamic 2D array for weights
-    copiedWeights = new double*[this->neuronCount + 1]; // + 1 for bias node
-    for (int i = 0; i < this->neuronCount + 1; i++) {
-        copiedWeights[i] = new double[outputCount];
-    }
+    // Copy weights using vector of vectors
+    std::vector<std::vector<double>> copiedWeights(this->neuronCount + 1,
+                                                   std::vector<double>(outputCount));
 
     for (int i = 0; i < this->neuronCount; i++) {
         for (int j = 0; j < this->outputCount; j++) {
@@ -112,12 +99,12 @@ NeuralLayer NeuralLayer::deepCopy() {
         }
     }
 
-    // Create copy
-    NeuralLayer *newLayer = new NeuralLayer(this->neuronCount, this->outputCount);
-    newLayer->weights = copiedWeights;
-    newLayer->neuronActivationFunction = this->neuronActivationFunction;
+    // Create copy - can return by value safely with vectors
+    NeuralLayer newLayer(this->neuronCount, this->outputCount);
+    newLayer.weights = std::move(copiedWeights);
+    newLayer.neuronActivationFunction = this->neuronActivationFunction;
 
-    return *newLayer;
+    return newLayer;
 }
 
 void NeuralLayer::setRandomWeights(double minValue, double maxValue) {

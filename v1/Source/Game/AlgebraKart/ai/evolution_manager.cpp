@@ -29,12 +29,13 @@ EvolutionManager *EvolutionManager::instance = NULL;
 
 // Topology of the agent's FNN
 int *EvolutionManager::ffnTopology;
+
 // The current population agents.
-std::vector<Agent *> EvolutionManager::agents;
+std::vector<std::unique_ptr<Agent>> EvolutionManager::agents;
 // The current population agents.
-std::vector<AgentController *> EvolutionManager::agentControllers;
+std::vector<std::unique_ptr<AgentController>> EvolutionManager::agentControllers;
 // The current population NetworkActors.
-std::vector<NetworkActor*> EvolutionManager::networkActors;
+std::vector<std::shared_ptr<NetworkActor>> EvolutionManager::networkActors;
 
 
 

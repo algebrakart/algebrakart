@@ -125,7 +125,7 @@ void AgentController::restart() {
 void AgentController::update(float duration) {
     timeSinceLastCheckpoint += duration;
 
-    NetworkActor *actor = EvolutionManager::getInstance()->getNetworkActors()[agentIndex];
+    std::shared_ptr<NetworkActor> actor = EvolutionManager::getInstance()->getNetworkActors()[agentIndex];
     Scene *scene_ = EvolutionManager::getInstance()->getNetworkActors()[agentIndex]->GetScene();
     Vehicle *vehicle = EvolutionManager::getInstance()->getNetworkActors()[agentIndex]->GetVehicle();
     Node *node = EvolutionManager::getInstance()->getNetworkActors()[agentIndex]->GetVehicle()->GetNode();

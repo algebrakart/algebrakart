@@ -11,6 +11,7 @@
 #include "genotype.h"
 #include <AlgebraKart/Constants.h>
 #include <Urho3D/Math/MathDefs.h>
+#include <memory>
 
 Genotype::Genotype(std::string name, int paramCount) {
     evaluation = 0.0;
@@ -102,7 +103,7 @@ void Genotype::saveToFile(const char* filePath) {
         std::cout << "Genotype record has been successfully saved." << std::endl;
 }
 
-Genotype *Genotype::loadFromFile(const char* filePath) {
+std::unique_ptr<Genotype> Genotype::loadFromFile(const char* filePath) {
     std::string dirPath = TRAINING_DATA_DIR;
     std::string fullPath = dirPath + filePath;
     std::ifstream dimensionsInFile;
@@ -129,7 +130,7 @@ Genotype *Genotype::loadFromFile(const char* filePath) {
     std::cout << "Genotype has been successfully loaded." << std::endl;
     dimensionsInFile.close();
 
-    Genotype* genotype = new Genotype(file->record.agentName, file->record.parameterCount);
+    std::unique_ptr<Genotype> genotype = std::make_unique<Genotype>(file->record.agentName, file->record.parameterCount);
     genotype->evaluation = file->record.evaluation;
     genotype->fitness = file->record.fitness;
 
@@ -144,13 +145,13 @@ float Genotype::getParameter(int index) {
     return parameters[index];
 }
 
-Genotype* Genotype::generateRandom(int parameterCount, float minValue, float maxValue) {
+std::unique_ptr<Genotype> Genotype::generateRandom(int parameterCount, float minValue, float maxValue) {
 
     if (parameterCount == 0) {
-        return new Genotype(std::string("random"), parameterCount);
+        return std::make_unique<Genotype>(std::string("random"), parameterCount);
     }
 
-    Genotype* randomGenotype = new Genotype(std::string("random"), parameterCount);
+    std::unique_ptr<Genotype> randomGenotype = std::make_unique<Genotype>(std::string("random"), parameterCount);
     randomGenotype->setRandomParameters(minValue, maxValue);
     return randomGenotype;
 }

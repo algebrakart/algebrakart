@@ -11,6 +11,7 @@
 #include <string>
 #include <functional>
 #include <stdlib.h>     /* abs */
+#include <memory>
 #include "../util/math_helper.h"
 
 class NeuralLayer {
@@ -41,8 +42,7 @@ public:
     // The weights of the connections of this layer to the next layer.
     // e.g. weight [i, j] is the weight of the connection from the i-th weight of this layer to the
     // j-th weight of the next layer.
-    double **weights;
-
+    std::vector<std::vector<double>> weights;
 
 private:
 };

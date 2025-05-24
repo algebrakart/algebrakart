@@ -35,18 +35,11 @@ void GeneticAlgorithm::buildPopulation() {
         std::string name = "agent_";
         name += String(i).CString();
         // Each genotype represents a behaviour model
-        Genotype* genotype = new Genotype(name, genotypeParamCount_);
-        currentPopulation_.push_back(genotype);
+        currentPopulation_.push_back(std::make_unique<Genotype>(name, genotypeParamCount_));
     }
 }
 
 GeneticAlgorithm::~GeneticAlgorithm() {
-
-    for (int i = 0; i < currentPopulation_.size(); i++) {
-        Genotype* genotype = currentPopulation_.at(i);
-        if (genotype)
-            delete genotype;
-    }
 }
 
 void GeneticAlgorithm::start() {
@@ -60,7 +53,7 @@ void GeneticAlgorithm::start() {
     buildPopulation();
     // Bound to defaultPopulationInitialization()
     initializePopulation(currentPopulation_);
-    prevPopulation_ = currentPopulation_;
+    prevPopulation_ = std::vector(currentPopulation_);
     evaluation(currentPopulation_);
 }
 
@@ -91,8 +84,8 @@ void GeneticAlgorithm::evaluationFinished() {
         return;
     }
 
-    std::vector<Genotype*> *intermediatePopulation;
-    std::vector<Genotype*> *newPopulation;
+    std::vector<std::unique_ptr<Genotype>> *intermediatePopulation;
+    std::vector<std::unique_ptr<Genotype>> *newPopulation;
 
     // [AB]: These are seg-faulting
     // To avoid -> stop evolving when no population growth
@@ -151,7 +144,7 @@ void GeneticAlgorithm::terminate() {
 }
 
 // Bound to initializePopulation for GA
-void GeneticAlgorithm::defaultPopulationInitialization(std::vector<Genotype*> population) {
+void GeneticAlgorithm::defaultPopulationInitialization(std::vector<std::unique_ptr<Genotype>> population) {
 
     int popCount = 0;
     // Set parameters to random values in set range
@@ -161,12 +154,12 @@ void GeneticAlgorithm::defaultPopulationInitialization(std::vector<Genotype*> po
     }
 }
 
-void GeneticAlgorithm::asyncEvaluation(std::vector<Genotype*> currentPopulation) {
+void GeneticAlgorithm::asyncEvaluation(std::vector<std::unique_ptr<Genotype>> currentPopulation) {
     // At this point the async evaluation should be started and after it is finished EvaluationFinished should be called
     std::cout << "Reached async evaluation." << std::endl;
 }
 
-void GeneticAlgorithm::defaultFitnessCalculation(std::vector<Genotype*> currentPopulation) {
+void GeneticAlgorithm::defaultFitnessCalculation(std::vector<std::unique_ptr<Genotype>> currentPopulation) {
 
     // First calculate average evaluation of whole population
     int populationSize = 0;
@@ -186,12 +179,12 @@ void GeneticAlgorithm::defaultFitnessCalculation(std::vector<Genotype*> currentP
         }
 }
 
-std::vector<Genotype *> *GeneticAlgorithm::remainderStochasticSampling(std::vector<Genotype *> currentPopulation) {
+std::vector<std::unique_ptr<Genotype>> *GeneticAlgorithm::remainderStochasticSampling(std::vector<std::unique_ptr<Genotype>> currentPopulation) {
 
     // AB:
     // TODO: this is not producing intermediate population of atleast 2 sometimes, this causes downstream error
 
-    std::vector<Genotype *> *intermediatePopulation = new std::vector<Genotype *>();
+    std::vector<std::unique_ptr<Genotype>> *intermediatePopulation = new std::vector<std::unique_ptr<Genotype>>();
     // Put integer portion of genotypes into intermediatePopulation
     // Assumes that currentPopulation is already sorted
 
@@ -232,7 +225,7 @@ std::vector<Genotype *> *GeneticAlgorithm::remainderStochasticSampling(std::vect
 }
 
 // Mutates all members of the new population with the default probability, while leaving the first 2 genotypes in the list.
-void GeneticAlgorithm::mutateAllButBestTwo(std::vector<Genotype *> newPopulation) {
+void GeneticAlgorithm::mutateAllButBestTwo(std::vector<std::unique_ptr<Genotype>> newPopulation) {
     std::cout << "Mutating all population but best two." << std::endl;
 
     // Start at 2
@@ -243,7 +236,7 @@ void GeneticAlgorithm::mutateAllButBestTwo(std::vector<Genotype *> newPopulation
     }
 }
 
-void GeneticAlgorithm::mutateAll(std::vector<Genotype *> newPopulation) {
+void GeneticAlgorithm::mutateAll(std::vector<std::unique_ptr<Genotype>> newPopulation) {
 
     for (int i = 0; i < newPopulation.size(); i++) {
         if (Urho3D::Random(0.0f, 1.0f) < DefMutationProb) {
@@ -252,8 +245,8 @@ void GeneticAlgorithm::mutateAll(std::vector<Genotype *> newPopulation) {
     }
 }
 
-std::vector<Genotype *> *
-GeneticAlgorithm::randomRecombination(std::vector<Genotype *> intermediatePopulation, int newPopulationSize) {
+std::vector<std::unique_ptr<Genotype>> *
+GeneticAlgorithm::randomRecombination(std::vector<std::unique_ptr<Genotype>> intermediatePopulation, int newPopulationSize) {
 
     if (intermediatePopulation.size() < 2) {
 
@@ -261,7 +254,7 @@ GeneticAlgorithm::randomRecombination(std::vector<Genotype *> intermediatePopula
         return nullptr;
     }
 
-    std::vector<Genotype *> *newPopulation = new std::vector<Genotype *>();
+    std::vector<std::unique_ptr<Genotype>> *newPopulation = new std::vector<std::unique_ptr<Genotype>>();
 
     if (newPopulation->size() < newPopulationSize) {
 
@@ -338,19 +331,19 @@ std::vector<Genotype*> *GeneticAlgorithm::defaultSelectionOperator(std::vector<G
 }*/
 
 // Simply crosses the first with the second genotype of the intermediate population until the new population is of desired size.
-std::vector<Genotype*> *GeneticAlgorithm::defaultRecombinationOperator(std::vector<Genotype*> intermediatePopulation, int newPopulationSize) {
+std::vector<std::unique_ptr<Genotype>> *GeneticAlgorithm::defaultRecombinationOperator(std::vector<std::unique_ptr<Genotype>> intermediatePopulation, int newPopulationSize) {
 
     if (intermediatePopulation.size() < 2) {
         std::cout << "Intermediate population size must be greater than 2 for this operator.";
         return nullptr;
     }
 
-    std::vector<Genotype*> *newPopulation = new std::vector<Genotype*>();
+    std::vector<std::unique_ptr<Genotype>> *newPopulation = new std::vector<std::unique_ptr<Genotype>>();
 
     if (newPopulation->size() < newPopulationSize) {
 
-        Genotype *offspring1;
-        Genotype *offspring2;
+        std::unique_ptr<Genotype> offspring1;
+        std::unique_ptr<Genotype> offspring2;
 
         // Get first 2 list items (top 2)
         size_t n = 2;
@@ -368,9 +361,9 @@ std::vector<Genotype*> *GeneticAlgorithm::defaultRecombinationOperator(std::vect
     return newPopulation;
 }
 
-void GeneticAlgorithm::defaultMutationOperator(std::vector<Genotype*> newPopulation) {
+void GeneticAlgorithm::defaultMutationOperator(std::vector<std::unique_ptr<Genotype>> newPopulation) {
 
-    for (std::vector<Genotype*>::iterator it = newPopulation.begin(); it != newPopulation.end(); ++it) {
+    for (std::vector<std::unique_ptr<Genotype>>::iterator it = newPopulation.begin(); it != newPopulation.end(); ++it) {
 
 
         for (int i = 0; i < newPopulation.size(); i++) {
@@ -382,8 +375,8 @@ void GeneticAlgorithm::defaultMutationOperator(std::vector<Genotype*> newPopulat
     }
 }
 
-void GeneticAlgorithm::completeCrossover(Genotype *parent1, Genotype *parent2, float swapChance, Genotype* &offspring1,
-                                         Genotype* &offspring2) {
+void GeneticAlgorithm::completeCrossover(std::unique_ptr<Genotype> parent1, std::unique_ptr<Genotype> parent2, float swapChance, std::unique_ptr<Genotype> &offspring1,
+                                         std::unique_ptr<Genotype> &offspring2) {
 
     // Initialize new parameter vectors
     int parameterCount = parent1->getParameterCopy().size();
@@ -412,7 +405,7 @@ void GeneticAlgorithm::completeCrossover(Genotype *parent1, Genotype *parent2, f
 
 }
 
-void GeneticAlgorithm::mutateGenotype(Genotype *genotype, float mutationProb, float mutationAmount) {
+void GeneticAlgorithm::mutateGenotype(std::unique_ptr<Genotype> genotype, float mutationProb, float mutationAmount) {
 
     for (int i = 0; i < genotype->getParameterCount(); i++) {
 
@@ -423,17 +416,17 @@ void GeneticAlgorithm::mutateGenotype(Genotype *genotype, float mutationProb, fl
     }
 }
 
-bool GeneticAlgorithm::defaultTermination(std::vector<Genotype*> currentPopulation) {
+bool GeneticAlgorithm::defaultTermination(std::vector<std::unique_ptr<Genotype>> currentPopulation) {
 
     std::cout << "GeneticAlgorithm::defaultTermination -> Generation count: " << String(EvolutionManager::getInstance()->getGenerationCount()).CString() << std::endl;
 
     return (EvolutionManager::getInstance()->getGenerationCount() >= RestartAfter);
 }
 
-const std::vector<Genotype*> &GeneticAlgorithm::getCurrentPopulation() const {
+const std::vector<std::unique_ptr<Genotype>> &GeneticAlgorithm::getCurrentPopulation() const {
     return currentPopulation_;
 }
 
-const std::vector<Genotype*> &GeneticAlgorithm::getPrevPopulation() const {
+const std::vector<std::unique_ptr<Genotype>> &GeneticAlgorithm::getPrevPopulation() const {
     return prevPopulation_;
 }

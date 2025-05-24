@@ -176,8 +176,8 @@ const int MSG_NODE_ERROR = 156;
 //#define INGAME_FONT3 "Fonts/RulerGold.ttf"
 //#define INGAME_FONT4 "Fonts/HopeGold.ttf"
 
-#define INGAME_FONT "Fonts/Poppins-Regular.ttf"
-#define INGAME_FONT2 "Fonts/Poppins-Regular.ttf"
+#define INGAME_FONT "Fonts/Poppins-Black.ttf"
+#define INGAME_FONT2 "Fonts/Poppins-Black.ttf"
 #define INGAME_FONT3 "Fonts/Poppins-Regular.ttf"
 #define INGAME_FONT4 "Fonts/Poppins-Black.ttf"
 
@@ -897,10 +897,56 @@ Controls AlgebraKart::SampleCSPControls()
     Controls controls; // Return data
     GameController *gameController = GetSubsystem<GameController>();
     // Retrieve controller inputs ** NOTE this will clear existing buttons (DO FIRST)
-    gameController->UpdateControlInputs(ntwkControls_);
+    if (gameController->IsValid()) {
+        gameController->UpdateControlInputs(ntwkControls_);
+    }
 
-    // Copy mouse yaw
-    controls.yaw_ = yaw_;
+    // === KEYBOARD INPUT HANDLING ===
+    // Check for arrow keys and WASD keys
+    bool keyboardForward = input->GetKeyDown(KEY_UP) || input->GetKeyDown(KEY_W);
+    bool keyboardBack = input->GetKeyDown(KEY_DOWN) || input->GetKeyDown(KEY_S);
+    bool keyboardLeft = input->GetKeyDown(KEY_LEFT) || input->GetKeyDown(KEY_A);
+    bool keyboardRight = input->GetKeyDown(KEY_RIGHT) || input->GetKeyDown(KEY_D);
+
+    // Apply keyboard controls to button flags
+    if (keyboardForward) {
+        ntwkControls_.buttons_ |= NTWK_CTRL_FORWARD;
+    }
+    if (keyboardBack) {
+        ntwkControls_.buttons_ |= NTWK_CTRL_BACK;
+    }
+    if (keyboardLeft) {
+        ntwkControls_.buttons_ |= NTWK_CTRL_LEFT;
+    }
+    if (keyboardRight) {
+        ntwkControls_.buttons_ |= NTWK_CTRL_RIGHT;
+    }
+
+    float keybdAccel;
+    float keybdAngle;
+    float keybdSteer;
+    // Set acceleration level for keyboard input
+    if (keyboardForward || keyboardBack) {
+        keybdAccel = 0.7f; // Same as joystick acceleration
+    }
+
+    // Set steering level for keyboard input
+    if (keyboardLeft) {
+        keybdSteer = -1.0f; // Full left
+        keybdAngle = 0;
+    } else if (keyboardRight) {
+        keybdSteer = 1.0f;  // Full right
+        keybdAngle = 180;
+    }
+
+    // Apply additional controls for special actions
+    if (input->GetKeyDown(KEY_SPACE)) {
+        ntwkControls_.buttons_ |= NTWK_CTRL_FIRE; // Space for fire/action
+    }
+
+    if (input->GetKeyDown(KEY_RETURN) || input->GetKeyDown(KEY_KP_ENTER)) {
+        ntwkControls_.buttons_ |= NTWK_CTRL_ENTER; // Enter for vehicle entry
+    }
 
     // set controls and pos
     ntwkControls_.yaw_ = yaw_;
@@ -916,8 +962,7 @@ Controls AlgebraKart::SampleCSPControls()
     Vector2 rAxisVal = rStick.GetVector2();
 
     joySteer_ = lStick.GetVector2();
-
-    float actorAccel = rStick.GetVector2().y_ * 1.25f;
+    float actorAccel = (rStick.GetVector2().y_ * 1.25f) + (keybdAccel*4.0f);
 
     // Set yaw to angle from axis calculation
     float joyAngle = 0;
@@ -951,12 +996,16 @@ Controls AlgebraKart::SampleCSPControls()
     }
     joyAngle = angle;
 
+    if (keybdAngle > 0) {
+        joyAngle += keybdAngle;
+    }
+
     // Rotate joy entry to align to screen
     joyAngle -= 180.0f;
 
     ntwkControls_.yaw_ = joyAngle;
     ntwkControls_.extraData_["accelLevel"] = 0.7f;//actorAccel;
-    ntwkControls_.extraData_["steerLevel"] = lAxisVal.x_;
+    ntwkControls_.extraData_["steerLevel"] = lAxisVal.x_ + keybdSteer;
 
     bool accel = (input->GetKeyDown(Urho3D::KEY_AC_FORWARD) || input->GetKeyDown(KEY_W) || ntwkControls_.IsDown(BUTTON_B) || (actorAccel < -0.9f));
     bool use = input->GetKeyDown(KEY_SPACE) || ntwkControls_.IsDown(BUTTON_X);
@@ -1069,7 +1118,7 @@ Controls AlgebraKart::SampleCSPControls()
     controls = ntwkControls_;
 
     //csp->predict();
-
+    //cspClient_->predict();
     return controls;
 }
 
@@ -4846,7 +4895,7 @@ void AlgebraKart::CreateUI() {
     // Construct the instructions text element
     gameNameText_ = ui->GetRoot()->CreateChild<Text>();
     gameNameText_->SetText(GAME_NAME);
-    gameNameText_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 12);
+    gameNameText_->SetFont(cache->GetResource<Font>(INGAME_FONT2), 40);
     gameNameText_->SetColor(Color::GRAY);
     // Position the text relative to the screen center
     gameNameText_->SetAlignment(HA_CENTER, VA_TOP);
@@ -4855,11 +4904,11 @@ void AlgebraKart::CreateUI() {
 
     auto gameNameText2_ = ui->GetRoot()->CreateChild<Text>();
     gameNameText2_->SetText(GAME_NAME);
-    gameNameText2_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 12);
+    gameNameText2_->SetFont(cache->GetResource<Font>(INGAME_FONT2), 40);
     gameNameText2_->SetColor(Color::WHITE);
     // Position the text relative to the screen center
     gameNameText2_->SetAlignment(HA_CENTER, VA_TOP);
-    gameNameText2_->SetPosition(0, -2);
+    gameNameText2_->SetPosition(-3, -2);
     gameNameText2_->SetVisible(true);
     gameNameText2_->SetParent(gameNameText_);
 
@@ -6489,7 +6538,7 @@ SharedPtr<Node> AlgebraKart::SpawnPlayer() {
     // Set camera node
     cameraNode_ = scene_->CreateChild("Camera", LOCAL);
     serverCam_ = cameraNode_->CreateComponent<Camera>();
-    //serverCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 0.0f));
+    serverCam_->GetNode()->SetRotation(Quaternion(0.0f, 30.0f, 0.0f));
     serverCam_->SetOrthographic(true);
     serverCam_->SetOrthoSize(230.0);
 //    serverCam_->SetFarClip(48000.0f);

@@ -17,6 +17,7 @@
 #include <cassert>
 #include <fstream>      // std::ifstream, std::ofstream
 #include <vector>
+#include <memory>
 
 
 class Genotype {
@@ -30,10 +31,10 @@ public:
     std::vector<float>& getParameterCopy();
     int getParameterCount();
     void saveToFile(const char *filePath);
-    Genotype *loadFromFile(const char *filePath);
+    std::unique_ptr<Genotype> loadFromFile(const char *filePath);
     float getParameter(int index);
     void setParameter(int index, float value);
-    Genotype *generateRandom(int parameterCount, float minValue, float maxValue);
+    std::unique_ptr<Genotype> generateRandom(int parameterCount, float minValue, float maxValue);
     void outputToConsole();
 
     float evaluation;
