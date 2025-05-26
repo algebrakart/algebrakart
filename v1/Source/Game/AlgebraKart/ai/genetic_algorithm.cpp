@@ -63,7 +63,7 @@ bool sortByGenotype(const Genotype* lhs, const Genotype* rhs) { if ((!lhs) && (r
 void GeneticAlgorithm::evaluationFinished() {
     bool badPop = false;
     // Iterate through agent controllers and apply update
-    std::vector<AgentController*> controllers = EvolutionManager::getInstance()->getAgentControllers();
+    std::vector<std::unique_ptr<AgentController>> controllers = EvolutionManager::getInstance()->getAgentControllers();
 
     // Calculate fitness from evaluation
     fitnessCalculationMethod(currentPopulation_);
@@ -84,8 +84,8 @@ void GeneticAlgorithm::evaluationFinished() {
         return;
     }
 
-    std::vector<std::unique_ptr<Genotype>> *intermediatePopulation;
-    std::vector<std::unique_ptr<Genotype>> *newPopulation;
+    std::vector<std::shared_ptr<Genotype>> intermediatePopulation;
+    std::vector<std::shared_ptr<Genotype>> newPopulation;
 
     // [AB]: These are seg-faulting
     // To avoid -> stop evolving when no population growth
@@ -95,26 +95,26 @@ void GeneticAlgorithm::evaluationFinished() {
 
     // If less than 2 genotypes exist in the intermediate population, the random recombination will fail
 //    assert(intermediatePopulation && intermediatePopulation->size() >= 2);
-    if (!intermediatePopulation || intermediatePopulation->size() < 2) {
+    if (intermediatePopulation.size() < 2) {
         // Bad population
         badPop = true;
     }
 
     if (!badPop) {
         // Apply recombination
-        newPopulation = randomRecombination(*intermediatePopulation, populationSize_);
+        newPopulation = randomRecombination(intermediatePopulation, populationSize_);
     }
 
     //assert(newPopulation);
     // If new population is null, the mutate below will fail
-    if (!newPopulation) {
+    if (newPopulation.empty()) {
         // Bad population
         badPop = true;
     }
 
     if (!badPop) {
         // Apply mutation
-        mutateAllButBestTwo(*newPopulation);
+        mutateAllButBestTwo(newPopulation);
     }
 
     // Store current as previous
@@ -128,7 +128,7 @@ void GeneticAlgorithm::evaluationFinished() {
         // Continue evolution cycle
 
         // Set current population to newly generated one and start evaluation again
-        currentPopulation_ = *newPopulation;
+        currentPopulation_ = newPopulation;
         generationCount_++;
     }
 
@@ -144,7 +144,7 @@ void GeneticAlgorithm::terminate() {
 }
 
 // Bound to initializePopulation for GA
-void GeneticAlgorithm::defaultPopulationInitialization(std::vector<std::unique_ptr<Genotype>> population) {
+void GeneticAlgorithm::defaultPopulationInitialization(std::vector<std::shared_ptr<Genotype>> population) {
 
     int popCount = 0;
     // Set parameters to random values in set range
@@ -154,12 +154,12 @@ void GeneticAlgorithm::defaultPopulationInitialization(std::vector<std::unique_p
     }
 }
 
-void GeneticAlgorithm::asyncEvaluation(std::vector<std::unique_ptr<Genotype>> currentPopulation) {
+void GeneticAlgorithm::asyncEvaluation(std::vector<std::shared_ptr<Genotype>> currentPopulation) {
     // At this point the async evaluation should be started and after it is finished EvaluationFinished should be called
     std::cout << "Reached async evaluation." << std::endl;
 }
 
-void GeneticAlgorithm::defaultFitnessCalculation(std::vector<std::unique_ptr<Genotype>> currentPopulation) {
+void GeneticAlgorithm::defaultFitnessCalculation(std::vector<std::shared_ptr<Genotype>> currentPopulation) {
 
     // First calculate average evaluation of whole population
     int populationSize = 0;
@@ -179,12 +179,12 @@ void GeneticAlgorithm::defaultFitnessCalculation(std::vector<std::unique_ptr<Gen
         }
 }
 
-std::vector<std::unique_ptr<Genotype>> *GeneticAlgorithm::remainderStochasticSampling(std::vector<std::unique_ptr<Genotype>> currentPopulation) {
+std::vector<std::shared_ptr<Genotype>> GeneticAlgorithm::remainderStochasticSampling(std::vector<std::shared_ptr<Genotype>> currentPopulation) {
 
     // AB:
     // TODO: this is not producing intermediate population of atleast 2 sometimes, this causes downstream error
 
-    std::vector<std::unique_ptr<Genotype>> *intermediatePopulation = new std::vector<std::unique_ptr<Genotype>>();
+    std::vector<std::shared_ptr<Genotype>> intermediatePopulation = std::vector<std::shared_ptr<Genotype>>();
     // Put integer portion of genotypes into intermediatePopulation
     // Assumes that currentPopulation is already sorted
 
@@ -202,7 +202,7 @@ std::vector<std::unique_ptr<Genotype>> *GeneticAlgorithm::remainderStochasticSam
         } else {
             for (int i = 0; i < (int) currentPopulation[i]->fitness; i++) {
                 Genotype *g = new Genotype(std::string("rss"), currentPopulation[i]->getParameterCopy());
-                intermediatePopulation->emplace_back(g);
+                intermediatePopulation.emplace_back(g);
                 URHO3D_LOGDEBUGF("remainderStochasticSampling -> intermediatePopulation -> load rss genotype: %s", g->getAgentName().c_str());
             }
         }
@@ -214,18 +214,18 @@ std::vector<std::unique_ptr<Genotype>> *GeneticAlgorithm::remainderStochasticSam
         float remainder = currentPopulation[i]->fitness - (int) currentPopulation[i]->fitness;
         if (Urho3D::Random(0.0f, 1.0f) < remainder) {
             Genotype *g = new Genotype(std::string("rem"), currentPopulation[i]->getParameterCopy());
-            intermediatePopulation->emplace_back(g);
+            intermediatePopulation.emplace_back(g);
             URHO3D_LOGDEBUGF("remainderStochasticSampling -> intermediatePopulation -> load rem genotype: %s", g->getAgentName().c_str());
         }
     }
 
-    std::cout << "selection -> remainderStochasticSampling(): " << intermediatePopulation->size() << std::endl;
+    std::cout << "selection -> remainderStochasticSampling(): " << intermediatePopulation.size() << std::endl;
 
     return intermediatePopulation;
 }
 
 // Mutates all members of the new population with the default probability, while leaving the first 2 genotypes in the list.
-void GeneticAlgorithm::mutateAllButBestTwo(std::vector<std::unique_ptr<Genotype>> newPopulation) {
+void GeneticAlgorithm::mutateAllButBestTwo(std::vector<std::shared_ptr<Genotype>> newPopulation) {
     std::cout << "Mutating all population but best two." << std::endl;
 
     // Start at 2
@@ -236,7 +236,7 @@ void GeneticAlgorithm::mutateAllButBestTwo(std::vector<std::unique_ptr<Genotype>
     }
 }
 
-void GeneticAlgorithm::mutateAll(std::vector<std::unique_ptr<Genotype>> newPopulation) {
+void GeneticAlgorithm::mutateAll(std::vector<std::shared_ptr<Genotype>> newPopulation) {
 
     for (int i = 0; i < newPopulation.size(); i++) {
         if (Urho3D::Random(0.0f, 1.0f) < DefMutationProb) {
@@ -245,26 +245,24 @@ void GeneticAlgorithm::mutateAll(std::vector<std::unique_ptr<Genotype>> newPopul
     }
 }
 
-std::vector<std::unique_ptr<Genotype>> *
-GeneticAlgorithm::randomRecombination(std::vector<std::unique_ptr<Genotype>> intermediatePopulation, int newPopulationSize) {
+std::vector<std::shared_ptr<Genotype>> GeneticAlgorithm::randomRecombination(std::vector<std::shared_ptr<Genotype>> intermediatePopulation, int newPopulationSize) {
 
     if (intermediatePopulation.size() < 2) {
 
         std::cout << "The intermediate population has to be at least of size 2 for this operator.";
-        return nullptr;
     }
 
     std::vector<std::unique_ptr<Genotype>> *newPopulation = new std::vector<std::unique_ptr<Genotype>>();
 
     if (newPopulation->size() < newPopulationSize) {
 
-        Genotype *offspring1;
-        Genotype *offspring2;
+        std::unique_ptr<Genotype> *offspring1;
+        std::unique_ptr<Genotype> *offspring2;
 
         // Get first 2 list items (top 2)
         size_t n = 2;
         auto end = std::next(intermediatePopulation.begin(), std::min(n, intermediatePopulation.size()));
-        std::vector<Genotype *> b(intermediatePopulation.begin(), end);
+        std::vector<std::unique_ptr<Genotype>> b = std::make_unique<Genotype>(intermediatePopulation.begin(), end);
 
         Genotype *intermediatePopulation0;
         Genotype *intermediatePopulation1;
@@ -400,8 +398,8 @@ void GeneticAlgorithm::completeCrossover(std::unique_ptr<Genotype> parent1, std:
     std::string babyName1 = "baby1_" + parent1->getAgentName() + "-" + parent2->getAgentName();
     std::string babyName2 = "baby2_" + parent1->getAgentName() + "-" + parent2->getAgentName();
 
-    offspring1 = new Genotype(babyName1, parameterCount, off1Parameters);
-    offspring2 = new Genotype(babyName2, parameterCount, off2Parameters);
+    offspring1 = std::make_unique<Genotype>(babyName1, parameterCount, off1Parameters);
+    offspring2 = std::make_unique<Genotype>(babyName2, parameterCount, off2Parameters);
 
 }
 

@@ -18,13 +18,13 @@ class AgentController;
 class AgentMovement {
 public:
 
-    AgentMovement(AgentController *agentController);
+    AgentMovement(std::unique_ptr<AgentController> agentController);
     ~AgentMovement();
 
     void update(float deltaTime);
     void checkInput();
     void applyInput(float deltaTime);
-    void setInputs(double *input, NetworkActor *actor);
+    void setInputs(double *input, std::shared_ptr<NetworkActor> actor);
     void applyVelocity(float deltaTime);
     void applyFriction(float deltaTime);
     void setTarget(Vector3 target);
@@ -42,7 +42,7 @@ public:
         return actionNorm_;
     }
 
-    std::shared_ptr<AgentController> agentController;
+    std::unique_ptr<AgentController> agentController;
 
 private:
 
@@ -83,6 +83,6 @@ private:
     double action_;
     double actionNorm_;
 
-    NetworkActor *networkActor_;
+    std::shared_ptr<NetworkActor> networkActor_;
 };
 

@@ -7,8 +7,8 @@
 
 class NetworkActor;
 
-AgentMovement::AgentMovement(AgentController *agentController) {
-    this->agentController = std::make_shared<AgentController>(*agentController);
+AgentMovement::AgentMovement(std::unique_ptr<AgentController> agentController) {
+    this->agentController = std::make_unique<AgentController>(*agentController);
 
     steerInputMin_ = 999.0f;
     steerInputMax_ = -999.0f;
@@ -124,7 +124,7 @@ void AgentMovement::applyInput(float deltaTime) {
   //  this->rotation *= (float)-horizontalInput * TURN_SPEED * deltaTime;
 }
 
-void AgentMovement::setInputs(double *input, NetworkActor *actor) {
+void AgentMovement::setInputs(double *input, std::shared_ptr<NetworkActor> actor) {
 
     // 3 outputs (steer input, accel input, action)
 

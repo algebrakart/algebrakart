@@ -211,7 +211,7 @@ void EvolutionManager::writeStatisticsToFile() {
     std::string outText;
     std::string lineText = "=========================================================================================";
 
-    std::vector<Genotype *> currentPopulation = getGeneticAlgorithm()->getCurrentPopulation();
+    std::vector<std::shared_ptr<Genotype>> currentPopulation = getGeneticAlgorithm()->getCurrentPopulation();
 
     outText += lineText;
     outText += "\n";
@@ -436,7 +436,7 @@ const std::vector<Agent *> &EvolutionManager::getAgents() const {
     return agents;
 }
 
-const std::vector<AgentController *> &EvolutionManager::getAgentControllers() const {
+const std::vector<std::shared_ptr<AgentController>> &EvolutionManager::getAgentControllers() const {
     return agentControllers;
 }
 
@@ -447,6 +447,6 @@ EvolutionManager *EvolutionManager::getInstance() {
     return instance;
 }
 
-std::vector<NetworkActor *> &EvolutionManager::getNetworkActors() {
+std::vector<std::shared_ptr<NetworkActor>> &EvolutionManager::getNetworkActors() {
     return networkActors;
 }

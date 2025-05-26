@@ -41,12 +41,12 @@ public:
     static void checkForTrackFinished();
     static bool checkGenerationTermination();
     static void onGATermination();
-    static void startEvaluation(std::vector<std::unique_ptr<Genotype>> currentPopulation);
+    static void startEvaluation(std::vector<std::shared_ptr<Genotype>> currentPopulation);
     static void onAgentDied();
-    static std::vector<Genotype*> *remainderStochasticSampling(std::vector<std::unique_ptr<Genotype>> currentPopulation);
-    static std::vector<Genotype*> *randomRecombination(std::vector<std::unique_ptr<Genotype>> intermediatePopulation, int newPopulationSize);
-    static void mutateAllButBestTwo(std::vector<std::unique_ptr<Genotype>> newPopulation);
-    static void mutateAll(std::vector<std::unique_ptr<Genotype>> newPopulation);
+    static std::vector<std::shared_ptr<Genotype>> *remainderStochasticSampling(std::vector<std::shared_ptr<Genotype>> currentPopulation);
+    static std::vector<std::shared_ptr<Genotype>> *randomRecombination(std::vector<std::shared_ptr<Genotype>> intermediatePopulation, int newPopulationSize);
+    static void mutateAllButBestTwo(std::vector<std::shared_ptr<Genotype>> newPopulation);
+    static void mutateAll(std::vector<std::shared_ptr<Genotype>> newPopulation);
     static void evalFinished();
 
     // The amount of agents that are currently alive.

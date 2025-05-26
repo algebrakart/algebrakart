@@ -15,7 +15,7 @@ class EvolutionManager;
 
 AgentController::AgentController(int index) {
     this->agentIndex = index;
-    this->movement = new AgentMovement(this);
+    this->movement = new AgentMovement(std::unique_ptr<AgentController>(this));
     this->fsm = new AgentFSM();
 
     int numSensors = 4;
