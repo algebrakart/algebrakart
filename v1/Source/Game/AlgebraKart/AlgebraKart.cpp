@@ -1126,20 +1126,20 @@ void AlgebraKart::HandleAI(float timeStep) {
     auto *input = GetSubsystem<Input>();
 
     // Iterate through agent controllers and apply update
-    std::vector<Agent *> agents = EvolutionManager::getInstance()->getAgents();
-    std::vector<AgentController *> controllers = EvolutionManager::getInstance()->getAgentControllers();
+    std::vector<std::shared_ptr<Agent>> agents = EvolutionManager::getInstance()->getAgents();
+    std::vector<std::shared_ptr<AgentController>> controllers = EvolutionManager::getInstance()->getAgentControllers();
 
     for (int i = 0; i < EvolutionManager::getInstance()->getAgents().size(); i++) {
 
         bool dead = (!EvolutionManager::getInstance()->getNetworkActors()[i]);
         if (!dead) {
             String botName = EvolutionManager::getInstance()->getNetworkActors()[i]->GetUserName();
-            AgentController *controller = EvolutionManager::getInstance()->getAgentControllers()[i];
+            std::shared_ptr<AgentController> controller = EvolutionManager::getInstance()->getAgentControllers()[i];
             // Process sensor inputs through ffn and apply calculated inputs
             controller->update(timeStep);
 
             if (controller->isAlive()) {
-                NetworkActor* actor = EvolutionManager::getInstance()->getNetworkActors()[i];
+                std::shared_ptr<NetworkActor> actor = EvolutionManager::getInstance()->getNetworkActors()[i];
                 if (actor) {
                     float speed = actor->vehicle_->GetSpeedKmH();
                     float SPEED_KILL_LIMIT = 400.0f;

@@ -31,9 +31,9 @@ EvolutionManager *EvolutionManager::instance = NULL;
 int *EvolutionManager::ffnTopology;
 
 // The current population agents.
-std::vector<std::unique_ptr<Agent>> EvolutionManager::agents;
+std::vector<std::shared_ptr<Agent>> EvolutionManager::agents;
 // The current population agents.
-std::vector<std::unique_ptr<AgentController>> EvolutionManager::agentControllers;
+std::vector<std::shared_ptr<AgentController>> EvolutionManager::agentControllers;
 // The current population NetworkActors.
 std::vector<std::shared_ptr<NetworkActor>> EvolutionManager::networkActors;
 
@@ -290,7 +290,7 @@ void EvolutionManager::checkForTrackFinished() {
     //if (genotypesSaved >= saveFirstNGenotype) return;
 
     std::string saveFolder = TRAINING_DATA_DIR + statisticsFileName + "/";
-    std::vector<Genotype *> currentPopulation = getGeneticAlgorithm()->getCurrentPopulation();
+    std::vector<std::shared_ptr<Genotype>> currentPopulation = getGeneticAlgorithm()->getCurrentPopulation();
 
     for (int i = 0; i < currentPopulation.size(); i++) {
 
@@ -432,7 +432,7 @@ GeneticAlgorithm *EvolutionManager::getGeneticAlgorithm() {
     return geneticAlgorithm;
 }
 
-const std::vector<Agent *> &EvolutionManager::getAgents() const {
+const std::vector<std::shared_ptr<Agent>> &EvolutionManager::getAgents() const {
     return agents;
 }
 

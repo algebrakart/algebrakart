@@ -252,17 +252,17 @@ std::vector<std::shared_ptr<Genotype>> GeneticAlgorithm::randomRecombination(std
         std::cout << "The intermediate population has to be at least of size 2 for this operator.";
     }
 
-    std::vector<std::unique_ptr<Genotype>> *newPopulation = new std::vector<std::unique_ptr<Genotype>>();
+    std::vector<std::unique_ptr<Genotype>> newPopulation = std::vector<std::unique_ptr<Genotype>>();
 
     if (newPopulation->size() < newPopulationSize) {
 
-        std::unique_ptr<Genotype> *offspring1;
-        std::unique_ptr<Genotype> *offspring2;
+        std::shared_ptr<Genotype> offspring1;
+        std::shared_ptr<Genotype> offspring2;
 
         // Get first 2 list items (top 2)
         size_t n = 2;
         auto end = std::next(intermediatePopulation.begin(), std::min(n, intermediatePopulation.size()));
-        std::vector<std::unique_ptr<Genotype>> b = std::make_unique<Genotype>(intermediatePopulation.begin(), end);
+        std::vector<std::shared_ptr<Genotype>> b = std::make_shared<Genotype>(intermediatePopulation.begin(), end);
 
         Genotype *intermediatePopulation0;
         Genotype *intermediatePopulation1;
