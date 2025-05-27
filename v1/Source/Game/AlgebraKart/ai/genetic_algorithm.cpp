@@ -58,7 +58,7 @@ void GeneticAlgorithm::start() {
 }
 
 // Sort by genotype
-bool sortByGenotype(const std::shared_ptr<Genotype> lhs, const std::shared_ptr<Genotype> rhs) { if ((!lhs) && (rhs)) { return rhs; } if ((!rhs) && (lhs)) { return lhs; } return lhs->fitness > rhs->fitness; }
+bool sortByGenotype(const std::shared_ptr<Genotype> lhs, const std::shared_ptr<Genotype> rhs) { if ((!lhs) && (rhs)) { return rhs->fitness > 0; } if ((!rhs) && (lhs)) { return lhs->fitness > 0; } return lhs->fitness > rhs->fitness; }
 
 void GeneticAlgorithm::evaluationFinished() {
     bool badPop = false;
@@ -263,10 +263,10 @@ std::vector<std::shared_ptr<Genotype>> GeneticAlgorithm::randomRecombination(std
         size_t n = 2;
         auto end = std::next(intermediatePopulation.begin(), std::min(n, intermediatePopulation.size()));
 //        std::vector<std::shared_ptr<Genotype>> b = std::make_shared<Genotype>(intermediatePopulation.begin(), end);
-        std::vector<std::shared_ptr<Genotype>> b = std::make_shared<Genotype>(intermediatePopulation, end);
+        std::vector<std::shared_ptr<Genotype>> b = std::make_shared<Genotype>(intermediatePopulation.begin(), end);
 
-        Genotype *intermediatePopulation0;
-        Genotype *intermediatePopulation1;
+        std::shared_ptr<Genotype> intermediatePopulation0;
+        std::shared_ptr<Genotype> intermediatePopulation1;
 
         int count = 0;
         for (int i = 0; i < b.size(); i++) {
