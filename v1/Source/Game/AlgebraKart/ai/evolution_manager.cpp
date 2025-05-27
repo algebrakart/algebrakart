@@ -354,7 +354,7 @@ void EvolutionManager::restartAlgorithm(float wait) {
 }
 
 // Starts the evaluation by first creating new agents from the current population and then restarting the track manager.
-void EvolutionManager::startEvaluation(std::vector<Genotype *> currentPopulation) {
+void EvolutionManager::startEvaluation(std::vector<std::shared_ptr<Genotype>> currentPopulation) {
 
     URHO3D_LOGDEBUGF("EvolutionManager::startEvaluation");
 
@@ -365,13 +365,13 @@ void EvolutionManager::startEvaluation(std::vector<Genotype *> currentPopulation
     // Create new agents from currentPopulation
     agentsAliveCount = 0;
 
-    std::vector<Agent *> agentsNew;
-    std::vector<AgentController *> agentControllersNew;
+    std::vector<std::shared_ptr<Agent>> agentsNew;
+    std::vector<std::shared_ptr<AgentController>> agentControllersNew;
 
     for (int i = 0; i < currentPopulation.size(); i++) {
 
         // Resolve network actor (void AlgebraKart::CreateAgents() creates agents)
-        NetworkActor *actor = nullptr;
+        std::shared_ptr<NetworkActor> actor = nullptr;
 
         if (!getNetworkActors().empty()) {
             if (getNetworkActors()[i]) {
@@ -383,9 +383,9 @@ void EvolutionManager::startEvaluation(std::vector<Genotype *> currentPopulation
         newId = (i+1);
 
         // Create agent based on Genotype, with activation function and ffn topology
-        Agent *agent = new Agent(newId, currentPopulation[i], MathHelper::softSignFunction, ffnTopology, actor);
+        std::shared_ptr<Agent> agent = std::make_shared<Agent>(newId, currentPopulation[i], MathHelper::softSignFunction, ffnTopology, actor);
         // Assigned an Agent Controller linked by id
-        AgentController *agentController = new AgentController(i);
+        std::shared_ptr<AgentController> agentController = std::make_shared<AgentController>(i);
 
         agentsNew.emplace_back(agent);
         agentControllersNew.emplace_back(agentController);
@@ -432,7 +432,7 @@ GeneticAlgorithm *EvolutionManager::getGeneticAlgorithm() {
     return geneticAlgorithm;
 }
 
-const std::vector<std::shared_ptr<Agent>> &EvolutionManager::getAgents() const {
+const std::vector<std::shared_ptr<Agent>> EvolutionManager::getAgents() const {
     return agents;
 }
 

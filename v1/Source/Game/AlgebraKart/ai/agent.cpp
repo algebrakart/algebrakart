@@ -13,7 +13,7 @@ using namespace Urho3D;
 
 // Initializes a new agent from given genotype, constructing a new feed-forward neural network from
 // the parameters of the genotype.
-Agent::Agent(unsigned int id, Genotype *genotype, NeuralLayer::ActivationFunction defaultActivation, int *topology, NetworkActor* actor) {
+Agent::Agent(unsigned int id, std::shared_ptr<Genotype> genotype, NeuralLayer::ActivationFunction defaultActivation, int *topology, std::shared_ptr<NetworkActor> actor) {
 
     if (id == -1)
         id = this->generateId();

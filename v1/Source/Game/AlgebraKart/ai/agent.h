@@ -20,7 +20,7 @@ class Agent {
 public:
 
     //Agent(unsigned int id, Genotype *genotype, NeuralLayer::ActivationFunction defaultActivation, int *topology);
-    Agent(unsigned int id, Genotype *genotype, NeuralLayer::ActivationFunction defaultActivation, int *topology, NetworkActor *actor);
+    Agent(unsigned int id, std::shared_ptr<Genotype> genotype, NeuralLayer::ActivationFunction defaultActivation, int *topology, std::shared_ptr<NetworkActor> actor);
     ~Agent();
     void reset();
     void kill();
@@ -31,7 +31,7 @@ public:
     std::string name;
 
     // Underlying genotype of this agent.
-    Genotype *genotype;
+    std::shared_ptr<Genotype> genotype;
 
     // The feed-forward neural network which was constructed from the genotype of this agent.
     NeuralNetwork *ffn;
@@ -51,8 +51,8 @@ public:
     long getLastHit() const;
     void setLastHit(long lastHit);
 
-    NetworkActor *getActor() { return networkActor_; };
-    void setActor(NetworkActor *actor) { networkActor_ = actor; };
+    std::shared_ptr<NetworkActor> getActor() { return networkActor_; };
+    void setActor(std::shared_ptr<NetworkActor> actor) { networkActor_ = actor; };
 
     float getRespawnTime() const {
         return respawnTime_;
@@ -71,5 +71,5 @@ private:
 private:
 
     Urho3D::Vector3 colour;
-    SharedPtr<NetworkActor> networkActor_;
+    std::shared_ptr<NetworkActor> networkActor_;
 };

@@ -103,7 +103,7 @@ void Genotype::saveToFile(const char* filePath) {
         std::cout << "Genotype record has been successfully saved." << std::endl;
 }
 
-std::unique_ptr<Genotype> Genotype::loadFromFile(const char* filePath) {
+std::shared_ptr<Genotype> Genotype::loadFromFile(const char* filePath) {
     std::string dirPath = TRAINING_DATA_DIR;
     std::string fullPath = dirPath + filePath;
     std::ifstream dimensionsInFile;
@@ -130,7 +130,7 @@ std::unique_ptr<Genotype> Genotype::loadFromFile(const char* filePath) {
     std::cout << "Genotype has been successfully loaded." << std::endl;
     dimensionsInFile.close();
 
-    std::unique_ptr<Genotype> genotype = std::make_unique<Genotype>(file->record.agentName, file->record.parameterCount);
+    std::shared_ptr<Genotype> genotype = std::make_shared<Genotype>(file->record.agentName, file->record.parameterCount);
     genotype->evaluation = file->record.evaluation;
     genotype->fitness = file->record.fitness;
 
@@ -145,13 +145,13 @@ float Genotype::getParameter(int index) {
     return parameters[index];
 }
 
-std::unique_ptr<Genotype> Genotype::generateRandom(int parameterCount, float minValue, float maxValue) {
+std::shared_ptr<Genotype> Genotype::generateRandom(int parameterCount, float minValue, float maxValue) {
 
     if (parameterCount == 0) {
         return std::make_unique<Genotype>(std::string("random"), parameterCount);
     }
 
-    std::unique_ptr<Genotype> randomGenotype = std::make_unique<Genotype>(std::string("random"), parameterCount);
+    std::shared_ptr<Genotype> randomGenotype = std::make_unique<Genotype>(std::string("random"), parameterCount);
     randomGenotype->setRandomParameters(minValue, maxValue);
     return randomGenotype;
 }

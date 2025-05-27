@@ -252,9 +252,9 @@ std::vector<std::shared_ptr<Genotype>> GeneticAlgorithm::randomRecombination(std
         std::cout << "The intermediate population has to be at least of size 2 for this operator.";
     }
 
-    std::vector<std::unique_ptr<Genotype>> newPopulation = std::vector<std::unique_ptr<Genotype>>();
+    std::vector<std::shared_ptr<Genotype>> newPopulation = std::vector<std::shared_ptr<Genotype>>();
 
-    if (newPopulation->size() < newPopulationSize) {
+    if (newPopulation.size() < newPopulationSize) {
 
         std::shared_ptr<Genotype> offspring1;
         std::shared_ptr<Genotype> offspring2;
@@ -262,7 +262,8 @@ std::vector<std::shared_ptr<Genotype>> GeneticAlgorithm::randomRecombination(std
         // Get first 2 list items (top 2)
         size_t n = 2;
         auto end = std::next(intermediatePopulation.begin(), std::min(n, intermediatePopulation.size()));
-        std::vector<std::shared_ptr<Genotype>> b = std::make_shared<Genotype>(intermediatePopulation.begin(), end);
+//        std::vector<std::shared_ptr<Genotype>> b = std::make_shared<Genotype>(intermediatePopulation.begin(), end);
+        std::vector<std::shared_ptr<Genotype>> b = std::make_shared<Genotype>(intermediatePopulation, end);
 
         Genotype *intermediatePopulation0;
         Genotype *intermediatePopulation1;
@@ -282,10 +283,10 @@ std::vector<std::shared_ptr<Genotype>> GeneticAlgorithm::randomRecombination(std
         }
 
         // Always add best two (unmodified)
-        newPopulation->emplace_back(intermediatePopulation0);
-        newPopulation->emplace_back(intermediatePopulation1);
+        newPopulation.emplace_back(intermediatePopulation0);
+        newPopulation.emplace_back(intermediatePopulation1);
 
-        while (newPopulation->size() < newPopulationSize) {
+        while (newPopulation.size() < newPopulationSize) {
 
             // Get two random indices that are not the same.
             int randomIndex1 = (int) Urho3D::Random(0.0, (float) std::round(intermediatePopulation.size()));
@@ -299,9 +300,9 @@ std::vector<std::shared_ptr<Genotype>> GeneticAlgorithm::randomRecombination(std
                                                      intermediatePopulation[randomIndex2],
                                                      DefCrossSwapProb, offspring1, offspring2);
 
-            newPopulation->emplace_back(offspring1);
-            if (newPopulation->size() < newPopulationSize) {
-                newPopulation->emplace_back(offspring2);
+            newPopulation.emplace_back(offspring1);
+            if (newPopulation.size() < newPopulationSize) {
+                newPopulation.emplace_back(offspring2);
             }
         }
     }
@@ -329,57 +330,55 @@ std::vector<Genotype*> *GeneticAlgorithm::defaultSelectionOperator(std::vector<G
 }*/
 
 // Simply crosses the first with the second genotype of the intermediate population until the new population is of desired size.
-std::vector<std::unique_ptr<Genotype>> *GeneticAlgorithm::defaultRecombinationOperator(std::vector<std::unique_ptr<Genotype>> intermediatePopulation, int newPopulationSize) {
+std::vector<std::shared_ptr<Genotype>> GeneticAlgorithm::defaultRecombinationOperator(std::vector<std::shared_ptr<Genotype>> intermediatePopulation, int newPopulationSize) {
 
     if (intermediatePopulation.size() < 2) {
         std::cout << "Intermediate population size must be greater than 2 for this operator.";
-        return nullptr;
     }
 
-    std::vector<std::unique_ptr<Genotype>> *newPopulation = new std::vector<std::unique_ptr<Genotype>>();
+    std::vector<std::shared_ptr<Genotype>> newPopulation = std::vector<std::shared_ptr<Genotype>>();
 
-    if (newPopulation->size() < newPopulationSize) {
+    if (newPopulation.size() < newPopulationSize) {
 
-        std::unique_ptr<Genotype> offspring1;
-        std::unique_ptr<Genotype> offspring2;
+        std::shared_ptr<Genotype> offspring1;
+        std::shared_ptr<Genotype> offspring2;
 
         // Get first 2 list items (top 2)
         size_t n = 2;
         auto end = std::next(intermediatePopulation.begin(), std::min(n, intermediatePopulation.size()));
-        std::vector<Genotype*> b(intermediatePopulation.begin(), end);
+        std::vector<std::shared_ptr<Genotype>> b(intermediatePopulation.begin(), end);
 
         completeCrossover(b[0], b[1], DefCrossSwapProb, offspring1, offspring2);
 
-        newPopulation->push_back(offspring1);
-        if (newPopulation->size() < newPopulationSize) {
-            newPopulation->push_back(offspring2);
+        newPopulation.push_back(offspring1);
+        if (newPopulation.size() < newPopulationSize) {
+            newPopulation.push_back(offspring2);
         }
     }
 
     return newPopulation;
 }
 
-void GeneticAlgorithm::defaultMutationOperator(std::vector<std::unique_ptr<Genotype>> newPopulation) {
+void GeneticAlgorithm::defaultMutationOperator(std::vector<std::shared_ptr<Genotype>> newPopulation) {
 
-    for (std::vector<std::unique_ptr<Genotype>>::iterator it = newPopulation.begin(); it != newPopulation.end(); ++it) {
-
-
+    for (std::vector<std::shared_ptr<Genotype>>::iterator it = newPopulation.begin(); it != newPopulation.end(); ++it) {
         for (int i = 0; i < newPopulation.size(); i++) {
             if (Urho3D::Random(0.0f,1.0f) < DefMutationPerc) {
                 mutateGenotype(newPopulation[i], DefMutationProb, DefMutationAmount);
             }
         }
-
     }
 }
 
-void GeneticAlgorithm::completeCrossover(std::unique_ptr<Genotype> parent1, std::unique_ptr<Genotype> parent2, float swapChance, std::unique_ptr<Genotype> &offspring1,
-                                         std::unique_ptr<Genotype> &offspring2) {
+void GeneticAlgorithm::completeCrossover(std::shared_ptr<Genotype> parent1, std::shared_ptr<Genotype> parent2, float swapChance, std::shared_ptr<Genotype> offspring1,
+                                         std::shared_ptr<Genotype> offspring2) {
 
     // Initialize new parameter vectors
     int parameterCount = parent1->getParameterCopy().size();
-    float *off1Parameters = new float[parameterCount];
-    float *off2Parameters = new float[parameterCount];
+    std::vector<std::shared_ptr<float>> off1Parameters = std::vector<std::shared_ptr<float>>();
+    off1Parameters.resize(parameterCount);
+    std::vector<std::shared_ptr<float>> off2Parameters = std::vector<std::shared_ptr<float>>();
+    off2Parameters.resize(parameterCount);
 
     // Iterate over all parameters randomly swapping
     for (int i = 0; i < parameterCount; i++) {
@@ -398,12 +397,12 @@ void GeneticAlgorithm::completeCrossover(std::unique_ptr<Genotype> parent1, std:
     std::string babyName1 = "baby1_" + parent1->getAgentName() + "-" + parent2->getAgentName();
     std::string babyName2 = "baby2_" + parent1->getAgentName() + "-" + parent2->getAgentName();
 
-    offspring1 = std::make_unique<Genotype>(babyName1, parameterCount, off1Parameters);
-    offspring2 = std::make_unique<Genotype>(babyName2, parameterCount, off2Parameters);
+    offspring1 = std::make_shared<Genotype>(babyName1, parameterCount, off1Parameters);
+    offspring2 = std::make_shared<Genotype>(babyName2, parameterCount, off2Parameters);
 
 }
 
-void GeneticAlgorithm::mutateGenotype(std::unique_ptr<Genotype> genotype, float mutationProb, float mutationAmount) {
+void GeneticAlgorithm::mutateGenotype(std::shared_ptr<Genotype> genotype, float mutationProb, float mutationAmount) {
 
     for (int i = 0; i < genotype->getParameterCount(); i++) {
 
@@ -414,17 +413,17 @@ void GeneticAlgorithm::mutateGenotype(std::unique_ptr<Genotype> genotype, float 
     }
 }
 
-bool GeneticAlgorithm::defaultTermination(std::vector<std::unique_ptr<Genotype>> currentPopulation) {
+bool GeneticAlgorithm::defaultTermination(std::vector<std::shared_ptr<Genotype>> currentPopulation) {
 
     std::cout << "GeneticAlgorithm::defaultTermination -> Generation count: " << String(EvolutionManager::getInstance()->getGenerationCount()).CString() << std::endl;
 
     return (EvolutionManager::getInstance()->getGenerationCount() >= RestartAfter);
 }
 
-const std::vector<std::unique_ptr<Genotype>> &GeneticAlgorithm::getCurrentPopulation() const {
+const std::vector<std::shared_ptr<Genotype>> GeneticAlgorithm::getCurrentPopulation() const {
     return currentPopulation_;
 }
 
-const std::vector<std::unique_ptr<Genotype>> &GeneticAlgorithm::getPrevPopulation() const {
+const std::vector<std::shared_ptr<Genotype>> GeneticAlgorithm::getPrevPopulation() const {
     return prevPopulation_;
 }

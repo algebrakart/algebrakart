@@ -43,8 +43,8 @@ public:
     static void onGATermination();
     static void startEvaluation(std::vector<std::shared_ptr<Genotype>> currentPopulation);
     static void onAgentDied();
-    static std::vector<std::shared_ptr<Genotype>> *remainderStochasticSampling(std::vector<std::shared_ptr<Genotype>> currentPopulation);
-    static std::vector<std::shared_ptr<Genotype>> *randomRecombination(std::vector<std::shared_ptr<Genotype>> intermediatePopulation, int newPopulationSize);
+    static std::vector<std::shared_ptr<Genotype>> remainderStochasticSampling(std::vector<std::shared_ptr<Genotype>> currentPopulation);
+    static std::vector<std::shared_ptr<Genotype>> randomRecombination(std::vector<std::shared_ptr<Genotype>> intermediatePopulation, int newPopulationSize);
     static void mutateAllButBestTwo(std::vector<std::shared_ptr<Genotype>> newPopulation);
     static void mutateAll(std::vector<std::shared_ptr<Genotype>> newPopulation);
     static void evalFinished();
@@ -55,8 +55,8 @@ public:
     // Event for when all agents have died.
     static SimpleEvent::Event allAgentsDied;
 
-    const std::vector<std::unique_ptr<Agent>> &getAgents() const;
-    const std::vector<std::unique_ptr<AgentController>> &getAgentControllers() const;
+    const std::vector<std::shared_ptr<Agent>> getAgents() const;
+    const std::vector<std::shared_ptr<AgentController>> & getAgentControllers() const;
     static std::vector<std::shared_ptr<NetworkActor>> &getNetworkActors();
 
 
@@ -82,10 +82,10 @@ public:
     static int* ffnTopology;
 
     // The current population agents.
-    static std::vector<std::unique_ptr<Agent>> agents;
+    static std::vector<std::shared_ptr<Agent>> agents;
 
     // The current population agents.
-    static std::vector<std::unique_ptr<AgentController>> agentControllers;
+    static std::vector<std::shared_ptr<AgentController>> agentControllers;
 
     // The current population NetworkActors.
     static std::vector<std::shared_ptr<NetworkActor>> networkActors;

@@ -101,8 +101,8 @@ public:
     MutationOperator mutation = defaultMutationOperator;
     CheckTerminationCriterion checkTermination = defaultTermination;
 
-    const std::vector<std::unique_ptr<Genotype>> &getCurrentPopulation() const;
-    const std::vector<std::unique_ptr<Genotype>> &getPrevPopulation() const;
+    const std::vector<std::shared_ptr<Genotype>> getCurrentPopulation() const;
+    const std::vector<std::shared_ptr<Genotype>> getPrevPopulation() const;
 
     // The amount of genotypes in a population.
     int populationSize_;
