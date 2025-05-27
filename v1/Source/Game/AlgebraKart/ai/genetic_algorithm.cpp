@@ -58,12 +58,12 @@ void GeneticAlgorithm::start() {
 }
 
 // Sort by genotype
-bool sortByGenotype(const Genotype* lhs, const Genotype* rhs) { if ((!lhs) && (rhs)) { return rhs; } if ((!rhs) && (lhs)) { return lhs; } return lhs->fitness > rhs->fitness; }
+bool sortByGenotype(const std::shared_ptr<Genotype> lhs, const std::shared_ptr<Genotype> rhs) { if ((!lhs) && (rhs)) { return rhs; } if ((!rhs) && (lhs)) { return lhs; } return lhs->fitness > rhs->fitness; }
 
 void GeneticAlgorithm::evaluationFinished() {
     bool badPop = false;
     // Iterate through agent controllers and apply update
-    std::vector<std::unique_ptr<AgentController>> controllers = EvolutionManager::getInstance()->getAgentControllers();
+    std::vector<std::shared_ptr<AgentController>> controllers = EvolutionManager::getInstance()->getAgentControllers();
 
     // Calculate fitness from evaluation
     fitnessCalculationMethod(currentPopulation_);
