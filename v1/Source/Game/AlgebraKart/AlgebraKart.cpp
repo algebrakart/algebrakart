@@ -4314,7 +4314,7 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                 // FFN
                                 int aIndex = camMode_ - 1;
 
-                                Genotype *genotype = EvolutionManager::getInstance()->getAgents()[aIndex]->genotype;
+                                std::shared_ptr<Genotype> genotype = EvolutionManager::getInstance()->getAgents()[aIndex]->genotype;
                                 // Retrieve parameters for genotype
                                 std::vector<float> parameters = genotype->getParameterCopy();
 
