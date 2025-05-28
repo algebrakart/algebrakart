@@ -25,7 +25,7 @@ public:
 
     Genotype(std::string name, std::vector<float> parameters);
     Genotype(std::string name, int paramCount);
-    Genotype(std::string name, int paramCount, float *offParameters);
+    Genotype(std::string name, int paramCount, std::vector<std::shared_ptr<float>> offParameters);
     ~Genotype();
     void setRandomParameters(float minValue, float maxValue);
     std::vector<float>& getParameterCopy();

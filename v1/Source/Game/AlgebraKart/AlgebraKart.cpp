@@ -292,7 +292,7 @@ void AlgebraKart::InitEvolutionManager() {
     EvolutionManager *evolutionManager = EvolutionManager::getInstance();
 
     // Create shape for each agent
-    std::vector<Agent *> agents = evolutionManager->getAgents();
+    std::vector<std::shared_ptr<Agent>> agents = evolutionManager->getAgents();
     std::cout << "Evolution Manager -> number of agents = " << agents.size() << std::endl;
 
     for (int i = 0; i < agents.size(); i++) {
@@ -318,8 +318,8 @@ void AlgebraKart::InitEvolutionManager() {
 
 
 void AlgebraKart::ShowEvolutionManagerStats() {
-    std::vector<Agent *> agents = EvolutionManager::getInstance()->getAgents();
-    std::vector<AgentController *> controllers = EvolutionManager::getInstance()->getAgentControllers();
+    std::vector<std::shared_ptr<Agent>> agents = EvolutionManager::getInstance()->getAgents();
+    std::vector<std::shared_ptr<AgentController>> controllers = EvolutionManager::getInstance()->getAgentControllers();
 
     char buffer[255];
     int aliveCount = EvolutionManager::getInstance()->agentsAliveCount;
@@ -460,7 +460,6 @@ void AlgebraKart::CreateAgents() {
         URHO3D_LOGDEBUGF("CreateAgents -> SpawnPlayer: %d", (i));
         // Spawn ai bot and generate NetworkActor
         EvolutionManager::getInstance()->getNetworkActors().push_back(SpawnPlayer(i));
-
     }
 }
 
@@ -7350,7 +7349,7 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
 }
 
 // Spawn Player (NetworkActor on Server for AI agent)
-NetworkActor *AlgebraKart::SpawnPlayer(unsigned int id) {
+std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
 
     ResourceCache *cache = GetSubsystem<ResourceCache>();
 
@@ -7442,8 +7441,8 @@ NetworkActor *AlgebraKart::SpawnPlayer(unsigned int id) {
     // Give the ownership to the client
     //networkActorNode->SetOwner(connection);
     //vehicleNode->SetOwner(connection);
-
-    return actor;
+    std::shared_ptr<NetworkActor> ptrActor(actor);
+    return ptrActor;
 }
 
 void AlgebraKart::InitiateGameMap(Scene *scene) {

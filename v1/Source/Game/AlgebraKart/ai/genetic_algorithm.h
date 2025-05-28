@@ -66,7 +66,7 @@ public:
 
 
      static void defaultMutationOperator(std::vector<std::shared_ptr<Genotype>> newPopulation);
-     static void completeCrossover(std::shared_ptr<Genotype> parent1, std::shared_ptr<Genotype> parent2, float swapChance, std::shared_ptr<Genotype> &offspring1, std::shared_ptr<Genotype> &offspring2);
+     static void completeCrossover(std::shared_ptr<Genotype> parent1, std::shared_ptr<Genotype> parent2, float swapChance, std::shared_ptr<Genotype> offspring1, std::shared_ptr<Genotype> offspring2);
      static void mutateGenotype(std::shared_ptr<Genotype> genotype, float mutationProb, float mutationAmount);
      static bool defaultTermination(std::vector<std::shared_ptr<Genotype>> currentPopulation);
 

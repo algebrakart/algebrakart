@@ -39,12 +39,13 @@ Genotype::Genotype(std::string name, std::vector<float> parameters) {
     fitness = 0.0;
 }
 
-Genotype::Genotype(std::string name, int paramCount, float *offParameters) {
+Genotype::Genotype(std::string name, int paramCount, std::vector<std::shared_ptr<float>> offParameters) {
 
     agentName_ = name;
     parameters = std::vector<float>();
     for (int i = 0; i < paramCount; i++) {
-        parameters.push_back(offParameters[i]);
+        auto a = offParameters[i];
+        parameters.push_back(*a);
     }
 
     evaluation = 0.0;

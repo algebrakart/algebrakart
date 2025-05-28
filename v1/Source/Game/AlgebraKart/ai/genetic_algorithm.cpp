@@ -263,7 +263,7 @@ std::vector<std::shared_ptr<Genotype>> GeneticAlgorithm::randomRecombination(std
         size_t n = 2;
         auto end = std::next(intermediatePopulation.begin(), std::min(n, intermediatePopulation.size()));
 //        std::vector<std::shared_ptr<Genotype>> b = std::make_shared<Genotype>(intermediatePopulation.begin(), end);
-        std::vector<std::shared_ptr<Genotype>> b = std::make_shared<Genotype>(intermediatePopulation.begin(), end);
+        std::vector<std::shared_ptr<Genotype>> b = std::vector(intermediatePopulation.begin(), end);
 
         std::shared_ptr<Genotype> intermediatePopulation0;
         std::shared_ptr<Genotype> intermediatePopulation1;
@@ -385,12 +385,12 @@ void GeneticAlgorithm::completeCrossover(std::shared_ptr<Genotype> parent1, std:
 
         if (Urho3D::Random(0.0f,1.0f) < swapChance) {
             // Swap parameters
-            off1Parameters[i] = parent2->getParameter(i);
-            off2Parameters[i] = parent1->getParameter(i);
+            off1Parameters[i] = std::make_shared<float>(parent2->getParameter(i));
+            off2Parameters[i] = std::make_shared<float>(parent1->getParameter(i));
         } else {
             // Dont swap parameters
-            off1Parameters[i] = parent1->getParameter(i);
-            off2Parameters[i] = parent2->getParameter(i);
+            off1Parameters[i] = std::make_shared<float>(parent1->getParameter(i));
+            off2Parameters[i] = std::make_shared<float>(parent2->getParameter(i));
         }
     }
 

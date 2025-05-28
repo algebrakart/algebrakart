@@ -305,7 +305,7 @@ private:
     SharedPtr<Node> SpawnPlayer(); // Spawn local
     Node* SpawnPlayer(Connection* connection); // Spawn with connection
     void SendWelcomeMessage(Connection* connection); // Send welcome message
-    NetworkActor* SpawnPlayer(unsigned int id); // Spawn for ai bot
+    std::shared_ptr<NetworkActor> SpawnPlayer(unsigned int id); // Spawn for ai bot
     void DestroyPlayer(Connection* connection); // Clean player with connection
 
     void StartMultiplayerGameSession();
