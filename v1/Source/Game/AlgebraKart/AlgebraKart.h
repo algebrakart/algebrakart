@@ -358,6 +358,26 @@ private:
 
     void PlayNextTrack(); // Load radio stream
 
+    // Loading Screen
+    SharedPtr<UIElement> loadingScreen_;
+    SharedPtr<Sprite> loadingBackgroundSprite_;
+    SharedPtr<Sprite> loadingLogoSprite_;
+    SharedPtr<Text> loadingText_;
+    SharedPtr<Text> loadingTipText_;
+    SharedPtr<Sprite> loadingProgressBarBg_;
+    SharedPtr<Sprite> loadingProgressBar_;
+    float loadingProgress_;
+    float loadingTipTimer_;
+    Vector<String> loadingTips_;
+    int currentTipIndex_;
+
+    void CreateLoadingScreen();
+    void ShowLoadingScreen();
+    void HideLoadingScreen();
+    void UpdateLoadingProgress(float progress, const String& status = "");
+    void UpdateLoadingScreen(float timeStep);
+    ////
+
     HashMap<Connection*, float> welcomeMsgMap_; // Welcome message map for delayed send to clients from server
 
     String clientName_;

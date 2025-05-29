@@ -387,6 +387,9 @@ void AlgebraKart::Start() {
     // Reset focus index
     focusIndex_ = 0;
 
+    // Create loading screen
+    CreateLoadingScreen();
+
     // Create empty scene
     CreateEmptyScene(context_);
 
@@ -2645,6 +2648,9 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
     ticks += timeStep;
     upTime_ += timeStep;
 
+    // Update loading screen animation
+    UpdateLoadingScreen(timeStep);
+
     // Skip on loading
     if (levelLoading_) return;
     if (clientLevelLoading_) return;
@@ -2652,9 +2658,7 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
     // Update timers
     lastCamRaycast += timeStep;
 
-
     HandleUpdateParticlePool(timeStep);
-
 
     auto *cache = GetSubsystem<ResourceCache>();
 
@@ -5863,7 +5867,140 @@ void AlgebraKart::HandleConnectionFailed(StringHash eventType, VariantMap &event
     InitMsgWindow("Connection failure", "Connection to server failed!");
 }
 
+void AlgebraKart::CreateLoadingScreen() {
+    auto* cache = GetSubsystem<ResourceCache>();
+    auto* ui = GetSubsystem<UI>();
+    auto* graphics = GetSubsystem<Graphics>();
+
+    // Create the main loading screen container
+    loadingScreen_ = ui->GetRoot()->CreateChild<UIElement>();
+    loadingScreen_->SetName("LoadingScreen");
+    loadingScreen_->SetSize(graphics->GetWidth(), graphics->GetHeight());
+    loadingScreen_->SetPosition(0, 0);
+    loadingScreen_->SetVisible(false);
+    loadingScreen_->SetPriority(1000); // High priority to appear on top
+
+    // Create background
+    loadingBackgroundSprite_ = loadingScreen_->CreateChild<Sprite>();
+    loadingBackgroundSprite_->SetTexture(cache->GetResource<Texture2D>("Textures/LoadingBackground.png"));
+    loadingBackgroundSprite_->SetSize(graphics->GetWidth(), graphics->GetHeight());
+    loadingBackgroundSprite_->SetAlignment(HA_LEFT, VA_TOP);
+    loadingBackgroundSprite_->SetPosition(0, 0);
+
+    // Create logo
+    loadingLogoSprite_ = loadingScreen_->CreateChild<Sprite>();
+    loadingLogoSprite_->SetTexture(cache->GetResource<Texture2D>("Textures/AlgebraKartLogo.png"));
+    loadingLogoSprite_->SetSize(400, 200);
+    loadingLogoSprite_->SetAlignment(HA_CENTER, VA_CENTER);
+    loadingLogoSprite_->SetPosition(0, -100);
+
+    // Create loading text
+    loadingText_ = loadingScreen_->CreateChild<Text>();
+    loadingText_->SetText("Connecting to the mathematical universe...");
+    loadingText_->SetFont(cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"), 18);
+    loadingText_->SetColor(Color::WHITE);
+    loadingText_->SetAlignment(HA_CENTER, VA_CENTER);
+    loadingText_->SetPosition(0, 50);
+
+    // Create progress bar background
+    loadingProgressBarBg_ = loadingScreen_->CreateChild<Sprite>();
+    loadingProgressBarBg_->SetTexture(cache->GetResource<Texture2D>("Textures/ProgressBarBg.png"));
+    loadingProgressBarBg_->SetSize(400, 20);
+    loadingProgressBarBg_->SetAlignment(HA_CENTER, VA_CENTER);
+    loadingProgressBarBg_->SetPosition(0, 80);
+    loadingProgressBarBg_->SetColor(Color(0.3f, 0.3f, 0.3f, 0.8f));
+
+    // Create progress bar
+    loadingProgressBar_ = loadingProgressBarBg_->CreateChild<Sprite>();
+    loadingProgressBar_->SetTexture(cache->GetResource<Texture2D>("Textures/ProgressBar.png"));
+    loadingProgressBar_->SetSize(0, 18);
+    loadingProgressBar_->SetAlignment(HA_LEFT, VA_CENTER);
+    loadingProgressBar_->SetPosition(1, 0);
+    loadingProgressBar_->SetColor(Color(0.2f, 0.8f, 0.2f, 1.0f));
+
+    // Create tip text
+    loadingTipText_ = loadingScreen_->CreateChild<Text>();
+    loadingTipText_->SetFont(cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"), 14);
+    loadingTipText_->SetColor(Color(0.8f, 0.8f, 0.8f, 1.0f));
+    loadingTipText_->SetAlignment(HA_CENTER, VA_CENTER);
+    loadingTipText_->SetPosition(0, 120);
+
+    // Initialize loading tips
+    loadingTips_.Push("Tip: Use WASD keys to control your vehicle");
+    loadingTips_.Push("Tip: Collect power-ups to boost your performance");
+    loadingTips_.Push("Tip: AI bots are evolving using neural networks");
+    loadingTips_.Push("Tip: Watch the mini-map to track your position");
+    loadingTips_.Push("Tip: Each race helps the AI learn better driving");
+    loadingTips_.Push("Tip: Press TAB to toggle camera views");
+
+    loadingProgress_ = 0.0f;
+    loadingTipTimer_ = 0.0f;
+    currentTipIndex_ = 0;
+
+    if (!loadingTips_.Empty()) {
+        loadingTipText_->SetText(loadingTips_[currentTipIndex_]);
+    }
+}
+
+void AlgebraKart::ShowLoadingScreen() {
+    if (loadingScreen_) {
+        loadingScreen_->SetVisible(true);
+        loadingProgress_ = 0.0f;
+        loadingTipTimer_ = 0.0f;
+        UpdateLoadingProgress(0.0f, "Initializing connection...");
+    }
+}
+
+void AlgebraKart::HideLoadingScreen() {
+    if (loadingScreen_) {
+        loadingScreen_->SetVisible(false);
+    }
+}
+
+void AlgebraKart::UpdateLoadingProgress(float progress, const String& status) {
+    loadingProgress_ = Clamp(progress, 0.0f, 1.0f);
+
+    if (loadingProgressBar_) {
+        float barWidth = 398.0f * loadingProgress_; // 398 = 400 - 2 for padding
+        loadingProgressBar_->SetSize(barWidth, 18);
+    }
+
+    if (!status.Empty() && loadingText_) {
+        loadingText_->SetText(status);
+    }
+}
+
+void AlgebraKart::UpdateLoadingScreen(float timeStep) {
+    if (!loadingScreen_ || !loadingScreen_->IsVisible()) {
+        return;
+    }
+
+    // Update tip rotation
+    loadingTipTimer_ += timeStep;
+    if (loadingTipTimer_ >= 3.0f && !loadingTips_.Empty()) { // Change tip every 3 seconds
+        loadingTipTimer_ = 0.0f;
+        currentTipIndex_ = (currentTipIndex_ + 1) % loadingTips_.Size();
+        loadingTipText_->SetText(loadingTips_[currentTipIndex_]);
+    }
+
+    // Add some animation to the logo (gentle pulse)
+    if (loadingLogoSprite_) {
+        float pulse = 1.0f + 0.1f * Sin(GetSubsystem<Time>()->GetElapsedTime() * 2.0f);
+        loadingLogoSprite_->SetScale(pulse);
+    }
+
+    // Animate progress bar color
+    if (loadingProgressBar_) {
+        float colorShift = 0.5f + 0.5f * Sin(GetSubsystem<Time>()->GetElapsedTime() * 3.0f);
+        Color barColor = Color(0.2f + 0.3f * colorShift, 0.8f, 0.2f + 0.3f * colorShift, 1.0f);
+        loadingProgressBar_->SetColor(barColor);
+    }
+}
+
 void AlgebraKart::DoConnect() {
+    // Show loading screen at the start of connection
+    ShowLoadingScreen();
+
     static const int MAX_ARRAY_SIZE = 10;
     static String colorArray[MAX_ARRAY_SIZE] =
             {
@@ -5883,8 +6020,8 @@ void AlgebraKart::DoConnect() {
     isServer_ = false;
     Server *server = GetSubsystem<Server>();
 //..    String address = gameServers[gameServerSelected_].c_str();
-
     String address;
+
     if (gameServerDropDownList_) {
         UIElement *ui = gameServerDropDownList_->GetSelectedItem();
         auto *text = static_cast<Text *>(ui);
@@ -5915,6 +6052,9 @@ void AlgebraKart::DoConnect() {
     URHO3D_LOGINFOF("client idx=%i, username=%s", idx, name.CString());
 
     VariantMap identity;
+    // Update loading progress
+    UpdateLoadingProgress(0.2f, "Establishing connection...");
+
     identity["UserName"] = name;
     identity["ColorIdx"] = idx;
     identity["Position"] = Vector3(-2,-2,-2);
@@ -5925,68 +6065,70 @@ void AlgebraKart::DoConnect() {
     if (engine_)
         engine_->RunFrame();
 
-
-
     // Client connect to server
-    if (network->Connect(address, SERVER_PORT, scene_, identity)) {
-
-        // CLIENT CODE -> START CONNECT
-
-        // Set camera node for viewport
-        cameraNode_ = scene_->CreateChild("Camera", LOCAL);
-        clientCam_ = cameraNode_->CreateComponent<Camera>();
-        //clientCam_->SetOrthographic(true);
-        clientCam_->SetFarClip(24000.0f);
-        //clientCam_->SetFillMode(Urho3D::FILL_WIREFRAME);
-        cameraNode_->SetPosition(Vector3(heliCamView_));
-        clientCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 0.0f));
-
-        // Setup game viewport
-        SetupGameViewports();
-
-        URHO3D_LOGINFOF("client identity name=%s", name.CString());
-        URHO3D_LOGINFOF("AlgebraKart::HandleConnect - data: [%s, %d]", name.CString(), idx);
-
-        // Store in local login list
-        loginList_.Push(name.CString());
-
-        if (showMenu_) {
-            // Change UI -> hide menu and show game
-            UpdateButtons();
-        }
-        started_ = true;
-
-        // Set logo sprite alignment
-        logoSprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-        logoSprite_->SetPosition(3, 3);
-        logoSprite_->SetScale(0.33f);
-        // Make logo not fully opaque to show the scene underneath
-        logoSprite_->SetOpacity(0.5f);
-
-        // Client startup code
-
-        // Store name
-        clientName_ = name.CString();
-
-        String playerText = "Logged in as: " + String(clientName_.CString());
-        instructionsText_->SetText(playerText);
-        //instructionsText_->SetPosition(0, 730);
-        instructionsText_->SetAlignment(HA_CENTER, VA_BOTTOM);
-        instructionsText_->SetPosition(0, -13);
-
-        // TODO CAN use this to get user input later for name
-//        String address = textEdit_->GetText().Trimmed();
-        // Empty the text edit after reading the address to connect to
-//        textEdit_->SetText(String::EMPTY);
-
-        UpdateButtons();
-
-        URHO3D_LOGINFOF("client idx=%i, username=%s", idx, name.CString());
-
+    bool success = network->Connect(address, SERVER_PORT, scene_, identity);
+    if (success) {
+        UpdateLoadingProgress(0.4f, "Connected! Loading resources...");
     } else {
+        UpdateLoadingProgress(0.0f, "Connection failed. Retrying...");
+        HideLoadingScreen();
         URHO3D_LOGINFOF("Connection to server failed =%s", address.CString());
         engine_->Exit();
+        return;
     }
+
+    // CLIENT CODE -> START CONNECT
+
+    // Set camera node for viewport
+    cameraNode_ = scene_->CreateChild("Camera", LOCAL);
+    clientCam_ = cameraNode_->CreateComponent<Camera>();
+    //clientCam_->SetOrthographic(true);
+    clientCam_->SetFarClip(24000.0f);
+    //clientCam_->SetFillMode(Urho3D::FILL_WIREFRAME);
+    cameraNode_->SetPosition(Vector3(heliCamView_));
+    clientCam_->GetNode()->SetRotation(Quaternion(90.0f, 0.0f, 0.0f));
+
+    // Setup game viewport
+    SetupGameViewports();
+
+    URHO3D_LOGINFOF("client identity name=%s", name.CString());
+    URHO3D_LOGINFOF("AlgebraKart::HandleConnect - data: [%s, %d]", name.CString(), idx);
+
+    // Store in local login list
+    loginList_.Push(name.CString());
+
+    if (showMenu_) {
+        // Change UI -> hide menu and show game
+        UpdateButtons();
+    }
+    started_ = true;
+
+    // Set logo sprite alignment
+    logoSprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+    logoSprite_->SetPosition(3, 3);
+    logoSprite_->SetScale(0.33f);
+    // Make logo not fully opaque to show the scene underneath
+    logoSprite_->SetOpacity(0.5f);
+
+    // Client startup code
+
+    // Store name
+    clientName_ = name.CString();
+
+    String playerText = "Logged in as: " + String(clientName_.CString());
+    instructionsText_->SetText(playerText);
+    //instructionsText_->SetPosition(0, 730);
+    instructionsText_->SetAlignment(HA_CENTER, VA_BOTTOM);
+    instructionsText_->SetPosition(0, -13);
+
+    // TODO CAN use this to get user input later for name
+//        String address = textEdit_->GetText().Trimmed();
+    // Empty the text edit after reading the address to connect to
+//        textEdit_->SetText(String::EMPTY);
+
+    UpdateButtons();
+
+    URHO3D_LOGINFOF("client idx=%i, username=%s", idx, name.CString());
 
     /// Subscribe the ServerConnected Event
     SubscribeToEvent(E_SERVERCONNECTED, URHO3D_HANDLER(AlgebraKart, HandleServerConnected));
