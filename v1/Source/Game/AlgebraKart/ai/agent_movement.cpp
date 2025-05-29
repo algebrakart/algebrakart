@@ -7,8 +7,8 @@
 
 class NetworkActor;
 
-AgentMovement::AgentMovement(std::unique_ptr<AgentController> agentController) {
-    this->agentController = std::make_unique<AgentController>(*agentController);
+AgentMovement::AgentMovement(std::shared_ptr<AgentController> agentController) {
+    this->agentController = agentController;
 
     steerInputMin_ = 999.0f;
     steerInputMax_ = -999.0f;

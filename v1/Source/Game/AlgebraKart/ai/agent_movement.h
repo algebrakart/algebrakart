@@ -18,7 +18,7 @@ class AgentController;
 class AgentMovement {
 public:
 
-    AgentMovement(std::unique_ptr<AgentController> agentController);
+    AgentMovement(std::shared_ptr<AgentController> agentController);
     ~AgentMovement();
 
     void update(float deltaTime);
@@ -42,7 +42,7 @@ public:
         return actionNorm_;
     }
 
-    std::unique_ptr<AgentController> agentController;
+    std::shared_ptr<AgentController> agentController;
 
 private:
 
