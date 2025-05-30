@@ -322,6 +322,7 @@ protected:
     int numWheelContacts_ = 0;
     Vector<int> wheelContactBuffer_;
     float wheelContactTime_ = 0;
+    float wheelSpace_ = 0;
 public:
     float getWheelContactTime() const;
     const Vector3 &GetDragBrake() const;

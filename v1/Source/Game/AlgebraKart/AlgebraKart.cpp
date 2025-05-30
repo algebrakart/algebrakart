@@ -8305,7 +8305,7 @@ void AlgebraKart::HandleServerDisconnected(StringHash eventType, VariantMap& eve
 
 void AlgebraKart::HandlePlayerRespawned(StringHash eventType, VariantMap& eventData)
 {
-    UpdateLoadingProgress(1.0f, "Ready to race!");
+    UpdateLoadingProgress(1.0f, "Get ready!");
 
     // Small delay before hiding to show completion
     auto* time = GetSubsystem<Time>();

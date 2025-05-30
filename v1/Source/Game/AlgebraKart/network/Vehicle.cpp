@@ -1482,6 +1482,9 @@ void Vehicle::Init(Node* node) {
 
         }
 
+        // Store set wheel space
+        wheelSpace_ = wheelSpace;
+
         Vector3 pos = Vector3(0, 4.0f, 0.0f); // Yugo
         Quaternion q = Quaternion(0, 90, 0);
 
@@ -2058,7 +2061,7 @@ void Vehicle::ApplyAntiRollBar()
     bool wheelHit = false;
 
 
-
+/*
     if (raycastVehicle_) {
 
         if (raycastVehicle_->GetSpeedKm() > 10.0f) {
@@ -2148,6 +2151,49 @@ void Vehicle::ApplyAntiRollBar()
             } // 4 wheels exist
         } // At least 10 km/h
 
+    }*/
+
+
+
+    if (raycastVehicle_) {
+
+        if (numWheels_ >= 4 && raycastVehicle_->GetSpeedKm() > 10.0f) {
+            float speedKmh = raycastVehicle_->GetSpeedKm();
+
+            // Speed-dependent anti-roll force
+            float speedFactor = Clamp(speedKmh / 100.0f, 0.3f, 2.0f);
+            float baseAntiRoll = antiRoll * speedFactor;
+
+            // Front anti-roll bar
+            float travel_FL = raycastVehicle_->GetWheelSkidInfoCumulative(0);
+            float travel_FR = raycastVehicle_->GetWheelSkidInfoCumulative(1);
+            float antiRollForce_Front = (travel_FL - travel_FR) * baseAntiRoll;
+
+            if (abs(antiRollForce_Front) > 1.0f) {
+                Vector3 wheelPos_FL = raycastVehicle_->GetWheelPosition(0);
+                Vector3 wheelPos_FR = raycastVehicle_->GetWheelPosition(1);
+
+                raycastVehicle_->GetBody()->ApplyForce(
+                        Vector3(0, -antiRollForce_Front, 0), wheelPos_FL);
+                raycastVehicle_->GetBody()->ApplyForce(
+                        Vector3(0, antiRollForce_Front, 0), wheelPos_FR);
+            }
+
+            // Rear anti-roll bar (slightly less aggressive)
+            float travel_BL = raycastVehicle_->GetWheelSkidInfoCumulative(2);
+            float travel_BR = raycastVehicle_->GetWheelSkidInfoCumulative(3);
+            float antiRollForce_Rear = (travel_BL - travel_BR) * baseAntiRoll * 0.8f;
+
+            if (abs(antiRollForce_Rear) > 1.0f) {
+                Vector3 wheelPos_BL = raycastVehicle_->GetWheelPosition(2);
+                Vector3 wheelPos_BR = raycastVehicle_->GetWheelPosition(3);
+
+                raycastVehicle_->GetBody()->ApplyForce(
+                        Vector3(0, -antiRollForce_Rear, 0), wheelPos_BL);
+                raycastVehicle_->GetBody()->ApplyForce(
+                        Vector3(0, antiRollForce_Rear, 0), wheelPos_BR);
+            }
+        }
     }
 }
 
@@ -2155,6 +2201,7 @@ void Vehicle::ApplyAntiRollBar()
 
 void Vehicle::ApplyDownwardForce()
 {
+    /*
     // apply downward force when some wheels are grounded
     if ( numWheelContacts_ > 0 && numWheelContacts_ != numWheels_ )
     {
@@ -2214,7 +2261,7 @@ void Vehicle::ApplyDownwardForce()
         Vector3 normForceWheel3 = normPosWheel3 + normVelMag * normWheel3;
         raycastVehicle_->GetBody()->ApplyForce( normForceWheel3 );
 
-*/
+*//*
 
         // Apply hard down force after wheel contact time is stable
         if (wheelContactTime_ > 1.0f) {
@@ -2226,6 +2273,111 @@ void Vehicle::ApplyDownwardForce()
 
         }
 
+    }
+    */
+    ////
+/*
+        // Apply normal force relative to vehicle
+        // small arbitrary multiplier
+        //const float velocityMultiplyer = 0.92f;
+        const float velocityMultiplyer = 100.12f;
+        //const float velocityMultiplyer = 1.24f;
+        Vector3 downNormal = node_->GetUp() * 1.0f;
+        float velocityMag = raycastVehicle_->GetBody()->GetLinearVelocity().LengthSquared() * velocityMultiplyer;
+        velocityMag = Clamp( velocityMag, MIN_DOWN_FORCE, MAX_DOWN_FORCE );
+        Vector3 force = velocityMag * downNormal;
+        //raycastVehicle_->GetBody()->ApplyForce( force  );
+
+
+
+        // Apply normal force relative to track, i.e. wheel contact normal
+
+        Vector3 normPosWheel0 = raycastVehicle_->GetContactPosition(0);
+        Vector3 normPosWheel1 = raycastVehicle_->GetContactPosition(1);
+        Vector3 normPosWheel2 = raycastVehicle_->GetContactPosition(2);
+        Vector3 normPosWheel3 = raycastVehicle_->GetContactPosition(3);
+
+        Vector3 normWheel0 = -raycastVehicle_->GetContactNormal(0);
+        Vector3 normWheel1 = -raycastVehicle_->GetContactNormal(1);
+        Vector3 normWheel2 = -raycastVehicle_->GetContactNormal(2);
+        Vector3 normWheel3 = -raycastVehicle_->GetContactNormal(3);
+
+
+
+        float pushMag = 0.0f + raycastVehicle_->GetBody()->GetLinearVelocity().LengthSquared() * 20.0f + raycastVehicle_->GetRPM()*10.0f;
+        pushMag = Clamp( pushMag, MIN_DOWN_FORCE, MAX_DOWN_FORCE );
+
+
+        // Normal force contact per wheel
+
+        const float normVelMultiplyer = 20.25f;
+        float normVelMag = 0;
+
+        normVelMag = raycastVehicle_->GetBody()->GetLinearVelocity().LengthSquared() * normVelMultiplyer;
+        normVelMag = Clamp( normVelMag, 1.0f, MAX_DOWN_FORCE*1000.0f );
+
+        // Wheel 0
+        Vector3 normForceWheel0 = normPosWheel0 + normVelMag * normWheel0;
+        raycastVehicle_->GetBody()->ApplyForce( normForceWheel0 );
+
+        // Wheel 1
+        Vector3 normForceWheel1 = normPosWheel1 + normVelMag * normWheel1;
+        raycastVehicle_->GetBody()->ApplyForce( normForceWheel1 );
+
+        // Wheel 2
+        Vector3 normForceWheel2 = normPosWheel2 + normVelMag * normWheel2;
+        raycastVehicle_->GetBody()->ApplyForce( normForceWheel2 );
+
+        // Wheel 3
+        Vector3 normForceWheel3 = normPosWheel3 + normVelMag * normWheel3;
+        raycastVehicle_->GetBody()->ApplyForce( normForceWheel3 );
+
+*/
+/*
+        // Apply hard down force after wheel contact time is stable
+        if (wheelContactTime_ > 1.0f) {
+            // Front wheels - hood force
+            raycastVehicle_->GetBody()->ApplyForce(force * 1, normPosWheel0);
+            raycastVehicle_->GetBody()->ApplyForce(force * 1, normPosWheel1);
+            //raycastVehicle_->GetBody()->ApplyForce(force, normPosWheel2);
+            //raycastVehicle_->GetBody()->ApplyForce(force, normPosWheel3);
+
+        }
+*/
+    // Apply downward force when some wheels are grounded
+    if (numWheelContacts_ > 0 && numWheelContacts_ != numWheels_) {
+        // Enhanced velocity-based downward force calculation
+        float speed = raycastVehicle_->GetBody()->GetLinearVelocity().Length();
+        float speedKmh = raycastVehicle_->GetSpeedKm();
+
+        // Progressive downward force that increases with speed
+        // Base force + speed-dependent component
+        const float BASE_DOWN_FORCE = 2000.0f;
+        const float SPEED_MULTIPLIER = 150.0f; // Force per km/h
+        const float MAX_DOWN_FORCE_CUSTOM = 15000.0f;
+
+        float downwardForce = BASE_DOWN_FORCE + (speedKmh * SPEED_MULTIPLIER);
+        downwardForce = Clamp(downwardForce, BASE_DOWN_FORCE, MAX_DOWN_FORCE_CUSTOM);
+
+        Vector3 downNormal = node_->GetUp() * -1.0f;
+
+        // Apply progressive force distribution based on speed
+        if (speedKmh > 80.0f) {
+            // At high speeds, apply more force to the front for stability
+            float frontBias = Clamp((speedKmh - 80.0f) / 100.0f, 0.0f, 0.7f);
+            float frontForce = downwardForce * (0.5f + frontBias);
+            float rearForce = downwardForce * (0.5f - frontBias * 0.5f);
+
+            // Front wheels get more downforce at high speed
+            Vector3 frontPos = node_->GetPosition() + node_->GetDirection() * wheelSpace_;
+            Vector3 rearPos = node_->GetPosition() - node_->GetDirection() * wheelSpace_;
+
+            raycastVehicle_->GetBody()->ApplyForce(frontForce * downNormal, frontPos);
+            raycastVehicle_->GetBody()->ApplyForce(rearForce * downNormal, rearPos);
+        } else {
+            // At lower speeds, apply force evenly
+            raycastVehicle_->GetBody()->ApplyForce(downwardForce * downNormal);
+        }
     }
 }
 
