@@ -397,6 +397,8 @@ void AlgebraKart::Start() {
         // Generate UI client for network management
         CreateUI();
 
+        UpdateLoadingProgress(0.1f, "Loading sound system...");
+
         // Enable for 3D sounds to work (attach to camera node)
         SoundListener *listener = scene_->CreateComponent<SoundListener>(LOCAL);
         GetSubsystem<Audio>()->SetListener(listener);
@@ -663,6 +665,7 @@ void AlgebraKart::HandleResourceBackgroundLoaded(StringHash eventType, VariantMa
     using namespace ResourceBackgroundLoaded;
 
     String progressStr = String("Loading: ") + String(Round(scene_->GetAsyncProgress() * 100.0f));
+    UpdateLoadingProgress(scene_->GetAsyncProgress(), "Connected! Loading resources...");
 
     int sticks = Round(scene_->GetAsyncProgress() * (float) 40);
     String progressBar = "";
@@ -5889,7 +5892,7 @@ void AlgebraKart::CreateLoadingScreen() {
 
     // Create loading text
     loadingText_ = loadingScreen_->CreateChild<Text>();
-    loadingText_->SetText("Establishing connection...");
+    loadingText_->SetText("Preparing scene...");
     loadingText_->SetFont(cache->GetResource<Font>(INGAME_FONT2), 24);
     loadingText_->SetColor(Color::WHITE);
     loadingText_->SetAlignment(HA_CENTER, VA_CENTER);
@@ -6287,6 +6290,9 @@ void AlgebraKart::StartMultiplayerGameSession()
         // if we are running a client
     else if (network->GetServerConnection())
     {
+
+        UpdateLoadingProgress(0.6f, "Establishing connection...");
+
         // Register the remote event 'player spawned'
         network->RegisterRemoteEvent(E_PLAYERSPAWNED);
         // Subscribe for the remote event 'player spawned'
@@ -7356,6 +7362,8 @@ void AlgebraKart::DestroyPlayer(Connection *connection) {
 // Spawn Player (NetworkActor on Server for Client)
 Node *AlgebraKart::SpawnPlayer(Connection *connection) {
 
+    UpdateLoadingProgress(0.6f, "Spawning player...");
+
     // Store connection as most recent client
     lastConnection_ = connection;
 
@@ -7643,6 +7651,8 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
     auto *font3 = cache->GetResource<Font>(INGAME_FONT3);
     auto *font4 = cache->GetResource<Font>(INGAME_FONT4);
 
+
+    UpdateLoadingProgress(0.2f, "Creating map...");
 
 /*
     // Create a directional light with shadows
@@ -8162,6 +8172,8 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
     }
 
 
+    UpdateLoadingProgress(0.3f, "Creating ai bots...");
+
     // Spawn the ai bot players
     CreateAgents();
 
@@ -8277,7 +8289,7 @@ void AlgebraKart::HandleClientDisconnected(StringHash eventType, VariantMap &eve
 
 void AlgebraKart::HandleServerConnected(StringHash eventType, VariantMap& eventData)
 {
-    UpdateLoadingProgress(0.6f, "Synchronizing with server...");
+    UpdateLoadingProgress(0.5f, "Connecting to server...");
     StartMultiplayerGameSession();
     // Start in game mode
     UpdateUIState(true);
