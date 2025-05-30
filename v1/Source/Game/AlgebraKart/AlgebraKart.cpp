@@ -775,7 +775,7 @@ void AlgebraKart::HandleClientResourceLoadFinished(StringHash eventType, Variant
 void AlgebraKart::HandleClientSceneLoaded(StringHash eventType, VariantMap& eventData)
 {
     // SERVER CODE
-
+    UpdateLoadingProgress(0.8f, "Loading game world...");
     using namespace ClientSceneLoaded;
     URHO3D_LOGINFO("HandleClientSceneLoaded");
     URHO3D_LOGINFOF("Client: Scene checksum -> %s", ToStringHex(scene_->GetChecksum()).CString());
@@ -5038,10 +5038,10 @@ void AlgebraKart::CreateUI() {
         return;
 
     // Create logo sprite and add to the UI layout
-    //logoSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+    logoSprite_ = ui->GetRoot()->CreateChild<Sprite>();
 
     // Set logo sprite texture
-    //logoSprite_->SetTexture(logoTexture);
+    logoSprite_->SetTexture(logoTexture);
 
     textureWidth = logoTexture->GetWidth();
     textureHeight = logoTexture->GetHeight();
@@ -5887,43 +5887,38 @@ void AlgebraKart::CreateLoadingScreen() {
     loadingBackgroundSprite_->SetAlignment(HA_LEFT, VA_TOP);
     loadingBackgroundSprite_->SetPosition(0, 0);
 
-    // Create logo
-    loadingLogoSprite_ = loadingScreen_->CreateChild<Sprite>();
-    loadingLogoSprite_->SetTexture(cache->GetResource<Texture2D>("Textures/AlgebraKartLogo.png"));
-    loadingLogoSprite_->SetSize(400, 200);
-    loadingLogoSprite_->SetAlignment(HA_CENTER, VA_CENTER);
-    loadingLogoSprite_->SetPosition(0, -100);
-
     // Create loading text
     loadingText_ = loadingScreen_->CreateChild<Text>();
-    loadingText_->SetText("Connecting to the mathematical universe...");
-    loadingText_->SetFont(cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"), 18);
+    loadingText_->SetText("Establishing connection...");
+    loadingText_->SetFont(cache->GetResource<Font>(INGAME_FONT2), 24);
     loadingText_->SetColor(Color::WHITE);
     loadingText_->SetAlignment(HA_CENTER, VA_CENTER);
-    loadingText_->SetPosition(0, 50);
+    loadingText_->SetPosition(0, -120);
+    loadingText_->SetEffectShadowOffset(IntVector2(4,5));
+    loadingText_->SetTextEffect(TextEffect::TE_SHADOW);
 
     // Create progress bar background
     loadingProgressBarBg_ = loadingScreen_->CreateChild<Sprite>();
     loadingProgressBarBg_->SetTexture(cache->GetResource<Texture2D>("Textures/ProgressBarBg.png"));
-    loadingProgressBarBg_->SetSize(400, 20);
+    loadingProgressBarBg_->SetSize(700, 20);
     loadingProgressBarBg_->SetAlignment(HA_CENTER, VA_CENTER);
-    loadingProgressBarBg_->SetPosition(0, 80);
+    loadingProgressBarBg_->SetPosition(-350, 0);
     loadingProgressBarBg_->SetColor(Color(0.3f, 0.3f, 0.3f, 0.8f));
 
     // Create progress bar
     loadingProgressBar_ = loadingProgressBarBg_->CreateChild<Sprite>();
     loadingProgressBar_->SetTexture(cache->GetResource<Texture2D>("Textures/ProgressBar.png"));
-    loadingProgressBar_->SetSize(0, 18);
-    loadingProgressBar_->SetAlignment(HA_LEFT, VA_CENTER);
-    loadingProgressBar_->SetPosition(1, 0);
-    loadingProgressBar_->SetColor(Color(0.2f, 0.8f, 0.2f, 1.0f));
+    loadingProgressBar_->SetSize(0, 20);
+    loadingProgressBar_->SetAlignment(HA_CENTER, VA_CENTER);
+    loadingProgressBar_->SetPosition(-349, -9);
+    loadingProgressBar_->SetColor(Color(0.7f, 1.0f, 0.9f, 1.0f));
 
     // Create tip text
     loadingTipText_ = loadingScreen_->CreateChild<Text>();
-    loadingTipText_->SetFont(cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"), 14);
+    loadingTipText_->SetFont(cache->GetResource<Font>(INGAME_FONT3, 17));
     loadingTipText_->SetColor(Color(0.8f, 0.8f, 0.8f, 1.0f));
     loadingTipText_->SetAlignment(HA_CENTER, VA_CENTER);
-    loadingTipText_->SetPosition(0, 120);
+    loadingTipText_->SetPosition(0, 420);
 
     // Initialize loading tips
     loadingTips_.Push("Tip: Use WASD keys to control your vehicle");
@@ -5961,7 +5956,7 @@ void AlgebraKart::UpdateLoadingProgress(float progress, const String& status) {
     loadingProgress_ = Clamp(progress, 0.0f, 1.0f);
 
     if (loadingProgressBar_) {
-        float barWidth = 398.0f * loadingProgress_; // 398 = 400 - 2 for padding
+        float barWidth = 698.0f * loadingProgress_; // 698 = 700 - 2 for padding
         loadingProgressBar_->SetSize(barWidth, 18);
     }
 
@@ -5981,12 +5976,6 @@ void AlgebraKart::UpdateLoadingScreen(float timeStep) {
         loadingTipTimer_ = 0.0f;
         currentTipIndex_ = (currentTipIndex_ + 1) % loadingTips_.Size();
         loadingTipText_->SetText(loadingTips_[currentTipIndex_]);
-    }
-
-    // Add some animation to the logo (gentle pulse)
-    if (loadingLogoSprite_) {
-        float pulse = 1.0f + 0.1f * Sin(GetSubsystem<Time>()->GetElapsedTime() * 2.0f);
-        loadingLogoSprite_->SetScale(pulse);
     }
 
     // Animate progress bar color
@@ -8288,6 +8277,7 @@ void AlgebraKart::HandleClientDisconnected(StringHash eventType, VariantMap &eve
 
 void AlgebraKart::HandleServerConnected(StringHash eventType, VariantMap& eventData)
 {
+    UpdateLoadingProgress(0.6f, "Synchronizing with server...");
     StartMultiplayerGameSession();
     // Start in game mode
     UpdateUIState(true);
@@ -8303,6 +8293,15 @@ void AlgebraKart::HandleServerDisconnected(StringHash eventType, VariantMap& eve
 
 void AlgebraKart::HandlePlayerRespawned(StringHash eventType, VariantMap& eventData)
 {
+    UpdateLoadingProgress(1.0f, "Ready to race!");
+
+    // Small delay before hiding to show completion
+    auto* time = GetSubsystem<Time>();
+    float currentTime = time->GetElapsedTime();
+
+    // For now, hide immediately after a frame
+    GetSubsystem<Engine>()->RunFrame();
+    HideLoadingScreen();
 
     // CLIENT CODE
 
