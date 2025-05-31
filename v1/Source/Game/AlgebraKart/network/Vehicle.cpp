@@ -2157,41 +2157,50 @@ void Vehicle::ApplyAntiRollBar()
 
     if (raycastVehicle_) {
 
-        if (numWheels_ >= 4 && raycastVehicle_->GetSpeedKm() > 10.0f) {
-            float speedKmh = raycastVehicle_->GetSpeedKm();
+        // Instead of applying forces, adjust suspension stiffness dynamically
+        if (numWheels_ >= 4 && raycastVehicle_->GetSpeedKm() > 20.0f) {
+            float speed = raycastVehicle_->GetSpeedKm();
 
-            // Speed-dependent anti-roll force
-            float speedFactor = Clamp(speedKmh / 100.0f, 0.3f, 2.0f);
-            float baseAntiRoll = antiRoll * speedFactor;
+            // Get wheel compression ratios
+            float leftCompression = 0.0f, rightCompression = 0.0f;
+            int leftWheels = 0, rightWheels = 0;
 
-            // Front anti-roll bar
-            float travel_FL = raycastVehicle_->GetWheelSkidInfoCumulative(0);
-            float travel_FR = raycastVehicle_->GetWheelSkidInfoCumulative(1);
-            float antiRollForce_Front = (travel_FL - travel_FR) * baseAntiRoll;
+            for (int i = 0; i < numWheels_; i++) {
+                if (raycastVehicle_->WheelIsGrounded(i)) {
+                    Vector3 wheelPos = raycastVehicle_->GetWheelPosition(i);
+                    Vector3 localWheelPos = node_->WorldToLocal(wheelPos);
 
-            if (abs(antiRollForce_Front) > 1.0f) {
-                Vector3 wheelPos_FL = raycastVehicle_->GetWheelPosition(0);
-                Vector3 wheelPos_FR = raycastVehicle_->GetWheelPosition(1);
-
-                raycastVehicle_->GetBody()->ApplyForce(
-                        Vector3(0, -antiRollForce_Front, 0), wheelPos_FL);
-                raycastVehicle_->GetBody()->ApplyForce(
-                        Vector3(0, antiRollForce_Front, 0), wheelPos_FR);
+                    if (localWheelPos.x_ < 0) {  // Left side
+                        leftCompression += raycastVehicle_->GetWheelSkidInfoCumulative(i);
+                        leftWheels++;
+                    } else {  // Right side
+                        rightCompression += raycastVehicle_->GetWheelSkidInfoCumulative(i);
+                        rightWheels++;
+                    }
+                }
             }
 
-            // Rear anti-roll bar (slightly less aggressive)
-            float travel_BL = raycastVehicle_->GetWheelSkidInfoCumulative(2);
-            float travel_BR = raycastVehicle_->GetWheelSkidInfoCumulative(3);
-            float antiRollForce_Rear = (travel_BL - travel_BR) * baseAntiRoll * 0.8f;
+            if (leftWheels > 0) leftCompression /= leftWheels;
+            if (rightWheels > 0) rightCompression /= rightWheels;
 
-            if (abs(antiRollForce_Rear) > 1.0f) {
-                Vector3 wheelPos_BL = raycastVehicle_->GetWheelPosition(2);
-                Vector3 wheelPos_BR = raycastVehicle_->GetWheelPosition(3);
+            // Calculate roll tendency
+            float rollDifference = leftCompression - rightCompression;
 
-                raycastVehicle_->GetBody()->ApplyForce(
-                        Vector3(0, -antiRollForce_Rear, 0), wheelPos_BL);
-                raycastVehicle_->GetBody()->ApplyForce(
-                        Vector3(0, antiRollForce_Rear, 0), wheelPos_BR);
+            // Adjust suspension stiffness based on roll (very conservative)
+            if (abs(rollDifference) > 0.1f) {
+                float adjustment = Clamp(rollDifference * 5.0f, -10.0f, 10.0f);
+
+                for (int i = 0; i < numWheels_; i++) {
+                    Vector3 wheelPos = raycastVehicle_->GetWheelPosition(i);
+                    Vector3 localWheelPos = node_->WorldToLocal(wheelPos);
+
+                    float currentStiffness = raycastVehicle_->GetWheelSuspensionStiffness(i);
+                    if (localWheelPos.x_ < 0 && rollDifference > 0) {  // Stiffen left side
+                        raycastVehicle_->SetWheelSuspensionStiffness(i, currentStiffness + adjustment);
+                    } else if (localWheelPos.x_ > 0 && rollDifference < 0) {  // Stiffen right side
+                        raycastVehicle_->SetWheelSuspensionStiffness(i, currentStiffness - adjustment);
+                    }
+                }
             }
         }
     }
@@ -2344,42 +2353,36 @@ void Vehicle::ApplyDownwardForce()
 
         }
 */
-    // Apply downward force when some wheels are grounded
-    if (numWheelContacts_ > 0 && numWheelContacts_ != numWheels_) {
-        // Enhanced velocity-based downward force calculation
+    // Only apply gentle downward force when partially airborne
+    if (numWheelContacts_ > 0 && numWheelContacts_ < numWheels_) {
         float speed = raycastVehicle_->GetBody()->GetLinearVelocity().Length();
         float speedKmh = raycastVehicle_->GetSpeedKm();
 
-        // Progressive downward force that increases with speed
-        // Base force + speed-dependent component
-        const float BASE_DOWN_FORCE = 2000.0f;
-        const float SPEED_MULTIPLIER = 150.0f; // Force per km/h
-        const float MAX_DOWN_FORCE_CUSTOM = 15000.0f;
+        // Much more conservative force calculation
+        const float BASE_DOWN_FORCE = 800.0f;  // Reduced from 2000.0f
+        const float SPEED_MULTIPLIER = 15.0f;  // Reduced from 150.0f
+        const float MAX_DOWN_FORCE_GENTLE = 3000.0f;  // Reduced from 15000.0f
 
         float downwardForce = BASE_DOWN_FORCE + (speedKmh * SPEED_MULTIPLIER);
-        downwardForce = Clamp(downwardForce, BASE_DOWN_FORCE, MAX_DOWN_FORCE_CUSTOM);
+        downwardForce = Clamp(downwardForce, BASE_DOWN_FORCE, MAX_DOWN_FORCE_GENTLE);
 
-        Vector3 downNormal = node_->GetUp() * -1.0f;
+        // Apply force only at center of mass to avoid flipping
+        Vector3 downNormal = Vector3(0, -1, 0);  // World down, not relative to vehicle
+        Vector3 centerOfMass = raycastVehicle_->GetBody()->GetCenterOfMass();
 
-        // Apply progressive force distribution based on speed
-        if (speedKmh > 80.0f) {
-            // At high speeds, apply more force to the front for stability
-            float frontBias = Clamp((speedKmh - 80.0f) / 100.0f, 0.0f, 0.7f);
-            float frontForce = downwardForce * (0.5f + frontBias);
-            float rearForce = downwardForce * (0.5f - frontBias * 0.5f);
+        // Apply smaller, more frequent impulses instead of continuous force
+        static float forceTimer = 0.0f;
+        forceTimer += GetSubsystem<Time>()->GetTimeStep();
 
-            // Front wheels get more downforce at high speed
-            Vector3 frontPos = node_->GetPosition() + node_->GetDirection() * wheelSpace_;
-            Vector3 rearPos = node_->GetPosition() - node_->GetDirection() * wheelSpace_;
-
-            raycastVehicle_->GetBody()->ApplyForce(frontForce * downNormal, frontPos);
-            raycastVehicle_->GetBody()->ApplyForce(rearForce * downNormal, rearPos);
-        } else {
-            // At lower speeds, apply force evenly
-            raycastVehicle_->GetBody()->ApplyForce(downwardForce * downNormal);
+        if (forceTimer >= 0.1f) {  // Apply every 100ms
+            Vector3 impulse = downNormal * (downwardForce * 0.1f);  // Scale down the impulse
+            raycastVehicle_->GetBody()->ApplyForce(impulse);
+            forceTimer = 0.0f;
         }
     }
 }
+
+
 
 
 void Vehicle::ApplyDragBrake()
@@ -2487,19 +2490,31 @@ void Vehicle::AutoCorrectPitchRoll()
 
 void Vehicle::LimitLinearAndAngularVelocity()
 {
-    // velocity limit
-    Vector3 linVel = raycastVehicle_->GetBody()->GetLinearVelocity();
-    if ( linVel.Length() > MAX_LINEAR_VEL_LIMIT )
-    {
-        raycastVehicle_->GetBody()->SetLinearVelocity( linVel.Normalized() * MAX_LINEAR_VEL_LIMIT );
+
+    Vector3 linearVel = raycastVehicle_->GetBody()->GetLinearVelocity();
+    Vector3 angularVel = raycastVehicle_->GetBody()->GetAngularVelocity();
+
+    float currentSpeed = linearVel.Length();
+    float speedKmh = raycastVehicle_->GetSpeedKm();
+
+    // Conservative maximum speeds
+    const float MAX_SPEED_MS = 55.0f;  // ~200 km/h max
+    const float MAX_ANGULAR_VEL = 8.0f;  // Reduced from higher values
+
+    // Gradually reduce speed if too fast, don't cut it abruptly
+    if (currentSpeed > MAX_SPEED_MS) {
+        float reduction = 0.98f;  // Gradual 2% reduction per frame
+        Vector3 reducedVel = linearVel * reduction;
+        raycastVehicle_->GetBody()->SetLinearVelocity(reducedVel);
     }
 
-    // angular velocity limiters
-    Vector3 v3AngVel = raycastVehicle_->GetBody()->GetAngularVelocity();
-    v3AngVel.x_ = Clamp( v3AngVel.x_, -MAX_ANGULAR_VEL_LIMIT,  MAX_ANGULAR_VEL_LIMIT );
-    v3AngVel.y_ = Clamp( v3AngVel.y_, -m_fYAngularVelocity,    m_fYAngularVelocity );
-    v3AngVel.z_ = Clamp( v3AngVel.z_, -MAX_ANGULAR_VEL_LIMIT,  MAX_ANGULAR_VEL_LIMIT );
-    raycastVehicle_->GetBody()->SetAngularVelocity( v3AngVel );
+    // Conservative angular velocity limiting
+    angularVel.x_ = Clamp(angularVel.x_, -MAX_ANGULAR_VEL, MAX_ANGULAR_VEL);
+    angularVel.y_ = Clamp(angularVel.y_, -MAX_ANGULAR_VEL, MAX_ANGULAR_VEL);
+    angularVel.z_ = Clamp(angularVel.z_, -MAX_ANGULAR_VEL, MAX_ANGULAR_VEL);
+
+    raycastVehicle_->GetBody()->SetAngularVelocity(angularVel);
+
 }
 
 void Vehicle::UpdateGear()
