@@ -166,7 +166,10 @@ public:
 
 
     void SpectrumAnalyzer() {};
-
+    void SetGrounded(bool grounded);
+    Vector3 GetCurrentMovement() const;
+    void SetMovementParameters(float walkSpeed, float runMultiplier, float jumpForce,
+                               float damping, float stiffness);
 private:
 
     // Network functions
@@ -347,6 +350,20 @@ private:
     Controls sample_input();
     void apply_input(Node* playerNode, const Controls& controls);
     void apply_input(Connection* connection, const Controls& controls);
+
+    // Racing formation constants
+    const int GRID_COLUMNS = 4;  // Number of columns in starting grid
+    const float GRID_SPACING_X = 25.0f;  // Distance between columns
+    const float GRID_SPACING_Z = 35.0f;  // Distance between rows
+    const Vector3 GRID_START_POSITION = Vector3(0.0f, 20.0f, -200.0f);  // Starting line position
+    const Vector3 RACING_DIRECTION = Vector3(-1.0f, 0.0f, 0.0f);  // Forward direction
+
+    // Track next available grid position
+    int nextGridPosition_ = 0;
+
+    // Helper method to calculate grid position
+    Vector3 GetGridPosition(int gridIndex);
+    void ResetGridPositions() { nextGridPosition_ = 0; }
 
     void UpdateClientObjects();
 
@@ -699,6 +716,24 @@ private:
     /// Packet counter UI update timer
     Timer packetCounterTimer_;
 
+    void ArrangePlayersInFormation();
+
+    void StartRace();
+
+    // Springy movement variables
+    Vector3 targetMovement_;          // Target movement direction
+    Vector3 currentMovement_;         // Current smoothed movement
+    Vector3 movementVelocity_;        // Velocity for spring damping
+    float walkSpeed_;                 // Base walking speed
+    float runSpeed_;                  // Running speed multiplier
+    float jumpForce_;                 // Jump force magnitude
+    float movementDamping_;           // Movement spring damping
+    float movementStiffness_;         // Movement spring stiffness
+
+    bool isRunning_;                  // Is character running
+    bool isGrounded_;                 // Is character on ground
+    float jumpCooldown_;              // Jump cooldown timer
+    float currentJumpCooldown_;       // Current jump cooldown
 };
 
 // Safety filter censored words

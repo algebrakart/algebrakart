@@ -278,6 +278,20 @@ AlgebraKart::AlgebraKart(Context *context) :
     bzRadioTracksArtistLink.push_back(artistLink);
     bzRadioTracksTrackName.push_back(trackFile);
 
+    // Add this to AlgebraKart constructor in AlgebraKart.cpp:
+    walkSpeed_ = 5.0f;
+    runSpeed_ = 2.0f;                    // Multiplier for running
+    jumpForce_ = 8.0f;
+    movementDamping_ = 0.8f;
+    movementStiffness_ = 10.0f;
+    isRunning_ = false;
+    isGrounded_ = true;
+    jumpCooldown_ = 0.5f;
+    currentJumpCooldown_ = 0.0f;
+    targetMovement_ = Vector3::ZERO;
+    currentMovement_ = Vector3::ZERO;
+    movementVelocity_ = Vector3::ZERO;
+
 }
 
 void AlgebraKart::Setup() {
@@ -900,10 +914,219 @@ Controls AlgebraKart::SampleCSPControls()
     auto input = GetSubsystem<Input>();
 
     Controls controls; // Return data
-    GameController *gameController = GetSubsystem<GameController>();
+    GameController *gameController_ = GetSubsystem<GameController>();
+
+    // Clear previous controls
+    controls.buttons_ = 0;
+    controls.yaw_ = 0.0f;
+
+    bool brake = false;
+    bool accel = false;
+
+// Clear previous controls
+    controls.buttons_ = 0;
+
+// Get time step for smooth movement calculations
+    float timeStep = GetSubsystem<Time>()->GetTimeStep();
+
+// Update jump cooldown
+    if (currentJumpCooldown_ > 0.0f)
+        currentJumpCooldown_ -= timeStep;
+
+// === KEYBOARD INPUT HANDLING ===
+    Vector3 inputDirection = Vector3::ZERO;
+
+// Directional input
+    if (input->GetKeyDown(KEY_W) || input->GetKeyDown(KEY_UP)) {
+        inputDirection.z_ += 1.0f;
+        controls.buttons_ |= NTWK_CTRL_FORWARD;
+    }
+    if (input->GetKeyDown(KEY_S) || input->GetKeyDown(KEY_DOWN)) {
+        inputDirection.z_ -= 1.0f;
+        controls.buttons_ |= NTWK_CTRL_BACK;
+    }
+    if (input->GetKeyDown(KEY_A) || input->GetKeyDown(KEY_LEFT)) {
+        inputDirection.x_ -= 1.0f;
+        controls.buttons_ |= NTWK_CTRL_LEFT;
+    }
+    if (input->GetKeyDown(KEY_D) || input->GetKeyDown(KEY_RIGHT)) {
+        inputDirection.x_ += 1.0f;
+        controls.buttons_ |= NTWK_CTRL_RIGHT;
+    }
+
+// Running (hold shift)
+    isRunning_ = input->GetKeyDown(KEY_LSHIFT) || input->GetKeyDown(KEY_RSHIFT);
+
+// Jumping (spacebar)
+    bool jumpPressed = input->GetKeyDown(KEY_SPACE);
+    if (jumpPressed && isGrounded_ && currentJumpCooldown_ <= 0.0f) {
+        controls.buttons_ |= NTWK_CTRL_FIRE; // Use fire button for jump
+        currentJumpCooldown_ = jumpCooldown_;
+        isGrounded_ = false; // Will be reset by physics collision
+    }
+
+// Additional controls
+    if (input->GetKeyDown(KEY_RETURN) || input->GetKeyDown(KEY_KP_ENTER)) {
+        controls.buttons_ |= NTWK_CTRL_ENTER;
+    }
+
+// === SPRINGY MOVEMENT CALCULATION ===
+
+// Normalize input direction to prevent faster diagonal movement
+    if (inputDirection.Length() > 0.0f) {
+        inputDirection = inputDirection.Normalized();
+    }
+
+// Calculate target movement with speed modifiers
+    float currentSpeed = walkSpeed_;
+    if (isRunning_ && inputDirection.Length() > 0.0f) {
+        currentSpeed *= runSpeed_;
+    }
+
+    targetMovement_ = inputDirection * currentSpeed;
+
+// Apply spring physics for smooth movement
+    Vector3 displacement = targetMovement_ - currentMovement_;
+    Vector3 springForce = displacement * movementStiffness_;
+    Vector3 dampingForce = movementVelocity_ * -movementDamping_;
+    Vector3 totalForce = springForce + dampingForce;
+
+// Update velocity and position using spring physics
+    movementVelocity_ += totalForce * timeStep;
+    currentMovement_ += movementVelocity_ * timeStep;
+
+// Apply movement deadzone to prevent micro-movements
+    if (currentMovement_.Length() < 0.01f && targetMovement_.Length() < 0.01f) {
+        currentMovement_ = Vector3::ZERO;
+        movementVelocity_ = Vector3::ZERO;
+    }
+
+    URHO3D_LOGDEBUGF("currentMovement_-> x: %f, y: %f, z: %f ", currentMovement_.x_, currentMovement_.y_, currentMovement_.z_);
+
+// === APPLY MOVEMENT TO EXISTING CONTROL SYSTEM ===
+
+// Map springy movement to existing control inputs
+// Use pitch and yaw for movement direction
+    if (currentMovement_.Length() > 0.01f) {
+        // Calculate movement direction angles
+        float moveAngle = atan2(currentMovement_.x_, currentMovement_.z_) * 180.0f / M_PI;
+        controls.yaw_ = moveAngle * 0.1f; // Scale for smooth rotation
+
+        // Map to existing control buttons based on primary movement direction
+        Vector3 normalizedMovement = currentMovement_.Normalized();
+
+        // Set acceleration level based on movement magnitude
+        float accelLevel = currentMovement_.Length() / (walkSpeed_ * runSpeed_);
+        controls.extraData_["accelLevel"] = Clamp(accelLevel, 0.0f, 1.0f);
+
+        // Set steering level for vehicle compatibility
+        controls.extraData_["steerLevel"] = Clamp(normalizedMovement.x_, -1.0f, 1.0f);
+
+        // Store movement values for NetworkActor application
+        controls.extraData_["movementX"] = currentMovement_.x_;
+        controls.extraData_["movementZ"] = currentMovement_.z_;
+        controls.extraData_["movementY"] = jumpPressed && isGrounded_ ? jumpForce_ : 0.0f;
+
+        URHO3D_LOGDEBUGF("accelLevel-> %f", accelLevel);
+
+    } else {
+        controls.yaw_ = 0.0f;
+        controls.extraData_["accelLevel"] = 0.0f;
+        controls.extraData_["steerLevel"] = 0.0f;
+        controls.extraData_["movementX"] = 0.0f;
+        controls.extraData_["movementZ"] = 0.0f;
+        controls.extraData_["movementY"] = 0.0f;
+    }
+
+// Store additional state
+    controls.extraData_["isRunning"] = isRunning_;
+    controls.extraData_["isGrounded"] = isGrounded_;
+
+
+// Copy to network controls for transmission
+    ntwkControls_ = controls;
+
+    return controls;
+
+/*
+    // CONTROLLER INPUT (Priority over keyboard)
+    if (gameController_ && gameController_->IsValid()) {
+        gameController_->UpdateControlInputs(controls);
+
+        // Get analog values from controller
+        float steerLevel = controls.extraData_["steerLevel"].GetFloat();
+        float accelLevel = controls.extraData_["accelLevel"].GetFloat();
+
+        // CRITICAL FIX: Properly handle yaw rotation
+        ntwkControls_.yaw_ = controls.yaw_ * 0.1f; // Scale down rotation speed
+
+        // Set movement based on analog values
+        ntwkControls_.extraData_["steerLevel"] = steerLevel;
+        ntwkControls_.extraData_["accelLevel"] = accelLevel;
+
+        // Map analog to digital controls for compatibility
+        if (Abs(steerLevel) > 0.1f) {
+            if (steerLevel < 0.0f) {
+                ntwkControls_.buttons_ |= NTWK_CTRL_LEFT;
+            } else {
+                ntwkControls_.buttons_ |= NTWK_CTRL_RIGHT;
+            }
+        }
+
+        if (Abs(accelLevel) > 0.1f) {
+            if (accelLevel > 0.0f) {
+                ntwkControls_.buttons_ |= NTWK_CTRL_FORWARD;
+            } else {
+                ntwkControls_.buttons_ |= NTWK_CTRL_BACK;
+            }
+        }
+    }
+        // KEYBOARD INPUT (Fallback)
+    else {
+        float keybdAccel = 0.0f;
+        float keybdSteer = 0.0f;
+
+        // Check for arrow keys and WASD keys
+        if (input->GetKeyDown(KEY_W) || input->GetKeyDown(KEY_UP)) {
+            ntwkControls_.buttons_ |= NTWK_CTRL_FORWARD;
+            keybdAccel = 0.7f;
+        }
+        if (input->GetKeyDown(KEY_S) || input->GetKeyDown(KEY_DOWN)) {
+            ntwkControls_.buttons_ |= NTWK_CTRL_BACK;
+            keybdAccel = -0.7f;
+        }
+        if (input->GetKeyDown(KEY_A) || input->GetKeyDown(KEY_LEFT)) {
+            ntwkControls_.buttons_ |= NTWK_CTRL_LEFT;
+            keybdSteer = -1.0f;
+        }
+        if (input->GetKeyDown(KEY_D) || input->GetKeyDown(KEY_RIGHT)) {
+            ntwkControls_.buttons_ |= NTWK_CTRL_RIGHT;
+            keybdSteer = 1.0f;
+        }
+
+        // Apply keyboard controls
+        ntwkControls_.extraData_["accelLevel"] = keybdAccel;
+        ntwkControls_.extraData_["steerLevel"] = keybdSteer;
+
+        // Keyboard doesn't change yaw directly
+        ntwkControls_.yaw_ = 0.0f;
+
+        // Additional controls
+        if (input->GetKeyDown(KEY_SPACE)) {
+            ntwkControls_.buttons_ |= NTWK_CTRL_FIRE;
+        }
+        if (input->GetKeyDown(KEY_RETURN)) {
+            ntwkControls_.buttons_ |= NTWK_CTRL_ENTER;
+        }
+    }
+
+    bool accel = ntwkControls_.buttons_ & NTWK_CTRL_FORWARD;
+    bool brake = ntwkControls_.buttons_ & NTWK_CTRL_BACK;
+
+
     // Retrieve controller inputs ** NOTE this will clear existing buttons (DO FIRST)
-    if (gameController->IsValid()) {
-        gameController->UpdateControlInputs(ntwkControls_);
+    if (gameController_->IsValid()) {
+        gameController_->UpdateControlInputs(ntwkControls_);
     }
 
     // === KEYBOARD INPUT HANDLING ===
@@ -952,9 +1175,6 @@ Controls AlgebraKart::SampleCSPControls()
     if (input->GetKeyDown(KEY_RETURN) || input->GetKeyDown(KEY_KP_ENTER)) {
         ntwkControls_.buttons_ |= NTWK_CTRL_ENTER; // Enter for vehicle entry
     }
-
-    // set controls and pos
-    ntwkControls_.yaw_ = yaw_;
 
     // axis
     const StringHash axisHashList[SDL_CONTROLLER_AXIS_MAX / 2] = {VAR_AXIS_0, VAR_AXIS_1, VAR_AXIS_2};
@@ -1009,15 +1229,16 @@ Controls AlgebraKart::SampleCSPControls()
     joyAngle -= 180.0f;
 
     ntwkControls_.yaw_ = joyAngle;
-    ntwkControls_.extraData_["accelLevel"] = 0.7f;//actorAccel;
+    ntwkControls_.extraData_["accelLevel"] = actorAccel;
     ntwkControls_.extraData_["steerLevel"] = lAxisVal.x_ + keybdSteer;
 
-    bool accel = (input->GetKeyDown(Urho3D::KEY_AC_FORWARD) || input->GetKeyDown(KEY_W) || ntwkControls_.IsDown(BUTTON_B) || (actorAccel < -0.9f));
+    /*
+    bool accel = (input->GetKeyDown(Urho3D::KEY_UP) || input->GetKeyDown(KEY_W) || ntwkControls_.IsDown(BUTTON_B) || (actorAccel < -0.9f));
     bool use = input->GetKeyDown(KEY_SPACE) || ntwkControls_.IsDown(BUTTON_X);
     bool enter = input->GetKeyDown(KEY_F) || ntwkControls_.IsDown(BUTTON_Y);
     bool brake = (input->GetKeyDown(KEY_S) || ntwkControls_.IsDown(BUTTON_A));
     bool fire = (input->GetKeyDown(Urho3D::KEY_B) || ntwkControls_.IsDown(BUTTON_B));
-
+*/
 
 
     if (input->GetKeyDown(Urho3D::KEY_RETURN)) {
@@ -1043,6 +1264,7 @@ Controls AlgebraKart::SampleCSPControls()
 
         Vector3 bodyPos;
         Quaternion rotation;
+
 
         if (actorNode) {
             // Retrieve Actor
@@ -1107,20 +1329,20 @@ Controls AlgebraKart::SampleCSPControls()
     }
 
 
-    bool left = input->GetKeyDown(KEY_A) || input->GetKeyDown(Urho3D::KEY_LEFT) || (lAxisVal.x_ < -0.4f);
-    bool right = input->GetKeyDown(KEY_D) || input->GetKeyDown(Urho3D::KEY_RIGHT) || (lAxisVal.x_ > 0.4f);
+    //bool left = input->GetKeyDown(KEY_A) || input->GetKeyDown(Urho3D::KEY_LEFT) || (lAxisVal.x_ < -0.4f);
+    //bool right = input->GetKeyDown(KEY_D) || input->GetKeyDown(Urho3D::KEY_RIGHT) || (lAxisVal.x_ > 0.4f);
 
-    ntwkControls_.Set(NTWK_CTRL_FORWARD, accel);
-    ntwkControls_.Set(NTWK_CTRL_BACK, brake);
-    ntwkControls_.Set(NTWK_CTRL_LEFT, left);
-    ntwkControls_.Set(NTWK_CTRL_RIGHT, right);
-    ntwkControls_.Set(NTWK_CTRL_ENTER, enter);
-    ntwkControls_.Set(NTWK_CTRL_FIRE, fire);
-    ntwkControls_.Set(NTWK_CTRL_USE, use);
+    //ntwkControls_.Set(NTWK_CTRL_FORWARD, accel);
+    //ntwkControls_.Set(NTWK_CTRL_BACK, brake);
+    //ntwkControls_.Set(NTWK_CTRL_LEFT, left);
+    //ntwkControls_.Set(NTWK_CTRL_RIGHT, right);
+    //ntwkControls_.Set(NTWK_CTRL_ENTER, enter);
+    //ntwkControls_.Set(NTWK_CTRL_FIRE, fire);
+   // ntwkControls_.Set(NTWK_CTRL_USE, use);
 
-
-    // Set controls to updated ntwkControls
+    // Copy ntwkControls to return value
     controls = ntwkControls_;
+    ////
 
     //csp->predict();
     //cspClient_->predict();
@@ -3739,6 +3961,7 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                 float timeStep = eventData[P_TIMESTEP].GetFloat();
                                 float controlYawAngle = actor->controls_.yaw_ - 90.0f;
                                 float slowdown = 0.07f;
+                                float accelLevel = actor->controls_.extraData_["accelLevel"].GetFloat();
 
                                 // Increment timers
                                 actor->lastWaypoint_ += timeStep;
@@ -3769,10 +3992,9 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                     // On foot controls
                                     float z = controlYawAngle;
 
-                                    // Dependent on stick yaw movement
-                                    if (abs(controlYawAngle) < 90.0f) {
-                                        //URHO3D_LOGINFOF("z -> %f", z);
-
+                                    // Dependent on movement
+                                    if (accelLevel > 0.0f) {
+                                        URHO3D_LOGINFOF("Accelerate -> %f", accelLevel);
                                         // Apply rotation
                                         actor->GetBody()->GetNode()->SetRotation(dir);
                                         // Align model and apply movement to body
@@ -7373,10 +7595,17 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
     VariantMap identity = connection->GetIdentity();
     String username = String(identity["UserName"]);
     String name = String(String("actor-") + username);
+    // Get next grid position
+    Vector3 actorPos = GetGridPosition(nextGridPosition_);
+    nextGridPosition_++;
     // Create a new network actor for the player
     SharedPtr<Node> networkActorNode(scene_->CreateChild(name, REPLICATED));
-    Vector3 randLoc = Vector3(Random(-4000,4000), Random(-4000,4000), Random(-4000,4000));
-    networkActorNode->SetPosition(randLoc);
+    networkActorNode->SetPosition(actorPos);
+
+    // Face the racing direction
+    Quaternion racingOrientation;
+    racingOrientation.FromLookRotation(RACING_DIRECTION, Vector3::UP);
+    networkActorNode->SetRotation(racingOrientation);
 
     NetworkActor *actor = networkActorNode->CreateComponent<NetworkActor>(REPLICATED);
     actor->Init(networkActorNode);
@@ -7392,7 +7621,7 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
     auto* body = networkActorNode->GetComponent<RigidBody>(true);
 
     // Set calculated network actor position
-
+/*
     Vector3 actorPos = Vector3(0,0,0);
     if (starAMarkerSet_) {
         Vector3 spawnDir = (starBMarker_-starAMarker_);
@@ -7409,7 +7638,7 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
 
     } else {
         actor->GetBody()->SetPosition(randLoc);
-    }
+    }*/
 
     actor->SetClientInfo(username, Random(1,100), Vector3(actor->GetBody()->GetPosition()));
     // Unmute sequencer -> turn to true to hear drum machine
@@ -7421,10 +7650,13 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
     String vehicleName = "vehicle-" + username;
     // Create a new vehicle for the player
     SharedPtr<Node> vehicleNode(scene_->CreateChild(vehicleName, REPLICATED));
-    //vehicleNode->SetRotation(Quaternion(0.0f, 180.0f, 0.0f));
+    // Create vehicle VERY close to the actor (almost same position)
+    //Vector3 vehiclePos = actorPos + Vector3(1.0f, 0.0f, -1.0f);  // Slightly behind and to the right
+    //vehicleNode->SetPosition(vehiclePos);
+    //vehicleNode->SetRotation(racingOrientation);  // Same orientation as actor
+    vehicleNode->SetRotation(Quaternion(0.0f, 180.0f, 0.0f));
     Vehicle *vehicle = vehicleNode->CreateComponent<Vehicle>(REPLICATED);
     vehicle->Init(vehicleNode);
-
     vehicleNode->SetPosition(Vector3(actor->GetBody()->GetPosition())+Vector3(0,-5,-40));
     //vehicle->GetRaycastVehicle()->GetBody()->SetPosition(Vector3(actor->GetPosition())-Vector3::UP*50.0f);
     vehicleNode->SetRotation(Quaternion(0.0f, Random(0.0f, 0.0f), 0.0f));
@@ -7503,20 +7735,31 @@ std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
         prevActorNode->Remove();
     }
 
+    // Get next grid position for AI bot
+    Vector3 actorPos = GetGridPosition(nextGridPosition_);
+    nextGridPosition_++;
+
     // Create a new network actor for the player
     SharedPtr<Node> networkActorNode(scene_->CreateChild(username, REPLICATED));
-    networkActorNode->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+    networkActorNode->SetPosition(actorPos);
+
+    // Face the racing direction
+    Quaternion racingOrientation;
+    racingOrientation.FromLookRotation(RACING_DIRECTION, Vector3::UP);
+    networkActorNode->SetRotation(racingOrientation);
 
     NetworkActor *actor = networkActorNode->CreateComponent<NetworkActor>(REPLICATED);
     actor->Init(networkActorNode);
     String name = String(String("actor-") + username);
+
+    // Create vehicle close to the AI actor
+    Vector3 vehiclePos = actorPos + Vector3(2.0f, 0.0f, -3.0f);  // Slightly behind and to the right
 
     // Assign server recorder to each client sequencer
     Server *server = GetSubsystem<Server>();
     SharedPtr<Recorder> serverRec_ = server->GetRecorder();
     actor->GetSequencer()->SetServerRec(serverRec_);
 
-    Vector3 actorPos = Vector3(0,0,0);
     if (starAMarkerSet_) {
         Vector3 spawnDir = (starBMarker_-starAMarker_);
         Vector3 startPos = starAMarker_;
@@ -7547,10 +7790,13 @@ std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
     Vehicle *vehicle = vehicleNode->CreateComponent<Vehicle>(REPLICATED);
     vehicle->Init(vehicleNode);
     actor->SetClientInfo(username, Random(1,100), Vector3(actor->GetPosition()));
-    vehicleNode->SetPosition(Vector3(actor->GetPosition())+Vector3(0,-30.0f,0));
-    vehicleNode->SetRotation(Quaternion(0.0f, -90.0f, 0.0f));
+    vehicleNode->SetPosition(vehiclePos);
+    vehicleNode->SetRotation(racingOrientation);
     // Attach vehicle to actor
     actor->vehicle_ = vehicle;
+
+    // Auto-enter the vehicle for AI bots (they should start in their vehicles)
+    //actor->EnterVehicle();
 
     // Create text3d client info node
     Node *plyFltTextNode = vehicleNode->CreateChild("Actor FloatText", REPLICATED);
@@ -8441,4 +8687,90 @@ void AlgebraKart::PlayNextTrack() {
     // Clamp tracks to queue size
     radioTrack_ = radioTrack_ % radioTrackInfoQueue_.Size();
     PlayMusic("Sounds/" + radioTrackInfoQueue_.At(radioTrack_).trackName);
+}
+
+Vector3 AlgebraKart::GetGridPosition(int gridIndex) {
+    int row = gridIndex / GRID_COLUMNS;
+    int col = gridIndex % GRID_COLUMNS;
+
+    // Calculate position in grid
+    Vector3 gridPos = GRID_START_POSITION;
+    if (starAMarkerSet_) {
+        Vector3 spawnDir = (starBMarker_ - starAMarker_);
+        gridPos = starAMarker_;
+        gridPos.y_ -= 34.0f;
+    }
+    gridPos.x_ += (col - (GRID_COLUMNS - 1) * 0.5f) * GRID_SPACING_X;  // Center the grid
+    gridPos.z_ += row * GRID_SPACING_Z;
+
+    return gridPos;
+}
+
+
+// Add this method to reset grid positions at the start of a race
+void AlgebraKart::StartRace() {
+    // Reset grid positions for new race
+    ResetGridPositions();
+
+    // You can call this when starting a new race or restarting
+    // Place any additional race start logic here
+}
+
+// Optional: Method to arrange existing players in formation
+void AlgebraKart::ArrangePlayersInFormation() {
+    ResetGridPositions();
+
+    // Rearrange all connected clients
+    for (auto& pair : actorMap_) {
+        Connection* connection = pair.first_;
+        WeakPtr<ClientObj> clientObj = pair.second_;
+
+        if (clientObj && clientObj->GetComponent<NetworkActor>()) {
+            Vector3 newPos = GetGridPosition(nextGridPosition_);
+            nextGridPosition_++;
+
+            clientObj->GetNode()->SetPosition(newPos);
+
+            // Move vehicle close to actor
+            auto* actor = clientObj->GetNode()->GetComponent<NetworkActor>();
+            if (actor->vehicle_) {
+                Vector3 vehiclePos = newPos + Vector3(2.0f, 0.0f, -3.0f);
+                actor->vehicle_->GetNode()->SetPosition(vehiclePos);
+
+                // Face racing direction
+                Quaternion racingOrientation;
+                racingOrientation.FromLookRotation(RACING_DIRECTION, Vector3::UP);
+                clientObj->GetNode()->SetRotation(racingOrientation);
+                //actor->vehicle_->GetNode()->SetRotation(racingOrientation);
+            }
+        }
+    }
+
+    // Rearrange all AI bots
+    for (auto& pair : aiActorMap_) {
+        unsigned int id = pair.first_;
+        ClientObj* clientObj = pair.second_.Get();
+
+        if (clientObj) {
+            NetworkActor *na = clientObj->GetComponent<NetworkActor>();
+            if (clientObj && clientObj->GetNode()) {
+                Vector3 newPos = GetGridPosition(nextGridPosition_);
+                nextGridPosition_++;
+
+                clientObj->GetNode()->SetPosition(newPos);
+
+                // Move vehicle close to actor
+                if (na->vehicle_) {
+                    Vector3 vehiclePos = newPos + Vector3(2.0f, 0.0f, -3.0f);
+                    na->vehicle_->GetNode()->SetPosition(vehiclePos);
+
+                    // Face racing direction
+                    Quaternion racingOrientation;
+                    racingOrientation.FromLookRotation(RACING_DIRECTION, Vector3::UP);
+                    na->GetNode()->SetRotation(racingOrientation);
+                    na->vehicle_->GetNode()->SetRotation(racingOrientation);
+                }
+            }
+        }
+    }
 }

@@ -32,12 +32,13 @@
 
 
 #include "GameController.h"
+#include "network/NetworkActor.h"
 
 #include <Urho3D/DebugNew.h>
 //=============================================================================
 //=============================================================================
 //#define TEST_PS4_CONTROLLER
-const float YAW_SENSITIVITY = 0.5f;
+//const float YAW_SENSITIVITY = 0.5f;
 //=============================================================================
 //=============================================================================
 GameController::GameController(Context* context)
@@ -132,7 +133,65 @@ void GameController::RemoveScreenJoystick()
         }
     }
 }
+//
+void GameController::UpdateControlInputs(Controls& controls)
+{
+    // Clear buttons first
+    controls.buttons_ = 0;
 
+    if (!IsValid()) return;
+
+    Input* input = GetSubsystem<Input>();
+    JoystickState* joystick = input->GetJoystickByIndex(joystickID_);
+
+    if (!joystick) return;
+
+    // Get raw axis values
+    float leftStickX = joystick->GetAxisPosition(0);  // Left stick X
+    float leftStickY = joystick->GetAxisPosition(1);  // Left stick Y
+    float rightStickX = joystick->GetAxisPosition(2); // Right stick X
+    float rightStickY = joystick->GetAxisPosition(3); // Right stick Y
+
+    // Apply deadzone and clamp values
+    Vector2 leftStick(leftStickX, leftStickY);
+    Vector2 rightStick(rightStickX, rightStickY);
+
+    ClampValues(leftStick, minTolerance_);
+    ClampValues(rightStick, minTolerance_);
+
+    // Set movement controls (left stick)
+    if (Abs(leftStick.x_) > minTolerance_) {
+        if (leftStick.x_ < 0.0f) {
+            controls.buttons_ |= NTWK_CTRL_LEFT;
+        } else {
+            controls.buttons_ |= NTWK_CTRL_RIGHT;
+        }
+    }
+
+    if (Abs(leftStick.y_) > minTolerance_) {
+        if (leftStick.y_ < 0.0f) {
+            controls.buttons_ |= NTWK_CTRL_FORWARD;
+        } else {
+            controls.buttons_ |= NTWK_CTRL_BACK;
+        }
+    }
+
+    // Set rotation (right stick X for yaw) - CRITICAL: Clamp yaw properly
+    controls.yaw_ = Clamp(rightStick.x_ * 90.0f, -180.0f, 180.0f); // Limit to reasonable range
+
+    // Store analog values for smooth movement
+    controls.extraData_["steerLevel"] = Clamp(leftStick.x_, -1.0f, 1.0f);
+    controls.extraData_["accelLevel"] = Clamp(-leftStick.y_, -1.0f, 1.0f); // Invert Y for forward
+
+    // Handle buttons
+    if (joystick->GetButtonDown(0)) // A button
+        controls.buttons_ |= NTWK_CTRL_FIRE;
+
+    if (joystick->GetButtonDown(1)) // B button
+        controls.buttons_ |= NTWK_CTRL_ENTER;
+}
+//
+/*
 void GameController::UpdateControlInputs(Controls& controls)
 {
     // clear buttons
@@ -175,23 +234,23 @@ void GameController::UpdateControlInputs(Controls& controls)
         }
     }
 }
-
+*/
+// Fix the ClampValues method
 void GameController::ClampValues(Vector2 &vec, float minVal) const
 {
-    if (Abs(vec.x_) < minVal)
-    {
-        vec.x_ = 0.0f;
-    }
-    if (Abs(vec.y_) < minVal)
-    {
-        vec.y_ = 0.0f;
+    // Apply deadzone
+    if (Abs(vec.x_) < minVal) vec.x_ = 0.0f;
+    if (Abs(vec.y_) < minVal) vec.y_ = 0.0f;
+
+    // Normalize if magnitude > 1 (diagonal movement)
+    float magnitude = vec.Length();
+    if (magnitude > 1.0f) {
+        vec /= magnitude;
     }
 
-    // diagonal pts between x and y axis result in magnitude > 1, normalize
-    if (vec.LengthSquared() > 1.0f)
-    {
-        vec.Normalize();
-    }
+    // Clamp individual components
+    vec.x_ = Clamp(vec.x_, -1.0f, 1.0f);
+    vec.y_ = Clamp(vec.y_, -1.0f, 1.0f);
 }
 
 void GameController::DumpAll() const

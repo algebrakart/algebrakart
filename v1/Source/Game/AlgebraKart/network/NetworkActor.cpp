@@ -455,26 +455,32 @@ void NetworkActor::ApplyMovement(float timeStep) {
 
     //Vector3 direction{0.90f * move_ + (0.1f*body_->GetLinearVelocity() * Vector3{ 1.0f, 0.0f, 1.0f })};
 
-
     // Adjust controls yaw
     //cos θ = (a · b) / (|a| |b|)
 
 
+    Variant cx = controls_.extraData_["movementX"]; // currentMovement_.x_;
+    Variant cy = controls_.extraData_["movementZ"]; // currentMovement_.z_;
+    Variant cz = controls_.extraData_["movementY"]; // jumpPressed && isGrounded_ ? jumpForce_ : 0.0f;
+    move_ = Vector3(cx.GetFloat(), cy.GetFloat(), cz.GetFloat());
+
     // Apply Movement
 
     float moveMag = move_.Length();
+
+    // AB: moveMag is always zero because no value from non-joystick
 
     if (moveMag > 0) {
 
         // If in air, allow control, but slower than when on ground
         //body_->ApplyImpulse(rot * move_ * (softGrounded ? MOVE_FORCE : INAIR_MOVE_FORCE));
 //        const float MOVE_FORCE = 0.45f;
-        //const float MOVE_FORCE = 13.5f;
+        const float MOVE_FORCE = 1300.5f;
         //const float MOVE_FORCE  588.5f;
         // MOVE_FORCE will be follow spring -> LERP?
         // Press Use key -> start running and accelerating.
         float speedModifier = 1.0f;
-        float MOVE_FORCE = 1000.0f * speedModifier * Max(useButtonDownTime_, 1.0f);
+        //float MOVE_FORCE = 1000.0f * speedModifier * Max(useButtonDownTime_, 1.0f);
 
         Vector3 impulse;
         if (controls_.yaw_ < 0) {
