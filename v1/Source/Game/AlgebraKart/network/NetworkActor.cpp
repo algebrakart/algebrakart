@@ -465,10 +465,12 @@ void NetworkActor::ApplyMovement(float timeStep) {
     move_ = Vector3(cx.GetFloat(), cy.GetFloat(), cz.GetFloat());
 
     // Apply Movement
-
     float moveMag = move_.Length();
 
     // AB: moveMag is always zero because no value from non-joystick
+
+    URHO3D_LOGDEBUGF("NetworkActor::ApplyMovement -> %f", moveMag);
+    URHO3D_LOGDEBUGF("accelLevel: %f", controls_.extraData_["accelLevel"].GetFloat());
 
     if (moveMag > 0) {
 
@@ -500,14 +502,14 @@ void NetworkActor::ApplyMovement(float timeStep) {
                     Quaternion(controls_.yaw_ - 90.0f, Vector3::UP) * body_->GetRotation() * Vector3::FORWARD *
                     MOVE_FORCE * moveMag;
         }
+        // Keys
+        impulse = move_ * MOVE_FORCE;
+
         lastImpulse_ = impulse;
         body_->ApplyImpulse(impulse*timeStep);
         //body_->ApplyImpulse(Vector3(impulse.x_, 0, impulse.z_));
       //  GetNode()->SetPosition(body_->GetNode()->GetWorldPosition());
 
-    } else {
-        // Slow down in opposite direction
-        body_->ApplyImpulse(-body_->GetLinearVelocity()*timeStep);
     }
 
 

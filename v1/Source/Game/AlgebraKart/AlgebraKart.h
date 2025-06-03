@@ -734,6 +734,11 @@ private:
     bool isGrounded_;                 // Is character on ground
     float jumpCooldown_;              // Jump cooldown timer
     float currentJumpCooldown_;       // Current jump cooldown
+
+    float currentYaw_;              // Current character rotation
+    float targetYaw_;               // Target character rotation
+    float yawRotationSpeed_;        // How fast character rotates
+
 };
 
 // Safety filter censored words

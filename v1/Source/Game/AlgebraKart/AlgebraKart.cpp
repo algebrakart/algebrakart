@@ -265,7 +265,10 @@ AlgebraKart::AlgebraKart(Context *context) :
         levelLoading_(false),
         playDrumMachine_(false),
         capturer_(nullptr),
-        renderer_(nullptr)
+        renderer_(nullptr),
+        currentYaw_(0.0f),
+        targetYaw_(0.0f),
+        yawRotationSpeed_(120.0f)      // degrees per second
 {
 
 
@@ -917,136 +920,129 @@ Controls AlgebraKart::SampleCSPControls()
     GameController *gameController_ = GetSubsystem<GameController>();
 
     // Clear previous controls
-    controls.buttons_ = 0;
-    controls.yaw_ = 0.0f;
+    ntwkControls_.buttons_ = 0;
+    ntwkControls_.yaw_ = 0.0f;
 
     bool brake = false;
     bool accel = false;
 
-// Clear previous controls
-    controls.buttons_ = 0;
+    // Clear previous controls
+    ntwkControls_.Reset();
 
-// Get time step for smooth movement calculations
+    // Get time step for smooth rotation
     float timeStep = GetSubsystem<Time>()->GetTimeStep();
 
-// Update jump cooldown
-    if (currentJumpCooldown_ > 0.0f)
-        currentJumpCooldown_ -= timeStep;
+    // === KEYBOARD INPUT HANDLING ===
+    bool forward = input->GetKeyDown(KEY_W) || input->GetKeyDown(KEY_UP);
+    bool back = input->GetKeyDown(KEY_S) || input->GetKeyDown(KEY_DOWN);
+    bool left = input->GetKeyDown(KEY_A) || input->GetKeyDown(KEY_LEFT);
+    bool right = input->GetKeyDown(KEY_D) || input->GetKeyDown(KEY_RIGHT);
 
-// === KEYBOARD INPUT HANDLING ===
+    // Running (hold shift)
+    isRunning_ = input->GetKeyDown(KEY_LSHIFT);
+    float speedMultiplier = isRunning_ ? runSpeed_ : 1.0f;
+
+    // === SMOOTH ROTATION INSTEAD OF INSTANT ===
+    // Only rotate when moving and turning
+    if ((forward || back) && (left || right)) {
+        // Moving diagonally - rotate towards movement direction
+        float targetYaw = 0.0f;
+        if (forward && left) targetYaw = -45.0f;
+        else if (forward && right) targetYaw = 45.0f;
+        else if (back && left) targetYaw = -135.0f;
+        else if (back && right) targetYaw = 135.0f;
+
+        // Smooth rotation towards target
+        float yawDiff = targetYaw - currentYaw_;
+        while (yawDiff > 180.0f) yawDiff -= 360.0f;
+        while (yawDiff < -180.0f) yawDiff += 360.0f;
+
+        float maxRotation = yawRotationSpeed_ * timeStep;
+        float rotationAmount = Clamp(yawDiff, -maxRotation, maxRotation);
+        currentYaw_ += rotationAmount;
+
+        // Apply very small yaw change
+        ntwkControls_.yaw_ = rotationAmount * 0.01f; // Much smaller multiplier
+    }
+    else if (left || right) {
+        // Only turning without forward/back movement
+        float rotationDirection = right ? 1.0f : -1.0f;
+        float rotationAmount = yawRotationSpeed_ * timeStep * rotationDirection;
+        currentYaw_ += rotationAmount;
+
+        // Apply very small yaw change
+        ntwkControls_.yaw_ = rotationAmount * 0.005f; // Even smaller for pure rotation
+    }
+    else {
+        // No rotation input
+        ntwkControls_.yaw_ = 0.0f;
+    }
+
+    // Keep yaw in reasonable range
+    while (currentYaw_ >= 360.0f) currentYaw_ -= 360.0f;
+    while (currentYaw_ < 0.0f) currentYaw_ += 360.0f;
+
+    // === KEEP EXISTING MOVEMENT SYSTEM ===
+    // Set button flags exactly as the original code did
+    if (forward) ntwkControls_.buttons_ |= NTWK_CTRL_FORWARD;
+    if (back) ntwkControls_.buttons_ |= NTWK_CTRL_BACK;
+    if (left) ntwkControls_.buttons_ |= NTWK_CTRL_LEFT;
+    if (right) ntwkControls_.buttons_ |= NTWK_CTRL_RIGHT;
+
+    // Calculate movement direction for extraData (keep original approach)
     Vector3 inputDirection = Vector3::ZERO;
+    if (forward) inputDirection.z_ += 1.0f;
+    if (back) inputDirection.z_ -= 1.0f;
+    if (left) inputDirection.x_ -= 1.0f;
+    if (right) inputDirection.x_ += 1.0f;
 
-// Directional input
-    if (input->GetKeyDown(KEY_W) || input->GetKeyDown(KEY_UP)) {
-        inputDirection.z_ += 1.0f;
-        controls.buttons_ |= NTWK_CTRL_FORWARD;
-    }
-    if (input->GetKeyDown(KEY_S) || input->GetKeyDown(KEY_DOWN)) {
-        inputDirection.z_ -= 1.0f;
-        controls.buttons_ |= NTWK_CTRL_BACK;
-    }
-    if (input->GetKeyDown(KEY_A) || input->GetKeyDown(KEY_LEFT)) {
-        inputDirection.x_ -= 1.0f;
-        controls.buttons_ |= NTWK_CTRL_LEFT;
-    }
-    if (input->GetKeyDown(KEY_D) || input->GetKeyDown(KEY_RIGHT)) {
-        inputDirection.x_ += 1.0f;
-        controls.buttons_ |= NTWK_CTRL_RIGHT;
+    float inputMagnitude = inputDirection.Length();
+    if (inputMagnitude > 0.1f) {
+        inputDirection.Normalize();
+        targetMovement_ = inputDirection * walkSpeed_ * speedMultiplier;
+    } else {
+        targetMovement_ = Vector3::ZERO;
     }
 
-// Running (hold shift)
-    isRunning_ = input->GetKeyDown(KEY_LSHIFT) || input->GetKeyDown(KEY_RSHIFT);
-
-// Jumping (spacebar)
-    bool jumpPressed = input->GetKeyDown(KEY_SPACE);
-    if (jumpPressed && isGrounded_ && currentJumpCooldown_ <= 0.0f) {
-        controls.buttons_ |= NTWK_CTRL_FIRE; // Use fire button for jump
-        currentJumpCooldown_ = jumpCooldown_;
-        isGrounded_ = false; // Will be reset by physics collision
-    }
-
-// Additional controls
-    if (input->GetKeyDown(KEY_RETURN) || input->GetKeyDown(KEY_KP_ENTER)) {
-        controls.buttons_ |= NTWK_CTRL_ENTER;
-    }
-
-// === SPRINGY MOVEMENT CALCULATION ===
-
-// Normalize input direction to prevent faster diagonal movement
-    if (inputDirection.Length() > 0.0f) {
-        inputDirection = inputDirection.Normalized();
-    }
-
-// Calculate target movement with speed modifiers
-    float currentSpeed = walkSpeed_;
-    if (isRunning_ && inputDirection.Length() > 0.0f) {
-        currentSpeed *= runSpeed_;
-    }
-
-    targetMovement_ = inputDirection * currentSpeed;
-
-// Apply spring physics for smooth movement
+    // Apply spring physics for smooth movement (keep existing)
     Vector3 displacement = targetMovement_ - currentMovement_;
     Vector3 springForce = displacement * movementStiffness_;
-    Vector3 dampingForce = movementVelocity_ * -movementDamping_;
-    Vector3 totalForce = springForce + dampingForce;
-
-// Update velocity and position using spring physics
-    movementVelocity_ += totalForce * timeStep;
+    Vector3 dampingForce = movementVelocity_ * movementDamping_;
+    movementVelocity_ += (springForce - dampingForce) * timeStep;
     currentMovement_ += movementVelocity_ * timeStep;
 
-// Apply movement deadzone to prevent micro-movements
-    if (currentMovement_.Length() < 0.01f && targetMovement_.Length() < 0.01f) {
+    // Apply movement deadzone
+    if (currentMovement_.Length() < 0.01f) {
         currentMovement_ = Vector3::ZERO;
         movementVelocity_ = Vector3::ZERO;
     }
 
-    URHO3D_LOGDEBUGF("currentMovement_-> x: %f, y: %f, z: %f ", currentMovement_.x_, currentMovement_.y_, currentMovement_.z_);
+    // Store movement values exactly as the original system expects
+    ntwkControls_.extraData_["movementX"] = currentMovement_.x_;
+    ntwkControls_.extraData_["movementY"] = isGrounded_ && input->GetKeyDown(KEY_SPACE) ? jumpForce_ : 0.0f;
+    ntwkControls_.extraData_["movementZ"] = currentMovement_.z_;
 
-// === APPLY MOVEMENT TO EXISTING CONTROL SYSTEM ===
+    // Set acceleration and steering levels for compatibility
+    ntwkControls_.extraData_["accelLevel"] = inputMagnitude > 0.1f ?
+                                        (forward ? 0.7f : (back ? -0.7f : 0.0f)) : 0.0f;
+    ntwkControls_.extraData_["steerLevel"] = inputMagnitude > 0.1f ?
+                                        (right ? 1.0f : (left ? -1.0f : 0.0f)) : 0.0f;
 
-// Map springy movement to existing control inputs
-// Use pitch and yaw for movement direction
-    if (currentMovement_.Length() > 0.01f) {
-        // Calculate movement direction angles
-        float moveAngle = atan2(currentMovement_.x_, currentMovement_.z_) * 180.0f / M_PI;
-        controls.yaw_ = moveAngle * 0.1f; // Scale for smooth rotation
-
-        // Map to existing control buttons based on primary movement direction
-        Vector3 normalizedMovement = currentMovement_.Normalized();
-
-        // Set acceleration level based on movement magnitude
-        float accelLevel = currentMovement_.Length() / (walkSpeed_ * runSpeed_);
-        controls.extraData_["accelLevel"] = Clamp(accelLevel, 0.0f, 1.0f);
-
-        // Set steering level for vehicle compatibility
-        controls.extraData_["steerLevel"] = Clamp(normalizedMovement.x_, -1.0f, 1.0f);
-
-        // Store movement values for NetworkActor application
-        controls.extraData_["movementX"] = currentMovement_.x_;
-        controls.extraData_["movementZ"] = currentMovement_.z_;
-        controls.extraData_["movementY"] = jumpPressed && isGrounded_ ? jumpForce_ : 0.0f;
-
-        URHO3D_LOGDEBUGF("accelLevel-> %f", accelLevel);
-
-    } else {
-        controls.yaw_ = 0.0f;
-        controls.extraData_["accelLevel"] = 0.0f;
-        controls.extraData_["steerLevel"] = 0.0f;
-        controls.extraData_["movementX"] = 0.0f;
-        controls.extraData_["movementZ"] = 0.0f;
-        controls.extraData_["movementY"] = 0.0f;
+    // Jumping
+    if (input->GetKeyDown(KEY_SPACE) && currentJumpCooldown_ <= 0.0f && isGrounded_) {
+        ntwkControls_.buttons_ |= NTWK_CTRL_FIRE;
+        currentJumpCooldown_ = jumpCooldown_;
     }
 
-// Store additional state
-    controls.extraData_["isRunning"] = isRunning_;
-    controls.extraData_["isGrounded"] = isGrounded_;
+    // Update jump cooldown
+    if (currentJumpCooldown_ > 0.0f) {
+        currentJumpCooldown_ -= timeStep;
+    }
 
-
-// Copy to network controls for transmission
-    ntwkControls_ = controls;
-
-    return controls;
+    // Additional controls
+    if (input->GetKeyDown(KEY_RETURN) || input->GetKeyDown(KEY_KP_ENTER)) {
+        ntwkControls_.buttons_ |= NTWK_CTRL_ENTER;
+    }
 
 /*
     // CONTROLLER INPUT (Priority over keyboard)
@@ -3961,7 +3957,8 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                 float timeStep = eventData[P_TIMESTEP].GetFloat();
                                 float controlYawAngle = actor->controls_.yaw_ - 90.0f;
                                 float slowdown = 0.07f;
-                                float accelLevel = actor->controls_.extraData_["accelLevel"].GetFloat();
+                                float accelLevel = ntwkControls_.extraData_["accelLevel"].GetFloat();
+                                URHO3D_LOGDEBUGF("actor %d, accelLevel -> %f", actor->GetID(), accelLevel);
 
                                 // Increment timers
                                 actor->lastWaypoint_ += timeStep;
@@ -3992,16 +3989,11 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                     // On foot controls
                                     float z = controlYawAngle;
 
-                                    // Dependent on movement
-                                    if (accelLevel > 0.0f) {
-                                        URHO3D_LOGINFOF("Accelerate -> %f", accelLevel);
-                                        // Apply rotation
-                                        actor->GetBody()->GetNode()->SetRotation(dir);
-                                        // Align model and apply movement to body
-                                        actor->ApplyMovement(timeStep);
-                                    } else {
-                                        // Do not apply force
-                                    }
+                                    URHO3D_LOGINFOF("Accelerate -> %f", accelLevel);
+                                    // Apply rotation
+                                    actor->GetBody()->GetNode()->SetRotation(dir);
+                                    // Align model and apply movement to body
+                                    actor->ApplyMovement(timeStep);
 
                                     // Apply vertical force
                                     actor->ApplyThrust(timeStep);
