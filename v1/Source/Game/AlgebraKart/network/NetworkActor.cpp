@@ -20,6 +20,7 @@
 
 #include "NetworkActor.h"
 #include "Urho3D/IO/MemoryBuffer.h"
+#include "Urho3D/Network/Network.h"
 
 #include <Urho3D/DebugNew.h>
 #include <AlgebraKart/Missile.h>
@@ -430,10 +431,63 @@ void NetworkActor::FindTargetByWaypoint(int id) {
     }
 }
 
+// Add this to NetworkActor class to properly handle the character rotation
+void NetworkActor::UpdateCharacterRotation(float timeStep) {
+    // Get the target rotation from controls
+    float targetYaw = controls_.yaw_;
+
+    // Smoothly rotate the character model to face the movement direction
+    Quaternion currentRotation = GetNode()->GetRotation();
+    Quaternion targetRotation = Quaternion(targetYaw, Vector3::UP);
+
+    // Smooth rotation interpolation
+    float rotationSpeed = 0.8f; // Adjust for how fast character turns
+    Quaternion newRotation = currentRotation.Slerp(targetRotation, rotationSpeed * timeStep);
+
+    GetNode()->SetRotation(newRotation);
+}
+
 void NetworkActor::ApplyMovement(float timeStep) {
+    // Update character rotation first
+    UpdateCharacterRotation(timeStep);
+
+    // Apply movement processing
+    if (!GetSubsystem<Network>()->IsServerRunning()) {
+        return;
+    }
+
+    // Get movement values that are already in world space
+    Variant cx = controls_.extraData_["movementX"];
+    Variant cy = controls_.extraData_["movementY"];
+    Variant cz = controls_.extraData_["movementZ"]; // Jump/vertical movement
+
+    Vector3 moveForce = Vector3::ZERO;
+
+    if (!cx.IsEmpty() && !cy.IsEmpty()) {
+        moveForce.x_ = cx.GetFloat();
+        moveForce.z_ = cy.GetFloat();
+    }
+
+    if (!cz.IsEmpty()) {
+        moveForce.y_ = cz.GetFloat();
+    }
+
+    // Apply the movement force to the rigid body
+    if (body_ && moveForce.Length() > 0.01f) {
+        // Apply horizontal movement
+        Vector3 horizontalForce = Vector3(moveForce.x_, 0.0f, moveForce.z_);
+        if (horizontalForce.Length() > 0.01f) {
+            body_->ApplyImpulse(horizontalForce * timeStep);
+        }
+
+        // Apply jump force
+        if (moveForce.y_ > 0.01f && onGround_) {
+            body_->ApplyImpulse(Vector3(0.0f, moveForce.y_, 0.0f));
+        }
+    }
+
+
     Quaternion rot{ node_->GetRotation() };
-
-
     // Apply move to network actor
 
     // axis
@@ -458,11 +512,7 @@ void NetworkActor::ApplyMovement(float timeStep) {
     // Adjust controls yaw
     //cos θ = (a · b) / (|a| |b|)
 
-
-    Variant cx = controls_.extraData_["movementX"]; // currentMovement_.x_;
-    Variant cy = controls_.extraData_["movementZ"]; // currentMovement_.z_;
-    Variant cz = controls_.extraData_["movementY"]; // jumpPressed && isGrounded_ ? jumpForce_ : 0.0f;
-    move_ = Vector3(cx.GetFloat(), cy.GetFloat(), cz.GetFloat());
+    move_ = Vector3(controls_.extraData_["movementX"].GetFloat(), controls_.extraData_["movementY"].GetFloat(), controls_.extraData_["movementZ"].GetFloat());
 
     // Apply Movement
     float moveMag = move_.Length();

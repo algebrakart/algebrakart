@@ -336,5 +336,7 @@ public:
     float turrentAngle_ = 0;
 
     void UsePickup();
+
+    void UpdateCharacterRotation(float timeStep);
 };
 

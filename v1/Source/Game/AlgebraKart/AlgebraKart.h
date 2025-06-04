@@ -720,24 +720,29 @@ private:
 
     void StartRace();
 
-    // Springy movement variables
-    Vector3 targetMovement_;          // Target movement direction
-    Vector3 currentMovement_;         // Current smoothed movement
-    Vector3 movementVelocity_;        // Velocity for spring damping
-    float walkSpeed_;                 // Base walking speed
-    float runSpeed_;                  // Running speed multiplier
-    float jumpForce_;                 // Jump force magnitude
-    float movementDamping_;           // Movement spring damping
-    float movementStiffness_;         // Movement spring stiffness
+    // === MOVEMENT CONFIGURATION ===
+    // Mario 64-style movement parameters
+    float walkSpeed_;                 // Base walking speed (already exists)
+    float runSpeed_;                  // Running speed multiplier (already exists)
+    float jumpForce_;                 // Jump force magnitude (already exists)
+    float yawRotationSpeed_;          // How fast character rotates (already exists)
 
-    bool isRunning_;                  // Is character running
-    bool isGrounded_;                 // Is character on ground
-    float jumpCooldown_;              // Jump cooldown timer
-    float currentJumpCooldown_;       // Current jump cooldown
+    // New movement parameters you may want to add:
+    float movementSmoothing_;         // How smoothly movement transitions (8.0f recommended)
+    float rotationSmoothing_;         // How smoothly rotation transitions (10.0f recommended)
+    float backwardSpeedMultiplier_;   // How much slower backward movement is (0.5f recommended)
+    float runningTurnSpeedMultiplier_; // How much faster turning is when running (1.5f recommended)
 
-    float currentYaw_;              // Current character rotation
-    float targetYaw_;               // Target character rotation
-    float yawRotationSpeed_;        // How fast character rotates
+    // Movement state tracking
+    Vector3 currentMovement_;         // Current smoothed movement (already exists)
+    Vector3 targetMovement_;          // Target movement direction (already exists)
+    float currentYaw_;                // Current character rotation (already exists)
+    float targetYaw_;                 // Target character rotation (already exists)
+
+    bool isRunning_;                  // Is character running (already exists)
+    bool isGrounded_;                 // Is character on ground (already exists)
+    float jumpCooldown_;              // Jump cooldown timer (already exists)
+    float currentJumpCooldown_;       // Current jump cooldown (already exists)
 
 };
 
