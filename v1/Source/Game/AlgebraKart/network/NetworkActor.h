@@ -341,11 +341,15 @@ public:
     float jumpCooldown_;        // Jump cooldown duration
     float currentJumpCooldown_; // Current jump cooldown timer
 
+    SharedPtr<Node> vehicleDirectionArrow_;
+    bool showVehicleArrow_;
+    float arrowBobTime_;
 
     void UsePickup();
-
-    void UpdateCharacterRotation(float timeStep);
-
     void ApplyRotation(float timeStep);
+
+    void CreateVehicleDirectionArrow();
+    void UpdateVehicleDirectionArrow();
+    void HideVehicleDirectionArrow();
 };
 

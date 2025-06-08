@@ -122,6 +122,9 @@ NetworkActor::~NetworkActor() {
 }
 
 void NetworkActor::Kill() {
+    // Hide arrow when player dies
+    HideVehicleDirectionArrow();
+
     if (this) {
         URHO3D_LOGINFOF("**** DESTROYING NetworkActor OBJECT -> %d", this->id_);
         if (vehicle_) {
@@ -328,6 +331,8 @@ void NetworkActor::Create() {
         activePickup_ = pickups_->Back().type;
     }
 
+    // Create vehicle direction arrow
+    CreateVehicleDirectionArrow();
 
     // Submit updated attributes over network
     Urho3D::Component::MarkNetworkUpdate();
@@ -502,8 +507,8 @@ void NetworkActor::ApplyRotation(float timeStep) {
         Quaternion yawRotation(yawDifference, Vector3::UP);
         Quaternion newRotation = currentRotation * yawRotation;
         body_->SetRotation(newRotation);
-        URHO3D_LOGDEBUGF("NetworkActor - Set rotation: [%f,%f,%f,%f]",
-                         newRotation.x_, newRotation.y_, newRotation.z_, newRotation.w_);
+        //URHO3D_LOGDEBUGF("NetworkActor - Set rotation: [%f,%f,%f,%f]",
+        //                 newRotation.x_, newRotation.y_, newRotation.z_, newRotation.w_);
 
     }
 }
@@ -518,6 +523,10 @@ void NetworkActor::FixedUpdate(float timeStep) {
 
     // DEBUG DRAW
     DebugDraw();
+
+
+    // Update vehicle direction arrow
+    UpdateVehicleDirectionArrow();
 
     /*
     if (pickupTime_ < 1.0f) {
@@ -745,6 +754,7 @@ void NetworkActor::FixedUpdate(float timeStep) {
             move_.Normalize();
     }
 
+    Vector3 localCenter = Vector3(0, 0, 0);
     if (body_ && vehicle_) {
         // Apply movement and rotation when not in vehicle
         if (!onVehicle_) {
@@ -752,9 +762,6 @@ void NetworkActor::FixedUpdate(float timeStep) {
             ApplyRotation(timeStep);
         } else {
             // In vehicle
-            Vector3 localCenter = Vector3(0,0,0);
-
-
             rpm_ = vehicle_->GetCurrentRPM();
             velocity_ = vehicle_->GetRaycastVehicle()->GetSpeedKm();
             steer_ = vehicle_->GetSteering();
@@ -784,10 +791,13 @@ void NetworkActor::FixedUpdate(float timeStep) {
                         break;
                 }
 
-                body_->SetPosition(vehicle_->GetRaycastVehicle()->GetBody()->GetPosition()+bodyOffset);
+                body_->SetPosition(vehicle_->GetRaycastVehicle()->GetBody()->GetPosition() + bodyOffset);
                 body_->SetRotation(vehicle_->GetRaycastVehicle()->GetBody()->GetRotation());
             }
+        }
 
+        // Body-only logic
+        if (body_) {
 
             if (sequencer_->GetPlaySource()->GetNode()) {
                 if (body_->GetNode()) {
@@ -797,8 +807,7 @@ void NetworkActor::FixedUpdate(float timeStep) {
             }
 
             localCenter = body_->GetPosition();
-            Vector3 distToVehicle = vehicle_->GetRaycastVehicle()->GetBody()->GetPosition()-localCenter;
-
+            Vector3 distToVehicle = vehicle_->GetRaycastVehicle()->GetBody()->GetPosition() - localCenter;
 
             float dist = distToVehicle.LengthSquared();
             if (distToVehicle.LengthSquared() < 40.0f) {
@@ -819,7 +828,6 @@ void NetworkActor::FixedUpdate(float timeStep) {
                 markType_ = 0;
             }
         }
-
     }
 
     // Update the in air timer. Reset if grounded
@@ -1052,6 +1060,121 @@ void NetworkActor::ComputeSteerForce() {
     }*/
 }
 
+void NetworkActor::CreateVehicleDirectionArrow()
+{
+    if (vehicleDirectionArrow_)
+        return;
+
+    auto* cache = GetSubsystem<ResourceCache>();
+
+    // Create arrow node as child of this actor
+    vehicleDirectionArrow_ = GetNode()->CreateChild("VehicleArrow", LOCAL);
+    vehicleDirectionArrow_->SetPosition(Vector3(0, 8.0f, 2.0f)); // Above and in front of player
+
+    // Create the main arrow shaft
+    auto* arrowShaft = vehicleDirectionArrow_->CreateChild("ArrowShaft", LOCAL);
+    arrowShaft->SetScale(Vector3(1.3f, 1.3f, 4.0f)); // Thin and long
+
+    auto* shaftModel = arrowShaft->CreateComponent<StaticModel>();
+    shaftModel->SetModel(cache->GetResource<Model>("Models/Box.mdl"));
+
+    // Create arrow head (tip)
+    auto* arrowHead = vehicleDirectionArrow_->CreateChild("ArrowHead", LOCAL);
+    arrowHead->SetPosition(Vector3(0, 0, 4.2f)); // At the front of shaft
+    arrowHead->SetScale(Vector3(4.8f, 4.8f, 4.8f));
+    arrowHead->SetRotation(Quaternion(90.0f, Vector3::RIGHT));
+
+    auto* headModel = arrowHead->CreateComponent<StaticModel>();
+    headModel->SetModel(cache->GetResource<Model>("Models/Pyramid.mdl"));
+    if (!headModel->GetModel()) {
+        // Fallback to box if pyramid model doesn't exist
+        headModel->SetModel(cache->GetResource<Model>("Models/Box.mdl"));
+        arrowHead->SetScale(Vector3(0.6f, 0.6f, 0.6f));
+    }
+
+    // Use existing material approach (simpler and more compatible)
+    auto* arrowMaterial = cache->GetResource<Material>("Materials/VColUnlit.xml");
+    if (!arrowMaterial) {
+        // Fallback to a basic material if VColUnlit doesn't exist
+        arrowMaterial = cache->GetResource<Material>("Materials/DefaultGrey.xml");
+    }
+
+    if (arrowMaterial) {
+        shaftModel->SetMaterial(arrowMaterial);
+        headModel->SetMaterial(arrowMaterial);
+    }
+
+    // Initially hidden
+    vehicleDirectionArrow_->SetEnabled(false);
+    showVehicleArrow_ = false;
+    arrowBobTime_ = 0.0f;
+}
+
+void NetworkActor::UpdateVehicleDirectionArrow()
+{
+    if (!vehicleDirectionArrow_ || !vehicle_ || !vehicle_->GetNode())
+        return;
+
+    // Show arrow only when not in vehicle and vehicle exists
+    bool shouldShow = !onVehicle_ && alive_ && vehicle_->GetNode();
+
+    if (shouldShow != showVehicleArrow_)
+    {
+        vehicleDirectionArrow_->SetEnabled(shouldShow);
+        showVehicleArrow_ = shouldShow;
+    }
+
+    if (shouldShow)
+    {
+        // Calculate direction from player to vehicle
+        Vector3 playerPos = GetBody()->GetPosition();
+        Vector3 vehiclePos = vehicle_->GetRaycastVehicle()->GetBody()->GetPosition();
+        Vector3 direction = (vehiclePos - playerPos);
+        float distance = direction.Length();
+        direction.Normalize();
+
+        // Don't show arrow if vehicle is very close (within 5 units)
+        if (distance < 5.0f)
+        {
+            vehicleDirectionArrow_->SetEnabled(false);
+            showVehicleArrow_ = false;
+            return;
+        }
+
+        // Position arrow relative to player, but in world space direction
+        float arrowDistance = Clamp(distance * 0.2f, 3.0f, 8.0f);
+
+        // Add bobbing animation
+        float timeStep = GetSubsystem<Time>()->GetTimeStep();
+        arrowBobTime_ += timeStep * 4.0f; // Speed of bobbing
+        float bob = Sin(arrowBobTime_) * 0.5f;
+
+        Vector3 arrowPos = Vector3(0, 4.0f + bob, arrowDistance);
+        vehicleDirectionArrow_->SetPosition(arrowPos);
+
+        // Make arrow point toward vehicle
+        Quaternion lookRotation;
+        lookRotation.FromLookRotation(direction, Vector3::UP);
+        vehicleDirectionArrow_->SetRotation(lookRotation);
+
+        // Scale arrow based on distance - bigger when vehicle is further
+        float baseScale = Clamp(distance * 0.05f, 0.8f, 2.0f);
+
+        // Add pulsing effect by scaling
+        float pulse = 0.9f + 0.1f * Sin(arrowBobTime_ * 3.0f);
+        Vector3 finalScale = Vector3(baseScale * pulse, baseScale * pulse, baseScale * pulse);
+        vehicleDirectionArrow_->SetScale(finalScale);
+    }
+}
+
+void NetworkActor::HideVehicleDirectionArrow()
+{
+    if (vehicleDirectionArrow_)
+    {
+        vehicleDirectionArrow_->SetEnabled(false);
+        showVehicleArrow_ = false;
+    }
+}
 
 void NetworkActor::Fire() {
 
@@ -1318,6 +1441,9 @@ void NetworkActor::EnterVehicle() {
     // Check for permission
     if (!canEnter_)
         return;
+
+    // Hide the direction arrow when entering vehicle
+    HideVehicleDirectionArrow();
 
     // Snap actor to vehicle
     onVehicle_ =  true;

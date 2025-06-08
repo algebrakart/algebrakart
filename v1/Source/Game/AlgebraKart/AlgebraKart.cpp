@@ -936,6 +936,7 @@ Controls AlgebraKart::SampleCSPControls()
     if (right) controls.buttons_ |= NTWK_CTRL_RIGHT;
     if (use) controls.buttons_ |= NTWK_CTRL_USE;
     if (fire) controls.buttons_ |= NTWK_CTRL_FIRE;
+    if (enter) controls.buttons_ |= NTWK_CTRL_ENTER;
 
 
     /*
@@ -3740,7 +3741,6 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                     // On foot controls
                                     float z = controlYawAngle;
 
-                                    URHO3D_LOGINFOF("Accelerate -> %f", accelLevel);
                                     // Apply rotation
                                     //actor->GetBody()->GetNode()->SetRotation(dir);
                                     // Align model and apply movement to body
@@ -7538,7 +7538,7 @@ std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
     actor->vehicle_ = vehicle;
 
     // Auto-enter the vehicle for AI bots (they should start in their vehicles)
-    //actor->EnterVehicle();
+    actor->EnterVehicle();
 
     // Create text3d client info node
     Node *plyFltTextNode = vehicleNode->CreateChild("Actor FloatText", REPLICATED);
