@@ -431,151 +431,81 @@ void NetworkActor::FindTargetByWaypoint(int id) {
     }
 }
 
-// Add this to NetworkActor class to properly handle the character rotation
-void NetworkActor::UpdateCharacterRotation(float timeStep) {
-    // Get the target rotation from controls
-    float targetYaw = controls_.yaw_;
-
-    // Smoothly rotate the character model to face the movement direction
-    Quaternion currentRotation = GetNode()->GetRotation();
-    Quaternion targetRotation = Quaternion(targetYaw, Vector3::UP);
-
-    // Smooth rotation interpolation
-    float rotationSpeed = 0.8f; // Adjust for how fast character turns
-    Quaternion newRotation = currentRotation.Slerp(targetRotation, rotationSpeed * timeStep);
-
-    GetNode()->SetRotation(newRotation);
-}
-
 void NetworkActor::ApplyMovement(float timeStep) {
-    // Update character rotation first
-    UpdateCharacterRotation(timeStep);
-
-    // Apply movement processing
-    if (!GetSubsystem<Network>()->IsServerRunning()) {
-        return;
+    if (onVehicle_) {
+        return; // Don't move when in vehicle
     }
 
-    // Get movement values that are already in world space
-    Variant cx = controls_.extraData_["movementX"];
-    Variant cy = controls_.extraData_["movementY"];
-    Variant cz = controls_.extraData_["movementZ"]; // Jump/vertical movement
+    Vector3 moveDir = Vector3::ZERO;
+    bool hasMovement = false;
 
-    Vector3 moveForce = Vector3::ZERO;
-
-    if (!cx.IsEmpty() && !cy.IsEmpty()) {
-        moveForce.x_ = cx.GetFloat();
-        moveForce.z_ = cy.GetFloat();
+    // Handle each direction independently to avoid diagonal movement
+    if (controls_.buttons_ & NTWK_CTRL_FORWARD) {
+        moveDir += Vector3::FORWARD; // Local forward direction
+        hasMovement = true;
+        //URHO3D_LOGDEBUG("NetworkActor - Moving FORWARD");
+    }
+    if (controls_.buttons_ & NTWK_CTRL_BACK) {
+        moveDir += Vector3::BACK; // Local backward direction
+        hasMovement = true;
+        //URHO3D_LOGDEBUG("NetworkActor - Moving BACK");
+    }
+    if (controls_.buttons_ & NTWK_CTRL_LEFT) {
+        //moveDir += Vector3::LEFT; // Local left direction
+        //hasMovement = true;
+        //URHO3D_LOGDEBUG("NetworkActor - Moving LEFT");
+    }
+    if (controls_.buttons_ & NTWK_CTRL_RIGHT) {
+        //moveDir += Vector3::RIGHT; // Local right direction
+        //hasMovement = true;
+        //URHO3D_LOGDEBUG("NetworkActor - Moving RIGHT");
     }
 
-    if (!cz.IsEmpty()) {
-        moveForce.y_ = cz.GetFloat();
-    }
+    // Apply movement force
+    if (hasMovement) {
+        moveDir.Normalize();
 
-    // Apply the movement force to the rigid body
-    if (body_ && moveForce.Length() > 0.01f) {
-        // Apply horizontal movement
-        Vector3 horizontalForce = Vector3(moveForce.x_, 0.0f, moveForce.z_);
-        if (horizontalForce.Length() > 0.01f) {
-            body_->ApplyImpulse(horizontalForce * timeStep);
-        }
+        // Transform movement direction from local to world space
+        // This makes the character move relative to its current orientation
+        Quaternion rotation = body_->GetRotation();
+        Vector3 worldMoveDir = rotation * moveDir;
 
-        // Apply jump force
-        if (moveForce.y_ > 0.01f && onGround_) {
-            body_->ApplyImpulse(Vector3(0.0f, moveForce.y_, 0.0f));
-        }
-    }
+        /*
+        URHO3D_LOGDEBUGF("NetworkActor - Local moveDir: [%f,%f,%f]",
+                         moveDir.x_, moveDir.y_, moveDir.z_);
+        URHO3D_LOGDEBUGF("NetworkActor - World moveDir: [%f,%f,%f]",
+                         worldMoveDir.x_, worldMoveDir.y_, worldMoveDir.z_);
+        */
+        Vector3 force = worldMoveDir * 800.0f; // Movement force magnitude
 
+        //URHO3D_LOGDEBUGF("NetworkActor - Applying force: [%f,%f,%f]",
+        //                 force.x_, force.y_, force.z_);
 
-    Quaternion rot{ node_->GetRotation() };
-    // Apply move to network actor
-
-    // axis
-    const StringHash axisHashList[SDL_CONTROLLER_AXIS_MAX / 2] = {VAR_AXIS_0, VAR_AXIS_1, VAR_AXIS_2};
-    // left stick - vehicle
-    Variant lStick = controls_.extraData_[VAR_AXIS_0];
-    Vector2 lAxisVal = lStick.GetVector2();
-
-    // right stick
-    Variant rStick = controls_.extraData_[VAR_AXIS_1];
-    Vector2 rAxisVal = rStick.GetVector2();
-
-    setMove(Vector3(lStick.GetVector2().x_, 0, lStick.GetVector2().y_));
-
-    // Next move
-    move_ = move_.Normalized() * Pow(move_.Length() * 1.05f, 2.0f);
-    if (move_.LengthSquared() > 0.0f)
-        move_.Normalize();
-
-    //Vector3 direction{0.90f * move_ + (0.1f*body_->GetLinearVelocity() * Vector3{ 1.0f, 0.0f, 1.0f })};
-
-    // Adjust controls yaw
-    //cos θ = (a · b) / (|a| |b|)
-
-    move_ = Vector3(controls_.extraData_["movementX"].GetFloat(), controls_.extraData_["movementY"].GetFloat(), controls_.extraData_["movementZ"].GetFloat());
-
-    // Apply Movement
-    float moveMag = move_.Length();
-
-    // AB: moveMag is always zero because no value from non-joystick
-
-    URHO3D_LOGDEBUGF("NetworkActor::ApplyMovement -> %f", moveMag);
-    URHO3D_LOGDEBUGF("accelLevel: %f", controls_.extraData_["accelLevel"].GetFloat());
-
-    if (moveMag > 0) {
-
-        // If in air, allow control, but slower than when on ground
-        //body_->ApplyImpulse(rot * move_ * (softGrounded ? MOVE_FORCE : INAIR_MOVE_FORCE));
-//        const float MOVE_FORCE = 0.45f;
-        const float MOVE_FORCE = 1300.5f;
-        //const float MOVE_FORCE  588.5f;
-        // MOVE_FORCE will be follow spring -> LERP?
-        // Press Use key -> start running and accelerating.
-        float speedModifier = 1.0f;
-        //float MOVE_FORCE = 1000.0f * speedModifier * Max(useButtonDownTime_, 1.0f);
-
-        Vector3 impulse;
-        if (controls_.yaw_ < 0) {
-
-            if (controls_.yaw_ > -90) {
-                impulse =
-                        Quaternion(controls_.yaw_ * -1, Vector3::UP) * body_->GetRotation() * Vector3::FORWARD *
-                        MOVE_FORCE * moveMag;
-            } else {
-                impulse =
-                        Quaternion(controls_.yaw_ + 180.0f, Vector3::UP) * body_->GetRotation() * Vector3::FORWARD *
-                        MOVE_FORCE * moveMag;
-
-            }
-        } else {
-            impulse =
-                    Quaternion(controls_.yaw_ - 90.0f, Vector3::UP) * body_->GetRotation() * Vector3::FORWARD *
-                    MOVE_FORCE * moveMag;
-        }
-        // Keys
-        impulse = move_ * MOVE_FORCE;
-
-        lastImpulse_ = impulse;
-        body_->ApplyImpulse(impulse*timeStep);
-        //body_->ApplyImpulse(Vector3(impulse.x_, 0, impulse.z_));
-      //  GetNode()->SetPosition(body_->GetNode()->GetWorldPosition());
-
-    }
-
-
-/*
-    // Apply force to rigid body of actor
-    bool run = false;
-    Vector3 force{ move_.Length() < 0.05f ? Vector3::ZERO : move_ * thrust_ * timeStep };
-    force *= 1.0f + 0.25f * run;
-
-    if (body_->GetLinearVelocity().Length() < (maxSpeed_ * (1.0f + 0.42f * run))
-         || (body_->GetLinearVelocity().Normalized() + force.Normalized()).Length() < M_SQRT2 )
-    {
         body_->ApplyForce(force);
     }
-*/
+}
 
+
+
+void NetworkActor::ApplyRotation(float timeStep) {
+
+    // Only apply rotation if yaw is significant enough
+    // Apply rotation from controls
+    if (Abs(controls_.yaw_) > 0.1f) { // Add deadzone to prevent drift
+        // Get current rotation
+        Quaternion currentRotation = body_->GetRotation();
+
+        // Calculate the rotation amount
+        float yawDifference = controls_.yaw_ * timeStep * 90.0f; // 90 degrees per second max
+
+        // Apply rotation
+        Quaternion yawRotation(yawDifference, Vector3::UP);
+        Quaternion newRotation = currentRotation * yawRotation;
+        body_->SetRotation(newRotation);
+        URHO3D_LOGDEBUGF("NetworkActor - Set rotation: [%f,%f,%f,%f]",
+                         newRotation.x_, newRotation.y_, newRotation.z_, newRotation.w_);
+
+    }
 }
 
 void NetworkActor::FixedUpdate(float timeStep) {
@@ -599,87 +529,6 @@ void NetworkActor::FixedUpdate(float timeStep) {
     // Sequencer update: play time step
     //sequencer_->Play(timeStep); // should happen automatic -> with sequencer to object -> update mask set
 
-
-
-    Vector3 localCenter = Vector3(0,0,0);
-
-    if (body_) {
-        if (vehicle_) {
-            rpm_ = vehicle_->GetCurrentRPM();
-            velocity_ = vehicle_->GetRaycastVehicle()->GetSpeedKm();
-            steer_ = vehicle_->GetSteering();
-            // Submit updated attributes over network
-            Urho3D::Component::MarkNetworkUpdate();
-
-
-            if (onVehicle_ && entered_) {
-                // Align network actor orientation once entered vehicle
-
-                Vector3 bodyOffset = Vector3(-0.0f, 0.4f, -0.0f);
-                switch (vehicle_->getCarType()) {
-                    case CAR_TYPE_JEEP1:
-                        break;
-                    case CAR_TYPE_JEEP2:
-                        break;
-                    case CAR_TYPE_JEEP3:
-                        break;
-                    case CAR_TYPE_KART:
-                        bodyOffset = Vector3(-0.0f, 0.4f, -0.0f);
-                        break;
-                    case CAR_TYPE_SAHIN:
-                        bodyOffset = Vector3(-0.0f, 0.4f, 3.2f);
-                        break;
-                    case CAR_TYPE_YUGO:
-                        bodyOffset = Vector3(-0.0f, 0.4f, 3.2f);
-                        break;
-                }
-
-                body_->SetPosition(vehicle_->GetRaycastVehicle()->GetBody()->GetPosition()+bodyOffset);
-                body_->SetRotation(vehicle_->GetRaycastVehicle()->GetBody()->GetRotation());
-            }
-
-
-            if (sequencer_->GetPlaySource()->GetNode()) {
-                if (body_->GetNode()) {
-                    // Sequencer update
-                    sequencer_->GetPlaySource()->GetNode()->SetPosition(body_->GetNode()->GetPosition());
-                }
-            }
-
-            localCenter = body_->GetPosition();
-            Vector3 distToVehicle = vehicle_->GetRaycastVehicle()->GetBody()->GetPosition()-localCenter;
-
-
-            float dist = distToVehicle.LengthSquared();
-            if (distToVehicle.LengthSquared() < 40.0f) {
-
-                if (!entered_) {
-                    // Close to vehicle mark
-                    markType_ = 1;
-                    canEnter_ = true;
-                } else {
-                    // In vehicle
-                    markType_ = 2;
-                }
-
-
-            } else {
-                // Too far
-                canEnter_ = false;
-                markType_ = 0;
-            }
-
-
-        }
-    }
-
-    // Update the in air timer. Reset if grounded
-    if (!onGround_)
-        inAirTimer_ += timeStep;
-    else {
-        // On ground
-        inAirTimer_ = 0.0f;
-    }
 
 
     if (showMarker_) {
@@ -895,6 +744,92 @@ void NetworkActor::FixedUpdate(float timeStep) {
         if (move_.LengthSquared() > 0.0f)
             move_.Normalize();
     }
+
+    if (body_ && vehicle_) {
+        // Apply movement and rotation when not in vehicle
+        if (!onVehicle_) {
+            ApplyMovement(timeStep);
+            ApplyRotation(timeStep);
+        } else {
+            // In vehicle
+            Vector3 localCenter = Vector3(0,0,0);
+
+
+            rpm_ = vehicle_->GetCurrentRPM();
+            velocity_ = vehicle_->GetRaycastVehicle()->GetSpeedKm();
+            steer_ = vehicle_->GetSteering();
+            // Submit updated attributes over network
+            Urho3D::Component::MarkNetworkUpdate();
+
+
+            if (onVehicle_ && entered_) {
+                // Align network actor orientation once entered vehicle
+
+                Vector3 bodyOffset = Vector3(-0.0f, 0.4f, -0.0f);
+                switch (vehicle_->getCarType()) {
+                    case CAR_TYPE_JEEP1:
+                        break;
+                    case CAR_TYPE_JEEP2:
+                        break;
+                    case CAR_TYPE_JEEP3:
+                        break;
+                    case CAR_TYPE_KART:
+                        bodyOffset = Vector3(-0.0f, 0.4f, -0.0f);
+                        break;
+                    case CAR_TYPE_SAHIN:
+                        bodyOffset = Vector3(-0.0f, 0.4f, 3.2f);
+                        break;
+                    case CAR_TYPE_YUGO:
+                        bodyOffset = Vector3(-0.0f, 0.4f, 3.2f);
+                        break;
+                }
+
+                body_->SetPosition(vehicle_->GetRaycastVehicle()->GetBody()->GetPosition()+bodyOffset);
+                body_->SetRotation(vehicle_->GetRaycastVehicle()->GetBody()->GetRotation());
+            }
+
+
+            if (sequencer_->GetPlaySource()->GetNode()) {
+                if (body_->GetNode()) {
+                    // Sequencer update
+                    sequencer_->GetPlaySource()->GetNode()->SetPosition(body_->GetNode()->GetPosition());
+                }
+            }
+
+            localCenter = body_->GetPosition();
+            Vector3 distToVehicle = vehicle_->GetRaycastVehicle()->GetBody()->GetPosition()-localCenter;
+
+
+            float dist = distToVehicle.LengthSquared();
+            if (distToVehicle.LengthSquared() < 40.0f) {
+
+                if (!entered_) {
+                    // Close to vehicle mark
+                    markType_ = 1;
+                    canEnter_ = true;
+                } else {
+                    // In vehicle
+                    markType_ = 2;
+                }
+
+
+            } else {
+                // Too far
+                canEnter_ = false;
+                markType_ = 0;
+            }
+        }
+
+    }
+
+    // Update the in air timer. Reset if grounded
+    if (!onGround_)
+        inAirTimer_ += timeStep;
+    else {
+        // On ground
+        inAirTimer_ = 0.0f;
+    }
+
 
 }
 

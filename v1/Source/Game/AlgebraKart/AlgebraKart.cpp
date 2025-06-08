@@ -910,247 +910,35 @@ void AlgebraKart::SubscribeToEvents() {
 // Sample client input
 Controls AlgebraKart::SampleCSPControls()
 {
-    auto ui = GetSubsystem<UI>();
-    auto input = GetSubsystem<Input>();
-
-    Controls controls; // Return data
-    GameController *gameController_ = GetSubsystem<GameController>();
-
-    // Clear previous controls
-    controls.Reset();
-
-    // Get time step for smooth rotation
-    float timeStep = GetSubsystem<Time>()->GetTimeStep();
-
-    // === KEYBOARD INPUT HANDLING ===
-    // Running (hold shift)
-    isRunning_ = input->GetKeyDown(KEY_LSHIFT) || input->GetKeyDown(KEY_RSHIFT);
-
-    // Get input states
-    bool keyboardForward = input->GetKeyDown(KEY_UP) || input->GetKeyDown(KEY_W);
-    bool keyboardBack = input->GetKeyDown(KEY_DOWN) || input->GetKeyDown(KEY_S);
-    bool keyboardLeft = input->GetKeyDown(KEY_LEFT) || input->GetKeyDown(KEY_A);
-    bool keyboardRight = input->GetKeyDown(KEY_RIGHT) || input->GetKeyDown(KEY_D);
-    bool keyboardJump = input->GetKeyDown(KEY_SPACE);
-
-    // === MARIO 64-STYLE ROTATION ===
-    float turnSpeed = yawRotationSpeed_; // degrees per second
-    if (isRunning_) {
-        turnSpeed *= 1.5f; // Turn faster when running
-    }
-
-    // Handle turning
-    if (keyboardLeft) {
-        currentYaw_ -= turnSpeed * timeStep;
-        ntwkControls_.buttons_ |= NTWK_CTRL_LEFT;
-    }
-    if (keyboardRight) {
-        currentYaw_ += turnSpeed * timeStep;
-        ntwkControls_.buttons_ |= NTWK_CTRL_RIGHT;
-    }
-
-    // Keep yaw in reasonable range
-    while (currentYaw_ > 180.0f) currentYaw_ -= 360.0f;
-    while (currentYaw_ < -180.0f) currentYaw_ += 360.0f;
-
-    // Set the rotation for networking
-    ntwkControls_.yaw_ = currentYaw_;
-
-    // === MARIO 64-STYLE MOVEMENT ===
-    Vector3 localMovement = Vector3::ZERO;
-
-    bool accel = false;
-    // Forward/backward movement (relative to character facing)
-    if (keyboardForward) {
-        localMovement.z_ = 1.0f; // Forward in local space
-        ntwkControls_.buttons_ |= NTWK_CTRL_FORWARD;
-        accel = true;
-    }
-    if (keyboardBack) {
-        localMovement.z_ = -0.5f; // Backward (typically slower than forward)
-        ntwkControls_.buttons_ |= NTWK_CTRL_BACK;
-    }
-
-    // Convert local movement to world space using character rotation
-    Quaternion characterRotation = Quaternion(currentYaw_, Vector3::UP);
-    Vector3 worldMovement = characterRotation * localMovement;
-
-    // Apply speed modifiers
-    float moveSpeed = walkSpeed_;
-    if (isRunning_) {
-        moveSpeed *= runSpeed_;
-    }
-
-    // Scale movement by speed
-    worldMovement *= moveSpeed;
-
-    // Apply spring physics for smooth movement
-    Vector3 targetMovement = worldMovement;
-
-    // Smooth movement interpolation (you can adjust these values)
-    float movementSmoothing = 8.0f; // Higher = more responsive
-    currentMovement_ = currentMovement_.Lerp(targetMovement, movementSmoothing * timeStep);
-
-    // Apply movement deadzone
-    if (currentMovement_.Length() < 0.1f) {
-        currentMovement_ = Vector3::ZERO;
-    }
-
-    // Store movement values for networking
-    ntwkControls_.extraData_["movementX"] = currentMovement_.x_;
-    ntwkControls_.extraData_["movementZ"] = currentMovement_.z_;
-    ntwkControls_.extraData_["movementY"] = currentMovement_.y_;
-
-    // === JUMPING ===
-    if (keyboardJump && isGrounded_ && currentJumpCooldown_ <= 0.0f) {
-        ntwkControls_.extraData_["movementY"] = jumpForce_;
-        currentJumpCooldown_ = jumpCooldown_;
-        ntwkControls_.buttons_ |= NTWK_CTRL_JUMP; // Add jump button if you have one
-    }
-
-    // Update jump cooldown
-    if (currentJumpCooldown_ > 0.0f) {
-        currentJumpCooldown_ -= timeStep;
-    }
-
-    // === OTHER CONTROLS ===
-    if (input->GetKeyDown(KEY_RETURN) || input->GetKeyDown(KEY_KP_ENTER)) {
-        ntwkControls_.buttons_ |= NTWK_CTRL_ENTER;
-    }
-    if (input->GetKeyDown(KEY_B)) {
-        ntwkControls_.buttons_ |= NTWK_CTRL_FIRE;
-    }
+    Controls controls;
+    controls.Reset(); // Clear all previous state
 
 
+    auto* input = GetSubsystem<Input>();
 
-/*
-    // CONTROLLER INPUT (Priority over keyboard)
-    if (gameController_ && gameController_->IsValid()) {
-        gameController_->UpdateControlInputs(controls);
+    // ONLY use keyboard input, ignore controller for now
+    bool forward = input->GetKeyDown(KEY_W) || input->GetKeyDown(KEY_UP);
+    bool back = input->GetKeyDown(KEY_S) || input->GetKeyDown(KEY_DOWN);
+    bool left = input->GetKeyDown(KEY_A) || input->GetKeyDown(KEY_LEFT);
+    bool right = input->GetKeyDown(KEY_D) || input->GetKeyDown(KEY_RIGHT);
 
-        // Get analog values from controller
-        float steerLevel = controls.extraData_["steerLevel"].GetFloat();
-        float accelLevel = controls.extraData_["accelLevel"].GetFloat();
-
-        // CRITICAL FIX: Properly handle yaw rotation
-        ntwkControls_.yaw_ = controls.yaw_ * 0.1f; // Scale down rotation speed
-
-        // Set movement based on analog values
-        ntwkControls_.extraData_["steerLevel"] = steerLevel;
-        ntwkControls_.extraData_["accelLevel"] = accelLevel;
-
-        // Map analog to digital controls for compatibility
-        if (Abs(steerLevel) > 0.1f) {
-            if (steerLevel < 0.0f) {
-                ntwkControls_.buttons_ |= NTWK_CTRL_LEFT;
-            } else {
-                ntwkControls_.buttons_ |= NTWK_CTRL_RIGHT;
-            }
-        }
-
-        if (Abs(accelLevel) > 0.1f) {
-            if (accelLevel > 0.0f) {
-                ntwkControls_.buttons_ |= NTWK_CTRL_FORWARD;
-            } else {
-                ntwkControls_.buttons_ |= NTWK_CTRL_BACK;
-            }
-        }
-    }
-        // KEYBOARD INPUT (Fallback)
-    else {
-        float keybdAccel = 0.0f;
-        float keybdSteer = 0.0f;
-
-        // Check for arrow keys and WASD keys
-        if (input->GetKeyDown(KEY_W) || input->GetKeyDown(KEY_UP)) {
-            ntwkControls_.buttons_ |= NTWK_CTRL_FORWARD;
-            keybdAccel = 0.7f;
-        }
-        if (input->GetKeyDown(KEY_S) || input->GetKeyDown(KEY_DOWN)) {
-            ntwkControls_.buttons_ |= NTWK_CTRL_BACK;
-            keybdAccel = -0.7f;
-        }
-        if (input->GetKeyDown(KEY_A) || input->GetKeyDown(KEY_LEFT)) {
-            ntwkControls_.buttons_ |= NTWK_CTRL_LEFT;
-            keybdSteer = -1.0f;
-        }
-        if (input->GetKeyDown(KEY_D) || input->GetKeyDown(KEY_RIGHT)) {
-            ntwkControls_.buttons_ |= NTWK_CTRL_RIGHT;
-            keybdSteer = 1.0f;
-        }
-
-        // Apply keyboard controls
-        ntwkControls_.extraData_["accelLevel"] = keybdAccel;
-        ntwkControls_.extraData_["steerLevel"] = keybdSteer;
-
-        // Keyboard doesn't change yaw directly
-        ntwkControls_.yaw_ = 0.0f;
-
-        // Additional controls
-        if (input->GetKeyDown(KEY_SPACE)) {
-            ntwkControls_.buttons_ |= NTWK_CTRL_FIRE;
-        }
-        if (input->GetKeyDown(KEY_RETURN)) {
-            ntwkControls_.buttons_ |= NTWK_CTRL_ENTER;
-        }
-    }
-
-    bool accel = ntwkControls_.buttons_ & NTWK_CTRL_FORWARD;
-    bool brake = ntwkControls_.buttons_ & NTWK_CTRL_BACK;
+    bool accel = forward;
+    bool use = input->GetKeyDown(KEY_SPACE); // GameController: ntwkControls_.IsDown(BUTTON_X);
+    bool enter = input->GetKeyDown(KEY_RETURN); // GameController: ntwkControls_.IsDown(BUTTON_Y);SetRotation(
+    bool brake = input->GetKeyDown(KEY_SHIFT); // GameController: ntwkControls_.IsDown(BUTTON_A));
+    bool fire = input->GetKeyDown(KEY_ALT); // GameController: ntwkControls_.IsDown(BUTTON_B));
 
 
-    // Retrieve controller inputs ** NOTE this will clear existing buttons (DO FIRST)
-    if (gameController_->IsValid()) {
-        gameController_->UpdateControlInputs(ntwkControls_);
-    }
+    // Set buttons based on keyboard only
+    if (forward) controls.buttons_ |= NTWK_CTRL_FORWARD;
+    if (back) controls.buttons_ |= NTWK_CTRL_BACK;
+    if (left) controls.buttons_ |= NTWK_CTRL_LEFT;
+    if (right) controls.buttons_ |= NTWK_CTRL_RIGHT;
+    if (use) controls.buttons_ |= NTWK_CTRL_USE;
+    if (fire) controls.buttons_ |= NTWK_CTRL_FIRE;
 
-    // === KEYBOARD INPUT HANDLING ===
-    // Check for arrow keys and WASD keys
-    bool keyboardForward = input->GetKeyDown(KEY_UP) || input->GetKeyDown(KEY_W);
-    bool keyboardBack = input->GetKeyDown(KEY_DOWN) || input->GetKeyDown(KEY_S);
-    bool keyboardLeft = input->GetKeyDown(KEY_LEFT) || input->GetKeyDown(KEY_A);
-    bool keyboardRight = input->GetKeyDown(KEY_RIGHT) || input->GetKeyDown(KEY_D);
 
-    // Apply keyboard controls to button flags
-    if (keyboardForward) {
-        ntwkControls_.buttons_ |= NTWK_CTRL_FORWARD;
-    }
-    if (keyboardBack) {
-        ntwkControls_.buttons_ |= NTWK_CTRL_BACK;
-    }
-    if (keyboardLeft) {
-        ntwkControls_.buttons_ |= NTWK_CTRL_LEFT;
-    }
-    if (keyboardRight) {
-        ntwkControls_.buttons_ |= NTWK_CTRL_RIGHT;
-    }
-
-    float keybdAccel;
-    float keybdAngle;
-    float keybdSteer;
-    // Set acceleration level for keyboard input
-    if (keyboardForward || keyboardBack) {
-        keybdAccel = 0.7f; // Same as joystick acceleration
-    }
-
-    // Set steering level for keyboard input
-    if (keyboardLeft) {
-        keybdSteer = -1.0f; // Full left
-        keybdAngle = 0;
-    } else if (keyboardRight) {
-        keybdSteer = 1.0f;  // Full right
-        keybdAngle = 180;
-    }
-
-    // Apply additional controls for special actions
-    if (input->GetKeyDown(KEY_SPACE)) {
-        ntwkControls_.buttons_ |= NTWK_CTRL_FIRE; // Space for fire/action
-    }
-
-    if (input->GetKeyDown(KEY_RETURN) || input->GetKeyDown(KEY_KP_ENTER)) {
-        ntwkControls_.buttons_ |= NTWK_CTRL_ENTER; // Enter for vehicle entry
-    }
-
+    /*
     // axis
     const StringHash axisHashList[SDL_CONTROLLER_AXIS_MAX / 2] = {VAR_AXIS_0, VAR_AXIS_1, VAR_AXIS_2};
     // left stick - vehicle
@@ -1196,16 +984,9 @@ Controls AlgebraKart::SampleCSPControls()
     }
     joyAngle = angle;
 
-    if (keybdAngle > 0) {
-        joyAngle += keybdAngle;
-    }
-
     // Rotate joy entry to align to screen
     joyAngle -= 180.0f;
-
-    ntwkControls_.yaw_ = joyAngle;
-    ntwkControls_.extraData_["accelLevel"] = actorAccel;
-    ntwkControls_.extraData_["steerLevel"] = lAxisVal.x_ + keybdSteer;
+     */
 
     /*
     bool accel = (input->GetKeyDown(Urho3D::KEY_UP) || input->GetKeyDown(KEY_W) || ntwkControls_.IsDown(BUTTON_B) || (actorAccel < -0.9f));
@@ -1223,6 +1004,8 @@ Controls AlgebraKart::SampleCSPControls()
         }
     }
 
+    // Sound controller flags
+
     // Found network player
     if (isSnapped_) {
 
@@ -1239,7 +1022,6 @@ Controls AlgebraKart::SampleCSPControls()
 
         Vector3 bodyPos;
         Quaternion rotation;
-bool brake = false;
 
         if (actorNode) {
             // Retrieve Actor
@@ -1304,30 +1086,8 @@ bool brake = false;
     }
 
 
-    //bool left = input->GetKeyDown(KEY_A) || input->GetKeyDown(Urho3D::KEY_LEFT) || (lAxisVal.x_ < -0.4f);
-    //bool right = input->GetKeyDown(KEY_D) || input->GetKeyDown(Urho3D::KEY_RIGHT) || (lAxisVal.x_ > 0.4f);
-
-    //ntwkControls_.Set(NTWK_CTRL_FORWARD, accel);
-    //ntwkControls_.Set(NTWK_CTRL_BACK, brake);
-    //ntwkControls_.Set(NTWK_CTRL_LEFT, left);
-    //ntwkControls_.Set(NTWK_CTRL_RIGHT, right);
-    //ntwkControls_.Set(NTWK_CTRL_ENTER, enter);
-    //ntwkControls_.Set(NTWK_CTRL_FIRE, fire);
-   // ntwkControls_.Set(NTWK_CTRL_USE, use);
-
-    // Copy ntwkControls to return value
-    //controls = ntwkControls_;
-    ////
-
-    // Set acceleration level for compatibility with existing systems
-    controls.extraData_["accelLevel"] = currentMovement_.Length() / moveSpeed;
-    controls.extraData_["steerLevel"] = 0.0f; // Not used in this movement mode
-
-    // Copy ntwkControls to return value
-    controls.buttons_ = ntwkControls_.buttons_;
-    controls.yaw_ = ntwkControls_.yaw_;
-    controls.extraData_ = ntwkControls_.extraData_;
-
+    // Store set controls in network control
+    ntwkControls_ = controls;
 
     //csp->predict();
     //cspClient_->predict();
@@ -1472,7 +1232,7 @@ void AlgebraKart::HandlePhysicsPreStep(StringHash eventType, VariantMap &eventDa
                         // Client: collect controls
                         // Torque is relative to the forward vector
                         Quaternion rotationF(0.0f, ntwkControls_.yaw_, 0.0f);
-/*
+
                         // Apply local physics change (Client-Side Prediction)
                         if (ntwkControls_.buttons_ & NTWK_CTRL_FORWARD)
                             change_func(rotationF * Vector3::RIGHT * MOVE_TORQUE);
@@ -1481,7 +1241,7 @@ void AlgebraKart::HandlePhysicsPreStep(StringHash eventType, VariantMap &eventDa
                         if (ntwkControls_.buttons_ & NTWK_CTRL_LEFT)
                             change_func(rotationF * Vector3::FORWARD * MOVE_TORQUE);
                         if (ntwkControls_.buttons_ & NTWK_CTRL_RIGHT)
-                            change_func(rotationF * Vector3::BACK * MOVE_TORQUE);*/
+                            change_func(rotationF * Vector3::BACK * MOVE_TORQUE);
 
                     }
             };
@@ -3946,8 +3706,10 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                                 float timeStep = eventData[P_TIMESTEP].GetFloat();
                                 float controlYawAngle = actor->controls_.yaw_ - 90.0f;
                                 float slowdown = 0.07f;
-                                float accelLevel = ntwkControls_.extraData_["accelLevel"].GetFloat();
-                                URHO3D_LOGDEBUGF("actor %d, accelLevel -> %f", actor->GetID(), accelLevel);
+
+                                float accelLevel = actor->GetControls().extraData_["accelLevel"].GetFloat();
+                                unsigned int buttons = actor->GetControls().buttons_;
+                                URHO3D_LOGDEBUGF("actor %d, yaw -> %f, buttons -> %d", actor->GetID(), actor->GetControls().yaw_, buttons);
 
                                 // Increment timers
                                 actor->lastWaypoint_ += timeStep;
@@ -3980,10 +3742,9 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
 
                                     URHO3D_LOGINFOF("Accelerate -> %f", accelLevel);
                                     // Apply rotation
-                                    actor->GetBody()->GetNode()->SetRotation(dir);
+                                    //actor->GetBody()->GetNode()->SetRotation(dir);
                                     // Align model and apply movement to body
                                     actor->ApplyMovement(timeStep);
-
                                     // Apply vertical force
                                     actor->ApplyThrust(timeStep);
                                 }

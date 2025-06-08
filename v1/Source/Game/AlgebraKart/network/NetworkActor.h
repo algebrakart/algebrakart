@@ -335,8 +335,17 @@ public:
 
     float turrentAngle_ = 0;
 
+    // Movement and physics state
+    bool isGrounded_;           // Is the character on ground
+    float jumpForce_;           // Jump force magnitude
+    float jumpCooldown_;        // Jump cooldown duration
+    float currentJumpCooldown_; // Current jump cooldown timer
+
+
     void UsePickup();
 
     void UpdateCharacterRotation(float timeStep);
+
+    void ApplyRotation(float timeStep);
 };
 
