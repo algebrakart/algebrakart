@@ -386,14 +386,14 @@ void EvolutionManager::startEvaluation(std::vector<std::shared_ptr<Genotype>> cu
         std::shared_ptr<Agent> agent = std::make_shared<Agent>(newId, currentPopulation[i], MathHelper::softSignFunction, ffnTopology, actor);
         // Assigned an Agent Controller linked by id
         std::shared_ptr<AgentController> agentController = std::make_shared<AgentController>(i);
+        if (agentController.get()) {
+            agentsNew.emplace_back(agent);
+            agentControllersNew.emplace_back(agentController);
 
-        agentsNew.emplace_back(agent);
-        agentControllersNew.emplace_back(agentController);
-
-        // Attach handler for agent died
-        agent->agentDied += onAgentDied;
-        agentsAliveCount++;
-
+            // Attach handler for agent died
+            agent->agentDied += onAgentDied;
+            agentsAliveCount++;
+        }
 
     }
 
@@ -403,6 +403,7 @@ void EvolutionManager::startEvaluation(std::vector<std::shared_ptr<Genotype>> cu
 
     agentControllers.clear();
     agentControllers = agentControllersNew;
+
 }
 
 // Agent Died

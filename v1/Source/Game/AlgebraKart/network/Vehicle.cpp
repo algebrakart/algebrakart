@@ -880,7 +880,6 @@ void Vehicle::Init(Node* node) {
         float wheelX = (CHASSIS_WIDTH / 2.0f) + wheelWidth_;
         float wheelSpace = 10.0f;
 
-
 ///code/dev/MonkeyMaya_com/bin/Data/Models/Vehicles/Offroad
         //int carType = Random(0,3);
         //int carType = Random(3,6); // Toy Jeeps
@@ -2658,4 +2657,8 @@ void Vehicle::setEnableControls(bool enableControls) {
 
 int Vehicle::getCarType() const {
     return carType;
+}
+
+const float *Vehicle::GetWheelDamage() const {
+    return wheelDamage;
 }

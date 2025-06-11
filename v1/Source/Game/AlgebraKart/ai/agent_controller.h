@@ -44,8 +44,8 @@ public:
     float getLastAvgSpdKm() const;
 
     int agentIndex; // Agent index of the evolution manager agents array
-    AgentMovement *movement;
-    AgentFSM *fsm;
+    std::shared_ptr<AgentMovement> movement;
+    std::shared_ptr<AgentFSM> fsm;
 
     bool useUserInput = false;
     float getTimeSinceLastCheckpoint() const;

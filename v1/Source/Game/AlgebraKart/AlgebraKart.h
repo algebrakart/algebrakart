@@ -596,6 +596,11 @@ private:
     /// Steering actor
     SharedPtr<Sprite> steerActorSprite_;
 
+    // Speedometer
+    SharedPtr<Sprite> speedometerBkgSprite_;
+    SharedPtr<Sprite> speedometerNeedleSprite_;
+    SharedPtr<Text> speedometerText_;
+
     // BOTS
     // Sprite map of ffn
     HashMap<int, Sprite*> ffnBotSprite_;
@@ -740,7 +745,13 @@ private:
     float targetYaw_;                 // Target character rotation
     float yawRotationSpeed_;          // How fast character rotates
 
-};
+    void UpdateAudioSpectrum(float timeStep);
+
+    void UpdateNetworkStatusDisplay(float ping);
+
+    void UpdateVehicleDamageDisplay(Vehicle* v, float timeStep);
+
+    };
 
 // Safety filter censored words
 String swearWords[] =  { "fuck", "shit", "cunt", "bastard", "asshole", "cock", "dick" };

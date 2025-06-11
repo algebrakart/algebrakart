@@ -15,8 +15,9 @@ class EvolutionManager;
 
 AgentController::AgentController(int index) {
     this->agentIndex = index;
-    this->movement = new AgentMovement(std::shared_ptr<AgentController>(this));
-    this->fsm = new AgentFSM();
+
+    this->movement = std::shared_ptr<AgentMovement>(new AgentMovement(this));
+    this->fsm = std::shared_ptr<AgentFSM>(new AgentFSM());
 
     int numSensors = 4;
     for (int i = 0; i < numSensors; i++) {
@@ -76,14 +77,6 @@ AgentController::AgentController(int index) {
  }
 
 AgentController::~AgentController() {
-
-    if (this->movement) {
-        delete[] this->movement;
-    }
-
-    if (this->fsm) {
-        delete[] this->fsm;
-    }
 }
 
 void AgentController::awake() {

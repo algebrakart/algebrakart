@@ -82,20 +82,12 @@ void Game::Setup() {
     // Default to not show menu
     showMenu_ = false;
 
-
     // Construct a search path to find the resource prefix with two entries:
-    // The first entry is an empty path which will be substituted with program/bin directory -- this entry is for binary when it is still in build tree
-    // The second and third entries are possible relative paths from the installed program/bin directory to the asset directory -- these entries are for binary when it is in the Urho3D SDK installation location
-//    if (!engineParameters_.Contains(EP_RESOURCE_PREFIX_PATHS))
-    //       engineParameters_[EP_RESOURCE_PREFIX_PATHS] = ";../share/Resources;../share/Urho3D/Resources";
-//    engineParameters_["ResourcePaths"] = "Data;;Data/NetDemo;";
-
     engineParameters_[EP_RESOURCE_PATHS] = "Data;CoreData";
 
     // Theme song
-//    String trackName = bzRadioTracksTrackName[7].c_str();
-    //   PlayMusic(trackName);
-
+    //String trackName = bzRadioTracksTrackName[7].c_str();
+    //PlayMusic(trackName);
 
     // Check for auto start server
     if (!GetArguments().Empty()) {
@@ -152,6 +144,39 @@ void Game::Setup() {
         // Player resolution
         engineParameters_[EP_WINDOW_WIDTH] = 1920;
         engineParameters_[EP_WINDOW_HEIGHT] = 1080;
+    }
+
+
+    // Check if we should run in headless mode (from command line argument)
+    const Vector<String>& arguments = GetArguments();
+    bool headlessMode = arguments.Contains("--headless") || arguments.Contains("-headless");
+
+    if (headlessMode) {
+        // True headless mode - no graphics, no audio, no window
+        engineParameters_[EP_HEADLESS] = true;
+        engineParameters_[EP_SOUND] = false;
+        engineParameters_[EP_WINDOW_RESIZABLE] = false;
+        engineParameters_[EP_FULL_SCREEN] = false;
+        engineParameters_[EP_WINDOW_WIDTH] = 0;
+        engineParameters_[EP_WINDOW_HEIGHT] = 0;
+
+        // Disable resource path scanning to speed up startup
+        engineParameters_[EP_RESOURCE_PATHS] = "Data;CoreData";
+
+        // Set log level for server
+        engineParameters_[EP_LOG_LEVEL] = LOG_INFO;
+
+        headless_ = true;
+    } else {
+        // Normal client/windowed server mode
+        engineParameters_[EP_WINDOW_TITLE] = "AlgebraKart";
+        engineParameters_[EP_WINDOW_WIDTH] = 1280;
+        engineParameters_[EP_WINDOW_HEIGHT] = 720;
+        engineParameters_[EP_FULL_SCREEN] = false;
+        engineParameters_[EP_WINDOW_RESIZABLE] = true;
+        engineParameters_[EP_SOUND] = true;
+
+        headless_ = false;
     }
 
 }

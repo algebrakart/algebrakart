@@ -134,7 +134,7 @@ public:
     float GetTurrentAngle();
     Node* GetTurrent();
 
-        float GetSpeedKmH() const       { return raycastVehicle_->GetSpeedKm(); }
+    float GetSpeedKmH() const       { return raycastVehicle_->GetSpeedKm(); }
     float GetSpeedMPH() const       { return raycastVehicle_->GetSpeedKm()*KMH_TO_MPH; }
     int GetCurrentGear() const      { return curGearIdx_; }
     float GetCurrentRPM() const     { return curRPM_; }
@@ -323,6 +323,12 @@ protected:
     Vector<int> wheelContactBuffer_;
     float wheelContactTime_ = 0;
     float wheelSpace_ = 0;
+
+    // wheel damage
+    float wheelDamage[4] = {0};
+public:
+    const float *GetWheelDamage() const;
+    // FL, FR, BL, BR
 public:
     float getWheelContactTime() const;
     const Vector3 &GetDragBrake() const;

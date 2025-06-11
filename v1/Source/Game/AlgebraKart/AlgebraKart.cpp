@@ -391,28 +391,41 @@ void AlgebraKart::Start() {
     // Execute base class startup
     Game::Start();
 
-    // rand seed
-    SetRandomSeed(Time::GetSystemTime());
-
     CreateServerSubsystem();
-
     context_->RegisterSubsystem(new GameController(context_));
 
     // Reset focus index
     focusIndex_ = 0;
 
-    // Create loading screen
-    CreateLoadingScreen();
+    // Random seed
+    SetRandomSeed(Time::GetSystemTime());
 
-    // Create empty scene
-    CreateEmptyScene(context_);
+    if (headless_) {
+        URHO3D_LOGINFO("Starting AlgebraKart in headless server mode");
 
-    if (!headless_) {
-        // Generate UI client for network management
+        // Only initialize essential subsystems for server
+        CreateEmptyScene(context_);
+
+        // Initialize AI/Evolution Manager for bots
+        InitEvolutionManager();
+
+        // Start server immediately in headless mode
+        DoStartServer();
+
+        // Subscribe only to essential events
+        SubscribeToEvents();
+
+    } else {
+        URHO3D_LOGINFO("Starting AlgebraKart in client/windowed mode");
+
+        // Full initialization for client
+        CreateLoadingScreen();
+        CreateEmptyScene(context_);
+        UpdateLoadingProgress(0.1f, "Creating UI...");
         CreateUI();
+        UpdateLoadingProgress(0.15f, "Loading sound system...");
 
-        UpdateLoadingProgress(0.1f, "Loading sound system...");
-
+        // Enable 3D audio (attach to camera node when available)
         // Enable for 3D sounds to work (attach to camera node)
         SoundListener *listener = scene_->CreateComponent<SoundListener>(LOCAL);
         GetSubsystem<Audio>()->SetListener(listener);
@@ -421,37 +434,22 @@ void AlgebraKart::Start() {
         GetSubsystem<Audio>()->SetMasterGain(SOUND_MUSIC, 0.3);
         GetSubsystem<Audio>()->SetMasterGain(SOUND_EFFECT, 0.3);
 
-        // Theme song
-        String trackName = "Sounds/BZradio/mm-theme-rp01.ogg";
-        //bzRadioTracksTrackName[7].c_str();
-        //PlayMusic(trackName);
+        // Initialize game systems
+        UpdateLoadingProgress(0.20f, "Loading evolution manager...");
+        InitEvolutionManager();
+        CreateServerSubsystem();
 
-        // Start in menu mode
-        //UpdateUIState(false);
+        UpdateLoadingProgress(0.25f, "Preparing event system...");
+        // Subscribe to all events
+        SubscribeToEvents();
 
-        /*
-        // Create boids
-        for (int i = 0; i < numOfBoidsets; i++)
-        {
-            boids[i].Initialise(cache, scene_, Vector3(0.0f, 20.0f, 0.0f));
-        }*/
-
-        // targetCameraPos_ = Vector3(0.0f, 40.0f, CAMERA_DISTANCE);
-
+        // Set initial state
+        UpdateUIState(false);
         ChangeDebugHudText();
-    }
+        Game::InitMouseMode(MM_FREE);
+        fpsTimer_.Reset();
+        framesCount_ = 0;
 
-    Game::InitMouseMode(MM_FREE);
-
-    fpsTimer_.Reset();
-    framesCount_ = 0;
-
-    // Hook up to the frame update events
-    SubscribeToEvents();
-
-    // Start Server
-    if(autoStartServer_) {
-        DoStartServer();
     }
 }
 
@@ -1104,44 +1102,46 @@ void AlgebraKart::HandleAI(float timeStep) {
 
     for (int i = 0; i < EvolutionManager::getInstance()->getAgents().size(); i++) {
 
-        bool dead = (!EvolutionManager::getInstance()->getNetworkActors()[i]);
-        if (!dead) {
-            String botName = EvolutionManager::getInstance()->getNetworkActors()[i]->GetUserName();
-            std::shared_ptr<AgentController> controller = EvolutionManager::getInstance()->getAgentControllers()[i];
-            // Process sensor inputs through ffn and apply calculated inputs
-            controller->update(timeStep);
+        if (EvolutionManager::getInstance()->getNetworkActors().size() > 0) {
+            bool dead = (!EvolutionManager::getInstance()->getNetworkActors()[i]);
+            if (!dead) {
+                String botName = EvolutionManager::getInstance()->getNetworkActors()[i]->GetUserName();
+                std::shared_ptr<AgentController> controller = EvolutionManager::getInstance()->getAgentControllers()[i];
+                // Process sensor inputs through ffn and apply calculated inputs
+                controller->update(timeStep);
 
-            if (controller->isAlive()) {
-                std::shared_ptr<NetworkActor> actor = EvolutionManager::getInstance()->getNetworkActors()[i];
-                if (actor) {
-                    float speed = actor->vehicle_->GetSpeedKmH();
-                    float SPEED_KILL_LIMIT = 400.0f;
-                    if (speed > SPEED_KILL_LIMIT) {
+                if (controller->isAlive()) {
+                    std::shared_ptr<NetworkActor> actor = EvolutionManager::getInstance()->getNetworkActors()[i];
+                    if (actor) {
+                        float speed = actor->vehicle_->GetSpeedKmH();
+                        float SPEED_KILL_LIMIT = 400.0f;
+                        if (speed > SPEED_KILL_LIMIT) {
 
-                        /*
-                        controller->die();
-                        actor->Kill();
+                            /*
+                            controller->die();
+                            actor->Kill();
 
-                        // respawn?
-                        EvolutionManager::getInstance()->getNetworkActors()[i]->Kill();
-                        EvolutionManager::getInstance()->getNetworkActors()[i] = nullptr;
-                        URHO3D_LOGDEBUGF("CreateAgents -> SpawnPlayer: %d", (i));
-                        // Spawn ai bot and generate NetworkActor
-                        EvolutionManager::getInstance()->getNetworkActors()[i] = SpawnPlayer(i);
-                        agents[i]->setRespawnTime(0);
-                        scene_->MarkNetworkUpdate();
-                        */
+                            // respawn?
+                            EvolutionManager::getInstance()->getNetworkActors()[i]->Kill();
+                            EvolutionManager::getInstance()->getNetworkActors()[i] = nullptr;
+                            URHO3D_LOGDEBUGF("CreateAgents -> SpawnPlayer: %d", (i));
+                            // Spawn ai bot and generate NetworkActor
+                            EvolutionManager::getInstance()->getNetworkActors()[i] = SpawnPlayer(i);
+                            agents[i]->setRespawnTime(0);
+                            scene_->MarkNetworkUpdate();
+                            */
 
+                        }
                     }
                 }
-            }
 
-            if (!controller->isAlive()) {
-                if (EvolutionManager::getInstance()->getNetworkActors()[i]) {
+                if (!controller->isAlive()) {
+                    if (EvolutionManager::getInstance()->getNetworkActors()[i]) {
 
-                    EvolutionManager::getInstance()->getNetworkActors()[i]->Kill();
-                    EvolutionManager::getInstance()->getNetworkActors()[i] = nullptr;
-                    scene_->MarkNetworkUpdate();
+                        EvolutionManager::getInstance()->getNetworkActors()[i]->Kill();
+                        EvolutionManager::getInstance()->getNetworkActors()[i] = nullptr;
+                        scene_->MarkNetworkUpdate();
+                    }
                 }
             }
         }
@@ -1803,6 +1803,43 @@ void AlgebraKart::HandlePlayerStateUpdate(StringHash eventType, VariantMap& even
             pranaBarProgBarText_->SetText(progressBar);
 
         }
+
+        // Update speedometer
+        if (speedometerBkgSprite_ && speedometerNeedleSprite_ && speedometerText_) {
+            // Show speedometer when in vehicle and moving
+            bool showSpeedometer = false;
+            if (auto* networkActor = actorMap_[GetSubsystem<Network>()->GetServerConnection()].Get()) {
+                bool inVehicle = true; //networkActor->entered_;
+                showSpeedometer = inVehicle && velocity > 1.0f; // Show when moving faster than 1 km/h
+            }
+
+            speedometerBkgSprite_->SetVisible(showSpeedometer);
+            speedometerNeedleSprite_->SetVisible(showSpeedometer);
+            speedometerText_->SetVisible(showSpeedometer);
+
+            if (showSpeedometer) {
+                // Calculate needle rotation based on speed
+                // Assuming max speed display of 200 km/h, with needle rotating 180 degrees
+                float maxSpeed = 200.0f;
+                float speedRatio = Clamp(velocity / maxSpeed, 0.0f, 1.0f);
+
+                // Needle rotates from -90 degrees (left) to +90 degrees (right)
+                float needleRotation = -90.0f + (speedRatio * 180.0f);
+                speedometerNeedleSprite_->SetRotation(needleRotation);
+
+                // Update digital readout
+                speedometerText_->SetText(String((int)velocity) + " KM/H");
+
+                // Color coding for speed
+                if (velocity < 60.0f) {
+                    speedometerText_->SetColor(Color::WHITE);
+                } else if (velocity < 120.0f) {
+                    speedometerText_->SetColor(Color::YELLOW);
+                } else {
+                    speedometerText_->SetColor(Color::RED);
+                }
+            }
+        }
     }
 }
 
@@ -2210,203 +2247,378 @@ void AlgebraKart::HandleCollisionEnd(StringHash eventType, VariantMap &eventData
 
 }
 
+
+///
+// HandleRenderUpdate is called every frame during Urho3D's render phase
+// This happens AFTER the main Update event but BEFORE actual rendering
+
 void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData) {
-    using namespace Update;
+    // In headless mode, we skip ALL rendering-related operations
+    if (headless_) {
+        return; // Exit early - no graphics processing needed
+    }
+
+    // == FRAME TIMING ==
+    // Get the time step for this frame (usually 1/60th second at 60 FPS)
+    using namespace RenderUpdate;
+    float timeStep = eventData[P_TIMESTEP].GetFloat();
+
+    //using namespace Update;
     auto *input = GetSubsystem<Input>();
 
     // Take the frame time step, which is stored as a float
-    float timeStep = eventData[P_TIMESTEP].GetFloat();
+    //float timeStep = eventData[P_TIMESTEP].GetFloat();
     HandleUpdateParticlePool(timeStep);
 
     DebugRenderer *dbgRenderer = scene_->GetComponent<DebugRenderer>(REPLICATED);
 
     float deltaSum;
 
+    // == UI UPDATES THAT DEPEND ON CURRENT FRAME STATE ==
 
-     if (!isServer_) {
+    if (!isServer_) {
 
-         // CLIENT CODE
+        // CLIENT CODE
 
-         // Found network player
-         if (isSnapped_) {
+        // Found network player
+        if (isSnapped_) {
 
-             String actorName = String("actor-") + clientName_;
-             Node *actorNode = scene_->GetChild(actorName);
+            String actorName = String("actor-") + clientName_;
+            Node *actorNode = scene_->GetChild(actorName);
 
-             String vehicleName = String("vehicle-") + clientName_;
-             Node *vehicleNode = scene_->GetChild(vehicleName);
-             //BLUE-304-vehicle
+            String vehicleName = String("vehicle-") + clientName_;
+            Node *vehicleNode = scene_->GetChild(vehicleName);
+            //BLUE-304-vehicle
 
-             Vector3 bodyPos;
-             Quaternion rotation;
+            Vector3 bodyPos;
+            Quaternion rotation;
 
-             if (actorNode) {
-                 // Retrieve Actor
-                 ClientObj *actor = actorNode->GetDerivedComponent<ClientObj>();
+            if (actorNode) {
+                // Retrieve Actor
+                ClientObj *actor = actorNode->GetDerivedComponent<ClientObj>();
 
-                 if (actor) {
-                     NetworkActor *na = actorNode->GetDerivedComponent<NetworkActor>();
-                     Vehicle *v = vehicleNode->GetDerivedComponent<Vehicle>();
-                     if (na) {
-                         auto *body = na->GetNode()->GetComponent<RigidBody>(true);
-                         if (body) {
-                             // CLIENT RIGID BODY RETRIEVED
-                             bodyPos = body->GetPosition();
-                             rotation = na->GetNode()->GetRotation();
-
-                             // Vehicle Damage
-                             if (vDamageSprite_) {
-                                 vDamageSprite_->SetVisible(true);
-                                 float height = 3.0f;
-                                 for (int i = 0; i < VDAMAGE_BODY_NUM_LINES; i++) {
-                                     // TODO ADD v damage list
-                                     float centerX = 6.0f;
-                                     float centerY = -142.0f;
-                                     SharedPtr<Sprite> sprite_;
-                                     sprite_ = vDamage_FL_LineSprites_.At(i);
-                                     sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(centerX-130.0f, centerY-90.0f+(i*height)));
-                                     sprite_->SetOpacity(0.9f);
-                                     // Set a low priority so that other UI elements can be drawn on top
-                                     sprite_->SetPriority(-100);
-                                     sprite_->SetVisible(true);
-
-                                     sprite_ = vDamage_FR_LineSprites_.At(i);
-                                     sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(centerX-48.0f, centerY-90.0f+(i*height)));
-                                     sprite_->SetOpacity(0.9f);
-                                     // Set a low priority so that other UI elements can be drawn on top
-                                     sprite_->SetPriority(-100);
-                                     sprite_->SetVisible(true);
-
-                                     sprite_ = vDamage_BL_LineSprites_.At(i);
-                                     sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(centerX-130.0f, centerY-10.0f+(i*height)));
-                                     sprite_->SetOpacity(0.9f);
-                                     // Set a low priority so that other UI elements can be drawn on top
-                                     sprite_->SetPriority(-100);
-                                     sprite_->SetVisible(true);
-
-                                     sprite_ = vDamage_BR_LineSprites_.At(i);
-                                     sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-                                     sprite_->SetPosition(Vector2(centerX-48.0f, centerY-10.0f+(i*height)));
-                                     sprite_->SetOpacity(0.9f);
-                                     // Set a low priority so that other UI elements can be drawn on top
-                                     sprite_->SetPriority(-100);
-                                     sprite_->SetVisible(true);
-
-                                     // ? left
-                                     // 90 middle
-                                     // ? right
+                if (actor) {
+                    NetworkActor *na = actorNode->GetDerivedComponent<NetworkActor>();
+                    Vehicle *v = vehicleNode->GetDerivedComponent<Vehicle>();
+                    if (na) {
+                        auto *body = na->GetNode()->GetComponent<RigidBody>(true);
+                        if (body) {
+                            // CLIENT RIGID BODY RETRIEVED
+                            bodyPos = body->GetPosition();
+                            rotation = na->GetNode()->GetRotation();
 
 
-                                 }
-                             }
+                            if (speedometerNeedleSprite_) {
+                                if (v) {
+                                        // Update speedometer display based on current vehicle speed
+                                        if (speedometerNeedleSprite_ && speedometerBkgSprite_) {
+                                            // Get current player's vehicle speed
+                                            float currentSpeed = na->GetSpeed();
 
-                             if (na->entered_) {
-                                 if (v) {
-                                     float steering = v->GetSteering();
-                                     if (steerWheelSprite_) {
-                                         steerWheelSprite_->SetVisible(true);
-                                         steerActorSprite_->SetVisible(false);
-                                         steerWheelSprite_->SetRotation(360.0f * steering);
-                                     }
+                                            // Calculate needle rotation (0-180 degrees for 0-200 km/h)
+                                            float maxDisplaySpeed = 200.0f;
+                                            float speedRatio = Clamp(currentSpeed / maxDisplaySpeed, 0.0f, 1.0f);
+                                            float needleAngle = -90.0f + (speedRatio * 180.0f); // -90° to +90°
 
-                                 }
-                             } else {
-                                 if (steerActorSprite_) {
-                                     steerWheelSprite_->SetVisible(false);
+                                            // Rotate the needle sprite
+                                            speedometerNeedleSprite_->SetRotation(needleAngle);
 
-                                     // Vehicle Damage
-                                     if (vDamageSprite_) {
+                                            // Update digital speed text
+                                            if (speedometerText_) {
+                                                speedometerText_->SetText(String((int)currentSpeed) + " km/h");
+                                            }
+                                        }
+                                }
+                            }
+
+                            ///
+
+                            // TODO: Finish vehicle damage system
+                            // Vehicle Damage
+                            if (vDamageSprite_) {
+                                vDamageSprite_->SetVisible(true);
+                                float height = 3.0f;
+                                for (int i = 0; i < VDAMAGE_BODY_NUM_LINES; i++) {
+                                    // TODO ADD v damage list
+                                    float centerX = 6.0f;
+                                    float centerY = -142.0f;
+                                    SharedPtr<Sprite> sprite_;
+                                    sprite_ = vDamage_FL_LineSprites_.At(i);
+                                    sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+                                    sprite_->SetPosition(Vector2(centerX-130.0f, centerY-90.0f+(i*height)));
+                                    sprite_->SetOpacity(0.9f);
+                                    // Set a low priority so that other UI elements can be drawn on top
+                                    sprite_->SetPriority(-100);
+                                    sprite_->SetVisible(true);
+
+                                    sprite_ = vDamage_FR_LineSprites_.At(i);
+                                    sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+                                    sprite_->SetPosition(Vector2(centerX-48.0f, centerY-90.0f+(i*height)));
+                                    sprite_->SetOpacity(0.9f);
+                                    // Set a low priority so that other UI elements can be drawn on top
+                                    sprite_->SetPriority(-100);
+                                    sprite_->SetVisible(true);
+
+                                    sprite_ = vDamage_BL_LineSprites_.At(i);
+                                    sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+                                    sprite_->SetPosition(Vector2(centerX-130.0f, centerY-10.0f+(i*height)));
+                                    sprite_->SetOpacity(0.9f);
+                                    // Set a low priority so that other UI elements can be drawn on top
+                                    sprite_->SetPriority(-100);
+                                    sprite_->SetVisible(true);
+
+                                    sprite_ = vDamage_BR_LineSprites_.At(i);
+                                    sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+                                    sprite_->SetPosition(Vector2(centerX-48.0f, centerY-10.0f+(i*height)));
+                                    sprite_->SetOpacity(0.9f);
+                                    // Set a low priority so that other UI elements can be drawn on top
+                                    sprite_->SetPriority(-100);
+                                    sprite_->SetVisible(true);
+
+                                    // ? left
+                                    // 90 middle
+                                    // ? right
+
+
+                                }
+                            }
+
+                            if (na->entered_) {
+                                if (v) {
+                                    float steering = v->GetSteering();
+                                    if (steerWheelSprite_) {
+                                        steerWheelSprite_->SetVisible(true);
+                                        steerActorSprite_->SetVisible(false);
+                                        steerWheelSprite_->SetRotation(360.0f * steering);
+                                    }
+
+                                }
+                            } else {
+                                if (steerActorSprite_) {
+                                    steerWheelSprite_->SetVisible(false);
+
+                                    // Vehicle Damage
+                                    if (vDamageSprite_) {
 //                                         vDamageSprite_->SetVisible(false);
-                                     }
+                                    }
 
-                                     // Detect move vector and visible only on non-zero
-                                     if (joySteer_.LengthSquared() > 0) {
+                                    // Detect move vector and visible only on non-zero
+                                    if (joySteer_.LengthSquared() > 0) {
 
-                                         // Joy movement
-
-
-                                         steerActorSprite_->SetVisible(true);
-                                         steerActorSprite_->SetRotation(body->GetRotation().YawAngle());
-                                         steerActorSprite_->SetPosition(Vector2(-90, -90));
-                                     } else {
-                                         steerActorSprite_->SetVisible(false);
-                                     }
-                                 }
-                             }
+                                        // Joy movement
 
 
-                             // Player pickup state
-                             int pickupItemState = -1;
+                                        steerActorSprite_->SetVisible(true);
+                                        steerActorSprite_->SetRotation(body->GetRotation().YawAngle());
+                                        steerActorSprite_->SetPosition(Vector2(-90, -90));
+                                    } else {
+                                        steerActorSprite_->SetVisible(false);
+                                    }
+                                }
+                                /// Alternate
+                                /**
+                                 *
+                                 *
+                                 */
+                                // == STEERING WHEEL VISUALIZATION ==
+/*
+                                // Show steering input visually
+                                if (steerWheelSprite_ && steerActorSprite_) {
+                                    float steerInput = GetCurrentSteerInput(); // -1.0 to 1.0
+
+                                    // Rotate steering wheel sprite
+                                    float wheelRotation = steerInput * 45.0f; // Max 45 degrees rotation
+                                    steerWheelSprite_->SetRotation(wheelRotation);
+
+                                    // Position the actor indicator on the wheel rim
+                                    float indicatorAngle = wheelRotation * M_PI / 180.0f;
+                                    float wheelRadius = 50.0f; // Radius in pixels
+                                    Vector2 wheelCenter = steerWheelSprite_->GetPosition();
+                                    Vector2 indicatorPos = wheelCenter + Vector2(
+                                            Sin(indicatorAngle) * wheelRadius,
+                                            -Cos(indicatorAngle) * wheelRadius
+                                    );
+                                    steerActorSprite_->SetPosition(indicatorPos);
+                                }
+*/
+
+
+                            }
+
+/*
+                            // == AUDIO SPECTRUM VISUALIZATION (if radio is playing) ==
+                            if (radioSpectrumSprite_ && _radioStream && _radioStream->IsPlaying()) {
+                                // Update audio spectrum visualization
+                                UpdateAudioSpectrum(timeStep);
+
+                                // Draw frequency spectrum on the radio display
+                                DrawFFT(Vector2(0, radioSpectrumHeight_ / 2),
+                                        radioSpectrumWidth_,
+                                        radioSpectrumHeight_,
+                                        Color(0.97f, 0.19f, 0.58f)); // Pink color
+                            }
+*/
+
+                            // == VEHICLE DAMAGE VISUALIZATION ==
+
+                            // Update damage indicators (only visible when damaged)
+                            UpdateVehicleDamageDisplay(v, timeStep);
+
+                            // == NETWORK LAG INDICATOR ==
+
+                            // Show connection quality
+                            auto* network = GetSubsystem<Network>();
+                            if (network->GetServerConnection()) {
+                                float ping = network->GetServerConnection()->GetRoundTripTime();
+                                UpdateNetworkStatusDisplay(ping);
+                            }
+
+
+                            // == PICKUP ITEM DISPLAY ==
+
+                            // Player pickup state
+                            int pickupItemState = -1;
                             if (na->numPickups_ > 0) {
                                 pickupItemState = na->activePickup_;
                             }
 
                             //URHO3D_LOGDEBUGF("pickupItemState=%d", pickupItemState);
-                                 // Update Client UI bars
+                            // Update Client UI bars
 
-                                 // Pickups
-                                 if (pickupSprite_) {
-                                     // Update player powerbar
-                                     IntVector2 v = pickupSprite_->GetSize();
-                                     //int power = int(((life) / 100.0f) * (float) v.x_);
-                                     pickupSprite_->SetSize(v.x_, v.y_);
-                                 }
+                            // Pickups
+                            if (pickupSprite_) {
+                                // Update player powerbar
+                                IntVector2 v = pickupSprite_->GetSize();
+                                //int power = int(((life) / 100.0f) * (float) v.x_);
+                                pickupSprite_->SetSize(v.x_, v.y_);
+                            }
 
-                                 if (pickupItemSprite_) {
-                                     // Update item
-                                     IntVector2 v = pickupItemSprite_->GetSize();
-                                     //int power = int(((life) / 100.0f) * (float) v.x_);
-                                     pickupItemSprite_->SetSize(v.x_, v.y_);
+                            if (pickupItemSprite_) {
+                                // Update item
+                                IntVector2 v = pickupItemSprite_->GetSize();
+                                //int power = int(((life) / 100.0f) * (float) v.x_);
+                                pickupItemSprite_->SetSize(v.x_, v.y_);
 
-                                     if (pickupItemState <= 0) {
-                                         // No pick up, show nothing
-                                         pickupItemSprite_->SetVisible(false);
-                                     } else {
-                                         pickupItemSprite_->SetVisible(true);
+                                if (pickupItemState <= 0) {
+                                    // No pick up, show nothing
+                                    pickupItemSprite_->SetVisible(false);
+                                } else {
+                                    pickupItemSprite_->SetVisible(true);
 
-                                         if (pickupItemState > 0) {
-                                             // types
-                                             // 1 -> balloon
-                                             // 2 -> heart with wings
-                                             // 3 -> battery
-                                             // 4 -> N2O
-                                             // 5 ->
-                                             // 6 ->
+                                    // Show current pickup item with blinking animation
+                                    int currentPickup = pickupItemState;
 
-                                             switch (pickupItemState) {
-                                                 // type
-                                                 case 1:
-                                                     // 1 -> balloon
-                                                     break;
-                                                 case 2:
-                                                     // 2 -> heart with wings
-                                                     break;
-                                                 case 3:
-                                                     // 3 -> battery
-                                                     break;
-                                                 case 4:
-                                                     // 4 -> N2O
-                                                     break;
-                                             }
-                                             pickupItemSprite_->SetTexture(hudPickupItemTextures_[pickupItemState-1]);
-                                         }
-                                     }
-                                 }
+                                    // Blinking animation for ready-to-use items
+                                    static float blinkTimer = 0.0f;
+                                    blinkTimer += timeStep * 3.0f; // Blink speed
+                                    float alpha = (Sin(blinkTimer) + 1.0f) * 0.5f; // 0.0 to 1.0
+                                    pickupItemSprite_->SetOpacity(Lerp(0.7f, 1.0f, alpha));
+
+                                    // Set appropriate pickup icon
+                                    if (pickupItemState > 0) {
+                                        // types
+                                        // 1 -> balloon
+                                        // 2 -> heart with wings
+                                        // 3 -> battery
+                                        // 4 -> N2O
+                                        // 5 ->
+                                        // 6 ->
+
+                                        switch (pickupItemState) {
+                                            // type
+                                            case 1:
+                                                // 1 -> balloon
+                                                break;
+                                            case 2:
+                                                // 2 -> heart with wings
+                                                break;
+                                            case 3:
+                                                // 3 -> battery
+                                                break;
+                                            case 4:
+                                                // 4 -> N2O
+                                                break;
+                                        }
+                                        pickupItemSprite_->SetTexture(hudPickupItemTextures_[pickupItemState-1]);
+                                    }
+                                }
+                            }
+
+                            // == MINIMAP UPDATES ==
+/*
+                            // Update player position on minimap
+                            if (miniMapP1Sprite_) {
+                                Vector3 playerPos = GetPlayerWorldPosition(); // Your method
+                                Vector2 minimapPos = WorldToMinimapCoords(playerPos); // Convert to minimap space
+
+                                miniMapP1Sprite_->SetPosition(minimapPos);
+
+                                // Rotate minimap icon based on player facing direction
+                                float playerYaw = GetPlayerYaw(); // Your method
+                                miniMapP1Sprite_->SetRotation(playerYaw);
+                            }
+*/
 
 
-                                 // Update client UI
-                                HandleClientUIUpdate();
+                            // Update client UI
+                            HandleClientUIUpdate();
 
-                         }
-                     }
-                 }
-             }
-         }
-     }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    ///
 }
+
+void AlgebraKart::UpdateAudioSpectrum(float timeStep) {
+    // Process audio data and update spectrum visualization
+    if (analyzer_ && capturer_) {
+        // Update spectrum analyzer with current audio data
+        analyzer_->update(capturer_->getBuffer(),
+                          capturer_->bufferHeadIndex(),
+                          audioSpectrumOptions_.topLevel,
+                          audioSpectrumOptions_.bottomLevel,
+                          audioSpectrumOptions_.minFreq,
+                          audioSpectrumOptions_.maxFreq,
+                          audioSpectrumOptions_.axisLogBase);
+    }
+}
+
+void AlgebraKart::UpdateVehicleDamageDisplay(Vehicle* v, float timeStep) {
+    // Show damage indicators on different parts of the vehicle
+
+    // Update damage line sprites for each wheel
+    for (int i = 0; i < 4; i++) {
+        if (v->GetWheelDamage()[i] > 0.1f) {
+            // Show damage lines with intensity based on damage level
+            //auto& damageSprites = GetWheelDamageSprites(i); // Your method
+            //UpdateDamageLines(damageSprites, wheelDamage[i], timeStep);
+        }
+    }
+}
+
+void AlgebraKart::UpdateNetworkStatusDisplay(float ping) {
+    // Color-code connection quality
+    Color statusColor;
+    if (ping < 50.0f) {
+        statusColor = Color::GREEN;      // Excellent
+    } else if (ping < 100.0f) {
+        statusColor = Color::YELLOW;     // Good
+    } else if (ping < 200.0f) {
+        statusColor = Color::MAGENTA;     // Fair
+    } else {
+        statusColor = Color::RED;        // Poor
+    }
+
+    // Update network status indicator
+    //if (networkStatusSprite_) {
+    //    networkStatusSprite_->SetColor(statusColor);
+    //}
+}
+
+///
 
 float ticks = 0;
 
@@ -4770,7 +4982,10 @@ void AlgebraKart::CreateServerSubsystem() {
 }
 
 void AlgebraKart::CreateUI() {
-
+    if (headless_) {
+        URHO3D_LOGDEBUG("Skipping UI creation in headless mode");
+        return;
+    }
     Graphics *graphics = GetSubsystem<Graphics>();
     auto* renderer = GetSubsystem<Renderer>();
 
@@ -5138,6 +5353,10 @@ void AlgebraKart::SetupMenuViewport() {
 
 void AlgebraKart::SetupGameViewports()
 {
+    if (headless_) {
+        URHO3D_LOGDEBUG("Skipping viewport setup in headless mode");
+        return;
+    }
 
     auto* graphics = GetSubsystem<Graphics>();
     auto* renderer = GetSubsystem<Renderer>();
@@ -5251,7 +5470,10 @@ void AlgebraKart::UpdateButtons() {
 
 // Manage camera movement for Client
 void AlgebraKart::MoveCamera(float timeStep) {
-
+    if (headless_) {
+        // Skip camera movement in headless mode
+        return;
+    }
     // CLIENT CODE
 
     // Right mouse button controls mouse cursor visibility: hide when pressed
@@ -5763,6 +5985,7 @@ void AlgebraKart::HandleLevelLoaded(StringHash eventType, VariantMap& eventData)
 
     scene_->StopAsyncLoading();
 
+    levelLoading_ = false;
     // Initiate game map for multiplayer game
     InitiateGameMap(scene_);
     // Spawn the player to server itself
@@ -6664,6 +6887,10 @@ SharedPtr<Node> AlgebraKart::SpawnPlayer() {
 
 // CLIENT CODE
 void AlgebraKart::CreateClientUI() {
+    if (headless_) {
+        URHO3D_LOGDEBUG("Skipping client UI creation in headless mode");
+        return;
+    }
 
     clientLevelLoading_ = true;
 
@@ -6898,9 +7125,112 @@ void AlgebraKart::CreateClientUI() {
     //miniMapWPSprite_ = ui->GetRoot()->CreateChild<Sprite>();
     //miniMapBkgSprite_ = ui->GetRoot()->CreateChild<Sprite>();
     //markerMapBkgSprite_ = ui->GetRoot()->CreateChild<Sprite>();
-    steerWheelSprite_ = ui->GetRoot()->CreateChild<Sprite>();
-    steerActorSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+    //steerWheelSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+    //steerActorSprite_ = ui->GetRoot()->CreateChild<Sprite>();
     radioSpectrumSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+
+    // Fix steering wheel positioning to avoid overlap with pickup items
+    // Get steering wheel texture
+    auto* steeringWheelTexture = cache->GetResource<Texture2D>("Textures/hud/steer_wheel.png");
+    auto* steeringActorTexture = cache->GetResource<Texture2D>("Textures/hud/steer_actor.png");
+
+    if (steeringWheelTexture) {
+        steerWheelSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        steerWheelSprite_->SetTexture(steeringWheelTexture);
+
+        int textureWidth = steeringWheelTexture->GetWidth();
+        int textureHeight = steeringWheelTexture->GetHeight();
+
+        // Position steering wheel in bottom-left corner, away from pickup items (top-right)
+        steerWheelSprite_->SetSize(textureWidth, textureHeight);
+        steerWheelSprite_->SetScale(0.4f); // Adjust scale as needed
+        steerWheelSprite_->SetHotSpot(textureWidth / 2, textureHeight / 2);
+        steerWheelSprite_->SetAlignment(HA_LEFT, VA_BOTTOM);
+        steerWheelSprite_->SetPosition(Vector2(120, graphics->GetHeight() - 120)); // Bottom-left position
+        steerWheelSprite_->SetOpacity(0.8f);
+        steerWheelSprite_->SetPriority(-90);
+        steerWheelSprite_->SetVisible(false); // Hidden by default
+    }
+
+    if (steeringActorTexture) {
+        steerActorSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        steerActorSprite_->SetTexture(steeringActorTexture);
+
+        int textureWidth = steeringActorTexture->GetWidth();
+        int textureHeight = steeringActorTexture->GetHeight();
+
+        // Position actor indicator on the steering wheel
+        steerActorSprite_->SetSize(textureWidth, textureHeight);
+        steerActorSprite_->SetScale(0.3f);
+        steerActorSprite_->SetHotSpot(textureWidth / 2, textureHeight / 2);
+        steerActorSprite_->SetAlignment(HA_LEFT, VA_BOTTOM);
+        steerActorSprite_->SetPosition(Vector2(120, graphics->GetHeight() - 120)); // Same as steering wheel
+        steerActorSprite_->SetOpacity(0.9f);
+        steerActorSprite_->SetPriority(-85);
+        steerActorSprite_->SetVisible(false); // Hidden by default
+    }
+
+    // Create analog speedometer
+    auto* speedometerBkgTexture = cache->GetResource<Texture2D>("Textures/hud/speedometer_bg.png");
+    auto* speedometerNeedleTexture = cache->GetResource<Texture2D>("Textures/hud/speedometer_needle.png");
+
+    if (speedometerBkgTexture) {
+        speedometerBkgSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        speedometerBkgSprite_->SetTexture(speedometerBkgTexture);
+
+        int textureWidth = speedometerBkgTexture->GetWidth();
+        int textureHeight = speedometerBkgTexture->GetHeight();
+
+        // Position speedometer in bottom-right corner, but avoid overlap with other elements
+        speedometerBkgSprite_->SetSize(textureWidth, textureHeight);
+        speedometerBkgSprite_->SetScale(1.0f);
+        speedometerBkgSprite_->SetHotSpot(textureWidth / 2, textureHeight / 2);
+        speedometerBkgSprite_->SetAlignment(HA_CENTER, VA_CENTER);
+
+        // Position away from pickup items and other HUD elements
+        float speedometerX = (graphics->GetWidth()/2)-85.0f;//700.0f;
+        float speedometerY = (graphics->GetHeight()/2)-320.0f;//450.0f;
+        speedometerBkgSprite_->SetPosition(Vector2(speedometerX, speedometerY));
+        speedometerBkgSprite_->SetOpacity(0.8f);
+        speedometerBkgSprite_->SetPriority(-100);
+        speedometerBkgSprite_->SetVisible(true); // Hidden by default
+    }
+
+    if (speedometerNeedleTexture) {
+        speedometerNeedleSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        speedometerNeedleSprite_->SetTexture(speedometerNeedleTexture);
+
+        int textureWidth = speedometerNeedleTexture->GetWidth();
+        int textureHeight = speedometerNeedleTexture->GetHeight();
+
+        // Position needle at center of speedometer
+        speedometerNeedleSprite_->SetSize(textureWidth, textureHeight);
+        speedometerNeedleSprite_->SetScale(1.0f);
+        speedometerNeedleSprite_->SetHotSpot(textureWidth / 2, textureHeight - 5); // Rotate around bottom center
+        speedometerNeedleSprite_->SetAlignment(HA_CENTER, VA_CENTER);
+
+        float speedometerX = (graphics->GetWidth()/2) - 85.0f;
+        float speedometerY = (graphics->GetHeight()/2) - 327.0f;
+        speedometerNeedleSprite_->SetPosition(Vector2(speedometerX, speedometerY));
+        speedometerNeedleSprite_->SetOpacity(0.9f);
+        speedometerNeedleSprite_->SetPriority(-85);
+        speedometerNeedleSprite_->SetVisible(true); // Hidden by default
+    }
+
+    // Create digital speed text overlay
+    speedometerText_ = ui->GetRoot()->CreateChild<Text>();
+    speedometerText_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
+    speedometerText_->SetTextAlignment(HA_CENTER);
+    speedometerText_->SetColor(Color::WHITE);
+    speedometerText_->SetAlignment(HA_CENTER, VA_CENTER);
+
+    // Position text below the speedometer
+    float speedometerX = (graphics->GetWidth()/2) - 85.0f;
+    float speedometerY = (graphics->GetHeight()/2) - 240.0f;
+    speedometerText_->SetPosition(IntVector2(speedometerX, speedometerY));
+    speedometerText_->SetText("0 KM/H");
+    speedometerText_->SetVisible(false);
+    speedometerText_->SetPriority(-80);
 
   /*  sprite_ = new Sprite2D(context_);
     sprite_->SetTexture(texture);
