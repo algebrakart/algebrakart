@@ -781,6 +781,32 @@ private:
     Quaternion smoothCameraRotation_;
     bool cameraInitialized_ = false;
 
+    // Minimap system
+    SharedPtr<Camera> minimapCam_;
+    SharedPtr<Node> minimapCamNode_;
+    SharedPtr<Viewport> minimapViewport_;
+
+    // Minimap player markers
+    Vector<SharedPtr<Node>> minimapPlayerMarkers_;
+    HashMap<Connection*, SharedPtr<Node>> minimapPlayerMap_;
+    HashMap<unsigned int, SharedPtr<Node>> minimapBotMap_;
+
+    // Minimap configuration
+    float minimapSize_ = 200.0f;  // Size of minimap in pixels
+    float minimapScale_ = 0.1f;   // World to minimap scale
+    Vector3 trackCenter_ = Vector3::ZERO;  // Center of the track
+    float trackBounds_ = 1000.0f;  // Track boundary size
+
+    Vector3 CalculatePlayersCenterPosition();
+
+    // Minimap methods
+    void SetupMinimapViewport();
+    void UpdateMinimap(float timeStep);
+    void CreateMinimapPlayerMarker(Connection* connection, const Color& color);
+    void CreateMinimapBotMarker(unsigned int botId, const Color& color);
+    void UpdateMinimapMarkers();
+    void CalculateTrackBounds();
+
     void SetCameraMode(CameraMode mode);
     void UpdateCameraFirstPerson(float timeStep);
     void UpdateCameraThirdPerson(float timeStep);

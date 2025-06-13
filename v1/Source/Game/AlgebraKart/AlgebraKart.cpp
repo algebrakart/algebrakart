@@ -2846,6 +2846,11 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
     lastCamRaycast += timeStep;
 
     HandleUpdateParticlePool(timeStep);
+    // Update minimap
+    if (minimapCam_)
+    {
+        UpdateMinimap(timeStep);
+    }
 
     auto *cache = GetSubsystem<ResourceCache>();
 
@@ -6750,6 +6755,270 @@ String AlgebraKart::SaveScene(bool initial) {
     return saveFile.GetName();
 }
 
+void AlgebraKart::SetupMinimapViewport()
+{
+    if (!scene_)
+        return;
+
+    auto* graphics = GetSubsystem<Graphics>();
+    auto* renderer = GetSubsystem<Renderer>();
+
+    // Create minimap camera node
+    minimapCamNode_ = scene_->CreateChild("MinimapCamera", LOCAL);
+    minimapCam_ = minimapCamNode_->CreateComponent<Camera>();
+
+    // Set up orthographic projection for top-down view
+    minimapCam_->SetOrthographic(true);
+    minimapCam_->SetOrthoSize(trackBounds_);
+    minimapCam_->SetNearClip(1.0f);
+    minimapCam_->SetFarClip(5000.0f);
+
+    // Position camera above the track center looking down
+    minimapCamNode_->SetPosition(Vector3(trackCenter_.x_, trackCenter_.y_ + 2000.0f, trackCenter_.z_));
+    minimapCamNode_->SetRotation(Quaternion(90.0f, 0.0f, 0.0f));
+
+    // Create minimap viewport (viewport 4)
+    minimapViewport_ = new Viewport(context_, scene_, minimapCam_);
+
+    // Position minimap in top-right corner
+    int viewportX = graphics->GetWidth() - (int)minimapSize_ - 20;
+    int viewportY = 20;
+    IntRect minimapRect(viewportX, viewportY, viewportX + (int)minimapSize_, viewportY + (int)minimapSize_);
+    minimapViewport_->SetRect(minimapRect);
+
+    // Set render path for minimap (simpler rendering)
+    minimapViewport_->SetRenderPath(renderer->GetViewport(0)->GetRenderPath());
+
+    // Add the viewport
+    renderer->SetViewport(4, minimapViewport_);
+
+    URHO3D_LOGINFO("Minimap viewport created");
+}
+
+void AlgebraKart::UpdateMinimap(float timeStep)
+{
+    if (!minimapCam_ || !scene_)
+        return;
+
+    // Update minimap camera position to follow the action
+    Vector3 centerPos = CalculatePlayersCenterPosition();
+    if (centerPos != Vector3::ZERO)
+    {
+        minimapCamNode_->SetPosition(Vector3(centerPos.x_, centerPos.y_ + 2000.0f, centerPos.z_));
+    }
+
+    // Update player markers
+    UpdateMinimapMarkers();
+}
+
+Vector3 AlgebraKart::CalculatePlayersCenterPosition()
+{
+    Vector3 center = Vector3::ZERO;
+    int playerCount = 0;
+
+    // Add connected players
+    for (auto& pair : actorMap_)
+    {
+        if (pair.second_)
+        {
+            center += pair.second_->GetNode()->GetPosition();
+            playerCount++;
+        }
+    }
+
+    // Add AI bots
+    for (auto& pair : aiActorMap_)
+    {
+        if (pair.second_)
+        {
+            center += pair.second_->GetNode()->GetPosition();
+            playerCount++;
+        }
+    }
+
+    if (playerCount > 0)
+        center /= (float)playerCount;
+
+    return center;
+}
+
+void AlgebraKart::CreateMinimapPlayerMarker(Connection* connection, const Color& color)
+{
+    if (!scene_)
+        return;
+
+    // Create marker node
+    Node* markerNode = scene_->CreateChild("MinimapPlayerMarker", LOCAL);
+    markerNode->SetScale(Vector3(20.0f, 20.0f, 20.0f));
+
+    // Create visual representation (a simple colored box)
+    StaticModel* model = markerNode->CreateComponent<StaticModel>();
+    model->SetModel(GetSubsystem<ResourceCache>()->GetResource<Model>("Models/Box.mdl"));
+
+    // Create or get material
+    auto* cache = GetSubsystem<ResourceCache>();
+    Material* material = cache->GetResource<Material>("Materials/VColUnlit.xml");
+    if (!material)
+    {
+        // Create a simple unlit material if it doesn't exist
+        material = new Material(context_);
+        //material->SetTechnique(0, cache->GetResource<Technique>("Techniques/NoTexture.xml"));
+        material->SetShaderParameter("MatDiffColor", color);
+    }
+    else
+    {
+        material = material->Clone();
+        material->SetShaderParameter("MatDiffColor", color);
+    }
+
+    model->SetMaterial(material);
+
+    // Store the marker
+    minimapPlayerMap_[connection] = SharedPtr<Node>(markerNode);
+}
+
+void AlgebraKart::CreateMinimapBotMarker(unsigned int botId, const Color& color)
+{
+    if (!scene_)
+        return;
+
+    // Create marker node
+    Node* markerNode = scene_->CreateChild("MinimapBotMarker", LOCAL);
+    markerNode->SetScale(Vector3(15.0f, 15.0f, 15.0f));
+
+    // Create visual representation (a simple colored sphere for bots)
+    StaticModel* model = markerNode->CreateComponent<StaticModel>();
+    model->SetModel(GetSubsystem<ResourceCache>()->GetResource<Model>("Models/Sphere.mdl"));
+
+    // Create material
+    auto* cache = GetSubsystem<ResourceCache>();
+    Material* material = cache->GetResource<Material>("Materials/VColUnlit.xml");
+    if (!material)
+    {
+        material = new Material(context_);
+        //material->SetTechnique(0, cache->GetResource<Technique>("Techniques/NoTexture.xml"));
+        material->SetShaderParameter("MatDiffColor", color);
+    }
+    else
+    {
+        material = material->Clone();
+        material->SetShaderParameter("MatDiffColor", color);
+    }
+
+    model->SetMaterial(material);
+
+    // Store the marker
+    minimapBotMap_[botId] = SharedPtr<Node>(markerNode);
+}
+
+void AlgebraKart::UpdateMinimapMarkers()
+{
+    // Update player markers
+    for (auto& pair : minimapPlayerMap_)
+    {
+        Connection* connection = pair.first_;
+        Node* marker = pair.second_;
+
+        if (marker && actorMap_.Contains(connection))
+        {
+            ClientObj* actor = actorMap_[connection];
+            if (actor && actor->GetNode())
+            {
+                Vector3 worldPos = actor->GetNode()->GetPosition();
+                // Keep the marker at a fixed height above the track for visibility
+                marker->SetPosition(Vector3(worldPos.x_, worldPos.y_ + 50.0f, worldPos.z_));
+
+                // Rotate marker to show direction
+                marker->SetRotation(actor->GetNode()->GetRotation());
+            }
+        }
+    }
+
+    // Update bot markers
+    for (auto& pair : minimapBotMap_)
+    {
+        unsigned int botId = pair.first_;
+        Node* marker = pair.second_;
+
+        if (marker && aiActorMap_.Contains(botId))
+        {
+            ClientObj* actor = aiActorMap_[botId];
+            if (actor && actor->GetNode())
+            {
+                Vector3 worldPos = actor->GetNode()->GetPosition();
+                marker->SetPosition(Vector3(worldPos.x_, worldPos.y_ + 50.0f, worldPos.z_));
+                marker->SetRotation(actor->GetNode()->GetRotation());
+            }
+        }
+    }
+}
+
+void AlgebraKart::CalculateTrackBounds()
+{
+    // Calculate track bounds based on scene content
+    // This is a simple implementation - you might want to make it more sophisticated
+
+    BoundingBox sceneBounds;
+
+    // Include all track elements in bounds calculation
+    PODVector<Node*> trackNodes;
+    scene_->GetChildrenWithComponent<StaticModel>(trackNodes, true);
+
+    for (Node* node : trackNodes)
+    {
+        if (node->GetName().Contains("Track") || node->GetName().Contains("Ground") ||
+            node->GetName().Contains("RaceTrack") || node->GetName().Contains("Earth"))
+        {
+            // Get the StaticModel component to access the bounding box
+            StaticModel* model = node->GetComponent<StaticModel>();
+            if (model && model->GetModel())
+            {
+                // Get the world bounding box from the drawable component
+                BoundingBox worldBounds = model->GetWorldBoundingBox();
+                sceneBounds.Merge(worldBounds);
+            }
+
+            /*else
+            {
+                // Fallback: use node position with estimated size
+                Vector3 nodePos = node->GetWorldPosition();
+                Vector3 nodeScale = node->GetWorldScale();
+                float estimatedSize = Max(nodeScale.x_, Max(nodeScale.y_, nodeScale.z_)) * 100.0f;
+
+                BoundingBox nodeBounds(nodePos - Vector3(estimatedSize), nodePos + Vector3(estimatedSize));
+                sceneBounds.Merge(nodeBounds);
+            }*/
+        }
+    }
+
+    if (sceneBounds.Defined())
+    {
+        trackCenter_ = sceneBounds.Center();
+        Vector3 size = sceneBounds.Size();
+        trackBounds_ = Max(size.x_, size.z_) * 0.6f; // Use 60% of the largest dimension
+
+        // Ensure minimum bounds
+        if (trackBounds_ < 500.0f)
+            trackBounds_ = 1000.0f;
+    }
+    else
+    {
+        // Default values if no track found - look for existing markers
+        if (starAMarkerSet_ && starBMarkerSet_)
+        {
+            trackCenter_ = (starAMarker_ + starBMarker_) * 0.5f;
+            trackBounds_ = (starBMarker_ - starAMarker_).Length() * 2.0f;
+        }
+        else
+        {
+            trackCenter_ = Vector3::ZERO;
+            trackBounds_ = 1500.0f; // Larger default for better visibility
+        }
+    }
+
+    URHO3D_LOGINFOF("Track bounds calculated: center=(%f,%f,%f), bounds=%f",
+                    trackCenter_.x_, trackCenter_.y_, trackCenter_.z_, trackBounds_);
+}
 
 Controls AlgebraKart::sample_input() {
     auto ui = GetSubsystem<UI>();
@@ -7638,11 +7907,11 @@ void AlgebraKart::CreateClientUI() {
     for (int i = 0; i < NUM_RADIO_TRACK_FIELDS; i++) {
         radioText_[i] = ui->GetRoot()->CreateChild<Text>("RadioTrackListText");
 
-        radioText_[i]->SetAlignment(HA_RIGHT, VA_TOP);
-        radioText_[i]->SetPosition(-38.0f, 20 + (i * 20));
+        radioText_[i]->SetAlignment(HA_RIGHT, VA_BOTTOM);
+        radioText_[i]->SetPosition(-138.0f, -100 + (i * 20));
         radioText_[i]->SetVisible(true);
         radioText_[i]->SetColor(Color(235/255.0f, 217/255.0f, 255/255));
-        radioText_[i]->SetFont(font4, 11);
+        radioText_[i]->SetFont(INGAME_FONT2, 9);
         radioText_[i]->SetTextEffect(TE_SHADOW);
         radioText_[i]->SetVisible(true);
         std::string debugData1;
@@ -7661,7 +7930,7 @@ void AlgebraKart::CreateVUMeter() {
     // Create main radio container
     radioContainer_ = ui->GetRoot()->CreateChild<UIElement>("RadioContainer");
     radioContainer_->SetSize(300, 120);
-    radioContainer_->SetPosition(graphics->GetWidth() - 320, 20); // Top-right corner
+    radioContainer_->SetPosition(graphics->GetWidth() - 320, graphics->GetHeight()-100); // Top-right corner
     radioContainer_->SetOpacity(0.9f);
     radioContainer_->SetVisible(false); // Hidden until radio plays
 
@@ -8014,6 +8283,15 @@ void AlgebraKart::DestroyPlayer(Connection *connection) {
         actor->Remove();
     }
 
+    // Remove minimap marker
+    if (minimapPlayerMap_.Contains(connection))
+    {
+        Node* marker = minimapPlayerMap_[connection];
+        if (marker)
+            marker->Remove();
+        minimapPlayerMap_.Erase(connection);
+    }
+
     // Clear maps
     actorMap_.Erase(connection);
     actorTextMap_.Erase(connection);
@@ -8163,6 +8441,25 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
     dir = dir * Quaternion(0, Vector3::RIGHT);
     targetCameraPos_ = vehicleNode->GetPosition() - dir * Vector3(0.0f, 0.0f, CLIENT_CAMERA_DISTANCE);
 
+
+    // Create minimap marker for this player
+    if (minimapCam_)
+    {
+        Color playerColor = Color::WHITE;
+        // You can assign different colors based on player ID or other criteria
+        switch (actorMap_.Size() % 6)
+        {
+            case 0: playerColor = Color::RED; break;
+            case 1: playerColor = Color::BLUE; break;
+            case 2: playerColor = Color::GREEN; break;
+            case 3: playerColor = Color::YELLOW; break;
+            case 4: playerColor = Color::MAGENTA; break;
+            case 5: playerColor = Color::CYAN; break;
+        }
+        CreateMinimapPlayerMarker(connection, playerColor);
+    }
+
+
     return networkActorNode;
 }
 
@@ -8243,7 +8540,7 @@ std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
     actor->vehicle_ = vehicle;
 
     // Auto-enter the vehicle for AI bots (they should start in their vehicles)
-    actor->EnterVehicle();
+    //actor->EnterVehicle();
 
     // Create text3d client info node
     Node *plyFltTextNode = vehicleNode->CreateChild("Actor FloatText", REPLICATED);
@@ -8269,6 +8566,16 @@ std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
 
     // Snap to latest bot
     flyCam_ = vehicleNode->GetPosition();
+
+    // Create minimap marker for this bot
+    if (minimapCam_)
+    {
+        Color botColor = Color::GRAY;
+        // Different shades for different bots
+        float hue = (float)(id % 360);
+        botColor.FromHSV(hue, 0.7f, 0.8f);
+        CreateMinimapBotMarker(id, botColor);
+    }
 
     // Give the ownership to the client
     //networkActorNode->SetOwner(connection);
@@ -8963,10 +9270,6 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
     sprite->SetVisible(false);
     velBarBkgBotSprite_ = sprite;
 
-
-
-    //}
-
 }
 
 // Add this implementation for HandleKeyDown (or modify existing one)
@@ -9295,7 +9598,6 @@ void AlgebraKart::HandlePlayerRespawned(StringHash eventType, VariantMap& eventD
     Network* network = GetSubsystem<Network>();
     Connection* connection = network->GetServerConnection();
 
-
     // Create client UI once we have spawned
     CreateClientUI();
 
@@ -9304,6 +9606,10 @@ void AlgebraKart::HandlePlayerRespawned(StringHash eventType, VariantMap& eventD
 
     // UnScribeRemoteEvents
     UnsubscribeFromEvent(E_PLAYERSPAWNED);
+
+    // Calculate track bounds and setup minimap
+    CalculateTrackBounds();
+    SetupMinimapViewport();
 
     // Send remote event
     //network->GetServerConnection()->SendRemoteEvent(E_PLAYERSPAWNED, true);
