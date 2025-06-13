@@ -823,6 +823,9 @@ void AlgebraKart::HandleClientSceneLoaded(StringHash eventType, VariantMap& even
 
 void AlgebraKart::SubscribeToEvents() {
 
+    // Subscribe to key events for camera switching
+    SubscribeToEvent(E_KEYDOWN, URHO3D_HANDLER(AlgebraKart, HandleKeyDown));
+
     // Subscribe to UI element events
     //SubscribeToEvent(textEdit_, E_TEXTFINISHED, URHO3D_HANDLER(AlgebraKart, HandleSendChat));
 //    SubscribeToEvent(sendButton_, E_RELEASED, URHO3D_HANDLER(AlgebraKart, HandleSend));
@@ -2234,6 +2237,7 @@ void AlgebraKart::HandleUpdateParticlePool(float timeStep) {
             }
         }
     }
+
 }
 
 
@@ -3511,6 +3515,10 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
         int k = 0;
         if (!radioTrackQueue_.Empty()) {
 
+            // Add this near the end of the method where audio is processed
+            UpdateVUMeterSmooth(timeStep);
+
+
             RadioTrack currTrack = radioTrackInfoQueue_[radioTrack_];
             radioText_[k]->SetText(String("Artist: ") + String(currTrack.artistName));
             k++;
@@ -3626,8 +3634,8 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
                 }
 
                 // Draw wave
-                DrawWave(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_,
-                         _radioStream->GetTimePosition(), Color(75.0f / 255.0f, 247.0f / 255.0f, 48.0f / 255.0f));
+                /*DrawWave(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_,
+                         _radioStream->GetTimePosition(), Color(75.0f / 255.0f, 247.0f / 255.0f, 48.0f / 255.0f));*/
                 // DrawFFT(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_, Color(247.0f/255.0f,48.0f/255.0f,148.0f/255.0f));
             }
 
@@ -4854,6 +4862,7 @@ void AlgebraKart::PlayMusic(const String &soundName) {
     if (sound != nullptr) {
         _radioStream->SetAutoRemoveMode(REMOVE_COMPONENT);
         _radioStream->Play(sound);
+        _radioStream->SetGain(0.8f);
         float t = _radioStream->GetTimePosition();
         int dataSize = _radioStream->GetSound()->GetDataSize();
         SharedArrayPtr<signed char> s = _radioStream->GetSound()->GetData();
@@ -5470,10 +5479,12 @@ void AlgebraKart::UpdateButtons() {
 
 // Manage camera movement for Client
 void AlgebraKart::MoveCamera(float timeStep) {
-    if (headless_) {
-        // Skip camera movement in headless mode
-        return;
-    }
+    // Skip camera movement in headless mode
+    if (headless_) return;
+
+    // Only move camera if we have a valid camera
+    //if (!clientCam_ || !clientCam_->GetNode()) return;
+
     // CLIENT CODE
 
     // Right mouse button controls mouse cursor visibility: hide when pressed
@@ -5552,97 +5563,110 @@ void AlgebraKart::MoveCamera(float timeStep) {
                             // Camera Positioning
                             ////
 
-                            Vector3 lookAtObject;
+                            // Update camera based on current mode
+                            switch (currentCameraMode_) {
+                                case CAMERA_FIRST_PERSON:
+                                    UpdateCameraFirstPerson(timeStep);
+                                    break;
+                                case CAMERA_THIRD_PERSON:
+                                    UpdateCameraThirdPerson(timeStep);
+                                    break;
+                                case CAMERA_ISOMETRIC:
+                                    UpdateCameraIsometric(timeStep);
+                                    break;
+                                case CAMERA_FREEFLY:
+                                    // Free-fly camera
+                                    Vector3 lookAtObject;
 
 
-                            if (na) {
+                                    if (na) {
 
-                                String username = actor->GetUserName();
-                                float botSpeedKm = 0;
-                                Quaternion forward;
+                                        String username = actor->GetUserName();
+                                        float botSpeedKm = 0;
+                                        Quaternion forward;
 
-                                float velMult = 8.0f;
+                                        float velMult = 8.0f;
 
-                                Vector3 cameraTargetPos;
-                                auto *naBody = na->GetNode()->GetComponent<RigidBody>(true);
+                                        Vector3 cameraTargetPos;
+                                        auto *naBody = na->GetNode()->GetComponent<RigidBody>(true);
 
 
-                                if (na->numPickups_ > 0) {
-                                    // we got here
-                                    int a;
-                                }
-
-                                if (na->onVehicle_ && na->entered_) {
-                                    if (naBody) {
-                                        // CLIENT RIGID BODY RETRIEVED
-                                        pos = naBody->GetPosition();
-                                        rot = naBody->GetRotation();
-                                        lVel = naBody->GetLinearVelocity();
-                                    }
-
-                                    if (v) {
-                                        auto *vBody = v->GetNode()->GetComponent<RigidBody>(true);
-                                        if (vBody) {
-                                            // CLIENT RIGID BODY RETRIEVED
-                                            pos = vBody->GetPosition();
-                                            rot = vBody->GetRotation();
-                                            lVel = vBody->GetLinearVelocity();
-                                            lookAtObject = vBody->GetPosition();
-
+                                        if (na->numPickups_ > 0) {
+                                            // we got here
+                                            int a;
                                         }
 
-                                        // Back wheel points forward
-                                        forward = -vBody->GetNode()->GetRotation();
-                                    }
+                                        if (na->onVehicle_ && na->entered_) {
+                                            if (naBody) {
+                                                // CLIENT RIGID BODY RETRIEVED
+                                                pos = naBody->GetPosition();
+                                                rot = naBody->GetRotation();
+                                                lVel = naBody->GetLinearVelocity();
+                                            }
 
-                                    //float bodyVel = EvolutionManager::getInstance()->getAgents()[camMode_ -1]->getActor()->vehicle_->GetBody()->GetLinearVelocity().Length();
-                                    botSpeedKm = Clamp(botSpeedKm, 1.0f, 2000.0f);
+                                            if (v) {
+                                                auto *vBody = v->GetNode()->GetComponent<RigidBody>(true);
+                                                if (vBody) {
+                                                    // CLIENT RIGID BODY RETRIEVED
+                                                    pos = vBody->GetPosition();
+                                                    rot = vBody->GetRotation();
+                                                    lVel = vBody->GetLinearVelocity();
+                                                    lookAtObject = vBody->GetPosition();
+                                                    // Back wheel points forward
+                                                    forward = -vBody->GetNode()->GetRotation();
 
-                                    // On vehicle
-                                    float velLen = lVel.Length();
+                                                }
+
+                                            }
+
+                                            //float bodyVel = EvolutionManager::getInstance()->getAgents()[camMode_ -1]->getActor()->vehicle_->GetBody()->GetLinearVelocity().Length();
+                                            botSpeedKm = Clamp(botSpeedKm, 1.0f, 2000.0f);
+
+                                            // On vehicle
+                                            float velLen = lVel.Length();
 
 
-                                    // FRONT VIEW
-                                    // Zoom up on body velocity increase
-                                    cameraTargetPos =
-                                            pos + forward *
-                                                  Vector3(velLen *
-                                                          velMult * 0.07,
-                                                          (CAMERA_RAY_DISTANCE_LIMIT / 22) * velLen,
-                                                          50.0f + velLen *
-                                                                  velMult) * 0.6f;
+                                            // FRONT VIEW
+                                            // Zoom up on body velocity increase
+                                            cameraTargetPos =
+                                                    pos + forward *
+                                                          Vector3(velLen *
+                                                                  velMult * 0.07,
+                                                                  (CAMERA_RAY_DISTANCE_LIMIT / 22) * velLen,
+                                                                  50.0f + velLen *
+                                                                          velMult) * 0.6f;
 
 
-                                    // REAR VIEW
-                                    // Zoom up on body velocity increase
-                                    cameraTargetPos =
-                                            pos + forward *
-                                                  Vector3(velLen *
-                                                          velMult * 0.07,
-                                                          (CAMERA_RAY_DISTANCE_LIMIT / 22) * velLen,
-                                                          -50.0f + -velLen *
-                                                                   velMult) * 0.6f;
+                                            // REAR VIEW
+                                            // Zoom up on body velocity increase
+                                            cameraTargetPos =
+                                                    pos + forward *
+                                                          Vector3(velLen *
+                                                                  velMult * 0.07,
+                                                                  (CAMERA_RAY_DISTANCE_LIMIT / 22) * velLen,
+                                                                  -50.0f + -velLen *
+                                                                           velMult) * 0.6f;
 
-                                    // IN-CAR VIEW
-                                    // Dashboard view
-                                    cameraTargetPos =
-                                            pos + (Vector3::UP * 3.0f) + forward *
-                                                  Vector3(0.0f,
-                                                          0,
-                                                          0.0f);
+                                            // IN-CAR VIEW
+                                            // Dashboard view
+                                            cameraTargetPos =
+                                                    pos + (Vector3::UP * 3.0f) + forward *
+                                                                                 Vector3(0.0f,
+                                                                                         0,
+                                                                                         0.0f);
 
-                                    lookAtObject = pos + na->GetBody()->GetRotation() * Vector3::FORWARD*15.0f;
+                                            lookAtObject = pos + na->GetBody()->GetRotation() * Vector3::FORWARD*15.0f;
 
-                                } else {
-                                    // On foot
-                                    botSpeedKm = 0;
-                                    // Back wheel points forward
-                                    forward = rot;
+                                        } else {
+                                            // On foot
+                                            botSpeedKm = 0;
+                                            // Back wheel points forward
+                                            forward = rot;
 
-                                    float velLen = lVel.Length();
+                                            float velLen = lVel.Length();
 
-                                    // Zoom up on body velocity increase
-                                    cameraTargetPos = (pos-(Vector3::FORWARD*77.0f)) + Vector3::UP * 57.3f;
+                                            // Zoom up on body velocity increase
+                                            cameraTargetPos = (pos-(Vector3::FORWARD*77.0f)) + Vector3::UP * 57.3f;
                                             /*Vector3::UP * 3.3f - forward *
                                                                        Vector3(0.0f + velLen *
                                                                                       velMult * 0.07,
@@ -5651,83 +5675,92 @@ void AlgebraKart::MoveCamera(float timeStep) {
                                                                                        velMult) * 0.11f;
 */
 
-                                    lookAtObject = naBody->GetPosition();
+                                            lookAtObject = naBody->GetPosition();
 
-                                }
-                                Vector3 cameraStartPos = clientCam_->GetNode()->GetPosition();
+                                        }
+                                        Vector3 cameraStartPos = clientCam_->GetNode()->GetPosition();
 
-                                bool stopMove = false;
-                                // Camera ray cast limiter
-                                if (lastCamRaycast > CAM_RAYCAST_TIME_WAIT) {
+                                        bool stopMove = false;
+                                        // Camera ray cast limiter
+                                        if (lastCamRaycast > CAM_RAYCAST_TIME_WAIT) {
 
-                                    /*
-                                 // Raycast camera against static objects (physics collision mask 2)
-                                 // and move it closer to the vehicle if something in between
-                                 Ray cameraRay(cameraStartPos, cameraTargetPos - cameraStartPos);
-                                 float cameraRayLength = (cameraTargetPos - cameraStartPos).Length();
-                                 PhysicsRaycastResult result;
-
-
-                                 // Adjust camera up to ray length
-
-                                 if (cameraRayLength < 10.0f) {
-                                     scene_->GetComponent<PhysicsWorld>()->RaycastSingle(result, cameraRay,
-                                                                                         cameraRayLength,
-                                                                                         NETWORKACTOR_COL_LAYER);
-                                 } else {
-                                     scene_->GetComponent<PhysicsWorld>()->RaycastSingleSegmented(result,
-                                                                                                  cameraRay,
-                                                                                                  cameraRayLength,
-                                                                                                  NETWORKACTOR_COL_LAYER);
-                                 }
-
-                                 if (result.body_)
-                                     cameraTargetPos =
-                                             cameraStartPos +
-                                             cameraRay.direction_ * (result.distance_ - 0.5f);
-         */
-                                    // Reset timer for recent ray cast
-                                    lastCamRaycast = 0;
+                                            /*
+                                         // Raycast camera against static objects (physics collision mask 2)
+                                         // and move it closer to the vehicle if something in between
+                                         Ray cameraRay(cameraStartPos, cameraTargetPos - cameraStartPos);
+                                         float cameraRayLength = (cameraTargetPos - cameraStartPos).Length();
+                                         PhysicsRaycastResult result;
 
 
-                                    // Set camera position and orientation
-                                    float w1;
-                                    float w2;
+                                         // Adjust camera up to ray length
 
-                                    if (stopMove) {
-                                        w1 = 1.0f; // hold position
-                                        w2 = 0.0f;
-                                    } else {
-                                        w1 = 0.94f;
-                                        w2 = 0.06f;
+                                         if (cameraRayLength < 10.0f) {
+                                             scene_->GetComponent<PhysicsWorld>()->RaycastSingle(result, cameraRay,
+                                                                                                 cameraRayLength,
+                                                                                                 NETWORKACTOR_COL_LAYER);
+                                         } else {
+                                             scene_->GetComponent<PhysicsWorld>()->RaycastSingleSegmented(result,
+                                                                                                          cameraRay,
+                                                                                                          cameraRayLength,
+                                                                                                          NETWORKACTOR_COL_LAYER);
+                                         }
+
+                                         if (result.body_)
+                                             cameraTargetPos =
+                                                     cameraStartPos +
+                                                     cameraRay.direction_ * (result.distance_ - 0.5f);
+                 */
+                                            // Reset timer for recent ray cast
+                                            lastCamRaycast = 0;
+
+
+                                            // Set camera position and orientation
+                                            float w1;
+                                            float w2;
+
+                                            if (stopMove) {
+                                                w1 = 1.0f; // hold position
+                                                w2 = 0.0f;
+                                            } else {
+                                                w1 = 0.94f;
+                                                w2 = 0.06f;
+                                            }
+
+                                            Vector3 weightedSum =
+                                                    clientCam_->GetNode()->GetPosition() * w1 + cameraTargetPos * w2;
+
+                                            // Calculate camera distance
+                                            clientCam_->GetNode()->SetPosition(weightedSum);
+                                            Quaternion lastRot = clientCam_->GetNode()->GetRotation();
+                                            // Take average from look at object
+                                            Vector3 cameraLook;
+                                            clientCam_->GetNode()->LookAt(lookAtObject);
+                                            Quaternion nextRot = clientCam_->GetNode()->GetRotation();
+
+                                            float t = 0.8f;
+                                            Quaternion q = lastRot*(1-t)-nextRot*t;
+
+                                            // lerp(q0,q1,t)=q0(1−t)+q1t;
+                                            clientCam_->GetNode()->SetRotation(q);
+
+
+
+                                            //clientCam_->GetNode()->SetPosition(cameraTargetPos);
+                                            //clientCam_->GetNode()->SetRotation(dir);
+                                        }
                                     }
+                                    break;
+                            }
 
-                                    Vector3 weightedSum =
-                                            clientCam_->GetNode()->GetPosition() * w1 + cameraTargetPos * w2;
-
-                                    // Calculate camera distance
-                                    clientCam_->GetNode()->SetPosition(weightedSum);
-                                    Quaternion lastRot = clientCam_->GetNode()->GetRotation();
-                                    // Take average from look at object
-                                    Vector3 cameraLook;
-                                    clientCam_->GetNode()->LookAt(lookAtObject);
-                                    Quaternion nextRot = clientCam_->GetNode()->GetRotation();
-
-                                    float t = 0.8f;
-                                    Quaternion q = lastRot*(1-t)-nextRot*t;
-
-                                    // lerp(q0,q1,t)=q0(1−t)+q1t;
-                                    clientCam_->GetNode()->SetRotation(q);
-
-
-
-                                    //clientCam_->GetNode()->SetPosition(cameraTargetPos);
-                                    //clientCam_->GetNode()->SetRotation(dir);
+                            // Update listener position for 3D audio
+                            if (auto* audio = GetSubsystem<Audio>()) {
+                                if (auto* listener = clientCam_->GetNode()->GetComponent<SoundListener>()) {
+                                    audio->SetListener(listener);
                                 }
                             }
+
                             ////
 
-                            // NetworkActor (Player) cam
                             // CLIENT CODE
 
                             // Get rank and show
@@ -7033,6 +7066,9 @@ void AlgebraKart::CreateClientUI() {
     radioVisualizerImg_->SetSize(radioSpectrumWidth_, radioSpectrumHeight_);
     radioSpectrumTexture_->SetData(radioVisualizerImg_, false);
 
+    // Create VU meter UI
+    CreateVUMeter();
+
     // Create sprite and add to the UI layout
     powerBarP1Sprite_ = ui->GetRoot()->CreateChild<Sprite>();
     powerBarBkgP1Sprite_ = ui->GetRoot()->CreateChild<Sprite>();
@@ -7614,6 +7650,345 @@ void AlgebraKart::CreateClientUI() {
         radioText_[i]->SetText(debugData1.c_str());
     }
 
+}
+
+
+void AlgebraKart::CreateVUMeter() {
+    auto* ui = GetSubsystem<UI>();
+    auto* graphics = GetSubsystem<Graphics>();
+    auto* cache = GetSubsystem<ResourceCache>();
+
+    // Create main radio container
+    radioContainer_ = ui->GetRoot()->CreateChild<UIElement>("RadioContainer");
+    radioContainer_->SetSize(300, 120);
+    radioContainer_->SetPosition(graphics->GetWidth() - 320, 20); // Top-right corner
+    radioContainer_->SetOpacity(0.9f);
+    radioContainer_->SetVisible(false); // Hidden until radio plays
+
+    // Create background panel
+    auto* radioBg = radioContainer_->CreateChild<BorderImage>("RadioBackground");
+    radioBg->SetTexture(cache->GetResource<Texture2D>("Textures/UI/UIElement.png"));
+    radioBg->SetSize(300, 180);
+    radioBg->SetImageBorder(IntRect(4, 4, 4, 4));
+    radioBg->SetColor(Color(0.1f, 0.1f, 0.1f, 0.8f));
+
+    // Create radio title
+    auto* radioTitle = radioContainer_->CreateChild<Text>("RadioTitle");
+    radioTitle->SetText("Bad Zindagi Radio");
+    radioTitle->SetFont(cache->GetResource<Font>(INGAME_FONT4), 10);
+    radioTitle->SetColor(Color::WHITE);
+    radioTitle->SetPosition(10, 5);
+
+    // Create track info text (existing functionality)
+    auto* trackInfo = radioContainer_->CreateChild<Text>("TrackInfo");
+    trackInfo->SetText("No track playing");
+    trackInfo->SetFont(cache->GetResource<Font>(INGAME_FONT3), 9);
+    trackInfo->SetColor(Color::YELLOW);
+    trackInfo->SetPosition(10, 25);
+    trackInfo->SetSize(280, 20);
+
+    // Create VU meter container
+    vuMeterContainer_ = radioContainer_->CreateChild<UIElement>("VUMeterContainer");
+    vuMeterContainer_->SetSize(280, 60);
+    vuMeterContainer_->SetPosition(10, 50);
+
+    // Initialize VU level arrays
+    vuLevels_.Resize(VU_METER_CHANNELS);
+    vuPeakLevels_.Resize(VU_METER_CHANNELS);
+    vuPeakHoldTime_.Resize(VU_METER_CHANNELS);
+
+    for (int i = 0; i < VU_METER_CHANNELS; i++) {
+        vuLevels_[i] = 0.0f;
+        vuPeakLevels_[i] = 0.0f;
+        vuPeakHoldTime_[i] = 0.0f;
+    }
+
+    // Create VU meter bars for each channel
+    vuMeterBars_.Clear();
+    vuMeterPeakBars_.Clear();
+
+    for (int channel = 0; channel < VU_METER_CHANNELS; channel++) {
+        // Channel label
+        auto* channelLabel = vuMeterContainer_->CreateChild<Text>();
+        channelLabel->SetText(channel == 0 ? "L" : "R");
+        channelLabel->SetFont(cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"), 10);
+        channelLabel->SetColor(Color::WHITE);
+        channelLabel->SetPosition(0, channel * 25 + 5);
+
+        for (int bar = 0; bar < VU_METER_BARS; bar++) {
+            // Main VU bar
+            auto* vuBar = vuMeterContainer_->CreateChild<Sprite>();
+            vuBar->SetSize(10, 15);
+            vuBar->SetPosition(20 + bar * 12, channel * 25);
+
+            // Create or set texture for the bar
+            // Option 1: Use existing UI texture (recommended)
+            vuBar->SetTexture(cache->GetResource<Texture2D>("Textures/Palette.png"));
+            vuBar->SetImageRect(IntRect(0, 0, 16, 16)); // Use a solid section
+
+            // Option 2: Create procedural texture (if needed)
+            // CreateVUBarTexture(vuBar); // See helper method below
+
+            vuBar->SetColor(GetVUBarColor(bar));
+            vuBar->SetVisible(false);
+            vuMeterBars_.Push(Urho3D::SharedPtr<Sprite>(vuBar));
+
+            // Peak indicator bar
+            auto* peakBar = vuMeterContainer_->CreateChild<Sprite>();
+            peakBar->SetSize(10, 3);
+            peakBar->SetPosition(20 + bar * 12, channel * 25 - 5);
+            peakBar->SetTexture(cache->GetResource<Texture2D>("Textures/Palette.png"));
+            peakBar->SetImageRect(IntRect(0, 0, 16, 16));
+            peakBar->SetColor(Color::YELLOW);
+            peakBar->SetVisible(false);
+            vuMeterPeakBars_.Push(Urho3D::SharedPtr<Sprite>(peakBar));
+        }
+    }
+}
+
+Color AlgebraKart::GetVUBarColor(int barIndex) {
+    float ratio = (float)barIndex / (float)VU_METER_BARS;
+
+    if (ratio < 0.6f) {
+        // Green range (low levels)
+        return Color::GREEN;
+    } else if (ratio < 0.8f) {
+        // Yellow range (medium levels)
+        return Color::YELLOW;
+    } else {
+        // Red range (high levels)
+        return Color::RED;
+    }
+}
+
+void AlgebraKart::UpdateVUMeter(float timeStep) {
+    if (!radioContainer_ || !_radioStream || !_radioStream->IsPlaying()) {
+        if (radioContainer_) {
+            radioContainer_->SetVisible(false);
+        }
+        return;
+    }
+
+    radioContainer_->SetVisible(true);
+
+    // Update track info
+    auto* trackInfo = radioContainer_->GetChild("TrackInfo", true);
+    if (trackInfo && currTrack_ < bzRadioTracksTrackName.size()) {
+        String trackText = String(bzRadioTracksArtistName[currTrack_].c_str()) + " - " +
+                           String(bzRadioTracksTrackName[currTrack_].c_str());
+        static_cast<Text*>(trackInfo)->SetText(trackText);
+    }
+
+    if (!analyzer_ || !capturer_) {
+        return;
+    }
+
+    // Get spectrum data
+    const Vector<float>& spectrum = analyzer_->spectrum();
+
+    if (spectrum.Empty()) {
+        return;
+    }
+
+    // Calculate VU levels for each channel
+    // For simplicity, we'll split the frequency spectrum between left and right
+    int spectrumSize = spectrum.Size();
+    int halfSpectrum = spectrumSize / 2;
+
+    // Left channel (lower frequencies)
+    vuLevels_[0] = CalculateVULevel(spectrum, 0, halfSpectrum);
+
+    // Right channel (higher frequencies)
+    vuLevels_[1] = CalculateVULevel(spectrum, halfSpectrum, spectrumSize);
+
+    // Update peak levels and peak hold
+    for (int channel = 0; channel < VU_METER_CHANNELS; channel++) {
+        if (vuLevels_[channel] > vuPeakLevels_[channel]) {
+            vuPeakLevels_[channel] = vuLevels_[channel];
+            vuPeakHoldTime_[channel] = VU_PEAK_HOLD_TIME;
+        } else {
+            vuPeakHoldTime_[channel] -= timeStep;
+            if (vuPeakHoldTime_[channel] <= 0.0f) {
+                vuPeakLevels_[channel] *= VU_PEAK_DECAY_RATE;
+                vuPeakHoldTime_[channel] = 0.0f;
+            }
+        }
+
+        // Clamp levels
+        vuLevels_[channel] = Clamp(vuLevels_[channel], 0.0f, 1.0f);
+        vuPeakLevels_[channel] = Clamp(vuPeakLevels_[channel], 0.0f, 1.0f);
+    }
+
+    // Update visual bars
+    for (int channel = 0; channel < VU_METER_CHANNELS; channel++) {
+        int activeBars = (int)(vuLevels_[channel] * VU_METER_BARS);
+        int peakBar = (int)(vuPeakLevels_[channel] * VU_METER_BARS);
+
+        for (int bar = 0; bar < VU_METER_BARS; bar++) {
+            int barIndex = channel * VU_METER_BARS + bar;
+
+            // Show/hide main bars
+            vuMeterBars_[barIndex]->SetVisible(bar < activeBars);
+
+            // Show/hide peak bars
+            vuMeterPeakBars_[barIndex]->SetVisible(bar == peakBar && peakBar > 0);
+        }
+    }
+}
+
+float AlgebraKart::CalculateVULevel(const Vector<float>& spectrum, int startFreq, int endFreq) {
+    if (spectrum.Empty() || startFreq >= endFreq) {
+        return 0.0f;
+    }
+
+    float totalLevel = 0.0f;
+    int sampleCount = 0;
+
+    // Calculate RMS level for the frequency range
+    for (int i = startFreq; i < endFreq && i < spectrum.Size(); i++) {
+        totalLevel += spectrum[i] * spectrum[i];
+        sampleCount++;
+    }
+
+    if (sampleCount == 0) {
+        return 0.0f;
+    }
+
+    // RMS calculation
+    float rmsLevel = Sqrt(totalLevel / sampleCount);
+
+    // Convert to dB scale and normalize
+    float dbLevel = 20.0f * log10(Max(rmsLevel, 0.001f)); // Avoid log(0)
+
+    // Normalize from typical range (-60dB to 0dB) to (0.0 to 1.0)
+    float normalizedLevel = (dbLevel + 60.0f) / 60.0f;
+
+    return Clamp(normalizedLevel, 0.0f, 1.0f);
+}
+
+// Optional: Enhanced version with better stereo separation
+float AlgebraKart::CalculateChannelLevel(int channel, const Vector<float>& spectrum) {
+    if (spectrum.Empty()) {
+        return 0.0f;
+    }
+
+    int spectrumSize = spectrum.Size();
+    float totalLevel = 0.0f;
+    int sampleCount = 0;
+
+    if (channel == 0) {
+        // Left channel: emphasize lower frequencies (bass, mids)
+        int endIdx = spectrumSize * 0.7f; // Use first 70% of spectrum
+        for (int i = 0; i < endIdx; i++) {
+            float weight = 1.0f - (float)i / endIdx * 0.5f; // Weight lower frequencies more
+            totalLevel += spectrum[i] * spectrum[i] * weight;
+            sampleCount++;
+        }
+    } else {
+        // Right channel: emphasize higher frequencies (treble)
+        int startIdx = spectrumSize * 0.3f; // Use last 70% of spectrum
+        for (int i = startIdx; i < spectrumSize; i++) {
+            float weight = (float)(i - startIdx) / (spectrumSize - startIdx) * 0.5f + 0.5f;
+            totalLevel += spectrum[i] * spectrum[i] * weight;
+            sampleCount++;
+        }
+    }
+
+    if (sampleCount == 0) return 0.0f;
+
+    float rmsLevel = Sqrt(totalLevel / sampleCount);
+    float dbLevel = 20.0f * log10(Max(rmsLevel, 0.001f));
+    return Clamp((dbLevel + 60.0f) / 60.0f, 0.0f, 1.0f);
+}
+
+// Add smooth transitions and better visual effects
+void AlgebraKart::UpdateVUMeterSmooth(float timeStep) {
+    if (!radioContainer_ || !_radioStream || !_radioStream->IsPlaying()) {
+        if (radioContainer_) {
+            radioContainer_->SetVisible(false);
+        }
+        return;
+    }
+
+    radioContainer_->SetVisible(true);
+
+    if (!analyzer_ || !capturer_) {
+        return;
+    }
+
+    if (audioSpectrumOptions_.inputSize < capturer_->bufferReadCount()) {
+        // Update analyzer
+        analyzer_->update(capturer_->getBuffer(), capturer_->bufferHeadIndex(),
+                          audioSpectrumOptions_.bottomLevel,
+                          audioSpectrumOptions_.topLevel, audioSpectrumOptions_.minFreq,
+                          audioSpectrumOptions_.maxFreq, audioSpectrumOptions_.axisLogBase);
+    }
+
+    const Vector<float>& spectrum = *capturer_->getBuffer();//analyzer_->spectrum();
+
+    if (spectrum.Empty()) return;
+
+    // Smooth level transitions
+    static Vector<float> smoothedLevels(VU_METER_CHANNELS, 0.0f);
+    const float SMOOTH_FACTOR = 0.3f; // Adjust for responsiveness
+
+    for (int channel = 0; channel < VU_METER_CHANNELS; channel++) {
+        float targetLevel = CalculateChannelLevel(channel, spectrum);
+
+        // Smooth the level changes
+        if (targetLevel > smoothedLevels[channel]) {
+            smoothedLevels[channel] = targetLevel; // Fast attack
+        } else {
+            smoothedLevels[channel] = Lerp(smoothedLevels[channel], targetLevel, SMOOTH_FACTOR * timeStep * 10.0f); // Slow decay
+        }
+
+        vuLevels_[channel] = smoothedLevels[channel];
+
+        // Update peaks
+        if (vuLevels_[channel] > vuPeakLevels_[channel]) {
+            vuPeakLevels_[channel] = vuLevels_[channel];
+            vuPeakHoldTime_[channel] = VU_PEAK_HOLD_TIME;
+        } else {
+            vuPeakHoldTime_[channel] -= timeStep;
+            if (vuPeakHoldTime_[channel] <= 0.0f) {
+                vuPeakLevels_[channel] *= VU_PEAK_DECAY_RATE;
+            }
+        }
+    }
+
+    // Update visual representation with smooth animations
+    for (int channel = 0; channel < VU_METER_CHANNELS; channel++) {
+        int activeBars = (int)(vuLevels_[channel] * VU_METER_BARS);
+        int peakBar = (int)(vuPeakLevels_[channel] * VU_METER_BARS);
+
+        for (int bar = 0; bar < VU_METER_BARS; bar++) {
+            int barIndex = channel * VU_METER_BARS + bar;
+            auto* vuBarSprite = vuMeterBars_[barIndex].Get();
+            auto* peakBarSprite = vuMeterPeakBars_[barIndex].Get();
+
+            // Animate bar visibility with alpha
+            if (bar < activeBars) {
+                vuBarSprite->SetVisible(true);
+                float alpha = 1.0f - (float)bar / VU_METER_BARS * 0.3f; // Slight fade for higher bars
+                Color barColor = GetVUBarColor(bar);
+                barColor.a_ = alpha;
+                vuBarSprite->SetColor(barColor);
+            } else {
+                vuBarSprite->SetVisible(false);
+            }
+
+            // Peak indicators
+            if (bar == peakBar && peakBar > 0) {
+                peakBarSprite->SetVisible(true);
+                float peakAlpha = vuPeakHoldTime_[channel] / VU_PEAK_HOLD_TIME;
+                Color peakColor = Color::YELLOW;
+                peakColor.a_ = peakAlpha;
+                peakBarSprite->SetColor(peakColor);
+            } else {
+                peakBarSprite->SetVisible(false);
+            }
+        }
+    }
 }
 
 void AlgebraKart::DestroyPlayer(Connection *connection) {
@@ -8592,6 +8967,288 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
 
     //}
 
+}
+
+// Add this implementation for HandleKeyDown (or modify existing one)
+void AlgebraKart::HandleKeyDown(StringHash eventType, VariantMap& eventData) {
+    using namespace KeyDown;
+    int key = eventData[P_KEY].GetInt();
+
+    // Camera mode switching
+    if (key == KEY_1) {
+        SetCameraMode(CAMERA_FIRST_PERSON);
+        URHO3D_LOGINFO("Switched to First Person Camera");
+    }
+    else if (key == KEY_2) {
+        SetCameraMode(CAMERA_THIRD_PERSON);
+        URHO3D_LOGINFO("Switched to Third Person Camera");
+    }
+    else if (key == KEY_3) {
+        SetCameraMode(CAMERA_ISOMETRIC);
+        URHO3D_LOGINFO("Switched to Isometric Camera");
+    }
+    else if (key == KEY_4) {
+        SetCameraMode(CAMERA_FREEFLY);
+        URHO3D_LOGINFO("Switched to Free-fly Camera");
+    }
+
+    // Existing key handling code...
+    if (key == KEY_TAB) {
+        GetSubsystem<Input>()->SetMouseVisible(!GetSubsystem<Input>()->IsMouseVisible());
+        GetSubsystem<Input>()->SetMouseGrabbed(!GetSubsystem<Input>()->IsMouseGrabbed());
+    }
+    else if (key == KEY_F1) {
+        drawDebug_ = !drawDebug_;
+    }
+}
+
+// Add this method to set camera mode
+void AlgebraKart::SetCameraMode(CameraMode mode) {
+    currentCameraMode_ = mode;
+    cameraInitialized_ = false; // Force re-initialization for smooth transition
+
+    // Reset smooth camera values
+    if (clientCam_ && clientCam_->GetNode()) {
+        smoothCameraPosition_ = clientCam_->GetNode()->GetPosition();
+        smoothCameraRotation_ = clientCam_->GetNode()->GetRotation();
+    }
+}
+
+// Get local network actor
+NetworkActor* AlgebraKart::GetLocalNetworkActor() {
+
+    // Only move camera if we have a controllable object
+    Network *network = GetSubsystem<Network>();
+    Connection *serverConnection = network->GetServerConnection();
+
+    if (serverConnection) {
+        int size;
+        PODVector<Node *> vec;
+
+        String actorName = String("actor-") + clientName_;
+        Node * actorNode = scene_->GetChild(actorName);
+
+        String vehicleName = String("vehicle-") + clientName_;
+        Node * vehicleNode = scene_->GetChild(vehicleName);
+
+        //BLUE-304-vehicle
+
+        Vector3 pos;
+        Quaternion rot;
+        Vector3 lVel;
+
+        if (actorNode) {
+            // Retrieve Actor
+            ClientObj *actor = actorNode->GetDerivedComponent<ClientObj>();
+
+            if (actor) {
+                NetworkActor *na = actorNode->GetDerivedComponent<NetworkActor>();
+                Vehicle *v = vehicleNode->GetDerivedComponent<Vehicle>();
+
+
+                if (na) {
+                    auto *body = na->GetNode()->GetComponent<RigidBody>(true);
+                    if (body) {
+                        // CLIENT RIGID BODY RETRIEVED
+                        pos = body->GetPosition();
+                        rot = body->GetRotation();
+                        lVel = body->GetLinearVelocity();
+
+                        return na;
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+// First Person Camera Implementation
+void AlgebraKart::UpdateCameraFirstPerson(float timeStep) {
+    NetworkActor* actor = GetLocalNetworkActor();
+    if (!actor || !actor->GetNode() || !clientCam_) return;
+
+    Node* actorNode = actor->GetNode();
+    Node* cameraNode = clientCam_->GetNode();
+
+    // Initialize camera position if needed
+    if (!cameraInitialized_) {
+        smoothCameraPosition_ = actorNode->GetWorldPosition();
+        smoothCameraRotation_ = actorNode->GetWorldRotation();
+        cameraInitialized_ = true;
+    }
+
+    Vector3 targetPosition;
+    Quaternion targetRotation;
+
+    if (actor->onVehicle_ && actor->vehicle_) {
+        // In vehicle - position camera at driver's eye level
+        Node* vehicleNode = actor->vehicle_->GetNode();
+        targetPosition = vehicleNode->GetWorldPosition() +
+                         vehicleNode->GetWorldRotation() * Vector3(0.0f, 8.0f, 2.0f);
+        targetRotation = vehicleNode->GetWorldRotation();
+    } else {
+        // On foot - position camera at head level
+        targetPosition = actorNode->GetWorldPosition() + Vector3(0.0f, 6.0f, 0.0f);
+        targetRotation = actorNode->GetWorldRotation();
+    }
+
+    // Apply mouse look if right mouse button is held
+    if (GetSubsystem<Input>()->GetMouseButtonDown(MOUSEB_RIGHT)) {
+        IntVector2 mouseMove = GetSubsystem<Input>()->GetMouseMove();
+        const float MOUSE_SENSITIVITY = 0.1f;
+
+        // Adjust rotation based on mouse input
+        float yawDelta = -mouseMove.x_ * MOUSE_SENSITIVITY;
+        float pitchDelta = -mouseMove.y_ * MOUSE_SENSITIVITY;
+
+        // Create rotation adjustments
+        Quaternion yawRotation(yawDelta, Vector3::UP);
+        Quaternion pitchRotation(pitchDelta, targetRotation * Vector3::RIGHT);
+
+        targetRotation = yawRotation * pitchRotation * targetRotation;
+    }
+
+    // Smooth camera movement
+    smoothCameraPosition_ = smoothCameraPosition_.Lerp(targetPosition, cameraSmoothSpeed_ * timeStep);
+    smoothCameraRotation_ = smoothCameraRotation_.Slerp(targetRotation, cameraSmoothSpeed_ * timeStep);
+
+    cameraNode->SetWorldPosition(smoothCameraPosition_);
+    cameraNode->SetRotation(smoothCameraRotation_);
+}
+
+// Third Person Camera Implementation
+void AlgebraKart::UpdateCameraThirdPerson(float timeStep) {
+    NetworkActor* actor = GetLocalNetworkActor();
+    if (!actor || !actor->GetNode() || !clientCam_) return;
+
+    Node* actorNode = actor->GetNode();
+    Node* cameraNode = clientCam_->GetNode();
+
+    // Initialize camera position if needed
+    if (!cameraInitialized_) {
+        smoothCameraPosition_ = actorNode->GetWorldPosition();
+        smoothCameraRotation_ = actorNode->GetWorldRotation();
+        cameraInitialized_ = true;
+    }
+
+    Vector3 targetPosition;
+    Vector3 lookAtPosition;
+
+    if (actor->onVehicle_ && actor->vehicle_) {
+        // In vehicle - dynamic camera based on speed
+        Node* vehicleNode = actor->vehicle_->GetNode();
+        float speed = actor->vehicle_->GetSpeedKmH();
+
+        // Adjust camera distance based on speed
+        float dynamicDistance = cameraDistance_ + (speed * 0.3f);
+        float dynamicHeight = cameraHeight_ + (speed * 0.1f);
+
+        // Calculate camera offset
+        Vector3 forward = vehicleNode->GetWorldRotation() * Vector3::FORWARD;
+        Vector3 up = Vector3::UP;
+
+        targetPosition = vehicleNode->GetWorldPosition() -
+                         forward * dynamicDistance +
+                         up * dynamicHeight;
+
+        // Look ahead of the vehicle
+        lookAtPosition = vehicleNode->GetWorldPosition() +
+                         forward * cameraLookAhead_ +
+                         up * 5.0f;
+    } else {
+        // On foot - standard third person
+        Vector3 forward = actorNode->GetWorldRotation() * Vector3::FORWARD;
+
+        targetPosition = actorNode->GetWorldPosition() -
+                         forward * 30.0f +
+                         Vector3::UP * 15.0f;
+
+        lookAtPosition = actorNode->GetWorldPosition() + Vector3::UP * 5.0f;
+    }
+
+    // Raycast to prevent camera going through walls
+    PhysicsRaycastResult result;
+    Vector3 rayStart = lookAtPosition;
+    Vector3 rayDirection = (targetPosition - lookAtPosition).Normalized();
+    float rayDistance = (targetPosition - lookAtPosition).Length();
+
+    scene_->GetComponent<PhysicsWorld>()->RaycastSingle(result,
+                                                        Ray(rayStart, rayDirection), rayDistance, NETWORKACTOR_COL_LAYER);
+
+    if (result.body_) {
+        // Adjust camera position if there's an obstacle
+        targetPosition = rayStart + rayDirection * (result.distance_ - 2.0f);
+    }
+
+    // Smooth camera movement
+    smoothCameraPosition_ = smoothCameraPosition_.Lerp(targetPosition, cameraSmoothSpeed_ * timeStep);
+
+    cameraNode->SetWorldPosition(smoothCameraPosition_);
+    cameraNode->LookAt(lookAtPosition, Vector3::UP);
+}
+
+// Isometric Camera Implementation
+void AlgebraKart::UpdateCameraIsometric(float timeStep) {
+    NetworkActor* actor = GetLocalNetworkActor();
+    if (!clientCam_) return;
+
+    Node* cameraNode = clientCam_->GetNode();
+    Vector3 targetPosition;
+    Vector3 lookAtPosition;
+
+    // Initialize camera for isometric view
+    if (!cameraInitialized_) {
+        // Set orthographic projection for true isometric feel
+        clientCam_->SetOrthographic(false); // Keep perspective for now, but you can change to true
+        clientCam_->SetFov(30.0f); // Narrow FOV for isometric-like view
+        cameraInitialized_ = true;
+    }
+
+    if (actor && actor->GetNode()) {
+        // Center on player but from high above
+        lookAtPosition = actor->GetNode()->GetWorldPosition();
+    } else {
+        // Center on map center if no actor
+        lookAtPosition = Vector3::ZERO;
+    }
+
+    // Calculate isometric camera position
+    float angleRad = isometricCameraAngle_ * M_DEGTORAD;
+    Vector3 cameraOffset(
+            isometricCameraHeight_ * Sin(angleRad),
+            isometricCameraHeight_ * Cos(angleRad),
+            isometricCameraHeight_ * Sin(angleRad)
+    );
+
+    targetPosition = lookAtPosition + cameraOffset;
+
+    // Allow camera panning with middle mouse button
+    if (GetSubsystem<Input>()->GetMouseButtonDown(MOUSEB_MIDDLE)) {
+        IntVector2 mouseMove = GetSubsystem<Input>()->GetMouseMove();
+        const float PAN_SPEED = 0.5f;
+
+        // Pan camera based on mouse movement
+        Vector3 right = cameraNode->GetWorldRotation() * Vector3::RIGHT;
+        Vector3 forward = Vector3(cameraNode->GetWorldDirection().x_, 0, cameraNode->GetWorldDirection().z_).Normalized();
+
+        targetPosition += right * mouseMove.x_ * PAN_SPEED;
+        targetPosition -= forward * mouseMove.y_ * PAN_SPEED;
+        lookAtPosition += right * mouseMove.x_ * PAN_SPEED;
+        lookAtPosition -= forward * mouseMove.y_ * PAN_SPEED;
+    }
+
+    // Mouse wheel zoom
+    int wheelDelta = GetSubsystem<Input>()->GetMouseMoveWheel();
+    if (wheelDelta != 0) {
+        isometricCameraHeight_ = Clamp(isometricCameraHeight_ - wheelDelta * 20.0f, 100.0f, 1000.0f);
+    }
+
+    // Smooth camera movement
+    smoothCameraPosition_ = smoothCameraPosition_.Lerp(targetPosition, cameraSmoothSpeed_ * timeStep);
+
+    cameraNode->SetWorldPosition(smoothCameraPosition_);
+    cameraNode->LookAt(lookAtPosition, Vector3::UP);
 }
 
 void AlgebraKart::HandleClientDisconnected(StringHash eventType, VariantMap &eventData) {

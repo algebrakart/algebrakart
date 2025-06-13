@@ -745,13 +745,63 @@ private:
     float targetYaw_;                 // Target character rotation
     float yawRotationSpeed_;          // How fast character rotates
 
+    // VU Meter UI elements
+    SharedPtr<UIElement> radioContainer_;
+    SharedPtr<UIElement> vuMeterContainer_;
+    Vector<SharedPtr<Sprite>> vuMeterBars_;
+    Vector<SharedPtr<Sprite>> vuMeterPeakBars_;
+    Vector<float> vuLevels_;
+    Vector<float> vuPeakLevels_;
+    Vector<float> vuPeakHoldTime_;
+
+    // VU meter configuration
+    const int VU_METER_BARS = 20;  // Number of bars per channel
+    const int VU_METER_CHANNELS = 2; // Stereo
+    const float VU_PEAK_HOLD_TIME = 1.0f; // Peak hold duration in seconds
+    const float VU_PEAK_DECAY_RATE = 0.8f; // Peak decay rate
+
+    // Camera mode enumeration
+    enum CameraMode {
+        CAMERA_FIRST_PERSON = 0,
+        CAMERA_THIRD_PERSON = 1,
+        CAMERA_ISOMETRIC = 2,
+        CAMERA_FREEFLY = 3,
+    };
+
+    // Camera system variables
+    CameraMode currentCameraMode_ = CAMERA_THIRD_PERSON;
+    float isometricCameraHeight_ = 500.0f;
+    float isometricCameraAngle_ = 45.0f;
+    Vector3 cameraOffset_;
+    float cameraDistance_ = 50.0f;
+    float cameraHeight_ = 20.0f;
+    float cameraLookAhead_ = 10.0f;
+    float cameraSmoothSpeed_ = 5.0f;
+    Vector3 smoothCameraPosition_;
+    Quaternion smoothCameraRotation_;
+    bool cameraInitialized_ = false;
+
+    void SetCameraMode(CameraMode mode);
+    void UpdateCameraFirstPerson(float timeStep);
+    void UpdateCameraThirdPerson(float timeStep);
+    void UpdateCameraIsometric(float timeStep);
+    NetworkActor* GetLocalNetworkActor();
+
     void UpdateAudioSpectrum(float timeStep);
-
     void UpdateNetworkStatusDisplay(float ping);
-
     void UpdateVehicleDamageDisplay(Vehicle* v, float timeStep);
 
-    };
+    // VU meter methods
+    void CreateVUMeter();
+    void UpdateVUMeter(float timeStep);
+    float CalculateVULevel(const Vector<float>& spectrum, int startFreq, int endFreq);
+
+    Color GetVUBarColor(int barIndex);
+
+    void UpdateVUMeterSmooth(float timeStep);
+
+    float CalculateChannelLevel(int channel, const Vector<float> &spectrum);
+};
 
 // Safety filter censored words
 String swearWords[] =  { "fuck", "shit", "cunt", "bastard", "asshole", "cock", "dick" };
