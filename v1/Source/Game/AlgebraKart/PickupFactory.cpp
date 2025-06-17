@@ -4,7 +4,7 @@
 #include <AlgebraKart/PickupFactory.h>
 
 PickupFactory::PickupFactory(Context* context)
-        : Object(context)
+        : LogicComponent(context)
 {
 
 }

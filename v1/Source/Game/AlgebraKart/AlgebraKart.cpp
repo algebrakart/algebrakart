@@ -160,6 +160,8 @@
 #include <string>
 #include <utility>
 
+#include "ViewCone.h"
+
 using namespace std;
 
 
@@ -392,6 +394,7 @@ void AlgebraKart::Start() {
     Game::Start();
 
     CreateServerSubsystem();
+    // Register subsystems/objects
     context_->RegisterSubsystem(new GameController(context_));
 
     // Reset focus index
@@ -399,6 +402,7 @@ void AlgebraKart::Start() {
 
     // Random seed
     SetRandomSeed(Time::GetSystemTime());
+
 
     if (headless_) {
         URHO3D_LOGINFO("Starting AlgebraKart in headless server mode");
@@ -8575,6 +8579,33 @@ std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
         float hue = (float)(id % 360);
         botColor.FromHSV(hue, 0.7f, 0.8f);
         CreateMinimapBotMarker(id, botColor);
+    }
+
+    if (actor && actor->GetNode())
+    {
+        // Add ViewCone component to AI bots
+//        ViewCone* viewCone = actor->GetNode()->CreateComponent<ViewCone>();
+
+        URHO3D_LOGINFO("About to create ViewCone");
+        ViewCone* viewCone = actor->GetNode()->CreateComponent<ViewCone>();
+        viewCone->SetSegments(8); // Start with minimal segments
+        URHO3D_LOGINFO("ViewCone created successfully");
+
+        // Configure view cone
+        viewCone->SetViewDistance(60.0f);
+        viewCone->SetViewAngle(75.0f);
+        viewCone->SetViewHeight(6.0f);
+
+        // Color coding for different AI types
+        Color aiColor;
+        switch (id % 5) {
+            case 0: aiColor = Color(0.2f, 1.0f, 0.2f, 0.3f); break; // Green
+            case 1: aiColor = Color(1.0f, 0.2f, 0.2f, 0.3f); break; // Red
+            case 2: aiColor = Color(0.2f, 0.2f, 1.0f, 0.3f); break; // Blue
+            case 3: aiColor = Color(1.0f, 1.0f, 0.2f, 0.3f); break; // Yellow
+            case 4: aiColor = Color(1.0f, 0.2f, 1.0f, 0.3f); break; // Magenta
+        }
+        URHO3D_LOGINFO("ViewCone added to AI bot " + String(id));
     }
 
     // Give the ownership to the client

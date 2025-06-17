@@ -4,9 +4,9 @@
 #include <Urho3D/IO/Log.h>
 
 // Helper class for building pickups.
-class PickupFactory : public Object
+class PickupFactory : public LogicComponent
 {
-URHO3D_OBJECT(PickupFactory, Object);
+URHO3D_OBJECT(PickupFactory, LogicComponent);
 
 public:
     // Construct.

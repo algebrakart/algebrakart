@@ -26,6 +26,7 @@
 #include <AlgebraKart/Missile.h>
 #include <AlgebraKart/Pickup.h>
 #include <AlgebraKart/PickupFactory.h>
+#include <AlgebraKart/ViewCone.h>
 
 #define PI 3.1415926
 
@@ -147,10 +148,19 @@ void NetworkActor::SetScene(Scene *scene) {
 }
 
 void NetworkActor::RegisterObject(Context *context) {
+    // Players
     context->RegisterFactory<NetworkActor>();
+
+    // Attack/defense system
     context->RegisterFactory<Missile>();
+
+    // Reward system
     context->RegisterFactory<Pickup>();
     context->RegisterFactory<PickupFactory>();
+
+    // Visibilty cone
+    context->RegisterFactory<ViewCone>();
+
 
     URHO3D_COPY_BASE_ATTRIBUTES(ClientObj);
 

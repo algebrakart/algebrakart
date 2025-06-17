@@ -1693,7 +1693,7 @@ void Vehicle::Init(Node* node) {
         engineSoundSrc_->SetDistanceAttenuation( 1.0f, 30.0f, 0.1f );
         engineSoundSrc_->SetSoundType(SOUND_EFFECT);
         engineSoundSrc_->SetGain(0.7f);
-        engineSoundSrc_->Play(engineSnd_);
+        //engineSoundSrc_->Play(engineSnd_);
         engineSoundSrc_->SetFrequency(AUDIO_FIXED_FREQ_44K * 0.05f);
 
 

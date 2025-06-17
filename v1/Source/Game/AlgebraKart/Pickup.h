@@ -33,7 +33,7 @@ private:
 	float boomRange;
 	/// Boom Damage
 	float damage;
-	/// Missile Node
+	/// Node attributes
 	SharedPtr<Node> node_;
     SharedPtr<RigidBody> pRigidBody_;
     SharedPtr<CollisionShape> pCollisionShape_;
