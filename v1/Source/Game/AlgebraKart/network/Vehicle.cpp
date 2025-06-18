@@ -359,22 +359,20 @@ void Vehicle::FixedUpdate(float timeStep)
 
             // Read controls generate vehicle control instruction
             if (controls_.buttons_ & NTWK_CTRL_LEFT) {
-//                newSteering = -1.0f;
+                newSteering = -1.0f;
                 //URHO3D_LOGDEBUG(vehicleName + " -> **NTWK_CTRL_LEFT**");
             }
             if (controls_.buttons_ & NTWK_CTRL_RIGHT) {
   //              float steerLevel = controls_.extraData_["steerLevel"].GetFloat();
 //                newSteering = steerLevel;
-//                newSteering = 1.0f;
+                newSteering = 1.0f;
 
                 //URHO3D_LOGDEBUG(vehicleName + " -> **NTWK_CTRL_RIGHT**");
             }
 
             if (controls_.buttons_ & NTWK_CTRL_FORWARD) {
-//                accelerator = 1.0f;
-                float accelLevel = controls_.extraData_["accelLevel"].GetFloat();
-                accelerator = accelLevel;
-
+                accelerator = 1.0f;
+                //float accelLevel = controls_.extraData_["accelLevel"].GetFloat();
                 //URHO3D_LOGDEBUG(vehicleName + " -> **ACCELERATE**");
             }
             if (controls_.buttons_ & NTWK_CTRL_BACK) {
@@ -476,6 +474,8 @@ void Vehicle::FixedUpdate(float timeStep)
         AutoCorrectPitchRoll();
 
         UpdateDrift();
+
+        ApplySmartDownforce();
 
 
         if (fire) {
@@ -1693,7 +1693,7 @@ void Vehicle::Init(Node* node) {
         engineSoundSrc_->SetDistanceAttenuation( 1.0f, 30.0f, 0.1f );
         engineSoundSrc_->SetSoundType(SOUND_EFFECT);
         engineSoundSrc_->SetGain(0.7f);
-        //engineSoundSrc_->Play(engineSnd_);
+        engineSoundSrc_->Play(engineSnd_);
         engineSoundSrc_->SetFrequency(AUDIO_FIXED_FREQ_44K * 0.05f);
 
 
@@ -2661,4 +2661,195 @@ int Vehicle::getCarType() const {
 
 const float *Vehicle::GetWheelDamage() const {
     return wheelDamage;
+}
+
+
+void Vehicle::ApplySmartDownforce()
+{
+    float speedKmh = raycastVehicle_->GetSpeedKm();
+    Vector3 velocity = raycastVehicle_->GetBody()->GetLinearVelocity();
+    float speed = velocity.Length();
+
+    // Only apply downforce when moving at significant speed
+    if (speedKmh < 30.0f) {
+        return;
+    }
+
+    // Check vehicle orientation to detect hood flipping
+    Vector3 up = node_->GetUp();
+    Vector3 forward = node_->GetDirection();
+
+    // Calculate pitch (nose up/down angle)
+    float pitch = asin(forward.y_);
+    float pitchDegrees = pitch * 180.0f / M_PI;
+
+    // Detect if front is lifting (hood flipping)
+    bool frontLifting = pitchDegrees > 15.0f;  // Nose pointing up more than 15 degrees
+    bool needsFrontDownforce = frontLifting || speedKmh > 80.0f;
+
+    if (needsFrontDownforce) {
+        // Calculate front downforce based on speed and pitch
+        float baseForce = 1200.0f;
+        float speedMultiplier = (speedKmh - 30.0f) / 100.0f;  // Scale with speed above 30 km/h
+        float pitchMultiplier = frontLifting ? (abs(pitchDegrees) / 15.0f) : 1.0f;
+
+        float frontDownforce = baseForce * speedMultiplier * pitchMultiplier;
+        frontDownforce = Clamp(frontDownforce, 0.0f, 4000.0f);
+
+        // Apply downforce at front of vehicle
+        Vector3 frontPosition = node_->GetPosition() + forward * (wheelSpace_ * 0.5f);
+        Vector3 downForce = Vector3(0, -frontDownforce, 0);
+
+        // Apply as impulse every few frames to avoid overwhelming physics
+        static int forceCounter = 0;
+        forceCounter++;
+        if (forceCounter % 3 == 0) {  // Every 3rd frame
+            raycastVehicle_->GetBody()->ApplyImpulse(Vector3(downForce * 0.1f),
+                                                     Vector3(frontPosition - node_->GetPosition()));
+        }
+    }
+
+    // Rear downforce for balance (lighter than front)
+    if (speedKmh > 60.0f) {
+        float rearDownforce = (speedKmh - 60.0f) * 8.0f;  // Gentler rear downforce
+        rearDownforce = Clamp(rearDownforce, 0.0f, 2000.0f);
+
+        Vector3 rearPosition = node_->GetPosition() - forward * (wheelSpace_ * 0.5f);
+        Vector3 rearForce = Vector3(0, -rearDownforce, 0);
+
+        static int rearForceCounter = 0;
+        rearForceCounter++;
+        if (rearForceCounter % 5 == 0) {  // Every 5th frame, less frequent
+            raycastVehicle_->GetBody()->ApplyImpulse(Vector3(rearForce * 0.1f),
+                                                     Vector3(rearPosition - node_->GetPosition()));
+        }
+    }
+}
+/*
+// Enhanced center of mass adjustment based on speed
+void Vehicle::UpdateDynamicCenterOfMass()
+{
+    float speedKmh = raycastVehicle_->GetSpeedKm();
+
+    // Base center of mass
+    Vector3 baseCOM = Vector3(0.0f, -0.3f, 0.0f);
+
+    // At higher speeds, shift COM slightly forward and lower for stability
+    if (speedKmh > 60.0f) {
+        float speedFactor = Clamp((speedKmh - 60.0f) / 100.0f, 0.0f, 1.0f);
+        Vector3 speedAdjustment = Vector3(0.0f, -0.2f * speedFactor, 0.1f * speedFactor);
+        Vector3 adjustedCOM = baseCOM + speedAdjustment;
+
+        body_->SetCenterOfMass(adjustedCOM);
+    } else {
+        body_->SetCenterOfMass(baseCOM);
+    }
+}*/
+
+void Vehicle::ApplySlopeStabilization()
+{
+    // Detect if vehicle is on a slope
+    Vector3 up = node_->GetUp();
+    Vector3 worldUp = Vector3(0, 1, 0);
+
+    float slopeAngle = acos(up.DotProduct(worldUp));
+    float slopeAngleDegrees = slopeAngle * 180.0f / M_PI;
+
+    // Only apply slope corrections on significant slopes
+    if (slopeAngleDegrees < 5.0f) {
+        return;
+    }
+
+    bool onSlope = slopeAngleDegrees > 5.0f;
+    bool steepSlope = slopeAngleDegrees > 20.0f;
+
+    Vector3 forward = node_->GetDirection();
+    Vector3 velocity = raycastVehicle_->GetBody()->GetLinearVelocity();
+    float speedKmh = raycastVehicle_->GetSpeedKm();
+
+    // Determine if going uphill or downhill
+    float hillDirection = forward.DotProduct(worldUp);
+    bool goingUphill = hillDirection > 0.1f;
+    bool goingDownhill = hillDirection < -0.1f;
+
+    if (onSlope) {
+        // Increase traction on slopes
+        float slopeTractionMultiplier = 1.0f + (slopeAngleDegrees / 45.0f);
+        slopeTractionMultiplier = Clamp(slopeTractionMultiplier, 1.0f, 2.0f);
+
+        for (int i = 0; i < numWheels_; i++) {
+            if (raycastVehicle_->WheelIsGrounded(i)) {
+                float baseFriction = m_fwheelFriction;
+                float slopeFriction = baseFriction * slopeTractionMultiplier;
+                raycastVehicle_->SetWheelFrictionSlip(i, slopeFriction);
+            }
+        }
+
+        // Apply additional downward force to maintain wheel contact
+        if (numWheelContacts_ < numWheels_) {
+            float slopeDownforce = 800.0f * (slopeAngleDegrees / 30.0f);
+            slopeDownforce = Clamp(slopeDownforce, 0.0f, 2000.0f);
+
+            Vector3 slopeForce = -up * slopeDownforce;  // Force along slope normal
+            raycastVehicle_->GetBody()->ApplyForce(Vector3(slopeForce));
+        }
+
+        // Prevent backward flipping on steep uphills
+        if (goingUphill && steepSlope) {
+            Vector3 antiFlipForce = Vector3(0, 0, 0);
+
+            // Check if vehicle is tilting backward too much
+            if (forward.y_ > 0.5f) {  // Nose pointing up significantly
+                // Apply forward and downward force at rear
+                Vector3 rearPosition = node_->GetPosition() - forward * wheelSpace_;
+                antiFlipForce = Vector3(0, -1500.0f, 0) + forward * 800.0f;
+
+                raycastVehicle_->GetBody()->ApplyImpulse(Vector3(antiFlipForce * 0.1f),
+                                                         Vector3(rearPosition - node_->GetPosition()));
+            }
+        }
+
+        // Prevent forward flipping on steep downhills
+        if (goingDownhill && steepSlope && speedKmh > 40.0f) {
+            if (forward.y_ < -0.3f) {  // Nose pointing down significantly
+                // Apply upward force at front
+                Vector3 frontPosition = node_->GetPosition() + forward * wheelSpace_;
+                Vector3 antiFrontFlipForce = Vector3(0, 1200.0f, 0);
+
+                raycastVehicle_->GetBody()->ApplyImpulse(Vector3(antiFrontFlipForce * 0.1f),
+                                                         Vector3(frontPosition - node_->GetPosition()));
+            }
+        }
+    } else {
+        // Reset friction to normal when not on slope
+        for (int i = 0; i < numWheels_; i++) {
+            float normalFriction = (i < 2) ? m_fwheelFriction * 0.9f : m_fwheelFriction * 1.1f;
+            raycastVehicle_->SetWheelFrictionSlip(i, normalFriction);
+        }
+    }
+}
+
+// Enhanced suspension for better slope handling
+void Vehicle::UpdateSlopeAwareSuspension()
+{
+    Vector3 up = node_->GetUp();
+    Vector3 worldUp = Vector3(0, 1, 0);
+
+    float slopeAngle = acos(up.DotProduct(worldUp));
+    float slopeAngleDegrees = slopeAngle * 180.0f / M_PI;
+
+    // Adjust suspension stiffness based on slope
+    float slopeMultiplier = 1.0f;
+    if (slopeAngleDegrees > 10.0f) {
+        slopeMultiplier = 1.0f + (slopeAngleDegrees / 60.0f);  // Stiffer on slopes
+        slopeMultiplier = Clamp(slopeMultiplier, 1.0f, 1.5f);
+    }
+
+    float adjustedStiffness = m_fsuspensionStiffness * slopeMultiplier;
+    float adjustedDamping = m_fsuspensionDamping * slopeMultiplier;
+
+    for (int i = 0; i < numWheels_; i++) {
+        raycastVehicle_->SetWheelSuspensionStiffness(i, adjustedStiffness);
+        raycastVehicle_->SetWheelDampingRelaxation(i, adjustedDamping);
+    }
 }

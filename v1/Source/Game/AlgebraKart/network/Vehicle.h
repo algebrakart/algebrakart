@@ -164,6 +164,12 @@ public:
     virtual void Fire();
     void Kill();
 
+    // Vehicle Stabilization
+    void ApplySmartDownforce();
+    void UpdateDynamicCenterOfMass();
+    void UpdateSlopeAwareSuspension();
+    void ApplySlopeStabilization();
+
 private:
     /// Creates particle emitter.
     void CreateEmitter(Vector3 place);

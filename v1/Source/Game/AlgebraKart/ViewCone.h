@@ -12,6 +12,8 @@
 #include <Urho3D/Physics/CollisionShape.h>
 #include <Urho3D/Physics/RigidBody.h>
 
+#include <AlgebraKart/network/NetworkActor.h>
+
 using namespace Urho3D;
 
 /// ViewCone object for displaying AI sight ranges in Commandos-style
@@ -82,6 +84,7 @@ public:
     void HandleTriggerExit(StringHash eventType, VariantMap& eventData);
     /// Check line of sight using raycasting
     void CheckLineOfSight();
+    void DebugConeState();
 
 private:
     /// Create the cone geometry.
@@ -122,4 +125,7 @@ private:
     Quaternion lastRotation_;
     /// Initialization state flag.
     bool initialized_;
+
+    // Visible nodes in view cone
+    Vector<SharedPtr<Node>> visibleNodes_;
 };

@@ -8383,7 +8383,7 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
     //Vector3 vehiclePos = actorPos + Vector3(1.0f, 0.0f, -1.0f);  // Slightly behind and to the right
     //vehicleNode->SetPosition(vehiclePos);
     //vehicleNode->SetRotation(racingOrientation);  // Same orientation as actor
-    vehicleNode->SetRotation(Quaternion(0.0f, 180.0f, 0.0f));
+    //vehicleNode->SetRotation(Quaternion(0.0f, 180.0f, 0.0f));
     Vehicle *vehicle = vehicleNode->CreateComponent<Vehicle>(REPLICATED);
     vehicle->Init(vehicleNode);
     vehicleNode->SetPosition(Vector3(actor->GetBody()->GetPosition())+Vector3(0,-5,-40));
@@ -8587,14 +8587,15 @@ std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
 //        ViewCone* viewCone = actor->GetNode()->CreateComponent<ViewCone>();
 
         URHO3D_LOGINFO("About to create ViewCone");
-        ViewCone* viewCone = actor->GetNode()->CreateComponent<ViewCone>();
+        ViewCone* viewCone = actor->GetNode()->CreateComponent<ViewCone>(REPLICATED);
         viewCone->SetSegments(8); // Start with minimal segments
         URHO3D_LOGINFO("ViewCone created successfully");
+        viewCone->DebugConeState();
 
         // Configure view cone
-        viewCone->SetViewDistance(60.0f);
+        viewCone->SetViewDistance(40.0f);
         viewCone->SetViewAngle(75.0f);
-        viewCone->SetViewHeight(6.0f);
+        viewCone->SetViewHeight(12.0f);
 
         // Color coding for different AI types
         Color aiColor;
@@ -8605,6 +8606,7 @@ std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
             case 3: aiColor = Color(1.0f, 1.0f, 0.2f, 0.3f); break; // Yellow
             case 4: aiColor = Color(1.0f, 0.2f, 1.0f, 0.3f); break; // Magenta
         }
+        viewCone->SetConeColor(aiColor);
         URHO3D_LOGINFO("ViewCone added to AI bot " + String(id));
     }
 
