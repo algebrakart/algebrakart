@@ -169,6 +169,7 @@ public:
     void UpdateDynamicCenterOfMass();
     void UpdateSlopeAwareSuspension();
     void ApplySlopeStabilization();
+    void CheckAndRecoverFromPenetration();
 
 private:
     /// Creates particle emitter.

@@ -133,8 +133,9 @@ Vehicle::Vehicle(Context* context)
     rollInfluence_ = 0.12f;
     emittersCreated = false;
 
-    // Working
-    m_fmaxEngineForce = 22000.0f;//950.f;
+    // Working 110000
+    // Unstable 180000 -> will work on stabilization
+    m_fmaxEngineForce = 110000.0f;//950.f;
   //  m_fmaxEngineForce = 4200.0f;//5400.0f;//950.f;
 
     m_fmaxBreakingForce = 800.f;
@@ -416,26 +417,16 @@ void Vehicle::FixedUpdate(float timeStep)
         ApplyEngineForces(accelerator, brake);
 
         // do this right after applyEngineForce and before applying other forces
-        if ( ApplyStiction(newSteering, accelerator, brake) )
-        {
-            return;
-        }
-
-        int cnt = 0;
-        for (int i = 0; i < numWheels_; i++) {
-            if (vehicle->WheelIsGrounded(i)) {
-                cnt++;
-            }
-        }
+        ApplyStiction(newSteering, accelerator, brake);
 
         // Set numbers of wheels in contact (this parameter drives others)
-        numWheelContacts_ = cnt; //vehicle->getNumWheelsContact();
+        numWheelContacts_ = vehicle->getNumWheelsContact();
 
-        if (cnt > 0) {
+        if (numWheelContacts_ > 0) {
             wheelContactTime_ += timeStep;
         }
 
-//        wheelContactBuffer_.Clear();
+        wheelContactBuffer_.Clear();
         // Push contacts into buffer
         wheelContactBuffer_.Push(numWheelContacts_);
 
@@ -459,23 +450,19 @@ void Vehicle::FixedUpdate(float timeStep)
         }
 
         if (wheelContactBuffer_.Size() > 6) {
-            wheelContactBuffer_.Resize(2);
+            wheelContactBuffer_.Resize(4);
             //wheelContactBuffer_.Clear();
         }
 
         ApplyDownwardForce();
 
         ApplyAntiRollBar();
-
         ApplyDragBrake();
-
         LimitLinearAndAngularVelocity();
 
         AutoCorrectPitchRoll();
-
         UpdateDrift();
 
-        ApplySmartDownforce();
 
 
         if (fire) {
@@ -1638,11 +1625,35 @@ void Vehicle::Init(Node* node) {
             numWheels_ = raycastVehicle_->GetNumWheels();
             prevWheelInContact_.Resize(numWheels_);
 
-            raycastVehicle_->SetWheelSuspensionStiffness(id, suspensionStiffness_);
-            raycastVehicle_->SetWheelDampingRelaxation(id, suspensionDamping_);
-            raycastVehicle_->SetWheelDampingCompression(id, suspensionCompression_);
-            raycastVehicle_->SetWheelFrictionSlip(id, wheelFriction_);
-            raycastVehicle_->SetWheelRollInfluence(id, rollInfluence_);
+
+
+                /// ConfigureSuspension ///
+
+                // Better suspension parameters to prevent penetration
+                float vehicleMass = body_->GetMass();
+/*
+                // Calculate optimal suspension based on vehicle mass
+                float suspensionForcePerWheel = (vehicleMass * 9.81f) / 4; // Weight distribution
+
+                // Suspension tuning - more conservative values
+                suspensionStiffness_ = suspensionForcePerWheel * 0.8f;  // Reduced stiffness
+                suspensionDamping_ = suspensionStiffness_ * 0.3f;       // Proper damping ratio
+                suspensionCompression_ = suspensionStiffness_ * 0.2f;   // Compression damping
+
+                // Ensure suspension rest length is appropriate for wheel radius
+                suspensionRestLength_ = wheelRadius_ * 0.9f;  // Give enough travel room
+*/
+                // Apply to all wheels
+                raycastVehicle_->SetWheelSuspensionStiffness(id, suspensionStiffness_);
+                raycastVehicle_->SetWheelDampingRelaxation(id, suspensionDamping_);
+                raycastVehicle_->SetWheelDampingCompression(id, suspensionCompression_);
+                raycastVehicle_->SetWheelRestLength(id, suspensionRestLength_);
+                raycastVehicle_->SetWheelFrictionSlip(id, wheelFriction_);
+                raycastVehicle_->SetWheelRollInfluence(id, rollInfluence_);
+
+                ///
+
+///
 
             prevWheelInContact_[id] = false;
             //front: 0.8f
@@ -1986,26 +1997,37 @@ void Vehicle::UpdateSteering(float newSteering)
     }
 }
 
-void Vehicle::ApplyEngineForces(float accelerator, bool braking)
-{
-    // 4x wheel drive
+void Vehicle::ApplyEngineForces(float accelerator, bool braking) {
+    // Limit engine force based on wheel contact to prevent penetration
     const float numDriveTrains = 2.0f;
-    const float invNumDriveTrains = 1.0f/numDriveTrains;
+    const float invNumDriveTrains = 1.0f / numDriveTrains;
 
     isBraking_ = braking;
     currentAcceleration_ = accelerator;
-    m_fBreakingForce = braking?m_fmaxBreakingForce*0.5f:0.0f;
-    m_fEngineForce = m_fmaxEngineForce * accelerator * invNumDriveTrains;
 
-    // Apply booster level (booster level = 1.0f, no effect)
-    m_fEngineForce = m_fEngineForce * boosterLevel_;
+    // Reduce max engine force to prevent wheel penetration
+    float maxEngineForce = m_fmaxEngineForce * 0.7f;  // Reduced from full power
+
+    // Scale engine force based on wheel contact - critical for preventing penetration
+    float contactRatio = (float)numWheelContacts_ / (float)numWheels_;
+    float engineForceMultiplier = Clamp(contactRatio, 0.3f, 1.0f);  // Minimum 30% force
+
+    m_fEngineForce = maxEngineForce * accelerator * invNumDriveTrains * engineForceMultiplier;
+    m_fEngineForce *= boosterLevel_;  // Apply booster
+
+    // Progressive force application - start gentle, increase with contact
+    if (numWheelContacts_ < numWheels_) {
+        m_fEngineForce *= 0.6f;  // Reduce force when not all wheels are grounded
+    }
+
+    m_fBreakingForce = braking ? m_fmaxBreakingForce * 0.5f : 0.0f;
 
     for ( int i = 0; i < numWheels_; ++i )
     {
         // 4x wheel drive
         raycastVehicle_->SetEngineForce(i, m_fEngineForce);
 
-        // apply brake to rear wheels only
+        // Apply brake to rear wheels only
         if (i > 1)
         {
             raycastVehicle_->SetBrake(i, m_fBreakingForce);
@@ -2352,33 +2374,89 @@ void Vehicle::ApplyDownwardForce()
 
         }
 */
-    // Only apply gentle downward force when partially airborne
+
+    float speedKmh = raycastVehicle_->GetSpeedKm();
+    Vector3 velocity = raycastVehicle_->GetBody()->GetLinearVelocity();
+    float speed = velocity.Length();
+
+    // Only apply downforce when moving at significant speed and one of the wheels is airborne
+    if (speedKmh < 10.0f || (numWheelContacts_ > 0 && numWheelContacts_ == numWheels_)) {
+        return;
+    }
+
+    // Check vehicle orientation to detect hood flipping
+    Vector3 up = node_->GetUp();
+    Vector3 forward = node_->GetDirection();
+
+    // Calculate pitch (nose up/down angle)
+    float pitch = asin(forward.y_);
+    float pitchDegrees = pitch * 180.0f / M_PI;
+
+    // Detect if front is lifting (hood flipping)
+    bool frontLifting = pitchDegrees > 15.0f;  // Nose pointing up more than 15 degrees
+    bool needsFrontDownforce = frontLifting || speedKmh > 80.0f;
+
+    // Only apply minimal downward force when partially airborne
     if (numWheelContacts_ > 0 && numWheelContacts_ < numWheels_) {
-        float speed = raycastVehicle_->GetBody()->GetLinearVelocity().Length();
         float speedKmh = raycastVehicle_->GetSpeedKm();
 
-        // Much more conservative force calculation
-        const float BASE_DOWN_FORCE = 800.0f;  // Reduced from 2000.0f
-        const float SPEED_MULTIPLIER = 15.0f;  // Reduced from 150.0f
-        const float MAX_DOWN_FORCE_GENTLE = 3000.0f;  // Reduced from 15000.0f
+        // Much more conservative force
+        float baseForce = 300.0f;  // Greatly reduced
+        float speedMultiplier = speedKmh * 2.0f;  // Gentle speed scaling
+        float totalForce = Clamp(baseForce + speedMultiplier, 100.0f, 800.0f);
 
-        float downwardForce = BASE_DOWN_FORCE + (speedKmh * SPEED_MULTIPLIER);
-        downwardForce = Clamp(downwardForce, BASE_DOWN_FORCE, MAX_DOWN_FORCE_GENTLE);
+        // Apply force only at center of mass
+        Vector3 centerOfMass = body_->GetCenterOfMass();
+        Vector3 downForce = Vector3(0, -totalForce, 0);
 
-        // Apply force only at center of mass to avoid flipping
-        Vector3 downNormal = Vector3(0, -1, 0);  // World down, not relative to vehicle
-        Vector3 centerOfMass = raycastVehicle_->GetBody()->GetCenterOfMass();
-
-        // Apply smaller, more frequent impulses instead of continuous force
+        // Apply force less frequently to prevent accumulation
         static float forceTimer = 0.0f;
         forceTimer += GetSubsystem<Time>()->GetTimeStep();
 
-        if (forceTimer >= 0.1f) {  // Apply every 100ms
-            Vector3 impulse = downNormal * (downwardForce * 0.1f);  // Scale down the impulse
-            raycastVehicle_->GetBody()->ApplyForce(impulse);
+        if (forceTimer >= 0.2f) {  // Every 200ms instead of every frame
+            body_->ApplyImpulse(downForce * 0.2f, centerOfMass);
             forceTimer = 0.0f;
         }
     }
+
+    if (needsFrontDownforce) {
+        // Calculate front downforce based on speed and pitch
+        float baseForce = 900.0f;
+        float speedMultiplier = (speedKmh - 30.0f) / 100.0f;  // Scale with speed above 30 km/h
+        float pitchMultiplier = frontLifting ? (abs(pitchDegrees) / 15.0f) : 1.0f;
+
+        float frontDownforce = baseForce * speedMultiplier * pitchMultiplier;
+        frontDownforce = Clamp(frontDownforce, 0.0f, 4000.0f);
+
+        // Apply downforce at front of vehicle
+        Vector3 frontPosition = node_->GetPosition() + forward * (wheelSpace_ * 0.5f);
+        Vector3 downForce = Vector3(0, -frontDownforce, 0);
+
+        // Apply as impulse every few frames to avoid overwhelming physics
+        static int forceCounter = 0;
+        forceCounter++;
+        if (forceCounter % 3 == 0) {  // Every 3rd frame
+            raycastVehicle_->GetBody()->ApplyImpulse(Vector3(downForce * 0.1f),
+                                                     Vector3(frontPosition - node_->GetPosition()));
+        }
+    }
+
+    // Rear downforce for balance (lighter than front)
+    if (speedKmh > 60.0f) {
+        float rearDownforce = (speedKmh - 60.0f) * 8.0f;  // Gentler rear downforce
+        rearDownforce = Clamp(rearDownforce, 0.0f, 2000.0f);
+
+        Vector3 rearPosition = node_->GetPosition() - forward * (wheelSpace_ * 0.5f);
+        Vector3 rearForce = Vector3(0, -rearDownforce, 0);
+
+        static int rearForceCounter = 0;
+        rearForceCounter++;
+        if (rearForceCounter % 5 == 0) {  // Every 5th frame, less frequent
+            raycastVehicle_->GetBody()->ApplyImpulse(Vector3(rearForce * 0.1f),
+                                                     Vector3(rearPosition - node_->GetPosition()));
+        }
+    }
+
 }
 
 
@@ -2663,68 +2741,6 @@ const float *Vehicle::GetWheelDamage() const {
     return wheelDamage;
 }
 
-
-void Vehicle::ApplySmartDownforce()
-{
-    float speedKmh = raycastVehicle_->GetSpeedKm();
-    Vector3 velocity = raycastVehicle_->GetBody()->GetLinearVelocity();
-    float speed = velocity.Length();
-
-    // Only apply downforce when moving at significant speed
-    if (speedKmh < 30.0f) {
-        return;
-    }
-
-    // Check vehicle orientation to detect hood flipping
-    Vector3 up = node_->GetUp();
-    Vector3 forward = node_->GetDirection();
-
-    // Calculate pitch (nose up/down angle)
-    float pitch = asin(forward.y_);
-    float pitchDegrees = pitch * 180.0f / M_PI;
-
-    // Detect if front is lifting (hood flipping)
-    bool frontLifting = pitchDegrees > 15.0f;  // Nose pointing up more than 15 degrees
-    bool needsFrontDownforce = frontLifting || speedKmh > 80.0f;
-
-    if (needsFrontDownforce) {
-        // Calculate front downforce based on speed and pitch
-        float baseForce = 1200.0f;
-        float speedMultiplier = (speedKmh - 30.0f) / 100.0f;  // Scale with speed above 30 km/h
-        float pitchMultiplier = frontLifting ? (abs(pitchDegrees) / 15.0f) : 1.0f;
-
-        float frontDownforce = baseForce * speedMultiplier * pitchMultiplier;
-        frontDownforce = Clamp(frontDownforce, 0.0f, 4000.0f);
-
-        // Apply downforce at front of vehicle
-        Vector3 frontPosition = node_->GetPosition() + forward * (wheelSpace_ * 0.5f);
-        Vector3 downForce = Vector3(0, -frontDownforce, 0);
-
-        // Apply as impulse every few frames to avoid overwhelming physics
-        static int forceCounter = 0;
-        forceCounter++;
-        if (forceCounter % 3 == 0) {  // Every 3rd frame
-            raycastVehicle_->GetBody()->ApplyImpulse(Vector3(downForce * 0.1f),
-                                                     Vector3(frontPosition - node_->GetPosition()));
-        }
-    }
-
-    // Rear downforce for balance (lighter than front)
-    if (speedKmh > 60.0f) {
-        float rearDownforce = (speedKmh - 60.0f) * 8.0f;  // Gentler rear downforce
-        rearDownforce = Clamp(rearDownforce, 0.0f, 2000.0f);
-
-        Vector3 rearPosition = node_->GetPosition() - forward * (wheelSpace_ * 0.5f);
-        Vector3 rearForce = Vector3(0, -rearDownforce, 0);
-
-        static int rearForceCounter = 0;
-        rearForceCounter++;
-        if (rearForceCounter % 5 == 0) {  // Every 5th frame, less frequent
-            raycastVehicle_->GetBody()->ApplyImpulse(Vector3(rearForce * 0.1f),
-                                                     Vector3(rearPosition - node_->GetPosition()));
-        }
-    }
-}
 /*
 // Enhanced center of mass adjustment based on speed
 void Vehicle::UpdateDynamicCenterOfMass()
@@ -2851,5 +2867,49 @@ void Vehicle::UpdateSlopeAwareSuspension()
     for (int i = 0; i < numWheels_; i++) {
         raycastVehicle_->SetWheelSuspensionStiffness(i, adjustedStiffness);
         raycastVehicle_->SetWheelDampingRelaxation(i, adjustedDamping);
+    }
+}
+
+void Vehicle::CheckAndRecoverFromPenetration() {
+    if (!raycastVehicle_ || numWheels_ == 0) return;
+
+    bool hasPenetration = false;
+    float avgPenetrationDepth = 0.0f;
+    int penetratedWheels = 0;
+
+    // Check for wheel penetration
+    for (int i = 0; i < numWheels_; i++) {
+        if (raycastVehicle_->WheelIsGrounded(i)) {
+            btWheelInfo& wheel = raycastVehicle_->GetWheel(i);
+            float suspensionLength = wheel.m_raycastInfo.m_suspensionLength;
+            float restLength = wheel.getSuspensionRestLength();
+
+            // Check if wheel is compressed beyond reasonable limits
+            if (suspensionLength < restLength * 0.1f) {  // Less than 10% of rest length
+                hasPenetration = true;
+                avgPenetrationDepth += (restLength * 0.1f - suspensionLength);
+                penetratedWheels++;
+            }
+        }
+    }
+
+    // Recovery procedure
+    if (hasPenetration && penetratedWheels > 0) {
+        avgPenetrationDepth /= penetratedWheels;
+
+        // Gentle upward recovery force
+        Vector3 recoveryForce = Vector3(0, avgPenetrationDepth * 2000.0f, 0);
+        recoveryForce = Vector3(0, Clamp(recoveryForce.y_, 500.0f, 3000.0f), 0);
+
+        // Apply recovery impulse
+        body_->ApplyImpulse(recoveryForce * GetSubsystem<Time>()->GetTimeStep());
+
+        // Temporarily reduce engine force during recovery
+        for (int i = 0; i < numWheels_; i++) {
+            float currentEngineForce = raycastVehicle_->GetEngineForce(i);
+            raycastVehicle_->SetEngineForce(i, currentEngineForce * 0.3f);
+        }
+
+        URHO3D_LOGDEBUGF("Vehicle penetration detected! Recovery force applied: %f", recoveryForce.y_);
     }
 }
