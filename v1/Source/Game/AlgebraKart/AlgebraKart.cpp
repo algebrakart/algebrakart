@@ -29,6 +29,7 @@
 #include <Urho3D/Graphics/Material.h>
 #include <Urho3D/Graphics/Octree.h>
 #include <Urho3D/Graphics/Renderer.h>
+#include <Urho3D/Graphics/RenderPath.h>
 #include <Urho3D/Graphics/Zone.h>
 #include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/Scene/Scene.h>
@@ -3528,84 +3529,86 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
             UpdateVUMeterSmooth(timeStep);
 
 
-            RadioTrack currTrack = radioTrackInfoQueue_[radioTrack_];
-            radioText_[k]->SetText(String("Artist: ") + String(currTrack.artistName));
-            k++;
+            if (radioText_[k]) {
+                RadioTrack currTrack = radioTrackInfoQueue_[radioTrack_];
+                radioText_[k]->SetText(String("Artist: ") + String(currTrack.artistName));
+                k++;
 
-            radioText_[k]->SetText(String("") + String(currTrack.artistLink));
-            k++;
+                radioText_[k]->SetText(String("") + String(currTrack.artistLink));
+                k++;
 
-            radioText_[k]->SetText(String("") + String(currTrack.trackName));
-            k++;
+                radioText_[k]->SetText(String("") + String(currTrack.trackName));
+                k++;
 
-            radioText_[k]->SetText(String(" ") + String(currTrack.artistName));
-            k++;
+                radioText_[k]->SetText(String(" ") + String(currTrack.artistName));
+                k++;
 
-            //radioText_[k]->SetText(String(" -------------------------------- "));
+                //radioText_[k]->SetText(String(" -------------------------------- "));
 
-            // SoundMixRate (int) %Sound output frequency in Hz. Default 44100.
-            if (_radioStream) {
-                float t = _radioStream->GetTimePosition();
-                float defaultMixRate = 44100;
-                // Next track
-                if (t == 0) {
-                    if (!_radioStream->GetSound()) {
-                        // No stream data
-                        // Load next track
-                        PlayNextTrack();
+                // SoundMixRate (int) %Sound output frequency in Hz. Default 44100.
+                if (_radioStream) {
+                    float t = _radioStream->GetTimePosition();
+                    float defaultMixRate = 44100;
+                    // Next track
+                    if (t == 0) {
+                        if (!_radioStream->GetSound()) {
+                            // No stream data
+                            // Load next track
+                            PlayNextTrack();
 
+                        }
                     }
-                }
 
-                // This stays the same
-                float totalSamples = 0;
-                if (_radioStream->GetSound()) {
-                    _radioStream->GetSound()->GetSampleSize() * _radioStream->GetSound()->GetFrequency();
-                }
+                    // This stays the same
+                    float totalSamples = 0;
+                    if (_radioStream->GetSound()) {
+                        _radioStream->GetSound()->GetSampleSize() * _radioStream->GetSound()->GetFrequency();
+                    }
 
 
-                //float totalSamples = _radioStream->GetSound()->GetSampleSize() * _radioStream->GetSound()->GetFrequency();
-                //_radioStream->GetPlayPosition()-_radioStream->GetSound()->GetStart();
+                    //float totalSamples = _radioStream->GetSound()->GetSampleSize() * _radioStream->GetSound()->GetFrequency();
+                    //_radioStream->GetPlayPosition()-_radioStream->GetSound()->GetStart();
 
-                //float t = (float) (int) (size_t) (_radioStream->GetPlayPosition()-_radioStream->GetSound()->GetStart())) /
+                    //float t = (float) (int) (size_t) (_radioStream->GetPlayPosition()-_radioStream->GetSound()->GetStart())) /
 //                                    (sound_->GetSampleSize() * sound_->GetFrequency())
 
-                // Update the time position. In stream mode, copy unused data back to the beginning of the stream buffer
+                    // Update the time position. In stream mode, copy unused data back to the beginning of the stream buffer
 
                     //timePosition_ += ((float)samples / (float)mixRate) * frequency_ / soundStream_->GetFrequency();
 
                     //timePosition_ = ((float) (int) (size_t) (position_ - sound_->GetStart())) /
 //                                    (sound_->GetSampleSize() * sound_->GetFrequency());
 
-                String fm, fs;
-                int m = int(_radioStream->GetTimePosition() / 60.0f);
-                if (m < 10) {
-                    fm = "0";
-                }
-                int s = int(fmod(_radioStream->GetTimePosition(), 60.0f));
-                if (s < 10) {
-                    fs = "0";
-                }
+                    String fm, fs;
+                    int m = int(_radioStream->GetTimePosition() / 60.0f);
+                    if (m < 10) {
+                        fm = "0";
+                    }
+                    int s = int(fmod(_radioStream->GetTimePosition(), 60.0f));
+                    if (s < 10) {
+                        fs = "0";
+                    }
 
-                String progressBar = "[";
-                String playTime = " " + String(fm) + String(m) + ":" + String(fs) + String(s) + " ";
-                if (_radioStream->GetSound()) {
-                    int ind = (t * totalSamples) / _radioStream->GetSound()->GetDataSize();
+                    String progressBar = "[";
+                    String playTime = " " + String(fm) + String(m) + ":" + String(fs) + String(s) + " ";
+                    if (_radioStream->GetSound()) {
+                        int ind = (t * totalSamples) / _radioStream->GetSound()->GetDataSize();
 
-                    for (int i = 0; i < 11; i++) {
-                        if (ind == i) {
-                            progressBar += "|";
-                        } else {
-                            progressBar += "-";
+                        for (int i = 0; i < 11; i++) {
+                            if (ind == i) {
+                                progressBar += "|";
+                            } else {
+                                progressBar += "-";
+                            }
                         }
                     }
-                }
-                progressBar += "]";
+                    progressBar += "]";
 
-                radioText_[k]->SetText(progressBar + playTime);
-                k++;
-            } else {
-                radioText_[k]->SetText(String("Waiting for next track..."));
+                    radioText_[k]->SetText(progressBar + playTime);
+                    k++;
+                } else {
+                    radioText_[k]->SetText(String("Waiting for next track..."));
+                }
             }
 
             /* NEXT QUEUE
@@ -3613,39 +3616,41 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
             */
             if (_radioStream->GetSound()) {
                 // Process stream data
-                SharedArrayPtr stream = SharedArrayPtr(_radioStream->GetSound()->GetData());
-                int streamSize = _radioStream->GetSound()->GetDataSize();
-                capturer_->getBuffer()->Resize(streamSize);
-                capturer_->data->readCount = 0;
-                float t = _radioStream->GetTimePosition();
+                if (_radioStream->GetSound()->GetData()) {
+                    SharedArrayPtr stream = SharedArrayPtr(_radioStream->GetSound()->GetData());
+                    int streamSize = _radioStream->GetSound()->GetDataSize();
+                    capturer_->getBuffer()->Resize(streamSize);
+                    capturer_->data->readCount = 0;
+                    float t = _radioStream->GetTimePosition();
 
-                for (size_t i = 0; i < streamSize; i++) {
+                    for (size_t i = 0; i < streamSize; i++) {
 
-                    // bug: streamSize is longer than available?
-                    if (stream.Get()[(int) i]) {
-                        float v = stream.Get()[(int) i] / 128.0f;
-                        capturer_->getBuffer()->At(i) = v;
-                        capturer_->data->readCount++;
-                        //URHO3D_LOGDEBUGF("readCount=%d,v=%f",capturer_->data->readCount, v);
+                        // bug: streamSize is longer than available?
+                        if (stream.Get()[(int) i]) {
+                            float v = stream.Get()[(int) i] / 128.0f;
+                            capturer_->getBuffer()->At(i) = v;
+                            capturer_->data->readCount++;
+                            //URHO3D_LOGDEBUGF("readCount=%d,v=%f",capturer_->data->readCount, v);
+                        }
                     }
+
+                    //URHO3D_LOGDEBUGF("readCount=%d",capturer_->data->readCount);
+
+                    if (audioSpectrumOptions_.inputSize < capturer_->bufferReadCount()) {
+                        // Update analyzer
+                        analyzer_->update(capturer_->getBuffer(), capturer_->bufferHeadIndex(),
+                                          audioSpectrumOptions_.bottomLevel,
+                                          audioSpectrumOptions_.topLevel, audioSpectrumOptions_.minFreq,
+                                          audioSpectrumOptions_.maxFreq, audioSpectrumOptions_.axisLogBase);
+                        //String renderStr = renderer_->draw(analyzer_->spectrum(), audioSpectrumOptions_.windowSize, audioSpectrumOptions_.smoothing, true);
+                        //  URHO3D_LOGDEBUGF("renderStr -> %s", renderStr.CString());
+                    }
+
+                    // Draw wave
+                    /*DrawWave(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_,
+                             _radioStream->GetTimePosition(), Color(75.0f / 255.0f, 247.0f / 255.0f, 48.0f / 255.0f));*/
+                    // DrawFFT(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_, Color(247.0f/255.0f,48.0f/255.0f,148.0f/255.0f));
                 }
-
-                //URHO3D_LOGDEBUGF("readCount=%d",capturer_->data->readCount);
-
-                if (audioSpectrumOptions_.inputSize < capturer_->bufferReadCount()) {
-                    // Update analyzer
-                    analyzer_->update(capturer_->getBuffer(), capturer_->bufferHeadIndex(),
-                                      audioSpectrumOptions_.bottomLevel,
-                                      audioSpectrumOptions_.topLevel, audioSpectrumOptions_.minFreq,
-                                      audioSpectrumOptions_.maxFreq, audioSpectrumOptions_.axisLogBase);
-                    //String renderStr = renderer_->draw(analyzer_->spectrum(), audioSpectrumOptions_.windowSize, audioSpectrumOptions_.smoothing, true);
-                    //  URHO3D_LOGDEBUGF("renderStr -> %s", renderStr.CString());
-                }
-
-                // Draw wave
-                /*DrawWave(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_,
-                         _radioStream->GetTimePosition(), Color(75.0f / 255.0f, 247.0f / 255.0f, 48.0f / 255.0f));*/
-                // DrawFFT(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_, Color(247.0f/255.0f,48.0f/255.0f,148.0f/255.0f));
             }
 
 
@@ -6773,30 +6778,40 @@ void AlgebraKart::SetupMinimapViewport()
 
     // Set up orthographic projection for top-down view
     minimapCam_->SetOrthographic(true);
-    minimapCam_->SetOrthoSize(trackBounds_);
+    minimapCam_->SetOrthoSize(minimapZoomLevel_);  // Start with default zoom
     minimapCam_->SetNearClip(1.0f);
     minimapCam_->SetFarClip(5000.0f);
 
+    // Set aspect ratio to maintain square minimap
+    minimapCam_->SetAspectRatio(1.0f);
+
     // Position camera above the track center looking down
-    minimapCamNode_->SetPosition(Vector3(trackCenter_.x_, trackCenter_.y_ + 2000.0f, trackCenter_.z_));
+    minimapCamNode_->SetPosition(Vector3(0.0f, 2000.0f, 0.0f));
     minimapCamNode_->SetRotation(Quaternion(90.0f, 0.0f, 0.0f));
 
-    // Create minimap viewport (viewport 4)
+    // Create minimap viewport
     minimapViewport_ = new Viewport(context_, scene_, minimapCam_);
 
-    // Position minimap in top-right corner
-    int viewportX = graphics->GetWidth() - (int)minimapSize_ - 20;
-    int viewportY = 20;
-    IntRect minimapRect(viewportX, viewportY, viewportX + (int)minimapSize_, viewportY + (int)minimapSize_);
+    // Position minimap in top-right corner with padding
+    int minimapSizePixels = (int)minimapSize_;
+    int viewportX = graphics->GetWidth() - minimapSizePixels - (int)minimapBorderPadding_;
+    int viewportY = (int)minimapBorderPadding_;
+    IntRect minimapRect(viewportX, viewportY, viewportX + minimapSizePixels, viewportY + minimapSizePixels);
     minimapViewport_->SetRect(minimapRect);
 
-    // Set render path for minimap (simpler rendering)
-    minimapViewport_->SetRenderPath(renderer->GetViewport(0)->GetRenderPath());
+    // Create a custom render path for minimap (optional - for better performance)
+    SharedPtr<RenderPath> renderPath = SharedPtr<RenderPath>(new RenderPath());
+    renderPath->Load(GetSubsystem<ResourceCache>()->GetResource<XMLFile>("RenderPaths/Forward.xml"));
+    // Remove unnecessary render passes for minimap
+    renderPath->RemoveCommands("BloomHDR");
+    renderPath->RemoveCommands("Bloom");
+    renderPath->RemoveCommands("FXAA2");
+    minimapViewport_->SetRenderPath(renderPath);
 
-    // Add the viewport
-    renderer->SetViewport(4, minimapViewport_);
+    // Initialize smooth following position
+    minimapTargetPosition_ = Vector3::ZERO;
 
-    URHO3D_LOGINFO("Minimap viewport created");
+    URHO3D_LOGINFO("Enhanced minimap viewport created");
 }
 
 void AlgebraKart::UpdateMinimap(float timeStep)
@@ -6804,15 +6819,162 @@ void AlgebraKart::UpdateMinimap(float timeStep)
     if (!minimapCam_ || !scene_)
         return;
 
-    // Update minimap camera position to follow the action
-    Vector3 centerPos = CalculatePlayersCenterPosition();
-    if (centerPos != Vector3::ZERO)
+    // Find the local player's position
+    Vector3 playerPos = Vector3::ZERO;
+    float playerYaw = 0.0f;
+    bool playerFound = false;
+
+    // Check if we're on server or client
+    if (isServer_)
     {
-        minimapCamNode_->SetPosition(Vector3(centerPos.x_, centerPos.y_ + 2000.0f, centerPos.z_));
+        // Server: Follow the last connected player or a selected AI bot
+        if (camMode_ > 0 && camMode_ <= aiActorMap_.Size())
+        {
+            // Following an AI bot
+            auto* actor = aiActorMap_[camMode_ - 1].Get();
+            if (actor && actor->GetNode())
+            {
+                playerPos = actor->GetNode()->GetWorldPosition();
+                playerYaw = actor->GetNode()->GetRotation().YawAngle();
+                playerFound = true;
+            }
+        }
+        else if (lastConnection_ && actorMap_.Contains(lastConnection_))
+        {
+            // Following the last connected player
+            ClientObj* actor = actorMap_[lastConnection_];
+            if (actor && actor->GetNode())
+            {
+                playerPos = actor->GetNode()->GetWorldPosition();
+                playerYaw = actor->GetNode()->GetRotation().YawAngle();
+                playerFound = true;
+            }
+        }
+    }
+    else
+    {
+        // Client: Follow the local player
+        Network* network = GetSubsystem<Network>();
+        Connection* serverConnection = network->GetServerConnection();
+
+        if (serverConnection)
+        {
+            String actorName = String("actor-") + clientName_;
+            Node* actorNode = scene_->GetChild(actorName);
+
+            if (actorNode)
+            {
+                ClientObj* actor = actorNode->GetDerivedComponent<ClientObj>();
+                if (actor)
+                {
+                    NetworkActor* na = actorNode->GetDerivedComponent<NetworkActor>();
+                    if (na)
+                    {
+                        // Get position from vehicle if in one, otherwise from actor
+                        if (na->onVehicle_ && na->vehicle_)
+                        {
+                            playerPos = na->vehicle_->GetNode()->GetWorldPosition();
+                            playerYaw = na->vehicle_->GetNode()->GetRotation().YawAngle();
+                        }
+                        else
+                        {
+                            playerPos = na->GetNode()->GetWorldPosition();
+                            playerYaw = na->GetNode()->GetRotation().YawAngle();
+                        }
+                        playerFound = true;
+                    }
+                }
+            }
+        }
     }
 
-    // Update player markers
+    if (playerFound)
+    {
+        // Smooth camera following
+        minimapTargetPosition_ = minimapTargetPosition_.Lerp(playerPos, minimapSmoothSpeed_ * timeStep);
+
+        // Update camera position (keep Y high above)
+        Vector3 camPos = minimapTargetPosition_;
+        camPos.y_ = 2000.0f;  // Keep camera high above
+        minimapCamNode_->SetPosition(camPos);
+
+        // Handle minimap rotation
+        if (minimapRotateWithPlayer_)
+        {
+            // Rotate minimap with player heading (car-centric view)
+            Quaternion rotation(90.0f, 0.0f, -playerYaw);
+            minimapCamNode_->SetRotation(rotation);
+        }
+        else
+        {
+            // Keep minimap north-oriented
+            minimapCamNode_->SetRotation(Quaternion(90.0f, 0.0f, 0.0f));
+        }
+
+        // Handle zoom controls (optional - you can bind these to keys)
+        Input* input = GetSubsystem<Input>();
+        if (input->GetKeyDown(KEY_KP_PLUS))
+        {
+            minimapZoomLevel_ = Max(minimapMinZoom_, minimapZoomLevel_ - 10.0f);
+            minimapCam_->SetOrthoSize(minimapZoomLevel_);
+        }
+        if (input->GetKeyDown(KEY_KP_MINUS))
+        {
+            minimapZoomLevel_ = Min(minimapMaxZoom_, minimapZoomLevel_ + 10.0f);
+            minimapCam_->SetOrthoSize(minimapZoomLevel_);
+        }
+    }
+
+    // Update player/bot markers
     UpdateMinimapMarkers();
+
+    // Optional: Draw minimap border and player direction indicator
+    DrawMinimapOverlay();
+}
+
+void AlgebraKart::DrawMinimapOverlay()
+{
+    auto* graphics = GetSubsystem<Graphics>();
+    auto* ui = GetSubsystem<UI>();
+
+    if (!minimapBorderSprite_)
+    {
+        // Create border sprite if it doesn't exist
+        auto* cache = GetSubsystem<ResourceCache>();
+
+        // Create minimap border
+        minimapBorderSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        Texture2D* borderTexture = cache->GetResource<Texture2D>("Textures/hud/MinimapBorder.png");
+        if (borderTexture)
+        {
+            minimapBorderSprite_->SetTexture(borderTexture);
+            minimapBorderSprite_->SetSize((int)minimapSize_ + 4, (int)minimapSize_ + 4);
+            minimapBorderSprite_->SetAlignment(HA_RIGHT, VA_TOP);
+            minimapBorderSprite_->SetPosition(
+                    -((int)minimapBorderPadding_ - 2),
+                    (int)minimapBorderPadding_ - 2
+            );
+            minimapBorderSprite_->SetPriority(100);  // On top
+        }
+
+        // Create direction indicator (shows which way is forward when rotating)
+        if (!minimapRotateWithPlayer_)
+        {
+            minimapDirectionSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+            Texture2D* arrowTexture = cache->GetResource<Texture2D>("Textures/hud/MinimapArrow.png");
+            if (arrowTexture)
+            {
+                minimapDirectionSprite_->SetTexture(arrowTexture);
+                minimapDirectionSprite_->SetSize(32, 32);
+                minimapDirectionSprite_->SetAlignment(HA_RIGHT, VA_TOP);
+                minimapDirectionSprite_->SetPosition(
+                        -(int)(minimapBorderPadding_ + minimapSize_ / 2 - 16),
+                        (int)(minimapBorderPadding_ + 10)
+                );
+                minimapDirectionSprite_->SetPriority(101);
+            }
+        }
+    }
 }
 
 Vector3 AlgebraKart::CalculatePlayersCenterPosition()
@@ -6917,6 +7079,10 @@ void AlgebraKart::CreateMinimapBotMarker(unsigned int botId, const Color& color)
 
 void AlgebraKart::UpdateMinimapMarkers()
 {
+    // Get minimap camera position for visibility culling
+    Vector3 minimapCamPos = minimapCamNode_->GetWorldPosition();
+    float visibleRange = minimapZoomLevel_ * 1.5f;  // Show markers slightly beyond visible area
+
     // Update player markers
     for (auto& pair : minimapPlayerMap_)
     {
@@ -6928,12 +7094,24 @@ void AlgebraKart::UpdateMinimapMarkers()
             ClientObj* actor = actorMap_[connection];
             if (actor && actor->GetNode())
             {
-                Vector3 worldPos = actor->GetNode()->GetPosition();
-                // Keep the marker at a fixed height above the track for visibility
-                marker->SetPosition(Vector3(worldPos.x_, worldPos.y_ + 50.0f, worldPos.z_));
+                Vector3 worldPos = actor->GetNode()->GetWorldPosition();
 
-                // Rotate marker to show direction
-                marker->SetRotation(actor->GetNode()->GetRotation());
+                // Check if marker is within visible range
+                float distance = (worldPos - minimapCamPos).Length();
+                if (distance < visibleRange)
+                {
+                    marker->SetEnabled(true);
+                    marker->SetPosition(Vector3(worldPos.x_, worldPos.y_ + 50.0f, worldPos.z_));
+                    marker->SetRotation(actor->GetNode()->GetRotation());
+
+                    // Scale marker based on distance (optional)
+                    float scale = 1.0f - (distance / visibleRange) * 0.3f;
+                    marker->SetScale(Vector3(20.0f * scale, 20.0f * scale, 20.0f * scale));
+                }
+                else
+                {
+                    marker->SetEnabled(false);  // Hide markers outside visible range
+                }
             }
         }
     }
@@ -6949,9 +7127,24 @@ void AlgebraKart::UpdateMinimapMarkers()
             ClientObj* actor = aiActorMap_[botId];
             if (actor && actor->GetNode())
             {
-                Vector3 worldPos = actor->GetNode()->GetPosition();
-                marker->SetPosition(Vector3(worldPos.x_, worldPos.y_ + 50.0f, worldPos.z_));
-                marker->SetRotation(actor->GetNode()->GetRotation());
+                Vector3 worldPos = actor->GetNode()->GetWorldPosition();
+
+                // Check if marker is within visible range
+                float distance = (worldPos - minimapCamPos).Length();
+                if (distance < visibleRange)
+                {
+                    marker->SetEnabled(true);
+                    marker->SetPosition(Vector3(worldPos.x_, worldPos.y_ + 50.0f, worldPos.z_));
+                    marker->SetRotation(actor->GetNode()->GetRotation());
+
+                    // Scale marker based on distance
+                    float scale = 1.0f - (distance / visibleRange) * 0.3f;
+                    marker->SetScale(Vector3(15.0f * scale, 15.0f * scale, 15.0f * scale));
+                }
+                else
+                {
+                    marker->SetEnabled(false);
+                }
             }
         }
     }

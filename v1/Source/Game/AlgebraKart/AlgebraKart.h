@@ -796,6 +796,17 @@ private:
     float minimapScale_ = 0.1f;   // World to minimap scale
     Vector3 trackCenter_ = Vector3::ZERO;  // Center of the track
     float trackBounds_ = 1000.0f;  // Track boundary size
+    // Enhanced minimap configuration
+    float minimapZoomLevel_ = 150.0f;     // Current zoom level
+    float minimapMinZoom_ = 50.0f;        // Minimum zoom (closest)
+    float minimapMaxZoom_ = 500.0f;       // Maximum zoom (farthest)
+    bool minimapRotateWithPlayer_ = true;  // Should minimap rotate with player
+    float minimapBorderPadding_ = 10.0f;   // Padding from screen edge
+    Vector3 minimapTargetPosition_;        // Target position for smooth following
+    float minimapSmoothSpeed_ = 10.0f;     // Camera smoothing speed
+    // UI overlay elements
+    SharedPtr<Sprite> minimapBorderSprite_;
+    SharedPtr<Sprite> minimapDirectionSprite_;
 
     Vector3 CalculatePlayersCenterPosition();
 
@@ -806,6 +817,7 @@ private:
     void CreateMinimapBotMarker(unsigned int botId, const Color& color);
     void UpdateMinimapMarkers();
     void CalculateTrackBounds();
+    void DrawMinimapOverlay();
 
     void SetCameraMode(CameraMode mode);
     void UpdateCameraFirstPerson(float timeStep);
