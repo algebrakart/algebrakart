@@ -271,7 +271,15 @@ AlgebraKart::AlgebraKart(Context *context) :
         renderer_(nullptr),
         currentYaw_(0.0f),
         targetYaw_(0.0f),
-        yawRotationSpeed_(120.0f)      // degrees per second
+        yawRotationSpeed_(120.0f),      // degrees per second
+        minimapZoomLevel_(200.0f),
+        minimapMinZoom_(50.0f),
+        minimapMaxZoom_(500.0f),
+        minimapSmoothSpeed_(5.0f),
+        minimapSize_(150.0f),
+        minimapBorderPadding_(10.0f),
+        minimapRotateWithPlayer_(false),
+        minimapTargetPosition_(Vector3::ZERO)
 {
 
 
@@ -294,6 +302,7 @@ AlgebraKart::AlgebraKart(Context *context) :
     currentJumpCooldown_ = 0.0f;
     targetMovement_ = Vector3::ZERO;
     currentMovement_ = Vector3::ZERO;
+    SetCameraMode(CAMERA_FREEFLY);
 
 }
 
@@ -6789,15 +6798,20 @@ void AlgebraKart::SetupMinimapViewport()
     minimapCamNode_->SetPosition(Vector3(0.0f, 2000.0f, 0.0f));
     minimapCamNode_->SetRotation(Quaternion(90.0f, 0.0f, 0.0f));
 
-    // Create minimap viewport
+    // Create minimap viewport (viewport 4)
     minimapViewport_ = new Viewport(context_, scene_, minimapCam_);
 
     // Position minimap in top-right corner with padding
     int minimapSizePixels = (int)minimapSize_;
-    int viewportX = graphics->GetWidth() - minimapSizePixels - (int)minimapBorderPadding_;
+    int viewportX = graphics->GetWidth() - minimapSizePixels - (int)minimapBorderPadding_ - 0.0f;
     int viewportY = (int)minimapBorderPadding_;
     IntRect minimapRect(viewportX, viewportY, viewportX + minimapSizePixels, viewportY + minimapSizePixels);
     minimapViewport_->SetRect(minimapRect);
+
+    // Set render path for minimap (simpler rendering)
+    minimapViewport_->SetRenderPath(renderer->GetViewport(0)->GetRenderPath());
+
+
 
     // Create a custom render path for minimap (optional - for better performance)
     SharedPtr<RenderPath> renderPath = SharedPtr<RenderPath>(new RenderPath());
@@ -6807,6 +6821,11 @@ void AlgebraKart::SetupMinimapViewport()
     renderPath->RemoveCommands("Bloom");
     renderPath->RemoveCommands("FXAA2");
     minimapViewport_->SetRenderPath(renderPath);
+
+    // Add the viewport
+    renderer->SetViewport(4, minimapViewport_);
+
+
 
     // Initialize smooth following position
     minimapTargetPosition_ = Vector3::ZERO;
@@ -6822,6 +6841,7 @@ void AlgebraKart::UpdateMinimap(float timeStep)
     // Find the local player's position
     Vector3 playerPos = Vector3::ZERO;
     float playerYaw = 0.0f;
+    float playerSpeed = 0.0f;
     bool playerFound = false;
 
     // Check if we're on server or client
@@ -6875,11 +6895,15 @@ void AlgebraKart::UpdateMinimap(float timeStep)
                         {
                             playerPos = na->vehicle_->GetNode()->GetWorldPosition();
                             playerYaw = na->vehicle_->GetNode()->GetRotation().YawAngle();
+                            playerSpeed = na->vehicle_->GetSpeedKmH();
                         }
                         else
                         {
-                            playerPos = na->GetNode()->GetWorldPosition();
+
+                            playerPos = na->GetBody()->GetPosition();
                             playerYaw = na->GetNode()->GetRotation().YawAngle();
+                            playerSpeed = na->GetBody()->GetLinearVelocity().Length();
+                            //URHO3D_LOGDEBUGF("Player found at position: %s", playerPos.ToString().CString());
                         }
                         playerFound = true;
                     }
@@ -6890,12 +6914,15 @@ void AlgebraKart::UpdateMinimap(float timeStep)
 
     if (playerFound)
     {
+        float dynamicZoom = minimapZoomLevel_ + (playerSpeed * 0.2f); // Zoom out slightly at high speed
+        minimapCam_->SetOrthoSize(Clamp(dynamicZoom, minimapMinZoom_, minimapMaxZoom_));
+
         // Smooth camera following
         minimapTargetPosition_ = minimapTargetPosition_.Lerp(playerPos, minimapSmoothSpeed_ * timeStep);
 
         // Update camera position (keep Y high above)
         Vector3 camPos = minimapTargetPosition_;
-        camPos.y_ = 2000.0f;  // Keep camera high above
+        camPos.y_ = 2800.0f;  // Keep camera high above
         minimapCamNode_->SetPosition(camPos);
 
         // Handle minimap rotation
@@ -6951,7 +6978,7 @@ void AlgebraKart::DrawMinimapOverlay()
             minimapBorderSprite_->SetSize((int)minimapSize_ + 4, (int)minimapSize_ + 4);
             minimapBorderSprite_->SetAlignment(HA_RIGHT, VA_TOP);
             minimapBorderSprite_->SetPosition(
-                    -((int)minimapBorderPadding_ - 2),
+                    -((int)minimapBorderPadding_ - 2 + minimapSize_),
                     (int)minimapBorderPadding_ - 2
             );
             minimapBorderSprite_->SetPriority(100);  // On top
@@ -8575,13 +8602,12 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
     // Create vehicle VERY close to the actor (almost same position)
     //Vector3 vehiclePos = actorPos + Vector3(1.0f, 0.0f, -1.0f);  // Slightly behind and to the right
     //vehicleNode->SetPosition(vehiclePos);
-    //vehicleNode->SetRotation(racingOrientation);  // Same orientation as actor
     //vehicleNode->SetRotation(Quaternion(0.0f, 180.0f, 0.0f));
     Vehicle *vehicle = vehicleNode->CreateComponent<Vehicle>(REPLICATED);
     vehicle->Init(vehicleNode);
     vehicleNode->SetPosition(Vector3(actor->GetBody()->GetPosition())+Vector3(0,-5,-40));
     //vehicle->GetRaycastVehicle()->GetBody()->SetPosition(Vector3(actor->GetPosition())-Vector3::UP*50.0f);
-    vehicleNode->SetRotation(Quaternion(0.0f, Random(0.0f, 0.0f), 0.0f));
+    vehicleNode->SetRotation(Quaternion(0.0f, Random(0.0f, 360.0f), 0.0f));
     // Attach vehicle to actor
     actor->vehicle_ = vehicle;
 
@@ -8737,7 +8763,7 @@ std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
     actor->vehicle_ = vehicle;
 
     // Auto-enter the vehicle for AI bots (they should start in their vehicles)
-    //actor->EnterVehicle();
+    actor->EnterVehicle();
 
     // Create text3d client info node
     Node *plyFltTextNode = vehicleNode->CreateChild("Actor FloatText", REPLICATED);

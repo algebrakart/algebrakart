@@ -462,6 +462,7 @@ void Vehicle::FixedUpdate(float timeStep)
 
         AutoCorrectPitchRoll();
         UpdateDrift();
+        CheckAndRecoverFromPenetration();
 
 
 
@@ -2885,6 +2886,7 @@ void Vehicle::CheckAndRecoverFromPenetration() {
             float restLength = wheel.getSuspensionRestLength();
 
             // Check if wheel is compressed beyond reasonable limits
+
             if (suspensionLength < restLength * 0.1f) {  // Less than 10% of rest length
                 hasPenetration = true;
                 avgPenetrationDepth += (restLength * 0.1f - suspensionLength);
@@ -2903,6 +2905,7 @@ void Vehicle::CheckAndRecoverFromPenetration() {
 
         // Apply recovery impulse
         body_->ApplyImpulse(recoveryForce * GetSubsystem<Time>()->GetTimeStep());
+        URHO3D_LOGINFOF("Recovery force applied: [%f, %f, %f]", recoveryForce.x_, recoveryForce.y_, recoveryForce.z_);
 
         // Temporarily reduce engine force during recovery
         for (int i = 0; i < numWheels_; i++) {

@@ -344,6 +344,7 @@ public:
     SharedPtr<Node> vehicleDirectionArrow_;
     bool showVehicleArrow_;
     float arrowBobTime_;
+    SharedPtr<Camera> activeCam_;
 
     void UsePickup();
     void ApplyRotation(float timeStep);

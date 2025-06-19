@@ -4,6 +4,7 @@
 #include <Urho3D/Graphics/Material.h>
 #include <Urho3D/Graphics/Model.h>
 #include <Urho3D/Graphics/StaticModel.h>
+#include <Urho3D/Graphics/Camera.h>
 #include <Urho3D/Physics/RigidBody.h>
 #include <Urho3D/Physics/CollisionShape.h>
 #include <Urho3D/Resource/ResourceCache.h>
@@ -535,8 +536,6 @@ void NetworkActor::FixedUpdate(float timeStep) {
     DebugDraw();
 
 
-    // Update vehicle direction arrow
-    UpdateVehicleDirectionArrow();
 
     /*
     if (pickupTime_ < 1.0f) {
@@ -589,6 +588,9 @@ void NetworkActor::FixedUpdate(float timeStep) {
 
     // Snaps network actor to vehicle
     if (vehicle_) {
+
+        // Update vehicle direction arrow
+        UpdateVehicleDirectionArrow();
 
         // Set to control if actor on vehicle
         vehicle_->setEnableControls(onVehicle_);
@@ -1077,42 +1079,25 @@ void NetworkActor::CreateVehicleDirectionArrow()
 
     auto* cache = GetSubsystem<ResourceCache>();
 
-    // Create arrow node as child of this actor
-    vehicleDirectionArrow_ = GetNode()->CreateChild("VehicleArrow", LOCAL);
-    vehicleDirectionArrow_->SetPosition(Vector3(0, 8.0f, 2.0f)); // Above and in front of player
+    // Create arrow node as child of scene instead of actor for more control
+    vehicleDirectionArrow_ = GetScene()->CreateChild("VehicleArrow", LOCAL);
+    vehicleDirectionArrow_->SetPosition(GetBody()->GetPosition() + Vector3(0, 8.0f, 0));
 
-    // Create the main arrow shaft
-    auto* arrowShaft = vehicleDirectionArrow_->CreateChild("ArrowShaft", LOCAL);
-    arrowShaft->SetScale(Vector3(1.3f, 1.3f, 4.0f)); // Thin and long
+    // Create a billboard set for the arrow
+    auto* billboardSet = vehicleDirectionArrow_->CreateComponent<BillboardSet>();
+    billboardSet->SetNumBillboards(1);
+    billboardSet->SetMaterial(cache->GetResource<Material>("Materials/ArrowMaterial.xml"));
+    billboardSet->SetSorted(true);
 
-    auto* shaftModel = arrowShaft->CreateComponent<StaticModel>();
-    shaftModel->SetModel(cache->GetResource<Model>("Models/Box.mdl"));
+    // Configure the billboard
+    Billboard* billboard = billboardSet->GetBillboard(0);
+    billboard->position_ = Vector3::ZERO;
+    billboard->size_ = Vector2(4.0f, 4.0f);
+    billboard->enabled_ = true;
+    billboard->color_ = Color::WHITE;
 
-    // Create arrow head (tip)
-    auto* arrowHead = vehicleDirectionArrow_->CreateChild("ArrowHead", LOCAL);
-    arrowHead->SetPosition(Vector3(0, 0, 4.2f)); // At the front of shaft
-    arrowHead->SetScale(Vector3(4.8f, 4.8f, 4.8f));
-    arrowHead->SetRotation(Quaternion(90.0f, Vector3::RIGHT));
-
-    auto* headModel = arrowHead->CreateComponent<StaticModel>();
-    headModel->SetModel(cache->GetResource<Model>("Models/Pyramid.mdl"));
-    if (!headModel->GetModel()) {
-        // Fallback to box if pyramid model doesn't exist
-        headModel->SetModel(cache->GetResource<Model>("Models/Box.mdl"));
-        arrowHead->SetScale(Vector3(0.6f, 0.6f, 0.6f));
-    }
-
-    // Use existing material approach (simpler and more compatible)
-    auto* arrowMaterial = cache->GetResource<Material>("Materials/VColUnlit.xml");
-    if (!arrowMaterial) {
-        // Fallback to a basic material if VColUnlit doesn't exist
-        arrowMaterial = cache->GetResource<Material>("Materials/DefaultGrey.xml");
-    }
-
-    if (arrowMaterial) {
-        shaftModel->SetMaterial(arrowMaterial);
-        headModel->SetMaterial(arrowMaterial);
-    }
+    // Commit changes
+    billboardSet->Commit();
 
     // Initially hidden
     vehicleDirectionArrow_->SetEnabled(false);
@@ -1141,9 +1126,8 @@ void NetworkActor::UpdateVehicleDirectionArrow()
         Vector3 vehiclePos = vehicle_->GetRaycastVehicle()->GetBody()->GetPosition();
         Vector3 direction = (vehiclePos - playerPos);
         float distance = direction.Length();
-        direction.Normalize();
 
-        // Don't show arrow if vehicle is very close (within 5 units)
+        // Don't show arrow if vehicle is very close
         if (distance < 5.0f)
         {
             vehicleDirectionArrow_->SetEnabled(false);
@@ -1151,30 +1135,74 @@ void NetworkActor::UpdateVehicleDirectionArrow()
             return;
         }
 
-        // Position arrow relative to player, but in world space direction
-        float arrowDistance = Clamp(distance * 0.2f, 3.0f, 8.0f);
+        if (shouldShow != showVehicleArrow_)
+        {
+            vehicleDirectionArrow_->SetEnabled(shouldShow);
+            showVehicleArrow_ = shouldShow;
+        }
 
-        // Add bobbing animation
-        float timeStep = GetSubsystem<Time>()->GetTimeStep();
-        arrowBobTime_ += timeStep * 4.0f; // Speed of bobbing
-        float bob = Sin(arrowBobTime_) * 0.5f;
+            // Always update arrow position to follow player
+            float timeStep = GetSubsystem<Time>()->GetTimeStep();
+            arrowBobTime_ += timeStep * 4.0f;
+            float bob = Sin(arrowBobTime_) * 0.8f;
 
-        Vector3 arrowPos = Vector3(0, 4.0f + bob, arrowDistance);
-        vehicleDirectionArrow_->SetPosition(arrowPos);
+            // Since arrow is now a scene child, just set its position directly
+            Vector3 arrowPos = playerPos + Vector3(0, 8.0f + bob, 0);
+            vehicleDirectionArrow_->SetPosition(arrowPos);
 
-        // Make arrow point toward vehicle
-        Quaternion lookRotation;
-        lookRotation.FromLookRotation(direction, Vector3::UP);
-        vehicleDirectionArrow_->SetRotation(lookRotation);
+            // Get camera for billboard calculations
+        Camera* camera = nullptr;
+        Node* cameraNode = GetScene()->GetChild("Camera", true);
+        if (cameraNode)
+            camera = cameraNode->GetComponent<Camera>();
 
-        // Scale arrow based on distance - bigger when vehicle is further
-        float baseScale = Clamp(distance * 0.05f, 0.8f, 2.0f);
+        if (camera)
+        {
+            // Calculate rotation to point toward vehicle
+            // Project direction onto horizontal plane (XZ plane)
+            Vector3 horizontalDirection = Vector3(direction.x_, 0, direction.z_);
+            horizontalDirection.Normalize();
 
-        // Add pulsing effect by scaling
-        float pulse = 0.9f + 0.1f * Sin(arrowBobTime_ * 3.0f);
-        Vector3 finalScale = Vector3(baseScale * pulse, baseScale * pulse, baseScale * pulse);
-        vehicleDirectionArrow_->SetScale(finalScale);
+            // Get camera's right and forward vectors
+            Vector3 cameraForward = camera->GetNode()->GetDirection();
+            Vector3 cameraRight = camera->GetNode()->GetRight();
+
+            // Project camera vectors onto horizontal plane
+            Vector3 camForwardFlat = Vector3(cameraForward.x_, 0, cameraForward.z_).Normalized();
+            Vector3 camRightFlat = Vector3(cameraRight.x_, 0, cameraRight.z_).Normalized();
+
+            // Calculate angle relative to camera
+            float dotForward = horizontalDirection.DotProduct(camForwardFlat);
+            float dotRight = horizontalDirection.DotProduct(camRightFlat);
+            float angle = atan2(dotRight, dotForward) * M_RADTODEG;
+
+            // Update billboard
+            auto* billboardSet = vehicleDirectionArrow_->GetComponent<BillboardSet>();
+            if (billboardSet)
+            {
+                Billboard* billboard = billboardSet->GetBillboard(0);
+
+                // Scale based on distance
+                float baseSize = Clamp(distance * 0.02f, 2.0f, 6.0f);
+                float pulse = 0.9f + 0.1f * Sin(arrowBobTime_ * 3.0f);
+                billboard->size_ = Vector2(baseSize * pulse, baseSize * pulse);
+
+                // Rotate the billboard to point toward vehicle
+                billboard->rotation_ = angle;
+
+                // Color based on distance (closer = more urgent)
+                float urgency = Clamp((20.0f - distance) / 20.0f, 0.0f, 1.0f);
+                billboard->color_ = Color(1.0f, 1.0f - urgency * 0.5f, 1.0f - urgency * 0.8f);
+
+                billboardSet->Commit();
+            }
+        }
+        URHO3D_LOGDEBUGF("Updating arrow: playerPos=[%f,%f,%f], vehiclePos=[%f,%f,%f]",
+                         playerPos.x_, playerPos.y_, playerPos.z_,
+                         vehiclePos.x_, vehiclePos.y_, vehiclePos.z_);
+
     }
+
 }
 
 void NetworkActor::HideVehicleDirectionArrow()
