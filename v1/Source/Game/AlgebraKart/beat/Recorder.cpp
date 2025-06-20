@@ -64,6 +64,12 @@ void Recorder::SetPlaySource(SoundSource3D *playSource) {
 void Recorder::Capture(Beat * channel1_, Beat * channel2_, Beat * channel3_, float currTime_,
                        float beatTime_, float barTime_) {
 
+    // Add buffer size limit
+    /*if (data_.Size() > MAX_BUFFER_SIZE) {
+        // Remove oldest entries
+        data_.Erase(data_.Begin(), data_.Begin() + (data_.Size() - MAX_BUFFER_SIZE));
+    }*/
+
     BeatTime *t = new BeatTime(currTime_, beatTime_, barTime_);
     // Create new buffer block
     SharedPtr<BufferData> bufData = storeContext_->CreateObject<BufferData>();

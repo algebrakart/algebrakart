@@ -269,6 +269,7 @@ AlgebraKart::AlgebraKart(Context *context) :
         playDrumMachine_(false),
         capturer_(nullptr),
         renderer_(nullptr),
+        audioProcessingEnabled_(true),
         currentYaw_(0.0f),
         targetYaw_(0.0f),
         yawRotationSpeed_(120.0f),      // degrees per second
@@ -3623,67 +3624,7 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
             /* NEXT QUEUE
             RadioTrack nextTrack = radioTrackInfoQueue_[nextRadioTrack_];
             */
-            if (_radioStream->GetSound()) {
-                // Process stream data
-                if (_radioStream->GetSound()->GetData()) {
-                    SharedArrayPtr stream = SharedArrayPtr(_radioStream->GetSound()->GetData());
-                    int streamSize = _radioStream->GetSound()->GetDataSize();
-                    capturer_->getBuffer()->Resize(streamSize);
-                    capturer_->data->readCount = 0;
-                    float t = _radioStream->GetTimePosition();
-
-                    for (size_t i = 0; i < streamSize; i++) {
-
-                        // bug: streamSize is longer than available?
-                        if (stream.Get()[(int) i]) {
-                            float v = stream.Get()[(int) i] / 128.0f;
-                            capturer_->getBuffer()->At(i) = v;
-                            capturer_->data->readCount++;
-                            //URHO3D_LOGDEBUGF("readCount=%d,v=%f",capturer_->data->readCount, v);
-                        }
-                    }
-
-                    //URHO3D_LOGDEBUGF("readCount=%d",capturer_->data->readCount);
-
-                    if (audioSpectrumOptions_.inputSize < capturer_->bufferReadCount()) {
-                        // Update analyzer
-                        analyzer_->update(capturer_->getBuffer(), capturer_->bufferHeadIndex(),
-                                          audioSpectrumOptions_.bottomLevel,
-                                          audioSpectrumOptions_.topLevel, audioSpectrumOptions_.minFreq,
-                                          audioSpectrumOptions_.maxFreq, audioSpectrumOptions_.axisLogBase);
-                        //String renderStr = renderer_->draw(analyzer_->spectrum(), audioSpectrumOptions_.windowSize, audioSpectrumOptions_.smoothing, true);
-                        //  URHO3D_LOGDEBUGF("renderStr -> %s", renderStr.CString());
-                    }
-
-                    // Draw wave
-                    /*DrawWave(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_,
-                             _radioStream->GetTimePosition(), Color(75.0f / 255.0f, 247.0f / 255.0f, 48.0f / 255.0f));*/
-                    // DrawFFT(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_, Color(247.0f/255.0f,48.0f/255.0f,148.0f/255.0f));
-                }
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            ProcessAudioStream();
         }
         else
             if (radioText_[k])
@@ -3831,6 +3772,46 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
 
     // Call our render update
     HandleRenderUpdate(eventType, eventData);
+}
+
+void AlgebraKart::ProcessAudioStream() {
+    MutexLock lock(audioMutex_);
+    if (!audioProcessingEnabled_ || !_radioStream->GetSound()->GetData()) return;
+    
+    SharedArrayPtr stream = SharedArrayPtr(_radioStream->GetSound()->GetData());
+    int streamSize = _radioStream->GetSound()->GetDataSize();
+    capturer_->getBuffer()->Resize(streamSize);
+    capturer_->data->readCount = 0;
+    float t = _radioStream->GetTimePosition();
+
+    for (size_t i = 0; i < streamSize; i++) {
+
+        // bug: streamSize is longer than available?
+        if (stream.Get()[(int) i]) {
+            float v = stream.Get()[(int) i] / 128.0f;
+            capturer_->getBuffer()->At(i) = v;
+            capturer_->data->readCount++;
+            //URHO3D_LOGDEBUGF("readCount=%d,v=%f",capturer_->data->readCount, v);
+        }
+    }
+
+    //URHO3D_LOGDEBUGF("readCount=%d",capturer_->data->readCount);
+
+    if (audioSpectrumOptions_.inputSize < capturer_->bufferReadCount()) {
+        // Update analyzer
+        analyzer_->update(capturer_->getBuffer(), capturer_->bufferHeadIndex(),
+                          audioSpectrumOptions_.bottomLevel,
+                          audioSpectrumOptions_.topLevel, audioSpectrumOptions_.minFreq,
+                          audioSpectrumOptions_.maxFreq, audioSpectrumOptions_.axisLogBase);
+        //String renderStr = renderer_->draw(analyzer_->spectrum(), audioSpectrumOptions_.windowSize, audioSpectrumOptions_.smoothing, true);
+        //  URHO3D_LOGDEBUGF("renderStr -> %s", renderStr.CString());
+    }
+
+    // Draw wave
+    /*DrawWave(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_,
+             _radioStream->GetTimePosition(), Color(75.0f / 255.0f, 247.0f / 255.0f, 48.0f / 255.0f));*/
+    // DrawFFT(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_, Color(247.0f/255.0f,48.0f/255.0f,148.0f/255.0f));
+
 }
 
 void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) {
@@ -4865,30 +4846,87 @@ void AlgebraKart::PlayDrumMachine() {
 
 void AlgebraKart::PlayMusic(const String &soundName) {
     // CLIENT CODE
-
-    // Play music on client
-
     auto *cache = GetSubsystem<ResourceCache>();
 
-    // Store source for pulling track information
-    _radioStream = scene_->CreateComponent<SoundSource3D>(LOCAL);
-    _radioStream->SetNearDistance(1);  // distance up to where the volume is 100%
-    _radioStream->SetFarDistance(6000);  // distance from where the volume is at 0%
+    // Safety: Clean up previous stream if it exists
+    if (_radioStream && _radioStream->GetNode()) {
+        _radioStream->Stop();
+        _radioStream = nullptr;
+    }
+
+    // Create new stream with error checking
+    Node* audioNode = scene_->CreateChild("RadioStreamNode", LOCAL);
+    if (!audioNode) {
+        URHO3D_LOGERROR("Failed to create audio node for radio stream");
+        return;
+    }
+
+    _radioStream = audioNode->CreateComponent<SoundSource3D>(LOCAL);
+    if (!_radioStream) {
+        URHO3D_LOGERROR("Failed to create SoundSource3D component");
+        audioNode->Remove();
+        return;
+    }
+
+    // Configure audio source
+    _radioStream->SetNearDistance(1);
+    _radioStream->SetFarDistance(6000);
     _radioStream->SetSoundType(SOUND_MUSIC);
 
-    // Store track
+    // Load sound with error checking
+    auto *sound = cache->GetResource<Sound>(soundName);
+    if (!sound) {
+        URHO3D_LOGERROR("Failed to load sound: " + soundName);
+        audioNode->Remove();
+        _radioStream = nullptr;
+        return;
+    }
+
+    // Verify sound data before playing
+    if (!sound->GetData() || sound->GetDataSize() == 0) {
+        URHO3D_LOGERROR("Sound has no data: " + soundName);
+        audioNode->Remove();
+        _radioStream = nullptr;
+        return;
+    }
+
+    // Store track and play
     radioTrackQueue_.Push(_radioStream);
 
+    _radioStream->SetAutoRemoveMode(REMOVE_COMPONENT);
+    _radioStream->Play(sound);
+    _radioStream->SetGain(0.8f);
 
-    // Play latest track
-    auto *sound = cache->GetResource<Sound>(soundName);
-    if (sound != nullptr) {
-        _radioStream->SetAutoRemoveMode(REMOVE_COMPONENT);
-        _radioStream->Play(sound);
-        _radioStream->SetGain(0.8f);
-        float t = _radioStream->GetTimePosition();
-        int dataSize = _radioStream->GetSound()->GetDataSize();
-        SharedArrayPtr<signed char> s = _radioStream->GetSound()->GetData();
+    URHO3D_LOGINFO("Successfully started playing: " + soundName);
+}
+
+void AlgebraKart::CleanupAudioResources() {
+    // Stop any playing streams
+    if (_radioStream) {
+        _radioStream->Stop();
+        if (_radioStream->GetNode()) {
+            _radioStream->GetNode()->Remove();
+        }
+        _radioStream = nullptr;
+    }
+
+    // Clear queue
+    radioTrackQueue_.Clear();
+
+    // Clean up audio analyzer components
+    if (analyzer_) {
+        delete analyzer_;
+        analyzer_ = nullptr;
+    }
+
+    if (capturer_) {
+        delete capturer_;
+        capturer_ = nullptr;
+    }
+
+    if (renderer_) {
+        delete renderer_;
+        renderer_ = nullptr;
     }
 }
 
@@ -8503,6 +8541,11 @@ void AlgebraKart::DestroyPlayer(Connection *connection) {
 
     ClientObj *actor = actorMap_[connection];
     if (actor) {
+        // Remove from physics world
+        if (actor->GetComponent<RigidBody>()) {
+            scene_->GetComponent<PhysicsWorld>()->RemoveRigidBody(actor->GetComponent<RigidBody>());
+        }
+        actor->CleanupConnection(connection);
         actor->SetEnabled(false);
         actor->Remove();
     }
@@ -8528,6 +8571,11 @@ void AlgebraKart::DestroyPlayer(Connection *connection) {
     Server *server = GetSubsystem<Server>();
     // Send refreshed login list to clients
     server->SendLoginListRefreshToClients();
+
+    // Cleanup any remaining references
+    if (welcomeMsgMap_.Contains(connection)) {
+        welcomeMsgMap_.Erase(connection);
+    }
 }
 
 // Spawn Player (NetworkActor on Server for Client)
@@ -9813,7 +9861,6 @@ void AlgebraKart::HandleClientDisconnected(StringHash eventType, VariantMap &eve
 
     // Clear client on disconnect
     DestroyPlayer(client);
-
 }
 
 
@@ -10059,5 +10106,21 @@ void AlgebraKart::ArrangePlayersInFormation() {
                 }
             }
         }
+    }
+}
+
+void AlgebraKart::MonitorMemoryUsage(float timeStep) {
+    static float memoryCheckTimer = 0.0f;
+    static float lastMemoryUsage = 0.0f;
+
+    memoryCheckTimer += timeStep;
+    if (memoryCheckTimer > 60.0f) { // Check every minute
+        // Log memory usage, connection count, agent count
+        URHO3D_LOGINFOF("Memory check - Active connections: %d, AI agents: %d, Scene nodes: %d",
+                        GetSubsystem<Network>()->GetClientConnections().Size(),
+                        EvolutionManager::getInstance()->getAgents().size(),
+                        scene_->GetNumChildren(true));
+
+        memoryCheckTimer = 0.0f;
     }
 }

@@ -883,6 +883,9 @@ void Vehicle::Init(Node* node) {
         }
 
 
+        // Force Kart
+        carType = CAR_TYPE_KART; // Kart
+
         v3BoxExtents.x_ *= 1.3f;
         v3BoxExtents.y_ *= 1.01f;
         v3BoxExtents.z_ *= 3.6f;

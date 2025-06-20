@@ -808,7 +808,11 @@ private:
     SharedPtr<Sprite> minimapBorderSprite_;
     SharedPtr<Sprite> minimapDirectionSprite_;
 
-    Vector3 CalculatePlayersCenterPosition();
+    // Add thread safety for audio
+    mutable Mutex audioMutex_;
+    bool audioProcessingEnabled_;
+
+        Vector3 CalculatePlayersCenterPosition();
 
     // Minimap methods
     void SetupMinimapViewport();
@@ -839,7 +843,13 @@ private:
     void UpdateVUMeterSmooth(float timeStep);
 
     float CalculateChannelLevel(int channel, const Vector<float> &spectrum);
-};
+    void MonitorMemoryUsage(float timeStep);
+
+    void CleanupAudioResources();
+    void ProcessAudioStream();
+
+
+    };
 
 // Safety filter censored words
-String swearWords[] =  { "fuck", "shit", "cunt", "bastard", "asshole", "cock", "dick" };
+String swearWords[] =  { "falcon" };
