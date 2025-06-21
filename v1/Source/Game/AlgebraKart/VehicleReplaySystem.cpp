@@ -53,6 +53,9 @@ VehicleReplaySystem::VehicleReplaySystem(Context* context) :
         frameTime_(0.0f),
         cameraTransitionTime_(0.0f)
 {
+    slowMotionFactor_ = 0.2f; // 20% speed for dramatic crashes
+    normalSpeedFactor_ = 1.0f;
+    currentTimeDilation_ = 1.0f;
 }
 
 VehicleReplaySystem::~VehicleReplaySystem() {

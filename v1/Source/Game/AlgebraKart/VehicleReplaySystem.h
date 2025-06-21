@@ -238,6 +238,10 @@ private:
 
     /// Event queue for multiple simultaneous events
     Vector<ReplayEvent> eventQueue_;
+
+    float slowMotionFactor_;
+    float normalSpeedFactor_;
+    float currentTimeDilation_;
 };
 
 /// Replay UI component for showing replay status

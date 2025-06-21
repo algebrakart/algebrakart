@@ -272,7 +272,13 @@ private:
     void HandleNetworkUpdateSent(StringHash eventType, VariantMap& eventData);
     void HandleUpdateParticlePool(float timeStep);
 
-    // Async loading functions
+    // Handle collision replay
+    void HandleCollisionReplay(StringHash eventType, VariantMap &eventData);
+    // Helpers
+    float GetMaxCollisionImpulse(VariantMap& eventData);
+    Vehicle* FindVehicleFromNode(Node* node);
+
+        // Async loading functions
     void NodeRegisterLoadTriggers(Node *node);
     void HandleLoadTriggerEntered(StringHash eventType, VariantMap& eventData);
     void HandleLoadProgress(StringHash eventType, VariantMap& eventData);

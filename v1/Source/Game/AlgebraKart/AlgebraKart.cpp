@@ -473,6 +473,10 @@ void AlgebraKart::Start() {
         replayUI_ = new ReplayUI(context_);
         replayUI_->Initialize();
 
+        // Subscribe to collision events for immediate replay triggers
+        SubscribeToEvent(E_NODECOLLISION, URHO3D_HANDLER(AlgebraKart, HandleCollisionReplay));
+
+
         URHO3D_LOGINFO("Replay system initialized");
 
         // Set initial state
@@ -2207,6 +2211,53 @@ void AlgebraKart::HandleCollisionBegin(StringHash eventType, VariantMap &eventDa
 }
 
 
+void AlgebraKart::HandleCollisionReplay(StringHash eventType, VariantMap &eventData) {
+    using namespace NodeCollision;
+
+    // Get collision information
+    float maxImpulse = GetMaxCollisionImpulse(eventData);
+
+    // Only trigger replay for significant collisions
+    if (maxImpulse > 15.0f) {
+        Node* nodeA = static_cast<Node*>(eventData[P_OTHERNODE].GetPtr());
+
+        // Try to find associated vehicle
+        Vehicle* vehicle = FindVehicleFromNode(nodeA);
+        if (vehicle && replaySystem_) {
+            replaySystem_->TriggerReplay(vehicle, REPLAY_HIGH_SPEED_COLLISION);
+            URHO3D_LOGINFOF("Collision replay triggered for vehicle: %s (impulse: %.2f)",
+                            vehicle->GetNode()->GetName().CString(), maxImpulse);
+        }
+    }
+}
+
+float AlgebraKart::GetMaxCollisionImpulse(VariantMap& eventData) {
+    using namespace NodeCollision;
+    MemoryBuffer contacts(eventData[P_CONTACTS].GetBuffer());
+    float maxImpulse = 0.0f;
+
+    while (!contacts.IsEof()) {
+        contacts.ReadVector3(); // position
+        contacts.ReadVector3(); // normal
+        contacts.ReadFloat();   // distance
+        float impulse = contacts.ReadFloat();
+        maxImpulse = Max(maxImpulse, impulse);
+    }
+
+    return maxImpulse;
+}
+
+Vehicle* AlgebraKart::FindVehicleFromNode(Node* node) {
+    // Search through the node hierarchy to find associated vehicle
+    while (node) {
+        Vehicle* vehicle = node->GetComponent<Vehicle>();
+        if (vehicle) return vehicle;
+
+        node = node->GetParent();
+    }
+    return nullptr;
+}
+
 void AlgebraKart::SetParticleEmitter(int hitId, float contactX, float contactY, int type, float timeStep) {
     // CREATE
     auto *cache = GetSubsystem<ResourceCache>();
@@ -3790,6 +3841,19 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
         scene_->SaveXML(saveFile);
     }
 
+    // Update replay system
+    if (replaySystem_ && replaySystemEnabled_) {
+        replaySystem_->Update(timeStep);
+
+        // Update replay UI if playing
+        if (replaySystem_->IsPlayingReplay()) {
+            // Handle replay UI updates here if needed
+            replayUI_->SetVisible(true);
+        } else {
+            replayUI_->SetVisible(false);
+        }
+    }
+
     // Call our render update
     HandleRenderUpdate(eventType, eventData);
 }
@@ -3831,7 +3895,6 @@ void AlgebraKart::ProcessAudioStream() {
     /*DrawWave(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_,
              _radioStream->GetTimePosition(), Color(75.0f / 255.0f, 247.0f / 255.0f, 48.0f / 255.0f));*/
     // DrawFFT(Vector2(0, radioSpectrumHeight_ / 2), radioSpectrumWidth_, radioSpectrumHeight_, Color(247.0f/255.0f,48.0f/255.0f,148.0f/255.0f));
-
 }
 
 void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) {
@@ -8632,7 +8695,6 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
     SharedPtr<Recorder> serverRec_ = server->GetRecorder();
     actor->GetSequencer()->SetServerRec(serverRec_);
 
-
     //actor->SetClientInfo(name, Random(1,100), Vector3(Random(-400.0f,400.0f),Random(20.0f,80.0f),Random(-400.0f,400.0f)));
 
     auto* body = networkActorNode->GetComponent<RigidBody>(true);
@@ -8678,6 +8740,13 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
     vehicleNode->SetRotation(Quaternion(0.0f, Random(0.0f, 360.0f), 0.0f));
     // Attach vehicle to actor
     actor->vehicle_ = vehicle;
+
+    // After creating the vehicle, start recording it
+    if (replaySystem_ && vehicle) {
+        replaySystem_->StartRecording(vehicle);
+        URHO3D_LOGINFOF("Started replay recording for player vehicle: %s",
+                        vehicle->GetNode()->GetName().CString());
+    }
 
     // Create text3d client info node
     Node *plyFltTextNode = vehicleNode->CreateChild("Actor FloatText", REPLICATED);
@@ -8829,6 +8898,13 @@ std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
     vehicleNode->SetRotation(racingOrientation);
     // Attach vehicle to actor
     actor->vehicle_ = vehicle;
+
+    // After creating the AI vehicle, start recording it
+    if (replaySystem_ && actor && actor->vehicle_) {
+        replaySystem_->StartRecording(actor->vehicle_);
+        URHO3D_LOGINFOF("Started replay recording for AI vehicle: %s",
+                        actor->vehicle_->GetNode()->GetName().CString());
+    }
 
     // Auto-enter the vehicle for AI bots (they should start in their vehicles)
     actor->EnterVehicle();
@@ -9592,7 +9668,6 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
 
 }
 
-// Add this implementation for HandleKeyDown (or modify existing one)
 void AlgebraKart::HandleKeyDown(StringHash eventType, VariantMap& eventData) {
     using namespace KeyDown;
     int key = eventData[P_KEY].GetInt();
@@ -9622,6 +9697,44 @@ void AlgebraKart::HandleKeyDown(StringHash eventType, VariantMap& eventData) {
     }
     else if (key == KEY_F1) {
         drawDebug_ = !drawDebug_;
+    }
+
+    // Replay system controls
+    if (replaySystem_) {
+        if (key == KEY_R && GetSubsystem<Input>()->GetKeyDown(KEY_CTRL)) {
+            // Ctrl+R: Manually trigger replay for local player
+            NetworkActor* localActor = GetLocalNetworkActor();
+            if (localActor && localActor->vehicle_) {
+                replaySystem_->TriggerReplay(localActor->vehicle_, REPLAY_MANUAL);
+                URHO3D_LOGINFO("Manual replay triggered");
+            }
+        }
+        else if (key == KEY_ESCAPE && replaySystem_->IsPlayingReplay()) {
+            // ESC: Skip current replay
+            replaySystem_->SkipReplay();
+            URHO3D_LOGINFO("Replay skipped");
+        }
+        else if (key == KEY_F9) {
+            // F9: Toggle replay system on/off
+            replaySystemEnabled_ = !replaySystemEnabled_;
+            URHO3D_LOGINFOF("Replay system %s", replaySystemEnabled_ ? "enabled" : "disabled");
+        }
+
+        if (key == KEY_F10) {
+            // F10: Trigger cinematic replay of last 10 seconds
+            NetworkActor* actor = GetLocalNetworkActor();
+            if (actor && actor->vehicle_) {
+                replaySystem_->SetRecordingDuration(10.0f);
+                replaySystem_->TriggerReplay(actor->vehicle_, REPLAY_MANUAL);
+            }
+        }
+        else if (key == KEY_F11) {
+            // F11: Cycle through replay camera modes during playback
+            if (replaySystem_->IsPlayingReplay()) {
+                // Implementation for cycling camera modes during replay
+                URHO3D_LOGINFO("Cycling replay camera mode");
+            }
+        }
     }
 }
 
