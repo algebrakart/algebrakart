@@ -133,9 +133,7 @@ Vehicle::Vehicle(Context* context)
     rollInfluence_ = 0.12f;
     emittersCreated = false;
 
-    // Working 110000
-    // Unstable 180000 -> will work on stabilization
-    m_fmaxEngineForce = 110000.0f;//950.f;
+    m_fmaxEngineForce = 560000.0f;//950.f;
   //  m_fmaxEngineForce = 4200.0f;//5400.0f;//950.f;
 
     m_fmaxBreakingForce = 800.f;
@@ -2405,9 +2403,9 @@ void Vehicle::ApplyDownwardForce()
         float speedKmh = raycastVehicle_->GetSpeedKm();
 
         // Much more conservative force
-        float baseForce = 300.0f;  // Greatly reduced
+        float baseForce = 800.0f;  // Greatly reduced
         float speedMultiplier = speedKmh * 2.0f;  // Gentle speed scaling
-        float totalForce = Clamp(baseForce + speedMultiplier, 100.0f, 800.0f);
+        float totalForce = Clamp(baseForce + speedMultiplier, 100.0f, 1800.0f);
 
         // Apply force only at center of mass
         Vector3 centerOfMass = body_->GetCenterOfMass();
@@ -2425,12 +2423,12 @@ void Vehicle::ApplyDownwardForce()
 
     if (needsFrontDownforce) {
         // Calculate front downforce based on speed and pitch
-        float baseForce = 900.0f;
+        float baseForce = 4000.0f;
         float speedMultiplier = (speedKmh - 30.0f) / 100.0f;  // Scale with speed above 30 km/h
         float pitchMultiplier = frontLifting ? (abs(pitchDegrees) / 15.0f) : 1.0f;
 
         float frontDownforce = baseForce * speedMultiplier * pitchMultiplier;
-        frontDownforce = Clamp(frontDownforce, 0.0f, 4000.0f);
+        frontDownforce = Clamp(frontDownforce, 0.0f, 12000.0f);
 
         // Apply downforce at front of vehicle
         Vector3 frontPosition = node_->GetPosition() + forward * (wheelSpace_ * 0.5f);
