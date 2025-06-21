@@ -269,7 +269,7 @@ AlgebraKart::AlgebraKart(Context *context) :
         playDrumMachine_(false),
         capturer_(nullptr),
         renderer_(nullptr),
-        audioProcessingEnabled_(true),
+        audioProcessingEnabled_(false),
         currentYaw_(0.0f),
         targetYaw_(0.0f),
         yawRotationSpeed_(120.0f),      // degrees per second
@@ -1157,8 +1157,8 @@ void AlgebraKart::HandleAI(float timeStep) {
                     if (EvolutionManager::getInstance()->getNetworkActors()[i]) {
 
                         EvolutionManager::getInstance()->getNetworkActors()[i]->Kill();
-                        EvolutionManager::getInstance()->getNetworkActors()[i] = nullptr;
                         scene_->MarkNetworkUpdate();
+                        EvolutionManager::getInstance()->getNetworkActors()[i] = nullptr;
                     }
                 }
             }
@@ -2853,6 +2853,9 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
     // Update loading screen animation
     UpdateLoadingScreen(timeStep);
 
+    // 60 second memory monitor
+    MonitorMemoryUsage(timeStep);
+
     // Skip on loading
     if (levelLoading_) return;
     if (clientLevelLoading_) return;
@@ -3777,7 +3780,7 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
 void AlgebraKart::ProcessAudioStream() {
     MutexLock lock(audioMutex_);
     if (!audioProcessingEnabled_ || !_radioStream->GetSound()->GetData()) return;
-    
+
     SharedArrayPtr stream = SharedArrayPtr(_radioStream->GetSound()->GetData());
     int streamSize = _radioStream->GetSound()->GetDataSize();
     capturer_->getBuffer()->Resize(streamSize);
