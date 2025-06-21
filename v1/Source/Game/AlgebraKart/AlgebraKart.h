@@ -40,6 +40,7 @@
 #include <AlgebraKart/network/csp/CSP_messages.h>
 #include "Game.h"
 #include "AlgebraKart/network/Vehicle.h"
+#include "VehicleReplaySystem.h"
 #include <AlgebraKart/PixelImage.h>
 
 
@@ -812,7 +813,12 @@ private:
     mutable Mutex audioMutex_;
     bool audioProcessingEnabled_;
 
-        Vector3 CalculatePlayersCenterPosition();
+    // Vehicle Replay System
+    SharedPtr<VehicleReplaySystem> replaySystem_;
+    SharedPtr<ReplayUI> replayUI_;
+    bool replaySystemEnabled_;
+
+    Vector3 CalculatePlayersCenterPosition();
 
     // Minimap methods
     void SetupMinimapViewport();

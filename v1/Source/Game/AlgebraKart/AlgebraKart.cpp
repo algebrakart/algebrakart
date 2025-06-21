@@ -280,7 +280,8 @@ AlgebraKart::AlgebraKart(Context *context) :
         minimapSize_(150.0f),
         minimapBorderPadding_(10.0f),
         minimapRotateWithPlayer_(false),
-        minimapTargetPosition_(Vector3::ZERO)
+        minimapTargetPosition_(Vector3::ZERO),
+        replaySystemEnabled_(true)
 {
 
 
@@ -457,6 +458,22 @@ void AlgebraKart::Start() {
         UpdateLoadingProgress(0.25f, "Preparing event system...");
         // Subscribe to all events
         SubscribeToEvents();
+
+        UpdateLoadingProgress(0.25f, "Initializing camera replay system...");
+        // Initialize replay system after scene creation
+        replaySystem_ = new VehicleReplaySystem(context_);
+        replaySystem_->Initialize(scene_, clientCam_);
+
+        // Configure replay settings
+        replaySystem_->SetAutoReplayEnabled(true);
+        replaySystem_->SetRecordingDuration(6.0f);  // Record 6 seconds before event
+        replaySystem_->SetPlaybackSpeed(0.4f);      // 40% speed for dramatic effect
+
+        // Initialize replay UI
+        replayUI_ = new ReplayUI(context_);
+        replayUI_->Initialize();
+
+        URHO3D_LOGINFO("Replay system initialized");
 
         // Set initial state
         UpdateUIState(false);
