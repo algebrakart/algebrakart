@@ -278,6 +278,9 @@ public:
 
     bool doJump_;
 
+    Vector3 linearVelocity_;
+    Vector3 angularVelocity_;
+
     // Marker
     Vector<StaticModel*> markers_;
     // Animated model
@@ -352,5 +355,8 @@ public:
     void CreateVehicleDirectionArrow();
     void UpdateVehicleDirectionArrow();
     void HideVehicleDirectionArrow();
+    const Vector3 &GetLinearVelocity() const;
+    const Vector3 &GetAngularVelocity() const;
+
 };
 

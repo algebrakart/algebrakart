@@ -40,7 +40,7 @@
 #include <AlgebraKart/network/csp/CSP_messages.h>
 #include "Game.h"
 #include "AlgebraKart/network/Vehicle.h"
-#include "VehicleReplaySystem.h"
+#include "ReplaySystem.h"
 #include <AlgebraKart/PixelImage.h>
 
 
@@ -277,6 +277,7 @@ private:
     // Helpers
     float GetMaxCollisionImpulse(VariantMap& eventData);
     Vehicle* FindVehicleFromNode(Node* node);
+    NetworkActor* FindNetworkActorFromNode(Node* node);
 
         // Async loading functions
     void NodeRegisterLoadTriggers(Node *node);
@@ -819,8 +820,8 @@ private:
     mutable Mutex audioMutex_;
     bool audioProcessingEnabled_;
 
-    // Vehicle Replay System
-    SharedPtr<VehicleReplaySystem> replaySystem_;
+    // Replay System
+    SharedPtr<ReplaySystem> replaySystem_;
     SharedPtr<ReplayUI> replayUI_;
     bool replaySystemEnabled_;
 

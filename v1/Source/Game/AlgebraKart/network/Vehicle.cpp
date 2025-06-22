@@ -51,6 +51,8 @@
 #include "Urho3D/ThirdParty/SDL/SDL_log.h"
 #include "Urho3D/DebugNew.h"
 #include "../../../ThirdParty/Bullet/src/BulletDynamics/Vehicle/btWheelInfo.h"
+#include "Urho3D/IO/MemoryBuffer.h"
+#include "Urho3D/Engine/Engine.h"
 
 #include <vector>
 #include <string>
@@ -1936,6 +1938,29 @@ void Vehicle::HandleVehicleCollision(StringHash eventType, VariantMap & eventDat
 
             }
         }
+    }
+
+    using namespace NodeCollision;
+
+    // Get collision data
+    MemoryBuffer contacts(eventData[P_CONTACTS].GetBuffer());
+    float maxImpulse = 0.0f;
+
+    while (!contacts.IsEof()) {
+        contacts.ReadVector3(); // Contact position
+        contacts.ReadVector3(); // Contact normal
+        contacts.ReadFloat();   // Contact distance
+        float impulse = contacts.ReadFloat(); // Contact impulse
+        maxImpulse = Max(maxImpulse, impulse);
+    }
+
+    // Trigger replay for significant collisions
+    if (maxImpulse > 10.0f && GetSpeedKmH() > 30.0f) {
+        // Find the AlgebraKart instance and trigger replay
+            // This requires making the replay system accessible
+            // You might need to make it a subsystem or pass it differently
+            URHO3D_LOGINFOF("High impact collision detected: impulse=%f, speed=%f",
+                            maxImpulse, GetSpeedKmH());
     }
 }
 

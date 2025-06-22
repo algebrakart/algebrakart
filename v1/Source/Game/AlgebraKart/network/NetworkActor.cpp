@@ -175,7 +175,7 @@ void NetworkActor::RegisterObject(Context *context) {
 
     URHO3D_ATTRIBUTE("Controls Yaw", float, controls_.yaw_, 0.0f, AM_DEFAULT);
     URHO3D_ATTRIBUTE("Controls Pitch", float, controls_.pitch_, 0.0f, AM_DEFAULT);
-    URHO3D_ATTRIBUTE("On Ground", bool, onGround_, false, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("On Ground", bool, onGround_, false, AM_DEFAULT | AM_NET);
     URHO3D_ATTRIBUTE("OK To Jump", bool, okToJump_, true, AM_DEFAULT);
     URHO3D_ATTRIBUTE("In Air Timer", float, inAirTimer_, 0.0f, AM_DEFAULT);
 
@@ -192,6 +192,10 @@ void NetworkActor::RegisterObject(Context *context) {
     URHO3D_ATTRIBUTE("RPM", float, rpm_, 0, AM_DEFAULT);
     URHO3D_ATTRIBUTE("Velocity", float, velocity_, 0, AM_DEFAULT);
     URHO3D_ATTRIBUTE("Steer", float, steer_, 0, AM_DEFAULT);
+
+    URHO3D_ATTRIBUTE("Linear Velocity", Vector3, linearVelocity_, Vector3(0,0,0), AM_DEFAULT | AM_NET);
+    URHO3D_ATTRIBUTE("Angular Velocity", Vector3, angularVelocity_, Vector3(0,0,0), AM_DEFAULT | AM_NET);
+
 
 //    URHO3D_ATTRIBUTE("Bone Axis", Vector3, boneAxis_, Vector3(0, 0, 1), AM_DEFAULT);
 
@@ -535,6 +539,9 @@ void NetworkActor::FixedUpdate(float timeStep) {
     // DEBUG DRAW
     DebugDraw();
 
+    // Store latest rigid body values
+    linearVelocity_ = GetBody()->GetLinearVelocity();
+    angularVelocity_ = GetBody()->GetAngularVelocity();
 
 
     /*
@@ -624,32 +631,34 @@ void NetworkActor::FixedUpdate(float timeStep) {
 
 
 
-        if (!doJump_) {
+        if (animCtrl_) {
+            if (!doJump_) {
 
-            // Update animation
-            if (velocity.Length() > REST_VELOCITY_THRESHOLD) {
+                // Update animation
+                if (velocity.Length() > REST_VELOCITY_THRESHOLD) {
 
-                animCtrl_->PlayExclusive(walkAniFile, 1, true, 0.15f);
-                animCtrl_->SetSpeed(walkAniFile, velocity.Length() * 0.4f);
-                animCtrl_->SetStartBone(walkAniFile, "Ctrl_all");
+                    animCtrl_->PlayExclusive(walkAniFile, 1, true, 0.15f);
+                    animCtrl_->SetSpeed(walkAniFile, velocity.Length() * 0.4f);
+                    animCtrl_->SetStartBone(walkAniFile, "Ctrl_all");
+
+                } else {
+
+                    animCtrl_->PlayExclusive(idleAniFile, 1, true, 0.15f);
+                    animCtrl_->SetStartBone(idleAniFile, "Ctrl_all");
+                }
 
             } else {
 
-                animCtrl_->PlayExclusive(idleAniFile, 1, true, 0.15f);
-                animCtrl_->SetStartBone(idleAniFile, "Ctrl_all");
+                animCtrl_->PlayExclusive(jumpAniFile, 1, false, 0.15f);
+                animCtrl_->SetStartBone(jumpAniFile, "Ctrl_all");
+                doJump_ = false;
             }
 
-        } else {
-
-            animCtrl_->PlayExclusive(jumpAniFile, 1, false, 0.15f);
-            animCtrl_->SetStartBone(jumpAniFile, "Ctrl_all");
-            doJump_ = false;
-        }
-
-        if (entered_) {
-            animCtrl_->PlayExclusive(victoryAniFile, 1, false, 0.15f);
-            animCtrl_->SetAnimationTime(7.7f);
-            animCtrl_->SetStartBone(victoryAniFile, "Ctrl_all");
+            if (entered_) {
+                animCtrl_->PlayExclusive(victoryAniFile, 1, false, 0.15f);
+                animCtrl_->SetAnimationTime(7.7f);
+                animCtrl_->SetStartBone(victoryAniFile, "Ctrl_all");
+            }
         }
 
 
@@ -1123,7 +1132,7 @@ void NetworkActor::UpdateVehicleDirectionArrow()
     {
         // Calculate direction from player to vehicle
         Vector3 playerPos = GetBody()->GetPosition();
-        Vector3 vehiclePos = vehicle_->GetRaycastVehicle()->GetBody()->GetPosition();
+        Vector3 vehiclePos = vehicle_->GetPosition();
         Vector3 direction = (vehiclePos - playerPos);
         float distance = direction.Length();
 
@@ -1302,7 +1311,7 @@ void NetworkActor::Fire(Vector3 target) {
 void NetworkActor::DebugDraw() {
     if (!vehicle_)
         return;
-
+/*
     if (GetScene()) {
         DebugRenderer *dbgRenderer = GetScene()->GetComponent<DebugRenderer>();
 
@@ -1323,12 +1332,8 @@ void NetworkActor::DebugDraw() {
             //Vector3 nodePos = GetNode()->GetPosition();
             //dbgRenderer->AddLine(localCenter, toTarget_, Color(1.0f, 1.0, 0.0));
 
-
             //Vector3 nodePos = GetNode()->GetPosition();
             //dbgRenderer->AddLine(localCenter, toTarget_, Color(1.0f, 0.0, 1.0));
-
-
-
 
             if (vehicle_->GetDragBrake().Length() > 0) {
 //            dragBrake_
@@ -1343,7 +1348,7 @@ void NetworkActor::DebugDraw() {
             //dbgRenderer->AddLine(posWS, posWS + this->vehicle_->GetNode()->GetDirection() * 40.0f, Color::CYAN);
             //dbgRenderer->AddLine(posWS, toTarget_, Color::YELLOW);
         }
-    }
+    }*/
 }
 
 void NetworkActor::setSteerSet(bool steerSet) {
@@ -1645,4 +1650,12 @@ int NetworkActor::GetPickUpItemState() {
             return pickups_->Back().type;
         }
     }
+}
+
+const Vector3 &NetworkActor::GetLinearVelocity() const {
+    return linearVelocity_;
+}
+
+const Vector3 &NetworkActor::GetAngularVelocity() const {
+    return angularVelocity_;
 }

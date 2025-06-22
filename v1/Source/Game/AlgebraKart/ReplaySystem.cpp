@@ -1,4 +1,4 @@
-#include "VehicleReplaySystem.h"
+#include "ReplaySystem.h"
 #include "network/Vehicle.h"
 #include "network/NetworkActor.h"
 #include <Urho3D/Scene/Scene.h>
@@ -17,7 +17,7 @@
 #include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/Core/Timer.h>
 
-#include "VehicleReplaySystem.h"
+#include "ReplaySystem.h"
 #include "network/Vehicle.h"
 #include "network/NetworkActor.h"
 #include <Urho3D/Scene/Scene.h>
@@ -32,7 +32,7 @@
 #include <Urho3D/UI/Sprite.h>
 #include <Urho3D/Resource/ResourceCache.h>
 
-VehicleReplaySystem::VehicleReplaySystem(Context* context) :
+ReplaySystem::ReplaySystem(Context* context) :
         Object(context),
         replayState_(REPLAY_RECORDING),
         replayTime_(0.0f),
@@ -58,33 +58,33 @@ VehicleReplaySystem::VehicleReplaySystem(Context* context) :
     currentTimeDilation_ = 1.0f;
 }
 
-VehicleReplaySystem::~VehicleReplaySystem() {
+ReplaySystem::~ReplaySystem() {
 }
 
-void VehicleReplaySystem::RegisterObject(Context* context) {
-    context->RegisterFactory<VehicleReplaySystem>();
+void ReplaySystem::RegisterObject(Context* context) {
+    context->RegisterFactory<ReplaySystem>();
 }
 
-void VehicleReplaySystem::Initialize(Scene* scene, Camera* gameCamera) {
+void ReplaySystem::Initialize(Scene* scene, Camera* gameCamera) {
     scene_ = scene;
     gameCamera_ = gameCamera;
 
     CreateReplayCamera();
 
-    URHO3D_LOGINFO("VehicleReplaySystem initialized");
+    URHO3D_LOGINFO("ReplaySystem initialized");
 }
 
-void VehicleReplaySystem::Update(float timeStep) {
+void ReplaySystem::Update(float timeStep) {
     if (replayState_ == REPLAY_PLAYING) {
         UpdateReplayPlayback(timeStep);
     } else if (replayState_ == REPLAY_RECORDING) {
-        // Update recording for all tracked vehicles
+        // Update recording for all tracked players
         for (auto& pair : recordingData_) {
-            Vehicle* vehicle = pair.first_;
-            if (vehicle && vehicle->GetNode()) {
-                RecordFrame(vehicle);
+            NetworkActor* actor = pair.first_;
+            if (actor && actor->GetNode()) {
+                RecordFrame(actor);
                 if (autoReplayEnabled_) {
-                    DetectEvents(vehicle, timeStep);
+                    DetectEvents(actor, timeStep);
                 }
             }
         }
@@ -98,39 +98,39 @@ void VehicleReplaySystem::Update(float timeStep) {
     }
 }
 
-void VehicleReplaySystem::StartRecording(Vehicle* vehicle) {
-    if (!vehicle) return;
+void ReplaySystem::StartRecording(NetworkActor* actor) {
+    if (!actor) return;
 
-    recordingData_[vehicle] = Vector<ReplayFrame>();
-    trackingData_[vehicle] = VehicleTrackingData();
+    recordingData_[actor] = Vector<ReplayFrame>();
+    trackingData_[actor] = PlayerTrackingData();
 
-    URHO3D_LOGINFOF("Started recording vehicle: %s", vehicle->GetNode()->GetName().CString());
+    URHO3D_LOGINFOF("Started recording vehicle: %s", actor->GetNode()->GetName().CString());
 }
 
-void VehicleReplaySystem::StopRecording(Vehicle* vehicle) {
-    if (!vehicle) return;
+void ReplaySystem::StopRecording(NetworkActor* actor) {
+    if (!actor) return;
 
-    recordingData_.Erase(vehicle);
-    trackingData_.Erase(vehicle);
+    recordingData_.Erase(actor);
+    trackingData_.Erase(actor);
 
-    URHO3D_LOGINFOF("Stopped recording vehicle: %s", vehicle->GetNode()->GetName().CString());
+    URHO3D_LOGINFOF("Stopped recording vehicle: %s", actor->GetNode()->GetName().CString());
 }
 
-void VehicleReplaySystem::TriggerReplay(Vehicle* vehicle, ReplayEventType eventType) {
-    if (!vehicle || replayState_ == REPLAY_PLAYING) return;
+void ReplaySystem::TriggerReplay(NetworkActor* actor, ReplayEventType eventType) {
+    if (!actor || replayState_ == REPLAY_PLAYING) return;
 
-    if (!recordingData_.Contains(vehicle) || recordingData_[vehicle].Empty()) {
+    if (!recordingData_.Contains(actor) || recordingData_[actor].Empty()) {
         URHO3D_LOGWARNING("No recording data available for replay");
         return;
     }
 
     ReplayEvent event;
     event.eventType_ = eventType;
-    event.eventTime_ = recordingData_[vehicle].Back().timestamp_;
-    event.eventLocation_ = vehicle->GetNode()->GetWorldPosition();
-    event.vehicleName_ = vehicle->GetNode()->GetName();
-    event.frames_ = recordingData_[vehicle];
-    event.severity_ = CalculateEventSeverity(vehicle, eventType);
+    event.eventTime_ = recordingData_[actor].Back().timestamp_;
+    event.eventLocation_ = actor->GetNode()->GetWorldPosition();
+    event.playerName_ = actor->GetNode()->GetName();
+    event.frames_ = recordingData_[actor];
+    event.severity_ = CalculateEventSeverity(actor, eventType);
 
     if (replayState_ == REPLAY_RECORDING) {
         StartReplay(event);
@@ -139,14 +139,14 @@ void VehicleReplaySystem::TriggerReplay(Vehicle* vehicle, ReplayEventType eventT
     }
 }
 
-void VehicleReplaySystem::SkipReplay() {
+void ReplaySystem::SkipReplay() {
     if (replayState_ == REPLAY_PLAYING) {
         EndReplay();
     }
 }
 
-void VehicleReplaySystem::RecordFrame(Vehicle* vehicle) {
-    if (!vehicle || !vehicle->GetNode()) return;
+void ReplaySystem::RecordFrame(NetworkActor* actor) {
+    if (!actor || !actor->GetNode()) return;
 
     Time* time = GetSubsystem<Time>();
     float currentTime = time->GetElapsedTime();
@@ -157,22 +157,19 @@ void VehicleReplaySystem::RecordFrame(Vehicle* vehicle) {
     }
     lastRecordTime_ = currentTime;
 
-    RigidBody* body = vehicle->GetBody();
-    if (!body) return;
-
-    Node* vehicleNode = vehicle->GetNode();
+    Node* actorNode = actor->GetNode();
 
     ReplayFrame frame(
             currentTime,
-            vehicleNode->GetWorldPosition(),
-            vehicleNode->GetWorldRotation(),
-            body->GetLinearVelocity(),
-            body->GetAngularVelocity(),
-            vehicle->GetSpeedKmH(),
-            vehicle->GetRaycastVehicle()->OnGround()
+            actorNode->GetWorldPosition(),
+            actorNode->GetWorldRotation(),
+            actor->GetLinearVelocity(),
+            actor->GetAngularVelocity(),
+            0,
+            actor->onGround_
     );
 
-    Vector<ReplayFrame>& frames = recordingData_[vehicle];
+    Vector<ReplayFrame>& frames = recordingData_[actor];
     frames.Push(frame);
 
     // Remove old frames (keep only recordingDuration_ seconds)
@@ -182,23 +179,23 @@ void VehicleReplaySystem::RecordFrame(Vehicle* vehicle) {
     }
 }
 
-void VehicleReplaySystem::DetectEvents(Vehicle* vehicle, float timeStep) {
-    if (!vehicle || !trackingData_.Contains(vehicle)) return;
+void ReplaySystem::DetectEvents(NetworkActor* actor, float timeStep) {
+    if (!actor || !trackingData_.Contains(actor)) return;
 
-    VehicleTrackingData& data = trackingData_[vehicle];
+    PlayerTrackingData& data = trackingData_[actor];
 
     // Cooldown check
     if (data.eventCooldown_.GetMSec(false) < eventCooldownTime_ * 1000.0f) {
         return;
     }
 
-    RigidBody* body = vehicle->GetBody();
+    RigidBody* body = actor->GetBody();
     if (!body) return;
 
-    Vector3 currentPos = vehicle->GetNode()->GetWorldPosition();
-    Vector3 currentVel = body->GetLinearVelocity();
-    float currentSpeed = vehicle->GetSpeedKmH();
-    bool onGround = vehicle->GetRaycastVehicle()->OnGround();
+    Vector3 currentPos = actor->GetNode()->GetWorldPosition();
+    Vector3 currentVel = actor->GetLinearVelocity();
+    float currentSpeed = actor->GetAcceleration();
+    bool onGround = actor->onGround_;
 
     // Update tracking data
     if (!data.wasOnGround_ && onGround) {
@@ -216,20 +213,20 @@ void VehicleReplaySystem::DetectEvents(Vehicle* vehicle, float timeStep) {
     if (data.lastSpeed_ > minCrashSpeed_ && currentSpeed < data.lastSpeed_ * 0.3f) {
         Vector3 velocityChange = currentVel - data.lastVelocity_;
         if (velocityChange.Length() > 20.0f) {
-            TriggerReplay(vehicle, REPLAY_CRASH);
+            TriggerReplay(actor, REPLAY_CRASH);
             data.eventCooldown_.Reset();
-            URHO3D_LOGINFOF("Crash detected for vehicle: %s", vehicle->GetNode()->GetName().CString());
+            URHO3D_LOGINFOF("Crash detected for vehicle: %s", actor->GetNode()->GetName().CString());
         }
     }
 
     // Flip detection
-    if (IsVehicleFlipping(vehicle)) {
+    if (IsVehicleFlipping(actor)) {
         data.flipTime_ += timeStep;
         if (data.flipTime_ > 1.0f) {
-            TriggerReplay(vehicle, REPLAY_FLIP);
+            TriggerReplay(actor, REPLAY_FLIP);
             data.eventCooldown_.Reset();
             data.flipTime_ = 0.0f;
-            URHO3D_LOGINFOF("Flip detected for vehicle: %s", vehicle->GetNode()->GetName().CString());
+            URHO3D_LOGINFOF("Flip detected for vehicle: %s", actor->GetNode()->GetName().CString());
         }
     } else {
         data.flipTime_ = 0.0f;
@@ -237,17 +234,17 @@ void VehicleReplaySystem::DetectEvents(Vehicle* vehicle, float timeStep) {
 
     // Airtime detection
     if (data.airTime_ > airTimeThreshold_ && data.lastSpeed_ > 20.0f) {
-        TriggerReplay(vehicle, REPLAY_AIRTIME);
+        TriggerReplay(actor, REPLAY_AIRTIME);
         data.eventCooldown_.Reset();
-        URHO3D_LOGINFOF("Airtime event detected for vehicle: %s", vehicle->GetNode()->GetName().CString());
+        URHO3D_LOGINFOF("Airtime event detected for vehicle: %s", actor->GetNode()->GetName().CString());
     }
 
     // High speed collision
     if (onGround && currentSpeed > 50.0f &&
         (currentPos - data.lastPosition_).Length() < currentSpeed * timeStep * 0.1f) {
-        TriggerReplay(vehicle, REPLAY_HIGH_SPEED_COLLISION);
+        TriggerReplay(actor, REPLAY_HIGH_SPEED_COLLISION);
         data.eventCooldown_.Reset();
-        URHO3D_LOGINFOF("High speed collision detected for vehicle: %s", vehicle->GetNode()->GetName().CString());
+        URHO3D_LOGINFOF("High speed collision detected for vehicle: %s", actor->GetNode()->GetName().CString());
     }
 
     // Update tracking data
@@ -257,7 +254,7 @@ void VehicleReplaySystem::DetectEvents(Vehicle* vehicle, float timeStep) {
     data.wasOnGround_ = onGround;
 }
 
-void VehicleReplaySystem::StartReplay(const ReplayEvent& event) {
+void ReplaySystem::StartReplay(const ReplayEvent& event) {
     if (event.frames_.Empty()) return;
 
     currentReplay_ = event;
@@ -295,7 +292,7 @@ void VehicleReplaySystem::StartReplay(const ReplayEvent& event) {
     URHO3D_LOGINFOF("Started replay for event type: %d", (int)event.eventType_);
 }
 
-void VehicleReplaySystem::UpdateReplayPlayback(float timeStep) {
+void ReplaySystem::UpdateReplayPlayback(float timeStep) {
     if (currentReplay_.frames_.Empty()) {
         EndReplay();
         return;
@@ -348,7 +345,7 @@ void VehicleReplaySystem::UpdateReplayPlayback(float timeStep) {
     }
 }
 
-void VehicleReplaySystem::EndReplay() {
+void ReplaySystem::EndReplay() {
     replayState_ = REPLAY_RECORDING;
 
     // Switch back to game camera
@@ -361,7 +358,7 @@ void VehicleReplaySystem::EndReplay() {
     URHO3D_LOGINFO("Replay ended");
 }
 
-void VehicleReplaySystem::CreateReplayCamera() {
+void ReplaySystem::CreateReplayCamera() {
     if (!scene_) return;
 
     replayCameraNode_ = scene_->CreateChild("ReplayCamera", LOCAL);
@@ -374,7 +371,7 @@ void VehicleReplaySystem::CreateReplayCamera() {
     URHO3D_LOGINFO("Replay camera created");
 }
 
-void VehicleReplaySystem::UpdateReplayCamera(const ReplayFrame& frame, float timeStep) {
+void ReplaySystem::UpdateReplayCamera(const ReplayFrame& frame, float timeStep) {
     if (!replayCamera_ || !replayCameraNode_) return;
 
     Vector3 targetPos = CalculateCinematicCameraPosition(frame.position_, cameraAnimTime_);
@@ -388,7 +385,7 @@ void VehicleReplaySystem::UpdateReplayCamera(const ReplayFrame& frame, float tim
     replayCameraNode_->LookAt(lookAtPos, Vector3::UP);
 }
 
-Vector3 VehicleReplaySystem::CalculateCinematicCameraPosition(const Vector3& targetPos, float time) {
+Vector3 ReplaySystem::CalculateCinematicCameraPosition(const Vector3& targetPos, float time) {
     Vector3 cameraPos = targetPos;
 
     switch (cameraMode_) {
@@ -440,7 +437,7 @@ Vector3 VehicleReplaySystem::CalculateCinematicCameraPosition(const Vector3& tar
     return cameraPos;
 }
 
-ReplayCameraMode VehicleReplaySystem::GetCameraMode(ReplayEventType eventType) {
+ReplayCameraMode ReplaySystem::GetCameraMode(ReplayEventType eventType) {
     switch (eventType) {
         case REPLAY_CRASH:
             return REPLAY_CAM_SLOW_MOTION;
@@ -456,7 +453,7 @@ ReplayCameraMode VehicleReplaySystem::GetCameraMode(ReplayEventType eventType) {
     }
 }
 
-ReplayFrame VehicleReplaySystem::InterpolateFrames(const ReplayFrame& a, const ReplayFrame& b, float t) {
+ReplayFrame ReplaySystem::InterpolateFrames(const ReplayFrame& a, const ReplayFrame& b, float t) {
     ReplayFrame result;
     result.timestamp_ = Lerp(a.timestamp_, b.timestamp_, t);
     result.position_ = a.position_.Lerp(b.position_, t);
@@ -468,34 +465,31 @@ ReplayFrame VehicleReplaySystem::InterpolateFrames(const ReplayFrame& a, const R
     return result;
 }
 
-bool VehicleReplaySystem::IsVehicleFlipping(Vehicle* vehicle) {
-    if (!vehicle || !vehicle->GetNode()) return false;
+bool ReplaySystem::IsVehicleFlipping(NetworkActor* actor) {
+    if (!actor || !actor->GetNode()) return false;
 
-    Vector3 up = vehicle->GetNode()->GetWorldRotation() * Vector3::UP;
+    Vector3 up = actor->GetNode()->GetWorldRotation() * Vector3::UP;
     float dotProduct = up.DotProduct(Vector3::UP);
     float angle = Acos(Clamp(dotProduct, -1.0f, 1.0f)) * M_RADTODEG;
 
     return angle > flipAngleThreshold_;
 }
 
-bool VehicleReplaySystem::IsVehicleCrashed(Vehicle* vehicle) {
-    if (!vehicle) return false;
+bool ReplaySystem::IsVehicleCrashed(NetworkActor* actor) {
+    if (!actor) return false;
 
-    RigidBody* body = vehicle->GetBody();
-    if (!body) return false;
-
-    float speed = vehicle->GetSpeedKmH();
-    Vector3 velocity = body->GetLinearVelocity();
+    float speed = actor->GetAcceleration();
+    Vector3 velocity = actor->GetLinearVelocity();
 
     // Check if vehicle is moving very slowly but has high angular velocity (spinning)
-    return speed < 5.0f && body->GetAngularVelocity().Length() > 5.0f;
+    return speed < 5.0f && actor->GetAngularVelocity().Length() > 5.0f;
 }
 
-float VehicleReplaySystem::CalculateEventSeverity(Vehicle* vehicle, ReplayEventType eventType) {
-    if (!vehicle) return 0.0f;
+float ReplaySystem::CalculateEventSeverity(NetworkActor* actor, ReplayEventType eventType) {
+    if (!actor) return 0.0f;
 
     float severity = 0.0f;
-    float speed = vehicle->GetSpeedKmH();
+    float speed = actor->GetAcceleration();
 
     switch (eventType) {
         case REPLAY_CRASH:
@@ -508,8 +502,8 @@ float VehicleReplaySystem::CalculateEventSeverity(Vehicle* vehicle, ReplayEventT
             severity = Clamp(speed / 120.0f, 0.5f, 1.0f);
             break;
         case REPLAY_AIRTIME:
-            if (trackingData_.Contains(vehicle)) {
-                float airTime = trackingData_[vehicle].airTime_;
+            if (trackingData_.Contains(actor)) {
+                float airTime = trackingData_[actor].airTime_;
                 severity = Clamp(airTime / 5.0f, 0.3f, 0.8f);
             }
             break;

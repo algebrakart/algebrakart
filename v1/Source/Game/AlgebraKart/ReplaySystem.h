@@ -6,6 +6,7 @@
 #include <Urho3D/Math/Quaternion.h>
 #include <Urho3D/Scene/Node.h>
 #include <Urho3D/Graphics/Camera.h>
+#include <Urho3D/Physics/RigidBody.h>
 #include <Urho3D/Core/Timer.h>
 #include <Urho3D/UI/UIElement.h>
 #include <Urho3D/UI/Text.h>
@@ -15,7 +16,6 @@
 using namespace Urho3D;
 
 // Forward declarations
-class Vehicle;
 class NetworkActor;
 
 /// Replay frame data structure
@@ -50,7 +50,7 @@ struct ReplayEvent {
     ReplayEventType eventType_;
     float eventTime_;
     Vector3 eventLocation_;
-    String vehicleName_;
+    String playerName_;
     Vector<ReplayFrame> frames_;
     float severity_; // 0.0 - 1.0 for event intensity
 
@@ -74,16 +74,16 @@ enum ReplayState {
     REPLAY_DISABLED
 };
 
-/// Main Vehicle Replay System
-class VehicleReplaySystem : public Object {
-URHO3D_OBJECT(VehicleReplaySystem, Object);
+/// Main Replay System
+class ReplaySystem : public Object {
+URHO3D_OBJECT(ReplaySystem, Object);
 
 public:
     /// Constructor
-    explicit VehicleReplaySystem(Context* context);
+    explicit ReplaySystem(Context* context);
 
     /// Destructor
-    ~VehicleReplaySystem() override;
+    ~ReplaySystem() override;
 
     /// Register object factory
     static void RegisterObject(Context* context);
@@ -95,13 +95,13 @@ public:
     void Update(float timeStep);
 
     /// Start recording a vehicle
-    void StartRecording(Vehicle* vehicle);
+    void StartRecording(NetworkActor* actor);
 
     /// Stop recording a vehicle
-    void StopRecording(Vehicle* vehicle);
+    void StopRecording(NetworkActor* actor);
 
     /// Manually trigger a replay event
-    void TriggerReplay(Vehicle* vehicle, ReplayEventType eventType = REPLAY_MANUAL);
+    void TriggerReplay(NetworkActor* actor, ReplayEventType eventType = REPLAY_MANUAL);
 
     /// Check if currently playing a replay
     bool IsPlayingReplay() const { return replayState_ == REPLAY_PLAYING; }
@@ -122,11 +122,11 @@ public:
     Camera* GetReplayCamera() { return replayCamera_; }
 
 private:
-    /// Record a frame for a vehicle
-    void RecordFrame(Vehicle* vehicle);
+    /// Record a frame for a player
+    void RecordFrame(NetworkActor* actor);
 
     /// Detect crash/flip events
-    void DetectEvents(Vehicle* vehicle, float timeStep);
+    void DetectEvents(NetworkActor* actor, float timeStep);
 
     /// Start playing a replay
     void StartReplay(const ReplayEvent& event);
@@ -153,13 +153,13 @@ private:
     ReplayFrame InterpolateFrames(const ReplayFrame& a, const ReplayFrame& b, float t);
 
     /// Check if vehicle is flipping
-    bool IsVehicleFlipping(Vehicle* vehicle);
+    bool IsVehicleFlipping(NetworkActor* actor);
 
     /// Check if vehicle crashed
-    bool IsVehicleCrashed(Vehicle* vehicle);
+    bool IsVehicleCrashed(NetworkActor* actor);
 
     /// Calculate event severity
-    float CalculateEventSeverity(Vehicle* vehicle, ReplayEventType eventType);
+    float CalculateEventSeverity(NetworkActor* actor, ReplayEventType eventType);
 
 private:
     /// Scene reference
@@ -172,11 +172,11 @@ private:
     SharedPtr<Camera> replayCamera_;
     SharedPtr<Node> replayCameraNode_;
 
-    /// Currently tracked vehicles
-    HashMap<Vehicle*, Vector<ReplayFrame>> recordingData_;
+    /// Currently tracked players
+    HashMap<NetworkActor*, Vector<ReplayFrame>> recordingData_;
 
-    /// Vehicle tracking data for event detection
-    struct VehicleTrackingData {
+    /// Player tracking data for event detection
+    struct PlayerTrackingData {
         Vector3 lastPosition_;
         Vector3 lastVelocity_;
         float lastSpeed_;
@@ -186,10 +186,10 @@ private:
         float lastContactTime_;
         Timer eventCooldown_;
 
-        VehicleTrackingData() : lastSpeed_(0.0f), airTime_(0.0f), flipTime_(0.0f),
+        PlayerTrackingData() : lastSpeed_(0.0f), airTime_(0.0f), flipTime_(0.0f),
                                 wasOnGround_(true), lastContactTime_(0.0f) {}
     };
-    HashMap<Vehicle*, VehicleTrackingData> trackingData_;
+    HashMap<NetworkActor*, PlayerTrackingData> trackingData_;
 
     /// Current replay state
     ReplayState replayState_;
