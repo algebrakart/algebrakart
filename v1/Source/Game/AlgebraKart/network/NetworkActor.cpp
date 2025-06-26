@@ -793,7 +793,7 @@ void NetworkActor::FixedUpdate(float timeStep) {
             if (onVehicle_ && entered_) {
                 // Align network actor orientation once entered vehicle
 
-                Vector3 bodyOffset = Vector3(-0.0f, 0.4f, -0.0f);
+                Vector3 bodyOffset = Vector3(-0.0f, 0.4f, -0.4f);
                 switch (vehicle_->getCarType()) {
                     case CAR_TYPE_JEEP1:
                         break;

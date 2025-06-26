@@ -31,6 +31,7 @@
 #include <Urho3D/Graphics/Renderer.h>
 #include <Urho3D/Graphics/RenderPath.h>
 #include <Urho3D/Graphics/Zone.h>
+#include <Urho3D/Graphics/Technique.h>
 #include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/Scene/Scene.h>
 #include <Urho3D/UI/Font.h>
@@ -3900,6 +3901,9 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
         }
     }
 
+    // Update beat sequencer UI
+    UpdateBeatSequencerUI(timeStep);
+
     // Call our render update
     HandleRenderUpdate(eventType, eventData);
 }
@@ -5467,57 +5471,114 @@ void AlgebraKart::InitiateViewport(Context* context, Scene* scene, Camera* camer
 }
 
 
-
 void AlgebraKart::SetupSequencerViewport() {
     auto *graphics = GetSubsystem<Graphics>();
     auto *renderer = GetSubsystem<Renderer>();
+    auto *cache = GetSubsystem<ResourceCache>();
 
-    // Load menu scene
-    ResourceCache *cache = GetSubsystem<ResourceCache>();
-    XMLFile *xmlLevel = cache->GetResource<XMLFile>("Scenes/AlgebraKartSequencer.xml");
+    // Load or create enhanced sequencer scene
     seqScene_ = MakeShared<Scene>(context_);
-    seqScene_->SetName("SeqScene");
+    seqScene_->SetName("EnhancedSeqScene");
 
-    if (xmlLevel) {
-        seqScene_->LoadXML(xmlLevel->GetRoot());
-    }
+    // Create zone for lighting
+    Node * zoneNode = seqScene_->CreateChild("Zone");
+    Zone *zone = zoneNode->CreateComponent<Zone>();
+    zone->SetBoundingBox(BoundingBox(-1000.0f, 1000.0f));
+    zone->SetAmbientColor(Color(0.2f, 0.2f, 0.3f));
+    zone->SetFogColor(Color(0.1f, 0.1f, 0.2f));
 
+    // Create lighting
+    Node * lightNode = seqScene_->CreateChild("DirectionalLight");
+    lightNode->SetDirection(Vector3(0.6f, -1.0f, 0.8f));
+    Light *light = lightNode->CreateComponent<Light>();
+    light->SetLightType(LIGHT_DIRECTIONAL);
+    light->SetColor(Color(0.8f, 0.9f, 1.0f));
+    light->SetCastShadows(true);
 
-    // Get sequencer objects
-    seqCam_ = seqScene_->GetChild("seqCam", LOCAL)->GetComponent<Camera>();
+    // Create camera
+    Node * cameraNode = seqScene_->CreateChild("SeqCamera");
+    seqCam_ = cameraNode->CreateComponent<Camera>();
     seqCam_->SetOrthographic(true);
+    seqCam_->SetOrthoSize(50.0f);
 
-    for (int i = 0; i < NUM_DRUM_MACHINE_PADS; i++) {
-        String name = "pad" + String(i+1);
-        StaticModel* model = seqScene_->GetChild(name, LOCAL)->GetComponent<StaticModel>();
-        model->SetMaterial(cache->GetResource<Material>("Materials/buttons.active.xml"));
-        beatModelVec_.Push(static_cast<SharedPtr<StaticModel>>(model));
+    // Position camera for good view of the beat grid
+    cameraNode->SetPosition(Vector3(0.0f, 30.0f, -20.0f));
+    cameraNode->LookAt(Vector3(0.0f, 0.0f, 0.0f));
+
+    // Create enhanced 3D beat pads with glowing effects
+    beatModelVec_.Clear();
+    beatModelVec_.Resize(NUM_DRUM_MACHINE_PADS);
+
+    for (int channel = 0; channel < 4; channel++) {
+        for (int step = 0; step < 16; step++) {
+            int index = channel * 16 + step;
+
+            // Create beat pad node
+            Node * padNode = seqScene_->CreateChild("BeatPad3D");
+            padNode->SetPosition(Vector3(
+                    (step - 7.5f) * 2.0f,           // X: spread across 16 steps
+                    0.0f,                           // Y: base level
+                    (channel - 1.5f) * 3.0f        // Z: 4 channels deep
+            ));
+
+            // Create the visual model
+            StaticModel * model = padNode->CreateComponent<StaticModel>();
+            model->SetModel(cache->GetResource<Model>("Models/Box.mdl"));
+
+            // Create material with emissive properties for glow effect
+            Material *material = new Material(context_);
+            material->SetTechnique(0, cache->GetResource<Technique>("Techniques/DiffUnlit.xml"));
+
+            // Set channel-based colors
+            Color channelColor;
+            switch (channel) {
+                case 0:
+                    channelColor = Color::RED;
+                    break;      // Kick
+                case 1:
+                    channelColor = Color::BLUE;
+                    break;     // Snare
+                case 2:
+                    channelColor = Color::GREEN;
+                    break;    // Hi-hat
+                case 3:
+                    channelColor = Color::MAGENTA;
+                    break;  // Synth
+            }
+
+            material->SetShaderParameter("MatDiffColor", channelColor);
+            material->SetShaderParameter("MatEmissiveColor", channelColor * 0.3f);
+            model->SetMaterial(material);
+
+            // Scale based on position importance (quarter notes larger)
+            float scale = (step % 4 == 0) ? 1.2f : 1.0f;
+            padNode->SetScale(Vector3(scale, 0.3f, scale));
+
+            beatModelVec_[index] = model;
+        }
     }
 
-    seqTimeCursorModel_ = seqScene_->GetChild("SeqTimeCursor", LOCAL)->GetComponent<StaticModel>();
-    beatTimeCursorModel_ = seqScene_->GetChild("BeatTimeCursor", LOCAL)->GetComponent<StaticModel>();
-    metronomeCursorModel_ = seqScene_->GetChild("display_button", LOCAL)->GetComponent<StaticModel>();
-    metronomeCursorModel_->SetMaterial(cache->GetResource<Material>("Materials/buttons.xml"));
-    //Camera, StaticModel, StaticModel
-/*
-    for (int i = 0; i < 8; i++) {
-        auto *b = beat->G
-        StaticModel* m = b->CreateComponent<StaticModel>();
-        b->SetPosition(beat->GetNode()->GetPosition()+Vector3(i*1.0f, i, i));
-        m->SetModel(beat->GetModel());
-    }
-*/
+    // Create enhanced time cursor with trail effect
+    Node * cursorNode = seqScene_->CreateChild("TimeCursor");
+    seqTimeCursorModel_ = cursorNode->CreateComponent<StaticModel>();
+    seqTimeCursorModel_->SetModel(cache->GetResource<Model>("Models/Cylinder.mdl"));
 
-    float seqHeight = 240.0f;
-    // The viewport index must be greater in that case, otherwise the view would be left behind
+    Material *cursorMaterial = new Material(context_);
+    cursorMaterial->SetTechnique(0, cache->GetResource<Technique>("Techniques/DiffUnlit.xml"));
+    cursorMaterial->SetShaderParameter("MatDiffColor", Color::YELLOW);
+    cursorMaterial->SetShaderParameter("MatEmissiveColor", Color::YELLOW * 0.8f);
+    seqTimeCursorModel_->SetMaterial(cursorMaterial);
+
+    cursorNode->SetPosition(Vector3(0.0f, 2.0f, 0.0f));
+    cursorNode->SetScale(Vector3(0.5f, 3.0f, 8.0f));
+
+    // Setup viewport
+    float seqHeight = 200.0f;
     seqViewport_ = new Viewport(context_, seqScene_, seqCam_,
-                                 IntRect(2, (graphics->GetHeight())-seqHeight, graphics->GetWidth()/6, graphics->GetHeight()));
+                                IntRect(graphics->GetWidth() - 400, graphics->GetHeight() - seqHeight,
+                                        graphics->GetWidth(), graphics->GetHeight()));
     renderer->SetViewport(3, seqViewport_);
-// DISABLE VIEW
-        renderer->SetViewport(3, nullptr);
-
 }
-
 
 void AlgebraKart::SetupMenuViewport() {
     auto* graphics = GetSubsystem<Graphics>();
@@ -7926,6 +7987,20 @@ void AlgebraKart::CreateClientUI() {
     speedometerText_->SetVisible(false);
     speedometerText_->SetPriority(-80);
 
+    // Create enhanced beat sequencer UI
+    beatSequencerUI_ = new BeatSequencerUI(context_);
+    beatSequencerUI_->Initialize();
+
+    // Subscribe to sequencer events
+    SubscribeToEvent("BeatToggled", URHO3D_HANDLER(AlgebraKart, HandleBeatToggled));
+    SubscribeToEvent("SequencerPlayToggle", URHO3D_HANDLER(AlgebraKart, HandleSequencerPlayToggle));
+    SubscribeToEvent("SequencerStop", URHO3D_HANDLER(AlgebraKart, HandleSequencerStop));
+    SubscribeToEvent("SequencerRecordToggle", URHO3D_HANDLER(AlgebraKart, HandleSequencerRecordToggle));
+
+    // Initially hide the sequencer UI
+    beatSequencerUI_->SetVisible(false);
+
+
   /*  sprite_ = new Sprite2D(context_);
     sprite_->SetTexture(texture);
     sprite_->SetRectangle(IntRect(info.x, info.y, info.x + info.image_->GetWidth(), info.y + info.image_->GetHeight()));
@@ -9731,6 +9806,15 @@ void AlgebraKart::HandleKeyDown(StringHash eventType, VariantMap& eventData) {
         drawDebug_ = !drawDebug_;
     }
 
+    // Toggle beat sequencer UI with 'B' key
+    if (key == KEY_B) {
+        if (beatSequencerUI_) {
+            bool visible = beatSequencerUI_->GetMainWindow()->IsVisible();
+            beatSequencerUI_->SetVisible(!visible);
+            URHO3D_LOGINFO(visible ? "Beat sequencer hidden" : "Beat sequencer shown");
+        }
+    }
+
     // Replay system controls
     if (replaySystem_) {
         if (key == KEY_R && GetSubsystem<Input>()->GetKeyDown(KEY_CTRL)) {
@@ -9860,8 +9944,8 @@ void AlgebraKart::UpdateCameraFirstPerson(float timeStep) {
         targetRotation = vehicleNode->GetWorldRotation();
     } else {
         // On foot - position camera at head level
-        targetPosition = actorNode->GetWorldPosition() + Vector3(0.0f, 6.0f, 0.0f);
-        targetRotation = actorNode->GetWorldRotation();
+        targetPosition = actor->GetBody()->GetPosition() + Vector3(0.0f, 2.6f, 0.0f) + actor->GetBody()->GetLinearVelocity()/12.0f;
+        targetRotation = actor->GetBody()->GetRotation();
     }
 
     // Apply mouse look if right mouse button is held
@@ -10345,5 +10429,200 @@ void AlgebraKart::MonitorMemoryUsage(float timeStep) {
                         scene_->GetNumChildren(true));
 
         memoryCheckTimer = 0.0f;
+    }
+}
+
+void AlgebraKart::UpdateBeatSequencerUI(float timeStep)
+{
+    if (!beatSequencerUI_ || !beatSequencerUI_->GetMainWindow()->IsVisible()) {
+        return;
+    }
+
+    // Get sequencer data from the actor if available
+    bool isPlaying = false;
+    int currentBeat = 0;
+    float beatTime = 0.0f;
+
+    // Check if we have access to the player's sequencer
+    if (isSnapped_) {
+        String actorName = String("actor-") + clientName_;
+        Node *actorNode = scene_->GetChild(actorName);
+
+        if (actorNode) {
+            ClientObj *actor = actorNode->GetDerivedComponent<ClientObj>();
+            if (actor && actor->GetSequencer()) {
+                Sequencer* sequencer = actor->GetSequencer();
+                currentBeat = sequencer->GetBeat();
+                beatTime = sequencer->GetBeatTime();
+                isPlaying = !sequencer->IsMute(); // Use mute state as playing indicator
+            }
+        }
+    }
+
+    // Update the sequencer UI
+    beatSequencerUI_->UpdateSequencer(timeStep, currentBeat, beatTime, isPlaying);
+
+    // Update spectrum analyzer if audio analysis is available
+    if (analyzer_ && capturer_) {
+        const Vector<float>& spectrum = analyzer_->spectrum();
+        if (!spectrum.Empty()) {
+            beatSequencerUI_->UpdateSpectrum(spectrum);
+        }
+
+        // Calculate simple VU levels from spectrum data
+        if (spectrum.Size() > 0) {
+            float leftLevel = 0.0f;
+            float rightLevel = 0.0f;
+
+            // Simple stereo separation
+            int halfSpectrum = spectrum.Size() / 2;
+            for (int i = 0; i < halfSpectrum; i++) {
+                leftLevel += spectrum[i];
+            }
+            for (int i = halfSpectrum; i < spectrum.Size(); i++) {
+                rightLevel += spectrum[i];
+            }
+
+            leftLevel /= halfSpectrum;
+            rightLevel /= (spectrum.Size() - halfSpectrum);
+
+            beatSequencerUI_->UpdateVUMeters(leftLevel, rightLevel);
+        }
+    }
+}
+
+// Event handlers - Add to AlgebraKart.cpp:
+void AlgebraKart::HandleBeatToggled(StringHash eventType, VariantMap& eventData)
+{
+    int channel = eventData["Channel"].GetInt();
+    int step = eventData["Step"].GetInt();
+    bool active = eventData["Active"].GetBool();
+
+    URHO3D_LOGINFOF("Beat toggled - Channel: %d, Step: %d, Active: %s",
+                    channel, step, active ? "true" : "false");
+
+    // TODO: Apply the beat change to your actual sequencer
+    // You could modify the sequence patterns here
+    if (isSnapped_) {
+        String actorName = String("actor-") + clientName_;
+        Node *actorNode = scene_->GetChild(actorName);
+
+        if (actorNode) {
+            ClientObj *actor = actorNode->GetDerivedComponent<ClientObj>();
+            if (actor && actor->GetSequencer()) {
+                // Here you could modify the sequencer pattern
+                // This would require extending your Sequencer class to support
+                // dynamic pattern modification
+
+                URHO3D_LOGINFO("Applied beat change to sequencer");
+            }
+        }
+    }
+}
+
+void AlgebraKart::HandleSequencerPlayToggle(StringHash eventType, VariantMap& eventData)
+{
+    bool playing = eventData["Playing"].GetBool();
+
+    URHO3D_LOGINFOF("Sequencer play toggle: %s", playing ? "Playing" : "Stopped");
+
+    if (isSnapped_) {
+        String actorName = String("actor-") + clientName_;
+        Node *actorNode = scene_->GetChild(actorName);
+
+        if (actorNode) {
+            ClientObj *actor = actorNode->GetDerivedComponent<ClientObj>();
+            if (actor && actor->GetSequencer()) {
+                // Toggle sequencer mute (your current play/stop mechanism)
+                actor->GetSequencer()->SetMute(!playing);
+
+                if (playing && !playDrumMachine_) {
+                    PlayDrumMachine();
+                }
+            }
+        }
+    }
+}
+
+void AlgebraKart::HandleSequencerStop(StringHash eventType, VariantMap& eventData)
+{
+    URHO3D_LOGINFO("Sequencer stopped");
+
+    if (isSnapped_) {
+        String actorName = String("actor-") + clientName_;
+        Node *actorNode = scene_->GetChild(actorName);
+
+        if (actorNode) {
+            ClientObj *actor = actorNode->GetDerivedComponent<ClientObj>();
+            if (actor && actor->GetSequencer()) {
+                // Stop the sequencer
+                actor->GetSequencer()->SetMute(true);
+
+                // Reset to beginning - you might need to add this method to Sequencer
+                // actor->GetSequencer()->Reset();
+            }
+        }
+    }
+}
+
+void AlgebraKart::HandleSequencerRecordToggle(StringHash eventType, VariantMap& eventData)
+{
+    bool recording = eventData["Recording"].GetBool();
+
+    URHO3D_LOGINFOF("Sequencer record toggle: %s", recording ? "Recording" : "Not Recording");
+
+    if (isSnapped_) {
+        String actorName = String("actor-") + clientName_;
+        Node *actorNode = scene_->GetChild(actorName);
+
+        if (actorNode) {
+            ClientObj *actor = actorNode->GetDerivedComponent<ClientObj>();
+            if (actor && actor->GetSequencer()) {
+                // Enable/disable recording mode
+                // You might need to add recording functionality to your Sequencer class
+
+                URHO3D_LOGINFO("Set sequencer recording mode");
+            }
+        }
+    }
+}
+
+void AlgebraKart::UpdateEnhanced3DSequencer(float timeStep, int currentBeat, bool isPlaying)
+{
+    if (!seqTimeCursorModel_) return;
+
+    // Animate the time cursor
+    float cursorX = (currentBeat - 7.5f) * 2.0f;
+    seqTimeCursorModel_->GetNode()->SetPosition(Vector3(cursorX, 2.0f, 0.0f));
+
+    // Update beat pad states with glow effects
+    for (int channel = 0; channel < 4; channel++) {
+        for (int step = 0; step < 16; step++) {
+            int index = channel * 16 + step;
+            if (index < beatModelVec_.Size() && beatModelVec_[index]) {
+
+                StaticModel* model = beatModelVec_[index];
+                Material* material = model->GetMaterial();
+
+                bool isActive = false; // Disable until implemented GetBeatState(channel, step); // Your beat pattern check
+                bool isCurrent = (step == currentBeat) && isPlaying;
+
+                if (isCurrent) {
+                    // Current beat - bright glow
+                    Color glowColor = Color::WHITE;
+                    material->SetShaderParameter("MatEmissiveColor", glowColor);
+                    model->GetNode()->SetScale(Vector3(1.5f, 1.0f, 1.5f));
+                } else if (isActive) {
+                    // Active beat - medium glow
+                    Color channelColor = Color::BLUE;//GetChannelColor(channel);
+                    material->SetShaderParameter("MatEmissiveColor", channelColor * 0.6f);
+                    model->GetNode()->SetScale(Vector3(1.0f, 0.8f, 1.0f));
+                } else {
+                    // Inactive beat - dim
+                    material->SetShaderParameter("MatEmissiveColor", Color::BLACK);
+                    model->GetNode()->SetScale(Vector3(1.0f, 0.3f, 1.0f));
+                }
+            }
+        }
     }
 }

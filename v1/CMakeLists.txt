@@ -30,7 +30,7 @@ project (Urho3D)
 if (NOT DEFINED CMAKE_CXX_STANDARD)
     set (CMAKE_CXX_STANDARD 17)
 endif ()
-
+set (URHO3D_C++11 1)
 # Enable ODBC Database (Server logging)
 set(ODBC_INCLUDE_DIRS "/usr/include/")
 set (URHO3D_DATABASE_ODBC 1)

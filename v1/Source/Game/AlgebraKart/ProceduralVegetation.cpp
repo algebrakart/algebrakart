@@ -88,7 +88,7 @@ void ProceduralVegetation::InitializeDefaultParams()
     grassParams.maxAge_ = 50.0f;
     grassParams.hasCollision_ = false;
     grassParams.castShadows_ = false;
-    vegetationParams_[VEG_GRASS] = grassParams;
+    vegetationParams_[(unsigned)VEG_GRASS] = grassParams; // CAST TO UNSIGNED
 
     // Bush parameters
     VegetationParams bushParams;
@@ -105,7 +105,7 @@ void ProceduralVegetation::InitializeDefaultParams()
     bushParams.hasCollision_ = true;
     bushParams.clusterRadius_ = 5.0f;
     bushParams.clusterStrength_ = 0.7f;
-    vegetationParams_[VEG_BUSH] = bushParams;
+    vegetationParams_[(unsigned)VEG_BUSH] = bushParams; // CAST TO UNSIGNED
 
     // Small tree parameters
     VegetationParams smallTreeParams;
@@ -122,7 +122,7 @@ void ProceduralVegetation::InitializeDefaultParams()
     smallTreeParams.hasCollision_ = true;
     smallTreeParams.clusterRadius_ = 8.0f;
     smallTreeParams.clusterStrength_ = 0.6f;
-    vegetationParams_[VEG_SMALL_TREE] = smallTreeParams;
+    vegetationParams_[(unsigned)VEG_SMALL_TREE] = smallTreeParams; // CAST TO UNSIGNED
 
     // Medium tree parameters
     VegetationParams mediumTreeParams;
@@ -139,7 +139,7 @@ void ProceduralVegetation::InitializeDefaultParams()
     mediumTreeParams.hasCollision_ = true;
     mediumTreeParams.clusterRadius_ = 12.0f;
     mediumTreeParams.clusterStrength_ = 0.5f;
-    vegetationParams_[VEG_MEDIUM_TREE] = mediumTreeParams;
+    vegetationParams_[(unsigned)VEG_MEDIUM_TREE] = mediumTreeParams; // CAST TO UNSIGNED
 
     // Large tree parameters
     VegetationParams largeTreeParams;
@@ -155,7 +155,7 @@ void ProceduralVegetation::InitializeDefaultParams()
     largeTreeParams.hasCollision_ = true;
     largeTreeParams.clusterRadius_ = 20.0f;
     largeTreeParams.clusterStrength_ = 0.4f;
-    vegetationParams_[VEG_LARGE_TREE] = largeTreeParams;
+    vegetationParams_[(unsigned)VEG_LARGE_TREE] = largeTreeParams; // CAST TO UNSIGNED
 
     // Pine tree parameters
     VegetationParams pineParams;
@@ -172,7 +172,7 @@ void ProceduralVegetation::InitializeDefaultParams()
     pineParams.hasCollision_ = true;
     pineParams.clusterRadius_ = 15.0f;
     pineParams.clusterStrength_ = 0.8f;
-    vegetationParams_[VEG_PINE_TREE] = pineParams;
+    vegetationParams_[(unsigned)VEG_PINE_TREE] = pineParams; // CAST TO UNSIGNED
 }
 
 void ProceduralVegetation::InitializeDefaultBiomes()
@@ -183,7 +183,7 @@ void ProceduralVegetation::InitializeDefaultBiomes()
     grassland.temperature_ = 22.0f;
     grassland.humidity_ = 60.0f;
     grassland.fertility_ = 80.0f;
-    biomeConfigs_[BIOME_GRASSLAND] = grassland;
+    biomeConfigs_[(unsigned)BIOME_GRASSLAND] = grassland; // CAST TO UNSIGNED
 
     // Forest biome
     BiomeConfig forest;
@@ -191,7 +191,7 @@ void ProceduralVegetation::InitializeDefaultBiomes()
     forest.temperature_ = 18.0f;
     forest.humidity_ = 80.0f;
     forest.fertility_ = 90.0f;
-    biomeConfigs_[BIOME_FOREST] = forest;
+    biomeConfigs_[(unsigned)BIOME_FOREST] = forest; // CAST TO UNSIGNED
 
     // Mountain biome
     BiomeConfig mountain;
@@ -199,7 +199,7 @@ void ProceduralVegetation::InitializeDefaultBiomes()
     mountain.temperature_ = 10.0f;
     mountain.humidity_ = 50.0f;
     mountain.fertility_ = 60.0f;
-    biomeConfigs_[BIOME_MOUNTAIN] = mountain;
+    biomeConfigs_[(unsigned)BIOME_MOUNTAIN] = mountain; // CAST TO UNSIGNED
 
     // Desert biome
     BiomeConfig desert;
@@ -207,7 +207,7 @@ void ProceduralVegetation::InitializeDefaultBiomes()
     desert.temperature_ = 35.0f;
     desert.humidity_ = 20.0f;
     desert.fertility_ = 30.0f;
-    biomeConfigs_[BIOME_DESERT] = desert;
+    biomeConfigs_[(unsigned)BIOME_DESERT] = desert; // CAST TO UNSIGNED
 }
 
 void ProceduralVegetation::GenerateVegetation()

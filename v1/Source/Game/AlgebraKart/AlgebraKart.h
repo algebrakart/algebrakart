@@ -44,7 +44,7 @@
 #include "ReplayUI.h"
 #include <AlgebraKart/PixelImage.h>
 
-
+#include "beat/BeatSequencerUI.h"
 #include "ProceduralVegetation.h"
 
 #define GAME_NAME "AlgebraKart"
@@ -834,6 +834,17 @@ private:
     Node* vegetationNode_;
     bool vegetationEnabled_;
     float vegetationUpdateTimer_;
+
+    /// Beat Sequencer UI
+    SharedPtr<BeatSequencerUI> beatSequencerUI_;
+
+    /// Enhanced sequencer integration
+    void UpdateBeatSequencerUI(float timeStep);
+    void UpdateEnhanced3DSequencer(float timeStep, int currentBeat, bool isPlaying);
+    void HandleBeatToggled(StringHash eventType, VariantMap& eventData);
+    void HandleSequencerPlayToggle(StringHash eventType, VariantMap& eventData);
+    void HandleSequencerStop(StringHash eventType, VariantMap& eventData);
+    void HandleSequencerRecordToggle(StringHash eventType, VariantMap& eventData);
 
     Vector3 CalculatePlayersCenterPosition();
 
