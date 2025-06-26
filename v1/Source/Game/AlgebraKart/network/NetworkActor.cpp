@@ -820,10 +820,12 @@ void NetworkActor::FixedUpdate(float timeStep) {
         // Body-only logic
         if (body_) {
 
-            if (sequencer_->GetPlaySource()->GetNode()) {
-                if (body_->GetNode()) {
-                    // Sequencer update
-                    sequencer_->GetPlaySource()->GetNode()->SetPosition(body_->GetNode()->GetPosition());
+            if (sequencer_) {
+                if (sequencer_->GetPlaySource()->GetNode()) {
+                    if (body_->GetNode()) {
+                        // Sequencer update
+                        sequencer_->GetPlaySource()->GetNode()->SetPosition(body_->GetNode()->GetPosition());
+                    }
                 }
             }
 

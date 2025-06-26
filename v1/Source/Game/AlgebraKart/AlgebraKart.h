@@ -41,9 +41,11 @@
 #include "Game.h"
 #include "AlgebraKart/network/Vehicle.h"
 #include "ReplaySystem.h"
+#include "ReplayUI.h"
 #include <AlgebraKart/PixelImage.h>
 
 
+#include "ProceduralVegetation.h"
 
 #define GAME_NAME "AlgebraKart"
 
@@ -824,6 +826,14 @@ private:
     SharedPtr<ReplaySystem> replaySystem_;
     SharedPtr<ReplayUI> replayUI_;
     bool replaySystemEnabled_;
+
+    float lastReplayTriggerTime_;
+    static constexpr float REPLAY_COOLDOWN_TIME = 3.0f;
+
+    SharedPtr<ProceduralVegetation> vegetationSystem_;
+    Node* vegetationNode_;
+    bool vegetationEnabled_;
+    float vegetationUpdateTimer_;
 
     Vector3 CalculatePlayersCenterPosition();
 

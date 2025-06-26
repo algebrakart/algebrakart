@@ -4,268 +4,209 @@
 #include <Urho3D/Container/Vector.h>
 #include <Urho3D/Math/Vector3.h>
 #include <Urho3D/Math/Quaternion.h>
-#include <Urho3D/Scene/Node.h>
-#include <Urho3D/Graphics/Camera.h>
-#include <Urho3D/Physics/RigidBody.h>
-#include <Urho3D/Core/Timer.h>
-#include <Urho3D/UI/UIElement.h>
-#include <Urho3D/UI/Text.h>
-#include <Urho3D/UI/Sprite.h>
+#include <Urho3D/Input/Controls.h>
 
+namespace Urho3D
+{
+    class Scene;
+    class Node;
+    class Camera;
+    class RigidBody;
+    class AnimationController;
+}
 
 using namespace Urho3D;
 
 // Forward declarations
 class NetworkActor;
+class Vehicle;
 
-/// Replay frame data structure
+// Replay frame data structure
 struct ReplayFrame {
-    float timestamp_;
-    Vector3 position_;
-    Quaternion rotation_;
-    Vector3 velocity_;
-    Vector3 angularVelocity_;
-    float speed_;
-    bool onGround_;
+    float timestamp;
 
-    ReplayFrame() : timestamp_(0.0f), speed_(0.0f), onGround_(true) {}
+    // Player/Actor data
+    Vector3 actorPosition;
+    Quaternion actorRotation;
+    Vector3 actorVelocity;
+    Vector3 actorAngularVelocity;
+    bool onGround;
+    bool onVehicle;
+    bool entered;
 
-    ReplayFrame(float timestamp, const Vector3& pos, const Quaternion& rot,
-                const Vector3& vel, const Vector3& angVel, float speed, bool grounded)
-            : timestamp_(timestamp), position_(pos), rotation_(rot),
-              velocity_(vel), angularVelocity_(angVel), speed_(speed), onGround_(grounded) {}
+    // Vehicle data (if applicable)
+    Vector3 vehiclePosition;
+    Quaternion vehicleRotation;
+    Vector3 vehicleVelocity;
+    Vector3 vehicleAngularVelocity;
+    float steering;
+    float engineForce;
+    float brakeForce;
+    float rpm;
+    float speedKmH;
+
+    // Controls input
+    Controls controls;
+
+    // Animation data
+    String currentAnimation;
+    float animationTime;
+    float animationSpeed;
+
+    // Camera data
+    Vector3 cameraPosition;
+    Quaternion cameraRotation;
+    float cameraFov;
+
+    // Additional state
+    int health;
+    int prana;
+    bool isAlive;
 };
 
-/// Types of replay events
-enum ReplayEventType {
-    REPLAY_CRASH = 0,
-    REPLAY_FLIP,
+// Replay data for a complete recording session
+struct ReplayData {
+    Vector<ReplayFrame> frames;
+    float totalDuration;
+    String playerName;
+    float recordingStartTime;
+    NetworkActor* originalActor;
+    Vehicle* originalVehicle;
+
+    void Clear() {
+        frames.Clear();
+        totalDuration = 0.0f;
+        playerName.Clear();
+        recordingStartTime = 0.0f;
+        originalActor = nullptr;
+        originalVehicle = nullptr;
+    }
+};
+
+enum ReplayMode {
+    REPLAY_CAMERA_ONLY,
+    REPLAY_GHOST_SIMULATION,
+    REPLAY_FULL_TAKEOVER
+};
+
+enum ReplayTriggerType {
+    REPLAY_MANUAL,
     REPLAY_HIGH_SPEED_COLLISION,
-    REPLAY_AIRTIME,
-    REPLAY_MANUAL // Player triggered
+    REPLAY_SPECTACULAR_MOMENT,
+    REPLAY_RACE_FINISH,
+    REPLAY_CRASH,
+    REPLAY_FLIP,
+    REPLAY_AIRTIME
 };
 
-/// Replay event data
-struct ReplayEvent {
-    ReplayEventType eventType_;
-    float eventTime_;
-    Vector3 eventLocation_;
-    String playerName_;
-    Vector<ReplayFrame> frames_;
-    float severity_; // 0.0 - 1.0 for event intensity
-
-    ReplayEvent() : eventType_(REPLAY_CRASH), eventTime_(0.0f), severity_(0.0f) {}
-};
-
-/// Camera modes for replay viewing
-enum ReplayCameraMode {
-    REPLAY_CAM_TRACKING = 0,     // Smooth tracking camera
-    REPLAY_CAM_CINEMATIC,        // Cinematic angles
-    REPLAY_CAM_ORBIT,            // Orbiting around crash point
-    REPLAY_CAM_SLOW_MOTION,      // Slow motion with close-up
-    REPLAY_CAM_MULTI_ANGLE       // Multiple quick angle changes
-};
-
-/// Replay system states
-enum ReplayState {
-    REPLAY_RECORDING = 0,
-    REPLAY_PLAYING,
-    REPLAY_PAUSED,
-    REPLAY_DISABLED
-};
-
-/// Main Replay System
-class ReplaySystem : public Object {
+class ReplaySystem : public Object
+{
 URHO3D_OBJECT(ReplaySystem, Object);
 
 public:
-    /// Constructor
-    explicit ReplaySystem(Context* context);
+    ReplaySystem(Context* context);
+    virtual ~ReplaySystem();
 
-    /// Destructor
-    ~ReplaySystem() override;
-
-    /// Register object factory
-    static void RegisterObject(Context* context);
-
-    /// Initialize the replay system
-    void Initialize(Scene* scene, Camera* gameCamera);
-
-    /// Update the replay system
+    // Core functionality
+    void Initialize(Scene* scene, Camera* camera);
     void Update(float timeStep);
 
-    /// Start recording a vehicle
+    // Recording
     void StartRecording(NetworkActor* actor);
-
-    /// Stop recording a vehicle
-    void StopRecording(NetworkActor* actor);
-
-    /// Manually trigger a replay event
-    void TriggerReplay(NetworkActor* actor, ReplayEventType eventType = REPLAY_MANUAL);
-
-    /// Check if currently playing a replay
-    bool IsPlayingReplay() const { return replayState_ == REPLAY_PLAYING; }
-
-    /// Skip current replay
-    void SkipReplay();
-
-    /// Enable/disable automatic replay detection
-    void SetAutoReplayEnabled(bool enabled) { autoReplayEnabled_ = enabled; }
-
-    /// Set replay recording duration (seconds before event)
-    void SetRecordingDuration(float duration) { recordingDuration_ = duration; }
-
-    /// Set replay playback speed multiplier
-    void SetPlaybackSpeed(float speed) { playbackSpeed_ = speed; }
-
-    /// Get current replay camera
-    Camera* GetReplayCamera() { return replayCamera_; }
-
-private:
-    /// Record a frame for a player
+    void StopRecording();
     void RecordFrame(NetworkActor* actor);
 
-    /// Detect crash/flip events
-    void DetectEvents(NetworkActor* actor, float timeStep);
+    // Playback
+    void TriggerReplay(NetworkActor* actor, ReplayTriggerType triggerType, ReplayMode mode = REPLAY_GHOST_SIMULATION);
+    void PlayReplay(const ReplayData& replayData, ReplayMode mode);
+    void StopReplay();
+    void SkipReplay();
+    void PauseReplay();
+    void ResumeReplay();
 
-    /// Start playing a replay
-    void StartReplay(const ReplayEvent& event);
+    // Configuration
+    void SetRecordingDuration(float duration) { recordingDuration_ = duration; }
+    void SetPlaybackSpeed(float speed) { playbackSpeed_ = Clamp(speed, 0.1f, 4.0f); }
+    void SetAutoReplayEnabled(bool enabled) { autoReplayEnabled_ = enabled; }
+    void SetReplayMode(ReplayMode mode) { currentReplayMode_ = mode; }
 
-    /// Update replay playback
-    void UpdateReplayPlayback(float timeStep);
-
-    /// End current replay
-    void EndReplay();
-
-    /// Create replay camera
-    void CreateReplayCamera();
-
-    /// Update replay camera position
-    void UpdateReplayCamera(const ReplayFrame& frame, float timeStep);
-
-    /// Calculate cinematic camera position
-    Vector3 CalculateCinematicCameraPosition(const Vector3& targetPos, float time);
-
-    /// Get camera mode for event type
-    ReplayCameraMode GetCameraMode(ReplayEventType eventType);
-
-    /// Interpolate between two replay frames
-    ReplayFrame InterpolateFrames(const ReplayFrame& a, const ReplayFrame& b, float t);
-
-    /// Check if vehicle is flipping
-    bool IsVehicleFlipping(NetworkActor* actor);
-
-    /// Check if vehicle crashed
-    bool IsVehicleCrashed(NetworkActor* actor);
-
-    /// Calculate event severity
-    float CalculateEventSeverity(NetworkActor* actor, ReplayEventType eventType);
+    // State queries
+    bool IsRecording() const { return isRecording_; }
+    bool IsPlayingReplay() const { return isPlayingReplay_; }
+    bool IsPaused() const { return isPaused_; }
+    float GetPlaybackProgress() const;
+    float GetRecordingTimeRemaining() const;
 
 private:
-    /// Scene reference
+    // Recording methods
+    void UpdateRecording(float timeStep);
+    void CaptureFrame(NetworkActor* actor);
+    void TrimOldFrames();
+
+    // Playback methods
+    void UpdatePlayback(float timeStep);
+    void ApplyReplayFrame(const ReplayFrame& frame);
+    void CreateGhostEntities();
+    void DestroyGhostEntities();
+    void UpdateGhostActor(const ReplayFrame& frame);
+    void UpdateGhostVehicle(const ReplayFrame& frame);
+    void UpdateReplayCamera(const ReplayFrame& frame);
+    ReplayFrame InterpolateFrames(const ReplayFrame& frame1, const ReplayFrame& frame2, float t);
+    bool IsActorValid(NetworkActor* actor) const;
+
+
+    // Utility methods
+    void SaveOriginalCameraState();
+    void RestoreOriginalCameraState();
+    void CreateCinematicEffects();
+    void UpdateCinematicEffects(float timeStep);
+
+    // Core components
     WeakPtr<Scene> scene_;
+    WeakPtr<Camera> originalCamera_;
+    WeakPtr<Node> originalCameraNode_;
 
-    /// Original game camera
-    WeakPtr<Camera> gameCamera_;
-
-    /// Replay camera
-    SharedPtr<Camera> replayCamera_;
-    SharedPtr<Node> replayCameraNode_;
-
-    /// Currently tracked players
-    HashMap<NetworkActor*, Vector<ReplayFrame>> recordingData_;
-
-    /// Player tracking data for event detection
-    struct PlayerTrackingData {
-        Vector3 lastPosition_;
-        Vector3 lastVelocity_;
-        float lastSpeed_;
-        float airTime_;
-        float flipTime_;
-        bool wasOnGround_;
-        float lastContactTime_;
-        Timer eventCooldown_;
-
-        PlayerTrackingData() : lastSpeed_(0.0f), airTime_(0.0f), flipTime_(0.0f),
-                                wasOnGround_(true), lastContactTime_(0.0f) {}
-    };
-    HashMap<NetworkActor*, PlayerTrackingData> trackingData_;
-
-    /// Current replay state
-    ReplayState replayState_;
-
-    /// Current replay event being played
-    ReplayEvent currentReplay_;
-
-    /// Replay playback time
-    float replayTime_;
-
-    /// Replay camera mode
-    ReplayCameraMode cameraMode_;
-
-    /// Camera animation time
-    float cameraAnimTime_;
-
-    /// Recording settings
-    float recordingDuration_;     // Seconds to record before event
-    float maxFrameRate_;          // Max frames per second to record
-    float lastRecordTime_;
-
-    /// Playback settings
-    float playbackSpeed_;
-    float replayDuration_;        // How long to show replay
-
-    /// Event detection settings
-    float minCrashSpeed_;         // Minimum speed for crash detection
-    float flipAngleThreshold_;    // Angle threshold for flip detection
-    float airTimeThreshold_;      // Air time threshold for airtime events
-    float eventCooldownTime_;     // Time between events for same vehicle
-
-    /// System settings
+    // Recording state
+    bool isRecording_;
     bool autoReplayEnabled_;
-    bool showReplayUI_;
+    float recordingDuration_;
+    float recordingTimer_;
+    ReplayData currentRecording_;
+    Vector<ReplayData> savedReplays_;
 
-    /// Frame interpolation
+    // Playback state
+    bool isPlayingReplay_;
+    bool isPaused_;
+    float playbackSpeed_;
+    float playbackTimer_;
     int currentFrameIndex_;
-    float frameTime_;
+    ReplayData currentReplay_;
+    ReplayMode currentReplayMode_;
 
-    /// Camera animation data
-    Vector3 cameraStartPos_;
-    Vector3 cameraTargetPos_;
-    Quaternion cameraStartRot_;
-    Quaternion cameraTargetRot_;
-    float cameraTransitionTime_;
+    // Ghost entities for simulation
+    SharedPtr<Node> ghostActorNode_;
+    SharedPtr<Node> ghostVehicleNode_;
+    NetworkActor* ghostActor_;
+    Vehicle* ghostVehicle_;
 
-    /// Event queue for multiple simultaneous events
-    Vector<ReplayEvent> eventQueue_;
+    // Original state preservation
+    Vector3 originalCameraPosition_;
+    Quaternion originalCameraRotation_;
+    float originalCameraFov_;
+    bool originalCameraState_[4]; // Various camera flags
 
-    float slowMotionFactor_;
-    float normalSpeedFactor_;
-    float currentTimeDilation_;
-};
+    // Cinematic effects
+    float cinematicTimer_;
+    bool cinematicMode_;
+    Vector3 cinematicCameraOffset_;
+    float cinematicShakeIntensity_;
 
-/// Replay UI component for showing replay status
-class ReplayUI : public Object {
-URHO3D_OBJECT(ReplayUI, Object);
+    // Performance optimization
+    float frameRecordInterval_;
+    float lastRecordTime_;
+    int maxStoredReplays_;
 
-public:
-    explicit ReplayUI(Context* context);
-    ~ReplayUI() override;
-
-    /// Initialize UI elements
-    void Initialize();
-
-    /// Update UI during replay
-    void UpdateReplayUI(const ReplayEvent& event, float progress);
-
-    /// Show/hide replay UI
-    void SetVisible(bool visible);
-
-private:
-    /// UI elements
-    SharedPtr<UIElement> replayContainer_;
-    SharedPtr<Text> replayText_;
-    SharedPtr<Sprite> replayProgressBar_;
-    SharedPtr<Text> replaySpeedText_;
-    bool uiVisible_;
+    bool isReplayTriggering_;
+    float lastCollisionTime_;
+    int maxConcurrentReplays_;
 };

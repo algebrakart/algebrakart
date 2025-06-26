@@ -281,7 +281,8 @@ AlgebraKart::AlgebraKart(Context *context) :
         minimapBorderPadding_(10.0f),
         minimapRotateWithPlayer_(false),
         minimapTargetPosition_(Vector3::ZERO),
-        replaySystemEnabled_(true)
+        replaySystemEnabled_(true),
+        lastReplayTriggerTime_(0.0f)
 {
 
 
@@ -304,7 +305,7 @@ AlgebraKart::AlgebraKart(Context *context) :
     currentJumpCooldown_ = 0.0f;
     targetMovement_ = Vector3::ZERO;
     currentMovement_ = Vector3::ZERO;
-    SetCameraMode(CAMERA_FREEFLY);
+    SetCameraMode(CAMERA_THIRD_PERSON);
 
 }
 
@@ -2212,20 +2213,55 @@ void AlgebraKart::HandleCollisionBegin(StringHash eventType, VariantMap &eventDa
 void AlgebraKart::HandleCollisionReplay(StringHash eventType, VariantMap &eventData) {
     using namespace NodeCollision;
 
-    // Get collision information
-    float maxImpulse = GetMaxCollisionImpulse(eventData);
+    // Add throttling to prevent spam
+    static float lastCollisionReplayTime = 0.0f;
+    float currentTime = GetSubsystem<Time>()->GetElapsedTime();
+
+    if (currentTime - lastCollisionReplayTime < 2.0f) {
+        return; // Ignore collisions within 2 seconds of last replay
+    }
+
+    // Get collision information safely
+    float maxImpulse = 0.0f;
+    try {
+        maxImpulse = GetMaxCollisionImpulse(eventData);
+    } catch (...) {
+        URHO3D_LOGERROR("Exception while calculating collision impulse");
+        return;
+    }
 
     // Only trigger replay for significant collisions
     if (maxImpulse > 15.0f) {
         Node* nodeA = static_cast<Node*>(eventData[P_OTHERNODE].GetPtr());
+        if (!nodeA) {
+            URHO3D_LOGWARNING("Invalid collision node");
+            return;
+        }
 
         // Try to find associated vehicle
         NetworkActor* actor = FindNetworkActorFromNode(nodeA);
-        if (actor && replaySystem_) {
-            // Get actor from vehicle
-            //replaySystem_->TriggerReplay(actor, REPLAY_HIGH_SPEED_COLLISION);
-            URHO3D_LOGINFOF("Collision replay triggered for vehicle: %s (impulse: %.2f)",
-                            actor->GetNode()->GetName().CString(), maxImpulse);
+        if (actor && actor->GetNode() && replaySystem_ && replaySystemEnabled_) {
+
+            // Additional safety check for the actor
+            String actorName = "Unknown";
+            try {
+                actorName = actor->GetUserName();
+            } catch (...) {
+                URHO3D_LOGWARNING("Could not get actor name for collision replay");
+                return;
+            }
+
+            // Update throttling timer
+            lastCollisionReplayTime = currentTime;
+
+            // Trigger replay with error handling
+            try {
+                replaySystem_->TriggerReplay(actor, REPLAY_HIGH_SPEED_COLLISION);
+                URHO3D_LOGINFOF("Collision replay triggered for vehicle: %s (impulse: %f)",
+                                actorName.CString(), maxImpulse);
+            } catch (...) {
+                URHO3D_LOGERROR("Exception while triggering collision replay");
+            }
         }
     }
 }
@@ -3813,7 +3849,6 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
         }
     }
 
-
     if (input->GetKeyPress(KEY_J)) {
         // Increment focus object
         camSpin2_ = camSpin2_ - 10.0f;
@@ -5127,9 +5162,6 @@ void AlgebraKart::CreateServerSubsystem() {
     RaycastVehicleBase::RegisterObject(context_);
     WheelTrackModel::RegisterObject(context_);
 
-    // Replay System
-    ReplaySystem::RegisterObject(context_);
-
     // Client-side Prediction
     CSP_Server::RegisterObject(context_);
     CSP_Client::RegisterObject(context_);
@@ -5812,8 +5844,7 @@ void AlgebraKart::MoveCamera(float timeStep) {
                                                                                          0,
                                                                                          0.0f);
 
-                                            lookAtObject = pos + na->GetBody()->GetRotation() * Vector3::FORWARD*15.0f;
-
+                                            lookAtObject = pos + naBody->GetRotation() * Vector3::FORWARD*15.0f;
                                         } else {
                                             // On foot
                                             botSpeedKm = 0;
@@ -8688,6 +8719,7 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
     VariantMap identity = connection->GetIdentity();
     String username = String(identity["UserName"]);
     String name = String(String("actor-") + username);
+    nextGridPosition_ += 2;
     // Get next grid position
     Vector3 actorPos = GetGridPosition(nextGridPosition_);
     nextGridPosition_++;
@@ -8748,7 +8780,7 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
     //vehicleNode->SetRotation(Quaternion(0.0f, 180.0f, 0.0f));
     Vehicle *vehicle = vehicleNode->CreateComponent<Vehicle>(REPLICATED);
     vehicle->Init(vehicleNode);
-    vehicleNode->SetPosition(Vector3(actor->GetBody()->GetPosition())+Vector3(0,-5,-40));
+    vehicleNode->SetPosition(Vector3(actor->GetBody()->GetPosition())+Vector3(0,-5,-2));
     //vehicle->GetRaycastVehicle()->GetBody()->SetPosition(Vector3(actor->GetPosition())-Vector3::UP*50.0f);
     vehicleNode->SetRotation(Quaternion(0.0f, Random(0.0f, 360.0f), 0.0f));
     // Attach vehicle to actor
@@ -8826,6 +8858,7 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
     }
 
 
+    actor->EnterVehicle();
     return networkActorNode;
 }
 
@@ -8863,7 +8896,7 @@ std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
     String name = String(String("actor-") + username);
 
     // Create vehicle close to the AI actor
-    Vector3 vehiclePos = actorPos + Vector3(2.0f, 0.0f, -3.0f);  // Slightly behind and to the right
+    Vector3 vehiclePos = actorPos + Vector3(0.0f, -5.0f, 0.0f);  // Slightly behind and to the right
 
     // Assign server recorder to each client sequencer
     Server *server = GetSubsystem<Server>();
@@ -8884,7 +8917,7 @@ std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
 
         //actorPos = Quaternion(0,90,0) * (startPos+spawnDir*w);
         actorPos = Quaternion(0,0,0) * (startPos+spawnDir*w);
-        actor->GetNode()->SetPosition(actorPos);
+        //actor->GetNode()->SetPosition(actorPos);
         // Clamp y to start marker
         //actorPos.y_ = starAMarker_.y_;
 
@@ -8904,9 +8937,6 @@ std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
     vehicleNode->SetRotation(racingOrientation);
     // Attach vehicle to actor
     actor->vehicle_ = vehicle;
-
-    // Auto-enter the vehicle for AI bots (they should start in their vehicles)
-    actor->EnterVehicle();
 
     // Create text3d client info node
     Node *plyFltTextNode = vehicleNode->CreateChild("Actor FloatText", REPLICATED);
@@ -8971,6 +9001,9 @@ std::shared_ptr<NetworkActor> AlgebraKart::SpawnPlayer(unsigned int id) {
         viewCone->SetConeColor(aiColor);
         URHO3D_LOGINFO("ViewCone added to AI bot " + String(id));
     }
+
+    // Auto-enter the vehicle for AI bots (they should start in their vehicles)
+    actor->EnterVehicle();
 
     // Give the ownership to the client
     //networkActorNode->SetOwner(connection);
@@ -9788,9 +9821,10 @@ NetworkActor* AlgebraKart::GetLocalNetworkActor() {
                         pos = body->GetPosition();
                         rot = body->GetRotation();
                         lVel = body->GetLinearVelocity();
-                        // Link the objects
-                        na->vehicle_ = v;
-
+                        // Only link vehicle if it's valid and has a RaycastVehicle
+                        if (v && v->GetNode() && v->GetRaycastVehicle()) {
+                            na->vehicle_ = v;
+                        }
                         return na;
                     }
                 }
@@ -9872,7 +9906,7 @@ void AlgebraKart::UpdateCameraThirdPerson(float timeStep) {
     Vector3 targetPosition;
     Vector3 lookAtPosition;
 
-    if (actor->onVehicle_ && actor->vehicle_) {
+    if (actor->onVehicle_ && actor->vehicle_ && actor->vehicle_->GetNode() && actor->vehicle_->GetRaycastVehicle()) {
         // In vehicle - dynamic camera based on speed
         Node* vehicleNode = actor->vehicle_->GetNode();
         float speed = actor->vehicle_->GetSpeedKmH();
@@ -9936,36 +9970,58 @@ void AlgebraKart::UpdateCameraIsometric(float timeStep) {
 
     // Initialize camera for isometric view
     if (!cameraInitialized_) {
-        // Set orthographic projection for true isometric feel
-        clientCam_->SetOrthographic(false); // Keep perspective for now, but you can change to true
-        clientCam_->SetFov(30.0f); // Narrow FOV for isometric-like view
+        clientCam_->SetOrthographic(false);
+        clientCam_->SetFov(30.0f);
         cameraInitialized_ = true;
     }
 
+    // Get player speed and position
+    float currentSpeed = 0.0f;
     if (actor && actor->GetNode()) {
-        // Center on player but from high above
-        lookAtPosition = actor->GetNode()->GetWorldPosition();
+        lookAtPosition = actor->GetBody()->GetPosition();
+
+        // Get speed from vehicle or actor
+        if (actor->onVehicle_ && actor->vehicle_ && actor->vehicle_->GetRaycastVehicle()) {
+            currentSpeed = actor->vehicle_->GetSpeedKmH();
+        } else {
+            Vector3 velocity = actor->GetBody()->GetLinearVelocity();
+            currentSpeed = velocity.Length() * 3.6f; // Convert m/s to km/h
+        }
     } else {
-        // Center on map center if no actor
         lookAtPosition = Vector3::ZERO;
     }
+
+    // Speed-based zoom calculation
+    static float smoothedSpeed = 0.0f;
+    smoothedSpeed = Lerp(smoothedSpeed, currentSpeed, 2.0f * timeStep);
+
+    // Calculate dynamic height: zoom out as speed increases
+    float baseHeight = isometricCameraHeight_;
+    float speedMultiplier = 1.0f;
+
+    if (smoothedSpeed > 10.0f) { // Only zoom when speed > 10 km/h
+        // Zoom out by 2% for every 10 km/h above threshold
+        speedMultiplier = 1.0f + ((smoothedSpeed - 10.0f) * 0.02f);
+    }
+
+    float dynamicHeight = baseHeight * speedMultiplier;
+    dynamicHeight = Clamp(dynamicHeight, 200.0f, 800.0f); // Reasonable limits
 
     // Calculate isometric camera position
     float angleRad = isometricCameraAngle_ * M_DEGTORAD;
     Vector3 cameraOffset(
-            isometricCameraHeight_ * Sin(angleRad),
-            isometricCameraHeight_ * Cos(angleRad),
-            isometricCameraHeight_ * Sin(angleRad)
+            dynamicHeight * Sin(angleRad),
+            dynamicHeight * Cos(angleRad),
+            dynamicHeight * Sin(angleRad)
     );
 
     targetPosition = lookAtPosition + cameraOffset;
 
-    // Allow camera panning with middle mouse button
+    // Existing mouse controls (preserve current functionality)
     if (GetSubsystem<Input>()->GetMouseButtonDown(MOUSEB_MIDDLE)) {
         IntVector2 mouseMove = GetSubsystem<Input>()->GetMouseMove();
         const float PAN_SPEED = 0.5f;
 
-        // Pan camera based on mouse movement
         Vector3 right = cameraNode->GetWorldRotation() * Vector3::RIGHT;
         Vector3 forward = Vector3(cameraNode->GetWorldDirection().x_, 0, cameraNode->GetWorldDirection().z_).Normalized();
 
@@ -9975,10 +10031,10 @@ void AlgebraKart::UpdateCameraIsometric(float timeStep) {
         lookAtPosition -= forward * mouseMove.y_ * PAN_SPEED;
     }
 
-    // Mouse wheel zoom
+    // Mouse wheel zoom (manual override)
     int wheelDelta = GetSubsystem<Input>()->GetMouseMoveWheel();
     if (wheelDelta != 0) {
-        isometricCameraHeight_ = Clamp(isometricCameraHeight_ - wheelDelta * 20.0f, 100.0f, 1000.0f);
+        isometricCameraHeight_ = Clamp(isometricCameraHeight_ - wheelDelta * 20.0f, 100.0f, 600.0f);
     }
 
     // Smooth camera movement
@@ -10199,7 +10255,7 @@ Vector3 AlgebraKart::GetGridPosition(int gridIndex) {
     if (starAMarkerSet_) {
         Vector3 spawnDir = (starBMarker_ - starAMarker_);
         gridPos = starAMarker_;
-        gridPos.y_ -= 34.0f;
+        gridPos.y_ += 34.0f;
     }
     gridPos.x_ += (col - (GRID_COLUMNS - 1) * 0.5f) * GRID_SPACING_X;  // Center the grid
     gridPos.z_ += row * GRID_SPACING_Z;

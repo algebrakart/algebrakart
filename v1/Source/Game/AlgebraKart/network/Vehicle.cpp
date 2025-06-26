@@ -135,7 +135,10 @@ Vehicle::Vehicle(Context* context)
     rollInfluence_ = 0.12f;
     emittersCreated = false;
 
-    m_fmaxEngineForce = 560000.0f;//950.f;
+    // Fastest reached
+//    m_fmaxEngineForce = 560000.0f;//950.f;
+    m_fmaxEngineForce = 35000.0f;//950.f;
+
   //  m_fmaxEngineForce = 4200.0f;//5400.0f;//950.f;
 
     m_fmaxBreakingForce = 800.f;
@@ -401,7 +404,9 @@ void Vehicle::FixedUpdate(float timeStep)
 
         if (newSteering != 0.0f)
         {
-            SetSteering(GetSteering() * 0.95f + newSteering * 0.0081f);
+            SetSteering(GetSteering() * 0.70f + newSteering * 0.30f);
+//            SetSteering(GetSteering() * 0.75f + newSteering * 0.0250f);
+
         }
         else
         {
@@ -463,6 +468,10 @@ void Vehicle::FixedUpdate(float timeStep)
         AutoCorrectPitchRoll();
         UpdateDrift();
         CheckAndRecoverFromPenetration();
+
+        // Broken stops the vehicle movement
+        //ApplySlopeStabilization();
+        //UpdateSlopeAwareSuspension();
 
 
 
@@ -818,7 +827,8 @@ void Vehicle::Init(Node* node) {
         //body_->DrawDebugGeometry(dbgRenderer, true);
 
         //float forwardWeightOffset = 38.0f; // Sahin
-        float forwardWeightOffset = 3.0f; // Yugo
+        //float forwardWeightOffset = 3.0f; // Yugo
+        float forwardWeightOffset = 1.5f; // Kart
 
         // Push back
         node_->SetPosition(Vector3(0,0,forwardWeightOffset));
@@ -1478,6 +1488,7 @@ void Vehicle::Init(Node* node) {
         Vector3 pos = Vector3(0, 4.0f, 0.0f); // Yugo
         Quaternion q = Quaternion(0, 90, 0);
 
+        // Turrent gun
         Node *turrentNode = GetNode()->CreateChild("Model");
         turrent_ = turrentNode->CreateComponent<StaticModel>();
         turrent_->SetCastShadows(true);
@@ -1956,11 +1967,11 @@ void Vehicle::HandleVehicleCollision(StringHash eventType, VariantMap & eventDat
 
     // Trigger replay for significant collisions
     if (maxImpulse > 10.0f && GetSpeedKmH() > 30.0f) {
-        // Find the AlgebraKart instance and trigger replay
+            // Find the AlgebraKart instance and trigger replay
             // This requires making the replay system accessible
             // You might need to make it a subsystem or pass it differently
-            URHO3D_LOGINFOF("High impact collision detected: impulse=%f, speed=%f",
-                            maxImpulse, GetSpeedKmH());
+            /*URHO3D_LOGINFOF("High impact collision detected: impulse=%f, speed=%f",
+                            maxImpulse, GetSpeedKmH());*/
     }
 }
 
@@ -2423,14 +2434,17 @@ void Vehicle::ApplyDownwardForce()
     bool frontLifting = pitchDegrees > 15.0f;  // Nose pointing up more than 15 degrees
     bool needsFrontDownforce = frontLifting || speedKmh > 80.0f;
 
+    //if (frontLifting)
+    //    URHO3D_LOGINFOF("Front of vehicle lifted past 15 degrees -> %f", pitchDegrees);
+
     // Only apply minimal downward force when partially airborne
     if (numWheelContacts_ > 0 && numWheelContacts_ < numWheels_) {
         float speedKmh = raycastVehicle_->GetSpeedKm();
 
         // Much more conservative force
-        float baseForce = 800.0f;  // Greatly reduced
+        float baseForce = 1400.0f;  // Greatly reduced
         float speedMultiplier = speedKmh * 2.0f;  // Gentle speed scaling
-        float totalForce = Clamp(baseForce + speedMultiplier, 100.0f, 1800.0f);
+        float totalForce = Clamp(baseForce + speedMultiplier, 100.0f, 2400.0f);
 
         // Apply force only at center of mass
         Vector3 centerOfMass = body_->GetCenterOfMass();
