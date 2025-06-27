@@ -915,6 +915,8 @@ private:
     void CleanupAudioResources();
     void ProcessAudioStream();
 
+    void InitializeMissileSystem();
+
 
     };
 

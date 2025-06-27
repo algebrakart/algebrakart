@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Urho3D/Core/Object.h>
+#include <Urho3D/Scene/Component.h>
 #include <Urho3D/Container/Vector.h>
 
 using namespace Urho3D;
@@ -9,9 +9,9 @@ class Missile;
 class NetworkActor;
 
 /// Manages all active missiles in the game
-class MissileManager : public Object
+class MissileManager : public Component
 {
-URHO3D_OBJECT(MissileManager, Object);
+URHO3D_OBJECT(MissileManager, Component);
 
 public:
     /// Construct.
@@ -22,7 +22,7 @@ public:
     /// Register object factory.
     static void RegisterObject(Context* context);
 
-    /// Update all missiles
+    /// Update all missiles (called automatically by Component system)
     void Update(float timeStep);
 
     /// Create a new missile

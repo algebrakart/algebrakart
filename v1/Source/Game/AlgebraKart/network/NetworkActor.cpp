@@ -324,6 +324,84 @@ void NetworkActor::Init(Node* node) {
         SetAttribute("Color Index", Variant(50));
         SetAttribute("Position", Variant(node_->GetPosition()));
 
+
+        // Get the global missile manager
+        if (scene_) {
+            Variant managerVar = scene_->GetVar("MissileManager");
+            if (!managerVar.IsEmpty()) {
+                projectileManager_ = managerVar.GetCustomPtr<MissileManager>();
+            }
+        }
+
+        // Initialize missile-related variables
+        targetLock_ = nullptr;
+        lockOnProgress_ = 0.0f;
+        lockOnTime_ = 0.0f;
+        lastMissileFireTime_ = 0.0f;
+        missileFireCooldown_ = MISSILE_FIRE_COOLDOWN;
+
+        // Create lock-on UI indicators
+        CreateLockOnUI();
+
+    }
+}
+
+void NetworkActor::CreateLockOnUI() {
+    if (!scene_) return;
+
+    ResourceCache* cache = GetSubsystem<ResourceCache>();
+
+    // Create lock-on indicator
+    lockOnIndicator_ = scene_->CreateChild("LockOnIndicator", LOCAL);
+    lockOnIndicator_->SetEnabled(false);
+
+    // Add a visual component (could be a Billboard or StaticModel)
+    BillboardSet* billboard = lockOnIndicator_->CreateComponent<BillboardSet>();
+    billboard->SetNumBillboards(1);
+    billboard->SetMaterial(cache->GetResource<Material>("Materials/LockOnTarget.xml"));
+    billboard->SetFaceCameraMode(FC_ROTATE_XYZ);
+
+    Billboard* lockBillboard = billboard->GetBillboard(0);
+    lockBillboard->size_ = Vector2(10.0f, 10.0f);
+    lockBillboard->position_ = Vector3::ZERO;
+    billboard->Commit();
+}
+
+void NetworkActor::UpdateLockOnUI(float timeStep) {
+    if (!lockOnIndicator_) return;
+
+    if (HasTargetLock() && lockOnProgress_ > 0.0f) {
+        lockOnIndicator_->SetEnabled(true);
+
+        // Position indicator above target
+        Vector3 targetPos = targetLock_->GetNode()->GetWorldPosition();
+        lockOnIndicator_->SetWorldPosition(targetPos + Vector3(0, 15, 0));
+
+        // Animate based on lock progress
+        float scale = 0.5f + (lockOnProgress_ * 0.5f);
+        lockOnIndicator_->SetScale(scale);
+
+        // Change color based on lock progress
+        BillboardSet* billboard = lockOnIndicator_->GetComponent<BillboardSet>();
+        if (billboard) {
+            Color lockColor = Color::YELLOW.Lerp(Color::RED, lockOnProgress_);
+            billboard->GetMaterial()->SetShaderParameter("MatDiffColor", lockColor);
+        }
+    } else {
+        lockOnIndicator_->SetEnabled(false);
+    }
+}
+
+void NetworkActor::PlayMissileFireSound() {
+    // Use the existing sound system from AlgebraKart
+    auto* cache = GetSubsystem<ResourceCache>();
+    auto* sound = cache->GetResource<Sound>("Sounds/MissileFire.wav");
+
+    if (sound) {
+        auto* source = GetNode()->CreateComponent<SoundSource3D>();
+        source->SetSoundType(SOUND_EFFECT);
+        source->SetAutoRemoveMode(REMOVE_COMPONENT);
+        source->Play(sound);
     }
 }
 
@@ -370,6 +448,10 @@ void NetworkActor::SetNode(Node* node)
 void NetworkActor::SetConnection(Connection* connection)
 {
     connection_ = connection;
+}
+
+void NetworkActor::SetProjectileManager(SharedPtr<MissileManager> manager) {
+    projectileManager_ = manager;
 }
 
 void NetworkActor::SwapMat() {
@@ -739,7 +821,7 @@ void NetworkActor::FixedUpdate(float timeStep) {
                     if (controls_.buttons_ & NTWK_CTRL_FIRE) {
                         // Fire uses pick up
                         UsePickup();
-                        //Fire();
+                        Fire();
                         lastFire_ = 0;
                     }
                 }
@@ -864,7 +946,53 @@ void NetworkActor::FixedUpdate(float timeStep) {
         inAirTimer_ = 0.0f;
     }
 
+    // Update target locking system
+    UpdateTargetLocking(timeStep);
 
+    // Update missile UI
+    UpdateLockOnUI(timeStep);
+}
+
+void NetworkActor::UpdateTargetLocking(float timeStep) {
+    if (!projectileManager_) return;
+
+    // Auto-acquire targets if none locked
+    if (!targetLock_) {
+        NetworkActor* nearestEnemy = FindNearestEnemy(LOCK_ON_RANGE);
+        if (nearestEnemy && CanTargetActor(nearestEnemy)) {
+            SetTargetLock(nearestEnemy);
+        }
+    }
+
+    // Update lock-on progress
+    if (targetLock_) {
+        Vector3 targetPos = targetLock_->GetNode()->GetWorldPosition();
+        Vector3 myPos = GetNode()->GetWorldPosition();
+        float distance = (targetPos - myPos).Length();
+
+        // Check if target is still in range and valid
+        if (distance > LOCK_ON_RANGE || targetLock_->killed_) {
+            ClearTargetLock();
+            return;
+        }
+
+        // Progress lock-on
+        lockOnTime_ += timeStep;
+        lockOnProgress_ = lockOnTime_ / LOCK_ON_TIME_REQUIRED;
+
+        if (lockOnProgress_ >= 1.0f) {
+            // Target is fully locked - can fire missiles
+            lockOnProgress_ = 1.0f;
+        }
+    }
+
+    // Update missile fire cooldown
+    if (lastMissileFireTime_ > 0.0f) {
+        lastMissileFireTime_ -= timeStep;
+        if (lastMissileFireTime_ < 0.0f) {
+            lastMissileFireTime_ = 0.0f;
+        }
+    }
 }
 
 /*
@@ -1803,23 +1931,6 @@ void NetworkActor::RemoveThreat(NetworkActor* threat)
         {
             // No more threats
             ShowLockOnIndicator(false);
-        }
-    }
-}
-
-void NetworkActor::UpdateLockOnUI(float timeStep)
-{
-    if (targetLock_)
-    {
-        lockOnTime_ += timeStep;
-        lockOnProgress_ = Clamp(lockOnTime_ / LOCK_ON_TIME_REQUIRED, 0.0f, 1.0f);
-
-        // Update lock-on indicator position
-        if (lockOnIndicator_)
-        {
-            Vector3 targetPos = targetLock_->GetNode()->GetWorldPosition();
-            // Convert world position to screen coordinates and position UI element
-            // This would require access to the camera and graphics system
         }
     }
 }

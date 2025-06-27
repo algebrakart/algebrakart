@@ -962,7 +962,7 @@ Controls AlgebraKart::SampleCSPControls()
     bool use = input->GetKeyDown(KEY_SPACE); // GameController: ntwkControls_.IsDown(BUTTON_X);
     bool enter = input->GetKeyDown(KEY_RETURN); // GameController: ntwkControls_.IsDown(BUTTON_Y);SetRotation(
     bool brake = input->GetKeyDown(KEY_SHIFT); // GameController: ntwkControls_.IsDown(BUTTON_A));
-    bool fire = input->GetKeyDown(KEY_ALT); // GameController: ntwkControls_.IsDown(BUTTON_B));
+    bool fire = input->GetKeyDown(KEY_SPACE); // GameController: ntwkControls_.IsDown(BUTTON_B));
 
 
     // Set buttons based on keyboard only
@@ -7586,7 +7586,7 @@ void AlgebraKart::HandleSceneUpdate(StringHash eventType, VariantMap &eventData)
 
 // Spawn Player (Admin on Server)
 SharedPtr<Node> AlgebraKart::SpawnPlayer() {
-    // SERVER CODE (ADMIN PLAYER)
+    // SERVER CODE (ADMIN PLAYER)NetworkActor>
 
     // Create a new network actor for the player
     SharedPtr<Node> networkActorNode(scene_->CreateChild("actor-SERVER"));
@@ -7605,7 +7605,6 @@ SharedPtr<Node> AlgebraKart::SpawnPlayer() {
     String cameraname = "camera_actor-server";
     SharedPtr<Node>cameraNode(networkActorNode->CreateChild(cameraname));
     cameraNode->SetPosition(Vector3(0.0f, 3000.0f, 0.0f));
-
 
     // Define server cam views
     //heliCamView_ = Vector3(0.0f,2200.0f,0.0f);
@@ -10627,4 +10626,15 @@ void AlgebraKart::UpdateEnhanced3DSequencer(float timeStep, int currentBeat, boo
             }
         }
     }
+}
+
+void AlgebraKart::InitializeMissileSystem() {
+    // Create global missile manager for the scene
+    Node* missileManagerNode = scene_->CreateChild("MissileManager", LOCAL);
+    MissileManager* missileManager = missileManagerNode->CreateComponent<MissileManager>();
+
+    // Store reference for global access
+    scene_->SetVar("MissileManager", missileManager);
+
+    URHO3D_LOGINFO("Missile system initialized");
 }

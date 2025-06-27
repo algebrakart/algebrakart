@@ -390,16 +390,20 @@ public:
     NetworkActor* GetTargetLock() const { return targetLock_; }
     bool HasTargetLock() const { return targetLock_ != nullptr; }
 
-    // Enhanced firing system
+    // Projectile system
+    void SetProjectileManager(SharedPtr<MissileManager> manager);
     void FireMissile();
     void FireMissile(NetworkActor* target);
     bool CanFireMissile() const;
 
     // Lock-on UI
+    void CreateLockOnUI();
     void UpdateLockOnUI(float timeStep);
     void ShowLockOnIndicator(bool show);
+    void PlayMissileFireSound();
+    void UpdateTargetLocking(float timeStep);
 
-    // Threat detection
+        // Threat detection
     bool IsBeingTargeted() const { return beingTargetedBy_.Size() > 0; }
     const PODVector<WeakPtr<NetworkActor>>& GetThreats() const { return beingTargetedBy_; }
     void AddThreat(NetworkActor* threat);

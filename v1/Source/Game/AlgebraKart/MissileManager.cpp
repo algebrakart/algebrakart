@@ -1,8 +1,13 @@
 #include "MissileManager.h"
 #include "Missile.h"
+#include "network/NetworkActor.h"
+#include <Urho3D/Scene/Scene.h>
+#include <Urho3D/Scene/SceneEvents.h>
 
-MissileManager::MissileManager(Context* context) : Object(context)
+MissileManager::MissileManager(Context* context) : Component(context)  // Change from Object
 {
+    // Subscribe to scene update events for automatic updating
+    //SetUpdateEventMask(USE_UPDATE);
 }
 
 void MissileManager::RegisterObject(Context* context)
@@ -15,7 +20,8 @@ void MissileManager::Update(float timeStep)
     CleanupDestroyedMissiles();
 
     // Update missile logic could be done here if needed
-    // Currently missiles update themselves
+    // Currently missiles update themselves, but you could add
+    // global missile behavior here (like collision checking between missiles)
 }
 
 Missile* MissileManager::CreateMissile(NetworkActor* producer, const Vector3& position, const Vector3& direction)
@@ -23,7 +29,7 @@ Missile* MissileManager::CreateMissile(NetworkActor* producer, const Vector3& po
     if (!producer)
         return nullptr;
 
-    auto* scene = producer->GetScene();
+    auto* scene = GetScene();
     if (!scene)
         return nullptr;
 
