@@ -147,7 +147,6 @@
 #include "../../Urho3D/Input/Controls.h"
 #include "../../Urho3D/Scene/SplinePath.h"
 #include "../../Urho3D/Resource/ResourceEvents.h"
-#include "Missile.h"
 #include "AlgebraKart/beat/BufferData.h"
 #include <AlgebraKart/PixelImage.h>
 #include <AlgebraKart/Constants.h>
@@ -5161,6 +5160,9 @@ void AlgebraKart::CreateServerSubsystem() {
     // Register two implementations of ClientObj, NetworkActor and Vehicle
     NetworkActor::RegisterObject(context_);
     Vehicle::RegisterObject(context_);
+
+    Missile::RegisterObject(context_);
+    MissileManager::RegisterObject(context_);
 
     // Vehicle & Projectiles
     RaycastVehicleBase::RegisterObject(context_);

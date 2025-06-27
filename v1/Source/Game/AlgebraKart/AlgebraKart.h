@@ -45,7 +45,12 @@
 #include <AlgebraKart/PixelImage.h>
 
 #include "beat/BeatSequencerUI.h"
+#include "beat/SynthesizerControlsUI.h"
 #include "ProceduralVegetation.h"
+
+#include <AlgebraKart/Missile.h>
+#include <AlgebraKart/MissileManager.h>
+
 
 #define GAME_NAME "AlgebraKart"
 
@@ -835,8 +840,36 @@ private:
     bool vegetationEnabled_;
     float vegetationUpdateTimer_;
 
-    /// Beat Sequencer UI
+    /// Audio UI System
     SharedPtr<BeatSequencerUI> beatSequencerUI_;
+    SharedPtr<SynthesizerControlsUI> synthControlsUI_;
+
+    /// Audio visualization
+    SharedPtr<UIElement> audioMasterPanel_;
+    SharedPtr<Text> audioStatusText_;
+    SharedPtr<Slider> masterVolumeSlider_;
+
+    /// Real-time audio processing
+    Vector<float> realtimeWaveform_;
+    Vector<float> realtimeSpectrum_;
+
+    /// Audio system integration
+    void InitializeAudioUISystem();
+    void UpdateAudioUISystem(float timeStep);
+    void HandleAudioUIEvents();
+
+    /// Event handlers for the new UI system
+    void HandleBeatSequencerToggle(StringHash eventType, VariantMap& eventData);
+    void HandleSynthControlsToggle(StringHash eventType, VariantMap& eventData);
+    void HandleMasterVolumeChanged(StringHash eventType, VariantMap& eventData);
+
+    /// Integration with existing synthesizer/sequencer
+    void ApplyBeatPatternToSequencer(int channel, int step, bool active);
+    void ApplySynthParametersToSynthesizer(const VariantMap& params);
+    void UpdateUIFromSequencerState();
+
+    /// Master audio control panel
+    void CreateMasterAudioPanel();
 
     /// Enhanced sequencer integration
     void UpdateBeatSequencerUI(float timeStep);

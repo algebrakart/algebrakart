@@ -4,6 +4,8 @@
 #include "ClientObj.h"
 #include "Vehicle.h"
 #include <AlgebraKart/beat/Sequencer.h>
+#include <AlgebraKart/Missile.h>
+#include <AlgebraKart/MissileManager.h>
 
 #include "../GameController.h"
 #include "../../../Urho3D/Graphics/AnimatedModel.h"
@@ -170,7 +172,6 @@ public:
     void RespawnVehicle();
     void Fire(Vector3 target);
     void Fire();
-    void CreateProjectile(Vector3 source, Quaternion q, Vector3 target);
     void CreatePickup(int type, Vector3 location);
 
     void Kill();
@@ -349,6 +350,29 @@ public:
     float arrowBobTime_;
     SharedPtr<Camera> activeCam_;
 
+    // Target locking data
+    WeakPtr<NetworkActor> targetLock_;
+    float lockOnProgress_;
+    float lockOnTime_;
+    float lastMissileFireTime_;
+    float missileFireCooldown_;
+
+    // Threat tracking
+    PODVector<WeakPtr<NetworkActor>> beingTargetedBy_;
+
+    // UI elements for lock-on
+    SharedPtr<Node> lockOnIndicator_;
+    SharedPtr<Node> threatWarning_;
+
+    SharedPtr<MissileManager> projectileManager_;
+
+    // Lock-on configuration
+    const float LOCK_ON_RANGE = 400.0f;
+    const float LOCK_ON_TIME_REQUIRED = 2.0f;
+    const float MISSILE_FIRE_COOLDOWN = 3.0f;
+    const float LOCK_ON_ANGLE_THRESHOLD = 30.0f; // degrees
+
+
     void UsePickup();
     void ApplyRotation(float timeStep);
 
@@ -357,6 +381,29 @@ public:
     void HideVehicleDirectionArrow();
     const Vector3 &GetLinearVelocity() const;
     const Vector3 &GetAngularVelocity() const;
+
+    // Target locking system
+    NetworkActor* FindNearestEnemy(float maxRange = 500.0f);
+    bool CanTargetActor(NetworkActor* target) const;
+    void SetTargetLock(NetworkActor* target);
+    void ClearTargetLock();
+    NetworkActor* GetTargetLock() const { return targetLock_; }
+    bool HasTargetLock() const { return targetLock_ != nullptr; }
+
+    // Enhanced firing system
+    void FireMissile();
+    void FireMissile(NetworkActor* target);
+    bool CanFireMissile() const;
+
+    // Lock-on UI
+    void UpdateLockOnUI(float timeStep);
+    void ShowLockOnIndicator(bool show);
+
+    // Threat detection
+    bool IsBeingTargeted() const { return beingTargetedBy_.Size() > 0; }
+    const PODVector<WeakPtr<NetworkActor>>& GetThreats() const { return beingTargetedBy_; }
+    void AddThreat(NetworkActor* threat);
+    void RemoveThreat(NetworkActor* threat);
 
 };
 

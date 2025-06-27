@@ -20,242 +20,520 @@
 
 #include "Missile.h"
 
+#include "Missile.h"
+#include "network/NetworkActor.h"
+#include <Urho3D/Core/Context.h>
+#include <Urho3D/Graphics/Model.h>
+#include <Urho3D/Graphics/Material.h>
+#include <Urho3D/Graphics/ParticleEffect.h>
+#include <Urho3D/Audio/Sound.h>
+#include <Urho3D/Scene/Scene.h>
+#include <Urho3D/IO/Log.h>
+#include <Urho3D/Math/MathDefs.h>
 
-Missile::Missile(Context* context) : LogicComponent(context)
+Missile::Missile(Context* context) :
+        LogicComponent(context),
+        state_(MissileState::SEEKING_TARGET),
+        lifetime_(0.0f),
+        currentVelocity_(Vector3::ZERO),
+        lockOnTime_(0.0f),
+        lockOnProgress_(0.0f),
+        targetLostTime_(0.0f),
+        maxLockOnRange_(400.0f),
+        lockOnRequiredTime_(2.0f),
+        maxSpeed_(150.0f),
+        acceleration_(80.0f),
+        turnRate_(3.0f),
+        explosionRadius_(25.0f),
+        damage_(50.0f),
+        timeSinceLastTargetUpdate_(0.0f)
 {
-	SetThrust(140.0f);
-	SetDetectionRange(3.0f);
-	SetBoomRange(0.3f);
-	SetDamage(20.0f);
-	duration_ = 0.0f;
 }
 
 void Missile::RegisterObject(Context* context)
 {
-	context->RegisterFactory<Missile>();
+    context->RegisterFactory<Missile>();
+
+    URHO3D_ATTRIBUTE("Max Speed", float, maxSpeed_, 150.0f, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("Turn Rate", float, turnRate_, 3.0f, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("Explosion Radius", float, explosionRadius_, 25.0f, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("Damage", float, damage_, 50.0f, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("Lock On Range", float, maxLockOnRange_, 400.0f, AM_DEFAULT);
 }
 
 void Missile::Start()
 {
-    ResourceCache* cache = GetSubsystem<ResourceCache>();
+    // Get required components
+    rigidBody_ = GetNode()->GetComponent<RigidBody>();
+    model_ = GetNode()->GetComponent<StaticModel>();
 
-    node_ = GetScene()->CreateChild("missile");
-    node_->SetRotation(Quaternion(0.0f, 0.0f, 0.0f));
+    if (!rigidBody_)
+    {
+        rigidBody_ = GetNode()->CreateComponent<RigidBody>();
+        rigidBody_->SetMass(1.0f);
+        rigidBody_->SetLinearDamping(0.1f);
+        rigidBody_->SetAngularDamping(0.5f);
+    }
 
-    pCollisionShape_ = node_->CreateComponent<CollisionShape>();
-    pObject_ = node_->CreateComponent<StaticModel>();
-    pRigidBody_ = node_->CreateComponent<RigidBody>();
+    if (!model_)
+    {
+        model_ = GetNode()->CreateComponent<StaticModel>();
+        auto* cache = GetSubsystem<ResourceCache>();
+        model_->SetModel(cache->GetResource<Model>("Models/Missile.mdl"));
+        model_->SetMaterial(cache->GetResource<Material>("Materials/Missile.xml"));
+    }
 
-    pRigidBody_->SetMass(1.0f);
-    pRigidBody_->SetUseGravity(false);
-    pRigidBody_->SetTrigger(true);
+    // Create collision shape
+    auto* shape = GetNode()->CreateComponent<CollisionShape>();
+    shape->SetCapsule(0.5f, 2.0f);
 
-    pRigidBody_->SetEnabled(false);
-    pObject_->SetEnabled(false);
+    // Create trail effect
+    CreateTrailEffect();
 
-    Model *projModel = cache->GetResource<Model>("Models/AssetPack/cannonball.mdl");
-
-    pObject_->SetModel(projModel);
-    pObject_->ApplyMaterialList("Models/AssetPack/cannonball.txt");
-    pObject_->SetCastShadows(true);
-
-    Model *projColModel = cache->GetResource<Model>("Models/AssetPack/cannonball.mdl");
-
-    pObject_->GetNode()->SetScale(6.0f);
-
-    pCollisionShape_->SetConvexHull(projColModel);
-    pCollisionShape_->GetNode()->SetRotation(Quaternion(0.0, 0.0f, -90.0f));
-  //  pCollisionShape_->GetNode()->SetScale(Vector3(0.3f, 0.3f, 0.3f));
-    pCollisionShape_->GetNode()->SetScale(6.0f);
-
-    // particle emitter
-    Node *pNodeEmitter = GetScene()->CreateChild();
-//    pNodeEmitter->SetPosition( emitPos );
-    pParticleEmitter_ = pNodeEmitter->CreateComponent<ParticleEmitter>();
-    pParticleEmitter_->SetEffect( cache->GetResource<ParticleEffect>("Offroad/Particles/Dust.xml"));
-    pParticleEmitter_->SetEmitting( false );
-
-//    particleEmitterNodeList_.Push( pNodeEmitter );
-
-    // node collision
+    // Subscribe to collision events
     SubscribeToEvent(GetNode(), E_NODECOLLISION, URHO3D_HANDLER(Missile, HandleMissileCollision));
-//    SubscribeToEvent(GetNode(), E_NODECOLLISIONSTART, URHO3D_HANDLER(Missile, HandleNodeCollision));
-}
 
-void Missile::AssignProducer(int producerId, Vector3 spawnLoc) {
+    // Set initial state
+    state_ = MissileState::SEEKING_TARGET;
+    lifetime_ = 0.0f;
 
-    // Update missile name
-    Urho3D::String nodeName = Urho3D::String("missile-") + Urho3D::String(producerId);
-    producerId_ = producerId;
-    node_->SetName(nodeName.CString());
-    //    node_->SetName("updated-missile");
-
-//    node_->SetName("missile-" + producerId_);
-    node_->SetPosition(spawnLoc);
-        GetNode()->SetPosition(node_->GetPosition());
-        pRigidBody_->SetPosition(node_->GetPosition());
-        //		bullet0->GetComponent<RigidBody2D>()->SetLinearVelocity(Vector2(towards_.x_, towards_.y_).Normalized() * 10.0f);
-        URHO3D_LOGDEBUGF("Missile::AssignProducer() -> %s, %d, [%f,%f,%f]", nodeName.CString(), producerId_, node_->GetPosition().x_,
-                         node_->GetPosition().y_,
-                         node_->GetPosition().z_);
-
-        pRigidBody_->SetEnabled(true);
-        pObject_->SetEnabled(true);
-}
-
-void Missile::Update(float timeStep)
-{
-
+    // Try to acquire target immediately if not set
+    if (!targetActor_)
+    {
+        AcquireTarget();
+    }
 }
 
 void Missile::FixedUpdate(float timeStep)
 {
+    lifetime_ += timeStep;
 
-    float MissileLife = 10.0f;
-	/// Update the duration
-	duration_ += timeStep;
-	// Clear the missiles 
-	if (duration_ > MissileLife) node_->Remove();
+    // Expire missile after 10 seconds
+    if (lifetime_ > 10.0f)
+    {
+        state_ = MissileState::EXPIRED;
+        GetNode()->Remove();
+        return;
+    }
 
+    switch (state_)
+    {
+        case MissileState::SEEKING_TARGET:
+            UpdateSeeking(timeStep);
+            break;
 
-	Vector3 lockTarget;
+        case MissileState::LOCKED_ON:
+            UpdateLockOn(timeStep);
+            break;
 
-    if (pRigidBody_) {
+        case MissileState::TRACKING:
+            UpdateTracking(timeStep);
+            break;
 
-        if (targetnodes_.Empty()) return;
+        case MissileState::IMPACT:
+        case MissileState::EXPIRED:
+            // Do nothing, missile should be removed
+            break;
+    }
 
+    // Apply physics
+    if (rigidBody_ && state_ != MissileState::IMPACT)
+    {
+        rigidBody_->SetLinearVelocity(currentVelocity_);
 
-        pParticleEmitter_->GetNode()->SetPosition(node_->GetPosition());
-        pParticleEmitter_->SetEmitting(true);
+        // Orient missile to velocity direction
+        if (currentVelocity_.LengthSquared() > 0.1f)
+        {
+            Quaternion rotation = Quaternion(Vector3::FORWARD, currentVelocity_.Normalized());
+            GetNode()->SetRotation(rotation);
+        }
+    }
+}
 
-        // Set Rotation
-        Vector3 velocity = Vector3(pRigidBody_->GetLinearVelocity());
-      //  node_->
-//edit
-        //	node_->SetWorldRotation(Quaternion(Vector3::UP, velocity));
-        // Apply thrust to the missile
-//        pRigidBody_->ApplyForce(velocity.Normalized() * thrust);
+void Missile::Update(float timeStep)
+{
+    // Update trail effect position
+    if (trailEmitter_)
+    {
+        trailEmitter_->GetNode()->SetWorldPosition(GetNode()->GetWorldPosition());
+    }
+}
 
-        // Set lock target to vehicle
-        lockTarget = targetnodes_[0]->GetPosition();
-
-        // Calculate the force
-        Vector3 force = lockTarget - node_->GetPosition();
-        force.Normalize();
-        // Track it!
-        pRigidBody_->ApplyForce(force * thrust);
-//            pRigidBody_->ApplyForce(velocity.Normalized()*thrust);
-
-        // Tracking targets
-
-        for (int i = 0; i < targetnodes_.Size(); i++) {
-            //Toolkit::Print(targetnodes_[i]->GetName());
-
-
-            //HeatSource *heatsource = targetnodes_[i]->GetComponent<HeatSource>();
-            //float attraction = heatsource->GetAttraction();
-            float attraction = 10.0f;
-
- //           pRigidBody_->ApplyForce(velocity.Normalized()*100.0f);
-
-
-//            URHO3D_LOGDEBUGF("Missile::FixedUpdate(): pRigidBody_->ApplyForce -> [%s, %f,%f]", attraction, force);
-
-            // If the target is in the boomrange,then boom!
-            float distance = (node_->GetPosition() - targetnodes_[i]->GetPosition()).Length();
-            if (distance < GetBoomRange()) {
-                LogicComponent *targetobject = targetnodes_[i]->GetDerivedComponent<LogicComponent>();
-
-                if (targetobject) {
-//                    targetobject->Damaged(GetDamage());
-                }
-                UnsubscribeFromAllEvents();
-                node_->Remove();
-
+void Missile::UpdateSeeking(float timeStep)
+{
+    // Try to acquire a target
+    if (!targetActor_)
+    {
+        if (!AcquireTarget())
+        {
+            // No target found, continue in straight line
+            if (currentVelocity_.LengthSquared() < 1.0f)
+            {
+                currentVelocity_ = GetNode()->GetDirection() * maxSpeed_ * 0.5f;
             }
-
+            return;
         }
     }
 
+    // Target acquired, begin lock-on
+    state_ = MissileState::LOCKED_ON;
+    lockOnTime_ = 0.0f;
+    PlayLockOnSound();
 }
 
-/*
-//URHO3D_PARAM(2349, "extraData");
-void Missile::HandleNodeCollision(StringHash eventType, VariantMap & eventData)
+void Missile::UpdateLockOn(float timeStep)
 {
-    using namespace NodeCollision;
-
-    // increase score if missile collides with boids
-    Node* collidedNode = static_cast<Node*>(eventData[P_OTHERNODE].GetPtr());
-    URHO3D_LOGDEBUGF("***** Missile::HandleMissileCollision() -> collidedNode: [%s]", collidedNode->GetName().CString());
-
-
-    if (collidedNode->GetName() == "boid")
+    if (!targetActor_)
     {
-        // emitt particle effect when boid has been hit
-        Node* particle = collidedNode->CreateChild("Particle");
-        particle->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-        particle->SetScale(2.0f);
-        ParticleEmitter* emitter = particle->CreateComponent<ParticleEmitter>();
-        emitter->SetEffect(GetSubsystem<ResourceCache>()->GetResource<ParticleEffect>("Particle/Burst.xml"));
+        state_ = MissileState::SEEKING_TARGET;
+        return;
     }
-}*/
 
-void Missile::HandleMissileCollision(StringHash eventType, VariantMap & eventData)
-{
-    using namespace NodeCollision;
+    lockOnTime_ += timeStep;
+    lockOnProgress_ = lockOnTime_ / lockOnRequiredTime_;
 
-    // increase score if missile collides with boids
-    Node* collidedNode = static_cast<Node*>(eventData[P_OTHERNODE].GetPtr());
-    URHO3D_LOGDEBUGF("***** Missile::HandleMissileCollision() -> collidedNode: [%s]", collidedNode->GetName().CString());
+    // Check if target is still in range
+    Vector3 targetPos = targetActor_->GetNode()->GetWorldPosition();
+    float distance = (targetPos - GetNode()->GetWorldPosition()).Length();
 
-
-    if (collidedNode->GetName() == "boid")
+    if (distance > maxLockOnRange_)
     {
-        // emitt particle effect when boid has been hit
-        Node* particle = collidedNode->CreateChild("Particle");
-        particle->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-        particle->SetScale(2.0f);
-        ParticleEmitter* emitter = particle->CreateComponent<ParticleEmitter>();
-        emitter->SetEffect(GetSubsystem<ResourceCache>()->GetResource<ParticleEffect>("Particle/Burst.xml"));
+        // Target out of range, return to seeking
+        ClearTarget();
+        state_ = MissileState::SEEKING_TARGET;
+        return;
+    }
+
+    // Update missile velocity toward target
+    UpdateGuidance(timeStep);
+
+    // Lock-on complete?
+    if (lockOnProgress_ >= 1.0f)
+    {
+        state_ = MissileState::TRACKING;
+        URHO3D_LOGINFO("Missile locked onto target!");
     }
 }
 
-/*
-void Missile::HandleContactBegin(StringHash eventType, VariantMap& eventData)
-{	
-	/// Clients should not update the component on its own
-	using namespace NodeBeginContact2D;	
-	SharedPtr<Node>othernode(static_cast<Node*>(eventData[P_OTHERNODE].GetPtr()));
-	// Do not track the launcher and the launcher's flare
-	//if (othernode == GetProducer()) return;
-	HeatSource* otherSource = othernode->GetComponent<HeatSource>();	
-	//If the other node is not a heatsource then return
-	if (!otherSource)return;
-	//Toolkit::Print("Source:" + otherSource->GetNode()->GetName()+" Fighter:"+GetProducer()->GetName());
-	//Toolkit::Print("target:" + String(otherSource->GetOwner()->GetID()));
-	if (otherSource->GetOwner() == GetProducer()) return;	
-	// If othernode is a heatsource then push it into the targetqueue;
-	targetnodes_.Push(othernode);	
-	//Toolkit::Print("got you!");
-}
-
-void Missile::HandleContactEnd(StringHash eventType, VariantMap& eventData)
+void Missile::UpdateTracking(float timeStep)
 {
-	/// Clients should not update the component on its own
-	Network* network = GetSubsystem<Network>();
-	if (!network->IsServerRunning()) {
-		return;
-	}
+    if (!targetActor_)
+    {
+        state_ = MissileState::SEEKING_TARGET;
+        return;
+    }
 
-	using namespace Urho3D;
-	// If the target is out of tracking range, then erase it.
-	using namespace NodeEndContact2D;
-	SharedPtr<Node>othernode(static_cast<Node*>(eventData[P_OTHERNODE].GetPtr()));
-	HeatSource* heatsource = othernode->GetComponent<HeatSource>();
-	if (!heatsource) return;
-	//4test Find it in the queue and erase it
-	if(targetnodes_.Contains(othernode))	targetnodes_.Erase(	targetnodes_.Find(othernode));
-	//Toolkit::Print("lost you!");
+    // Update target information
+    Vector3 targetPos = targetActor_->GetNode()->GetWorldPosition();
+    Vector3 targetVel = Vector3::ZERO;
+
+    if (auto* targetRigidBody = targetActor_->GetNode()->GetComponent<RigidBody>())
+    {
+        targetVel = targetRigidBody->GetLinearVelocity();
+    }
+
+    lastKnownTargetPos_ = targetPos;
+    lastKnownTargetVel_ = targetVel;
+    timeSinceLastTargetUpdate_ = 0.0f;
+
+    // Check if target is still in reasonable range
+    float distance = (targetPos - GetNode()->GetWorldPosition()).Length();
+    if (distance > maxLockOnRange_ * 2.0f)
+    {
+        targetLostTime_ += timeStep;
+        if (targetLostTime_ > 3.0f) // Give up after 3 seconds
+        {
+            ClearTarget();
+            state_ = MissileState::SEEKING_TARGET;
+            return;
+        }
+    }
+    else
+    {
+        targetLostTime_ = 0.0f;
+    }
+
+    // Update guidance
+    UpdateGuidance(timeStep);
 }
-*/
+
+void Missile::UpdateGuidance(float timeStep)
+{
+    Vector3 targetPos;
+
+    if (targetActor_)
+    {
+        // Use current target position
+        targetPos = targetActor_->GetNode()->GetWorldPosition();
+
+        // Lead the target
+        if (auto* targetRigidBody = targetActor_->GetNode()->GetComponent<RigidBody>())
+        {
+            Vector3 targetVel = targetRigidBody->GetLinearVelocity();
+            targetPos = CalculateInterceptPoint(targetPos, targetVel);
+        }
+    }
+    else
+    {
+        // Use last known position
+        targetPos = lastKnownTargetPos_;
+    }
+
+    // Calculate desired velocity
+    Vector3 desiredVelocity = SteerTowards(targetPos, timeStep);
+
+    // Apply acceleration toward desired velocity
+    Vector3 acceleration = (desiredVelocity - currentVelocity_) * acceleration_ * timeStep;
+    currentVelocity_ += acceleration;
+
+    // Limit speed
+    if (currentVelocity_.Length() > maxSpeed_)
+    {
+        currentVelocity_ = currentVelocity_.Normalized() * maxSpeed_;
+    }
+}
+
+Vector3 Missile::CalculateInterceptPoint(const Vector3& targetPos, const Vector3& targetVel)
+{
+    Vector3 missilePos = GetNode()->GetWorldPosition();
+    Vector3 toTarget = targetPos - missilePos;
+
+    // Simple lead calculation
+    float timeToTarget = toTarget.Length() / maxSpeed_;
+    return targetPos + targetVel * timeToTarget;
+}
+
+Vector3 Missile::SteerTowards(const Vector3& target, float timeStep)
+{
+    Vector3 missilePos = GetNode()->GetWorldPosition();
+    Vector3 desired = (target - missilePos).Normalized() * maxSpeed_;
+
+    // Limit turning rate
+    Vector3 currentDir = currentVelocity_.Normalized();
+    Vector3 desiredDir = desired.Normalized();
+
+    float maxTurn = turnRate_ * timeStep;
+    float angle = currentDir.Angle(desiredDir);
+
+    if (angle > maxTurn)
+    {
+        // Limit turn rate
+        Vector3 axis = currentDir.CrossProduct(desiredDir).Normalized();
+        Quaternion rotation(maxTurn * M_RADTODEG, axis);
+        desiredDir = rotation * currentDir;
+        desired = desiredDir * maxSpeed_;
+    }
+
+    return desired;
+}
+
+bool Missile::AcquireTarget()
+{
+    if (!producerActor_)
+        return false;
+
+    auto* scene = GetScene();
+    if (!scene)
+        return false;
+
+    // Find all NetworkActors in range
+    PODVector<Node*> actors;
+    scene->GetChildrenWithComponent<NetworkActor>(actors, true);
+
+    NetworkActor* bestTarget = nullptr;
+    float bestPriority = 0.0f;
+    Vector3 missilePos = GetNode()->GetWorldPosition();
+
+    for (auto* actorNode : actors)
+    {
+        auto* actor = actorNode->GetComponent<NetworkActor>();
+        if (!actor || actor == producerActor_)
+            continue;
+
+        // Check if this actor can be targeted
+        if (!producerActor_->CanTargetActor(actor))
+            continue;
+
+        float distance = (actorNode->GetWorldPosition() - missilePos).Length();
+        if (distance > maxLockOnRange_)
+            continue;
+
+        float priority = CalculateTargetPriority(actor);
+        if (priority > bestPriority)
+        {
+            bestPriority = priority;
+            bestTarget = actor;
+        }
+    }
+
+    if (bestTarget)
+    {
+        LockOnTarget(bestTarget);
+        return true;
+    }
+
+    return false;
+}
+
+float Missile::CalculateTargetPriority(NetworkActor* actor) const
+{
+    if (!actor)
+        return 0.0f;
+
+    Vector3 missilePos = GetNode()->GetWorldPosition();
+    Vector3 targetPos = actor->GetNode()->GetWorldPosition();
+
+    float distance = (targetPos - missilePos).Length();
+    float priority = 1.0f / (distance + 1.0f); // Closer targets have higher priority
+
+    // Bonus for targets in front of missile
+    Vector3 forward = GetNode()->GetDirection();
+    Vector3 toTarget = (targetPos - missilePos).Normalized();
+    float alignment = forward.DotProduct(toTarget);
+    if (alignment > 0.0f)
+    {
+        priority *= (1.0f + alignment);
+    }
+
+    return priority;
+}
+
+void Missile::LockOnTarget(NetworkActor* target)
+{
+    targetActor_ = target;
+    lockOnProgress_ = 0.0f;
+    lockOnTime_ = 0.0f;
+    targetLostTime_ = 0.0f;
+
+    if (target)
+    {
+        target->AddThreat(producerActor_);
+        URHO3D_LOGINFOF("Missile acquiring lock on target: %s", target->GetNode()->GetName().CString());
+    }
+}
+
+void Missile::ClearTarget()
+{
+    if (targetActor_)
+    {
+        targetActor_->RemoveThreat(producerActor_);
+    }
+
+    targetActor_.Reset();
+    lockOnProgress_ = 0.0f;
+    lockOnTime_ = 0.0f;
+}
+
+void Missile::SetInitialVelocity(const Vector3& velocity)
+{
+    currentVelocity_ = velocity;
+    if (rigidBody_)
+    {
+        rigidBody_->SetLinearVelocity(velocity);
+    }
+}
+
+void Missile::HandleMissileCollision(StringHash eventType, VariantMap& eventData)
+{
+    using namespace NodeCollision;
+
+    auto* otherNode = static_cast<Node*>(eventData[P_OTHERNODE].GetPtr());
+    if (!otherNode)
+        return;
+
+    // Check if we hit our target or any NetworkActor
+    auto* targetActor = otherNode->GetComponent<NetworkActor>();
+    if (targetActor && targetActor != producerActor_)
+    {
+        URHO3D_LOGINFOF("Missile hit target: %s", targetActor->GetNode()->GetName().CString());
+
+        // Apply damage to target
+        // targetActor->TakeDamage(damage_, producerActor_);
+
+        Explode();
+        return;
+    }
+
+    // Check if we hit terrain or other solid objects
+    auto* rigidBody = otherNode->GetComponent<RigidBody>();
+    if (rigidBody && rigidBody->GetMass() == 0.0f) // Static object
+    {
+        URHO3D_LOGINFO("Missile hit terrain");
+        Explode();
+    }
+}
+
+void Missile::Explode()
+{
+    state_ = MissileState::IMPACT;
+
+    // Create explosion effect
+    auto* cache = GetSubsystem<ResourceCache>();
+    auto* explosionNode = GetScene()->CreateChild("MissileExplosion");
+    explosionNode->SetWorldPosition(GetNode()->GetWorldPosition());
+
+    auto* explosion = explosionNode->CreateComponent<ParticleEmitter>();
+    explosion->SetEffect(cache->GetResource<ParticleEffect>("Particle/Explosion.xml"));
+
+    // Play explosion sound
+    auto* sound = explosionNode->CreateComponent<SoundSource3D>();
+    sound->SetSoundType(SOUND_EFFECT);
+    sound->Play(cache->GetResource<Sound>("Sounds/Explosion.wav"));
+
+    // Remove explosion after a few seconds
+//    explosionNode->
+//    auto* lifetimeComponent = explosionNode->CreateComponent<LifeTime>();
+//    lifetimeComponent->SetLifeTime(5.0f);
+
+    // Apply area damage
+    PODVector<RigidBody*> rigidBodies;
+    GetScene()->GetComponent<PhysicsWorld>()->GetRigidBodies(rigidBodies,
+                                                             Sphere(GetNode()->GetWorldPosition(), explosionRadius_));
+
+    for (auto* body : rigidBodies)
+    {
+        auto* actor = body->GetNode()->GetComponent<NetworkActor>();
+        if (actor && actor != producerActor_)
+        {
+            float distance = (body->GetNode()->GetWorldPosition() - GetNode()->GetWorldPosition()).Length();
+            float damageFactor = 1.0f - (distance / explosionRadius_);
+            float finalDamage = damage_ * Clamp(damageFactor, 0.0f, 1.0f);
+
+            // Apply damage
+            // actor->TakeDamage(finalDamage, producerActor_);
+
+            // Apply explosion force
+            Vector3 force = (body->GetPosition() - GetNode()->GetWorldPosition()).Normalized() * 1000.0f;
+            body->ApplyImpulse(force);
+        }
+    }
+
+    // Clear target threat
+    ClearTarget();
+
+    // Remove missile
+    GetNode()->Remove();
+}
+
+void Missile::PlayLockOnSound()
+{
+    if (!soundSource_)
+    {
+        soundSource_ = GetNode()->CreateComponent<SoundSource3D>();
+        soundSource_->SetSoundType(SOUND_EFFECT);
+    }
+
+    auto* cache = GetSubsystem<ResourceCache>();
+    soundSource_->Play(cache->GetResource<Sound>("Sounds/MissileLock.wav"));
+}
+
+void Missile::CreateTrailEffect()
+{
+    auto* trailNode = GetNode()->CreateChild("MissileTrail");
+    trailNode->SetPosition(Vector3(0, 0, -1.0f)); // Behind missile
+
+    trailEmitter_ = trailNode->CreateComponent<ParticleEmitter>();
+    auto* cache = GetSubsystem<ResourceCache>();
+    trailEmitter_->SetEffect(cache->GetResource<ParticleEffect>("Particle/MissileTrail.xml"));
+}
+

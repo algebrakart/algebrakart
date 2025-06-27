@@ -28,6 +28,8 @@
 #include <AlgebraKart/Pickup.h>
 #include <AlgebraKart/PickupFactory.h>
 #include <AlgebraKart/ViewCone.h>
+#include <AlgebraKart/Missile.h>
+#include <AlgebraKart/MissileManager.h>
 
 #define PI 3.1415926
 
@@ -115,6 +117,7 @@ NetworkActor::NetworkActor(Context *context)
 
     numPickups_ = 0;
     activePickup_ = 0;
+
 }
 
 NetworkActor::~NetworkActor() {
@@ -1269,28 +1272,6 @@ void NetworkActor::CreatePickup(int type, Vector3 location) {
                      newP->GetNode()->GetPosition().z_);
 }
 
-void NetworkActor::CreateProjectile(Vector3 source, Quaternion q, Vector3 target) {
-    Scene *scene = GetScene();
-    SharedPtr<Node> n;
-    Node *proj0 = scene->CreateChild("projectile", REPLICATED);
-    Missile *newM = proj0->CreateComponent<Missile>();
-    // Set the position and rotation of the projectile
-    //proj0->SetWorldPosition(this->GetPosition());
-    proj0->SetWorldRotation(q);
-    newM->SetProducer(vehicle_->GetNode()->GetID());
-
-    Node *tgt = scene->CreateChild("missileTarget", REPLICATED);
-    tgt->SetPosition(target);
-    newM->AddTarget(SharedPtr<Node>(tgt));
-    // Assign the producer node
-    newM->AssignProducer(vehicle_->GetNode()->GetID(),
-                         source);
-    URHO3D_LOGDEBUGF("NetworkActor::Fire() [%d] -> [%f,%f,%f]", vehicle_->GetNode()->GetID(),
-                     newM->GetNode()->GetPosition().x_,
-                     newM->GetNode()->GetPosition().y_,
-                     newM->GetNode()->GetPosition().z_);
-}
-
 void NetworkActor::Fire(Vector3 target) {
 
     if (!node_)
@@ -1305,7 +1286,8 @@ void NetworkActor::Fire(Vector3 target) {
         if (entered_) {
             source = vehicle_->GetTurrent()->GetPosition();
         }
-        CreateProjectile(source, body_->GetRotation(), target);
+
+        projectileManager_->CreateMissile(this, body_->GetPosition(), target);
     }
 }
 
@@ -1660,4 +1642,200 @@ const Vector3 &NetworkActor::GetLinearVelocity() const {
 
 const Vector3 &NetworkActor::GetAngularVelocity() const {
     return angularVelocity_;
+}
+
+NetworkActor* NetworkActor::FindNearestEnemy(float maxRange)
+{
+    auto* scene = GetScene();
+    if (!scene)
+        return nullptr;
+
+    PODVector<Node*> actors;
+    scene->GetChildrenWithComponent<NetworkActor>(actors, true);
+
+    NetworkActor* nearestEnemy = nullptr;
+    float nearestDistance = maxRange;
+    Vector3 myPos = GetNode()->GetWorldPosition();
+
+    for (auto* actorNode : actors)
+    {
+        auto* actor = actorNode->GetComponent<NetworkActor>();
+        if (!actor || actor == this)
+            continue;
+
+        if (!CanTargetActor(actor))
+            continue;
+
+        float distance = (actorNode->GetWorldPosition() - myPos).Length();
+        if (distance < nearestDistance)
+        {
+            nearestDistance = distance;
+            nearestEnemy = actor;
+        }
+    }
+
+    return nearestEnemy;
+}
+
+bool NetworkActor::CanTargetActor(NetworkActor* target) const
+{
+    if (!target || target == this)
+        return false;
+
+    // Add team/faction checks here if needed
+    // For now, can target any other actor
+
+    // Check if target is alive
+    if (!target->alive_)
+        return false;
+
+    // Check line of sight (optional)
+    // TODO: Implement raycast to check for obstacles
+
+    return true;
+}
+
+void NetworkActor::SetTargetLock(NetworkActor* target)
+{
+    if (targetLock_ != target)
+    {
+        ClearTargetLock();
+        targetLock_ = target;
+        lockOnProgress_ = 0.0f;
+        lockOnTime_ = 0.0f;
+
+        if (target)
+        {
+            target->AddThreat(this);
+            ShowLockOnIndicator(true);
+        }
+    }
+}
+
+void NetworkActor::ClearTargetLock()
+{
+    if (targetLock_)
+    {
+        targetLock_->RemoveThreat(this);
+        targetLock_.Reset();
+    }
+
+    lockOnProgress_ = 0.0f;
+    lockOnTime_ = 0.0f;
+    ShowLockOnIndicator(false);
+}
+
+void NetworkActor::FireMissile()
+{
+    if (!CanFireMissile())
+        return;
+
+    NetworkActor* target = targetLock_;
+    if (!target)
+    {
+        target = FindNearestEnemy(LOCK_ON_RANGE);
+    }
+
+    FireMissile(target);
+}
+
+void NetworkActor::FireMissile(NetworkActor* target)
+{
+    if (!CanFireMissile())
+        return;
+
+    // Create missile
+    auto* missileNode = GetScene()->CreateChild("Missile");
+    Vector3 spawnPos = GetNode()->GetWorldPosition() + GetNode()->GetDirection() * 5.0f + Vector3(0, 2, 0);
+    missileNode->SetWorldPosition(spawnPos);
+    missileNode->SetRotation(GetNode()->GetRotation());
+
+    auto* missile = missileNode->CreateComponent<Missile>();
+    missile->SetProducer(this);
+    if (target)
+    {
+        missile->SetTarget(target);
+    }
+
+    // Set initial velocity
+    Vector3 initialVel = GetNode()->GetDirection() * 50.0f;
+    if (auto* myBody = GetNode()->GetComponent<RigidBody>())
+    {
+        initialVel += myBody->GetLinearVelocity();
+    }
+    missile->SetInitialVelocity(initialVel);
+
+    lastMissileFireTime_ = GetSubsystem<Time>()->GetElapsedTime();
+
+    // Clear lock after firing
+    ClearTargetLock();
+
+    URHO3D_LOGINFO("Missile fired!");
+}
+
+bool NetworkActor::CanFireMissile() const
+{
+    float currentTime = GetSubsystem<Time>()->GetElapsedTime();
+    return (currentTime - lastMissileFireTime_) >= MISSILE_FIRE_COOLDOWN;
+}
+
+void NetworkActor::AddThreat(NetworkActor* threat)
+{
+    if (threat && !beingTargetedBy_.Contains(WeakPtr<NetworkActor>(threat)))
+    {
+        beingTargetedBy_.Push(WeakPtr<NetworkActor>(threat));
+
+        if (beingTargetedBy_.Size() == 1)
+        {
+            // First threat, show warning
+            ShowLockOnIndicator(true);
+        }
+    }
+}
+
+void NetworkActor::RemoveThreat(NetworkActor* threat)
+{
+    if (threat)
+    {
+        beingTargetedBy_.Remove(WeakPtr<NetworkActor>(threat));
+
+        if (beingTargetedBy_.Empty())
+        {
+            // No more threats
+            ShowLockOnIndicator(false);
+        }
+    }
+}
+
+void NetworkActor::UpdateLockOnUI(float timeStep)
+{
+    if (targetLock_)
+    {
+        lockOnTime_ += timeStep;
+        lockOnProgress_ = Clamp(lockOnTime_ / LOCK_ON_TIME_REQUIRED, 0.0f, 1.0f);
+
+        // Update lock-on indicator position
+        if (lockOnIndicator_)
+        {
+            Vector3 targetPos = targetLock_->GetNode()->GetWorldPosition();
+            // Convert world position to screen coordinates and position UI element
+            // This would require access to the camera and graphics system
+        }
+    }
+}
+
+void NetworkActor::ShowLockOnIndicator(bool show)
+{
+    // Implementation depends on your UI system
+    // Create/show/hide lock-on reticle or warning indicators
+    if (show && !lockOnIndicator_)
+    {
+        // Create lock-on indicator UI element
+        // lockOnIndicator_ = CreateLockOnReticle();
+    }
+    else if (!show && lockOnIndicator_)
+    {
+        // Hide indicator
+        // lockOnIndicator_->SetVisible(false);
+    }
 }
