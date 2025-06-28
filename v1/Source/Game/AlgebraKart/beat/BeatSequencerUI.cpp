@@ -3,6 +3,7 @@
 #include <Urho3D/UI/UIEvents.h>
 #include <Urho3D/UI/Font.h>
 #include <Urho3D/UI/Text.h>
+#include <cstdlib>
 
 // Implementation
 BeatSequencerUI::BeatSequencerUI(Context* context) :
@@ -534,8 +535,8 @@ void BeatSequencerUI::HandleBeatPadPressed(StringHash eventType, VariantMap& eve
     Vector<String> parts = name.Split('_');
     if (parts.Size() < 3) return;
 
-    int channel = std::stoi(parts[1].CString());
-    int step = std::stoi(parts[2].CString());
+    int channel = std::atoi(parts[1].CString());
+    int step = std::atoi(parts[2].CString());
 
     if (channel >= 0 && channel < NUM_CHANNELS && step >= 0 && step < NUM_STEPS) {
         // Toggle beat
