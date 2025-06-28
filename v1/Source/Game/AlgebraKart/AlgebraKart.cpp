@@ -10314,9 +10314,12 @@ void AlgebraKart::HandlePlayerLoaded(StringHash eventType, VariantMap &eventData
                         // CLIENT RIGID BODY RETRIEVED
                         bodyPos = body->GetPosition();
                         rotation = na->GetNode()->GetRotation();
-                        replaySystem_->StartRecording(na);
-                        URHO3D_LOGINFOF("Started replay recording for player: %s",
+
+                        // If this runs automatically, the memory will reach out of memory
+                        //replaySystem_->StartRecording(na);
+                        /*URHO3D_LOGINFOF("Started replay recording for player: %s",
                                         na->GetNode()->GetName().CString());
+                                        */
 
                     }
                 }
