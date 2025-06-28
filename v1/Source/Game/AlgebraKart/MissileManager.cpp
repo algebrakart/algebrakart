@@ -24,17 +24,16 @@ void MissileManager::Update(float timeStep)
     // global missile behavior here (like collision checking between missiles)
 }
 
-Missile* MissileManager::CreateMissile(NetworkActor* producer, const Vector3& position, const Vector3& direction)
+Missile* MissileManager::CreateMissile(Scene* scene, NetworkActor* producer, const Vector3& position, const Vector3& direction)
 {
     if (!producer)
         return nullptr;
 
-    auto* scene = GetScene();
     if (!scene)
         return nullptr;
 
     auto* missileNode = scene->CreateChild("Missile");
-    missileNode->SetWorldPosition(position);
+    missileNode->SetPosition(position);
     missileNode->SetDirection(direction);
 
     auto* missile = missileNode->CreateComponent<Missile>();

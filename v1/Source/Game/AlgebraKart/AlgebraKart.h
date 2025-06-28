@@ -853,6 +853,8 @@ private:
     Vector<float> realtimeWaveform_;
     Vector<float> realtimeSpectrum_;
 
+    SharedPtr<MissileManager> globalMissileManager_;
+
     /// Audio system integration
     void InitializeAudioUISystem();
     void UpdateAudioUISystem(float timeStep);

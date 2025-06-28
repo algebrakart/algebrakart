@@ -79,8 +79,8 @@ void Missile::Start()
     {
         model_ = GetNode()->CreateComponent<StaticModel>();
         auto* cache = GetSubsystem<ResourceCache>();
-        model_->SetModel(cache->GetResource<Model>("Models/Missile.mdl"));
-        model_->SetMaterial(cache->GetResource<Material>("Materials/Missile.xml"));
+        model_->SetModel(cache->GetResource<Model>("Models/go kart.065.mdl"));
+//        model_->SetMaterial(cache->GetResource<Material>("Materials/Missile.xml"));
     }
 
     // Create collision shape

@@ -26,7 +26,7 @@ public:
     void Update(float timeStep);
 
     /// Create a new missile
-    Missile* CreateMissile(NetworkActor* producer, const Vector3& position, const Vector3& direction);
+    Missile* CreateMissile(Scene* scene, NetworkActor* producer, const Vector3& position, const Vector3& direction);
 
     /// Remove a missile
     void RemoveMissile(Missile* missile);

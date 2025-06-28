@@ -1414,8 +1414,7 @@ void NetworkActor::Fire(Vector3 target) {
         if (entered_) {
             source = vehicle_->GetTurrent()->GetPosition();
         }
-
-        projectileManager_->CreateMissile(this, body_->GetPosition(), target);
+        projectileManager_->CreateMissile(GetScene(), this, body_->GetPosition(), target);
     }
 }
 

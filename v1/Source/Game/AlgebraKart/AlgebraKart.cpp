@@ -7594,6 +7594,7 @@ SharedPtr<Node> AlgebraKart::SpawnPlayer() {
     actor->Init(networkActorNode);
     String name = String(String("actor-SERVER"));
     actor->SetClientInfo(name, 99, Vector3(0,-6,0));
+    actor->SetProjectileManager(globalMissileManager_);
 
     // Assign server recorder to each client sequencer
     Server *server = GetSubsystem<Server>();
@@ -8810,6 +8811,7 @@ Node *AlgebraKart::SpawnPlayer(Connection *connection) {
 
     NetworkActor *actor = networkActorNode->CreateComponent<NetworkActor>(REPLICATED);
     actor->Init(networkActorNode);
+    actor->SetProjectileManager(globalMissileManager_);
 
     // Assign server recorder to each client sequencer
     Server *server = GetSubsystem<Server>();
@@ -9773,6 +9775,12 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
     sprite->SetPriority(-100);
     sprite->SetVisible(false);
     velBarBkgBotSprite_ = sprite;
+
+    // Create missile manager as a standalone object
+    globalMissileManager_ = SharedPtr<MissileManager>(new MissileManager(context_));
+    // Store reference in scene for easy access
+    scene_->SetVar("MissileManager", globalMissileManager_.Get());
+    URHO3D_LOGINFO("Missile system initialized");
 
 }
 
