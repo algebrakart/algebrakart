@@ -873,7 +873,7 @@ private:
     /// Master audio control panel
     void CreateMasterAudioPanel();
 
-    /// Enhanced sequencer integration
+        /// Enhanced sequencer integration
     void UpdateBeatSequencerUI(float timeStep);
     void UpdateEnhanced3DSequencer(float timeStep, int currentBeat, bool isPlaying);
     void HandleBeatToggled(StringHash eventType, VariantMap& eventData);

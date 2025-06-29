@@ -5033,33 +5033,57 @@ void AlgebraKart::PlayMusic(const String &soundName) {
 }
 
 void AlgebraKart::CleanupAudioResources() {
-    // Stop any playing streams
-    if (_radioStream) {
-        _radioStream->Stop();
-        if (_radioStream->GetNode()) {
-            _radioStream->GetNode()->Remove();
+
+    // FIX: More thorough audio cleanup
+    {
+        MutexLock lock(audioMutex_);
+
+        // Stop and clean radio stream
+        if (_radioStream) {
+            _radioStream->Stop();
+            _radioStream->Remove();
         }
-        _radioStream = nullptr;
+
+        // Clean up all sound sources
+        if (scene_) {
+            PODVector<SoundSource3D*> soundSources;
+            scene_->GetComponents<SoundSource3D>(soundSources, true);
+
+            for (SoundSource3D* source : soundSources) {
+                if (source->GetAutoRemoveMode() != AutoRemoveMode::REMOVE_NODE) {
+                    source->Stop();
+                    source->GetNode()->RemoveComponent<SoundSource3D>();
+                }
+            }
+        }
+
+        // Clear audio spectrum data
+        // Clean up audio analyzer components
+        if (analyzer_) {
+            delete analyzer_;
+            analyzer_ = nullptr;
+        }
+
+        if (capturer_) {
+            delete capturer_;
+            capturer_ = nullptr;
+        }
+
+        if (renderer_) {
+            delete renderer_;
+            renderer_ = nullptr;
+        }
+
+        // Clear all audio UI components
+        beatSequencerUI_.Reset();
+        synthControlsUI_.Reset();
     }
 
     // Clear queue
     radioTrackQueue_.Clear();
 
-    // Clean up audio analyzer components
-    if (analyzer_) {
-        delete analyzer_;
-        analyzer_ = nullptr;
-    }
+    URHO3D_LOGINFO("Audio resources cleaned up");
 
-    if (capturer_) {
-        delete capturer_;
-        capturer_ = nullptr;
-    }
-
-    if (renderer_) {
-        delete renderer_;
-        renderer_ = nullptr;
-    }
 }
 
 // SERVER CODE
@@ -8727,7 +8751,7 @@ void AlgebraKart::UpdateVUMeterSmooth(float timeStep) {
 }
 
 void AlgebraKart::DestroyPlayer(Connection *connection) {
-
+    ////
     ResourceCache *cache = GetSubsystem<ResourceCache>();
 
     /// Retrieve the username for the client
@@ -8745,13 +8769,38 @@ void AlgebraKart::DestroyPlayer(Connection *connection) {
 
     ClientObj *actor = actorMap_[connection];
     if (actor) {
-        // Remove from physics world
-        if (actor->GetComponent<RigidBody>()) {
-            scene_->GetComponent<PhysicsWorld>()->RemoveRigidBody(actor->GetComponent<RigidBody>());
+        // Clean up sequencer and recorder references
+        if (actor && actor->GetSequencer()) {
+            actor->GetSequencer()->Reset();
+            actor->GetSequencer().Reset(); // Clear shared pointer
         }
-        actor->CleanupConnection(connection);
-        actor->SetEnabled(false);
-        actor->Remove();
+
+        // Remove from all collections
+        actorMap_.Erase(connection);
+
+        // FIX: Clean up any remaining network actors associated with this connection
+        // This is critical - actors might hold references preventing cleanup
+        Scene *scene = scene_;
+        if (scene) {
+            PODVector<Node *> actorNodes;
+            scene->GetChildrenWithComponent<NetworkActor>(actorNodes, true);
+
+            for (Node *node: actorNodes) {
+                NetworkActor *actor = node->GetComponent<NetworkActor>();
+                if (actor && actor->GetConnection() == connection) {
+                    // Properly cleanup the actor
+                    actor->Kill();
+                    // Clear maps
+                    actorMap_.Erase(connection);
+                    actorTextMap_.Erase(connection);
+                    serverObjects_.Erase(connection);
+                    // Clean up connection
+                    actor->CleanupConnection(connection);
+                    actor->SetConnection(nullptr);
+                    node->Remove(); // Remove the entire node
+                }
+            }
+        }
     }
 
     // Remove minimap marker
@@ -8763,10 +8812,8 @@ void AlgebraKart::DestroyPlayer(Connection *connection) {
         minimapPlayerMap_.Erase(connection);
     }
 
-    // Clear maps
-    actorMap_.Erase(connection);
-    actorTextMap_.Erase(connection);
-    serverObjects_.Erase(connection);
+
+    URHO3D_LOGINFOF("Client disconnected and cleaned up: %s", connection->GetAddress().CString());
 
     // Push update to clients
     connection->SendServerUpdate();
