@@ -16,6 +16,7 @@
 #include "Server.h"
 #include "ClientObj.h"
 #include "Vehicle.h"
+#include "NetworkActor.h"
 
 #include <Urho3D/DebugNew.h>
 
@@ -272,6 +273,8 @@ void Server::HandleClientDisconnected(StringHash eventType, VariantMap& eventDat
 
     OutputLoginListToConsole();
 
+    PeriodicCleanup();
+
     URHO3D_LOGINFO("**** HandleClientDisconnected COMPLETED");
 
 }
@@ -313,3 +316,45 @@ const SharedPtr<Recorder> &Server::GetRecorder() const {
 void Server::SetRecorder(const SharedPtr<Recorder> &recorder) {
     recorder_ = recorder;
 }
+
+void Server::PeriodicCleanup() {
+    URHO3D_LOGINFO("Performing periodic server cleanup...");
+
+    // Clean up orphaned nodes
+    if (scene_) {
+        PODVector<Node*> orphanedNodes;
+
+        // Find nodes without valid components or connections
+        const auto& children = scene_->GetChildren();
+        for (Node* child : children) {
+            bool hasValidComponent = false;
+
+            if (auto* actor = child->GetComponent<NetworkActor>()) {
+                if (!actor->GetConnection() || !actor->alive_) {
+                    child->Remove();
+                    continue;
+                }
+                hasValidComponent = true;
+            }
+
+            if (auto* vehicle = child->GetComponent<Vehicle>()) {
+                hasValidComponent = true;
+            }
+
+            // If node has no valid components, mark for removal
+            if (!hasValidComponent && child->GetName().StartsWith("temp_")) {
+                orphanedNodes.Push(child);
+            }
+        }
+
+        // Remove orphaned nodes
+        for (Node* node : orphanedNodes) {
+            node->Remove();
+        }
+
+        if (orphanedNodes.Size() > 0) {
+            URHO3D_LOGINFOF("Cleaned up %u orphaned nodes", orphanedNodes.Size());
+        }
+    }
+}
+

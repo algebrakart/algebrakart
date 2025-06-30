@@ -25,6 +25,25 @@
 #include <Urho3D/UI/UIEvents.h>
 #include <Urho3D/Scene/SmoothedTransform.h>
 
+// Cross-platform memory monitoring
+#ifdef _WIN32
+#include <windows.h>
+#include <psapi.h>
+#pragma comment(lib, "psapi.lib")
+#elif defined(__linux__)
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
+#elif defined(__APPLE__)
+#include <mach/mach.h>
+#include <mach/task.h>
+#include <mach/mach_init.h>
+#endif
+
+// Add these as global functions (not member functions)
+size_t GetProcessMemoryUsage();
+size_t GetProcessVirtualMemoryUsage();
 
 // Audio Spectrum Analyzer
 #include <AlgebraKart/beat/AudioSpectrumAnalyzer.h>
@@ -117,9 +136,11 @@ struct ParticlePool {
     bool used; // Is particle emitter used?
     int usedBy; // Node id using particle emitter
     SharedPtr<Node> node; // Scene node
-    float lastEmit;
-    float currEmit;
     float timeout;
+    SharedPtr<ParticleEmitter> emitter;
+    float creationTime;
+    float timeToLive;
+    bool active;
 };
 
 
@@ -165,6 +186,7 @@ class AlgebraKart : public Game
 public:
     /// Construct.
     explicit AlgebraKart(Context* context);
+    ~AlgebraKart();
     /// Setup after engine initialization and before running the main loop.
     void Start() override;
     /// Setup before engine initialization. Modifies the engine parameters.
@@ -631,8 +653,9 @@ private:
     SharedPtr<PixelImage> radioVisualizerImg_;
     SharedPtr<Texture2D> radioSpectrumTexture_;
 
-    /// Particle pool
-    ParticlePool particlePool_[20];
+    /// Particle pool (max 80 pools)
+    static const int PARTICLE_POOL_SIZE = 80; // Match your array size
+    ParticlePool particlePool_[80];
 
     #define VDAMAGE_BODY_NUM_LINES 8
 
@@ -854,6 +877,15 @@ private:
     Vector<float> realtimeSpectrum_;
 
     SharedPtr<MissileManager> globalMissileManager_;
+
+    const size_t MEMORY_WARNING_THRESHOLD = 1024 * 1024 * 1024; // 1GB
+    const size_t MEMORY_CRITICAL_THRESHOLD = 2048 * 1024 * 1024; // 2GB
+
+    void ForceMemoryCleanup();
+    void CleanupExcessNodes(); // Clean up orphaned and excess scene nodes
+    void ManageResourceCache(float timeStep);
+    void LogResourceCacheStats(); // Helper for debugging
+    int FindFreeParticleSlot(); // Helper for particle pool management
 
     /// Audio system integration
     void InitializeAudioUISystem();

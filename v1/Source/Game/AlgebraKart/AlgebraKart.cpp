@@ -242,7 +242,417 @@ int currTrack_ = 0;
  *
  */
 
-///
+//
+/// \return
+
+
+// =============================================================================
+// Cross-Platform Memory Monitoring and Limits
+// =============================================================================
+
+// Cross-platform memory usage function
+size_t GetProcessMemoryUsage() {
+#ifdef _WIN32
+    PROCESS_MEMORY_COUNTERS pmc;
+    if (GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc))) {
+        return pmc.WorkingSetSize;
+    }
+    return 0;
+#elif defined(__linux__)
+    // Read from /proc/self/status for detailed memory info
+    FILE* file = fopen("/proc/self/status", "r");
+    if (!file) return 0;
+
+    char line[256];
+    size_t vmRSS = 0;
+
+    while (fgets(line, sizeof(line), file)) {
+        if (strncmp(line, "VmRSS:", 6) == 0) {
+            // Extract RSS in kB and convert to bytes
+            sscanf(line, "VmRSS: %zu kB", &vmRSS);
+            vmRSS *= 1024; // Convert kB to bytes
+            break;
+        }
+    }
+
+    fclose(file);
+    return vmRSS;
+#elif defined(__APPLE__)
+    // macOS implementation using task_info
+    struct mach_task_basic_info info;
+    mach_msg_type_number_t infoCount = MACH_TASK_BASIC_INFO_COUNT;
+
+    if (task_info(mach_task_self(), MACH_TASK_BASIC_INFO,
+                  (task_info_t)&info, &infoCount) != KERN_SUCCESS) {
+        return 0;
+    }
+
+    return info.resident_size;
+#else
+    // Fallback - return 0 if platform not supported
+    return 0;
+#endif
+}
+
+// Get virtual memory usage (useful for detecting memory leaks)
+size_t GetProcessVirtualMemoryUsage() {
+#ifdef _WIN32
+    PROCESS_MEMORY_COUNTERS pmc;
+    if (GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc))) {
+        return pmc.PagefileUsage;
+    }
+    return 0;
+#elif defined(__linux__)
+    FILE* file = fopen("/proc/self/status", "r");
+    if (!file) return 0;
+
+    char line[256];
+    size_t vmSize = 0;
+
+    while (fgets(line, sizeof(line), file)) {
+        if (strncmp(line, "VmSize:", 7) == 0) {
+            sscanf(line, "VmSize: %zu kB", &vmSize);
+            vmSize *= 1024; // Convert kB to bytes
+            break;
+        }
+    }
+
+    fclose(file);
+    return vmSize;
+#elif defined(__APPLE__)
+    struct mach_task_basic_info info;
+    mach_msg_type_number_t infoCount = MACH_TASK_BASIC_INFO_COUNT;
+
+    if (task_info(mach_task_self(), MACH_TASK_BASIC_INFO,
+                  (task_info_t)&info, &infoCount) != KERN_SUCCESS) {
+        return 0;
+    }
+
+    return info.virtual_size;
+#else
+    return 0;
+#endif
+}
+
+// In AlgebraKart.cpp - Enhanced cross-platform memory monitoring
+void AlgebraKart::MonitorMemoryUsage(float timeStep) {
+    static float memoryCheckTimer = 0.0f;
+    static const float MEMORY_CHECK_INTERVAL = 10.0f; // Check every 10 seconds
+    static const size_t MEMORY_WARNING_THRESHOLD = 1024 * 1024 * 1024; // 1GB
+    static const size_t MEMORY_CRITICAL_THRESHOLD = 2048 * 1024 * 1024; // 2GB
+    static const size_t VIRTUAL_MEMORY_THRESHOLD = 4096 * 1024 * 1024; // 4GB virtual
+
+    memoryCheckTimer += timeStep;
+
+    if (memoryCheckTimer >= MEMORY_CHECK_INTERVAL) {
+        memoryCheckTimer = 0.0f;
+
+        // Get memory usage (cross-platform)
+        size_t physicalMemory = GetProcessMemoryUsage();
+        size_t virtualMemory = GetProcessVirtualMemoryUsage();
+
+        if (physicalMemory > 0) {
+            if (physicalMemory > MEMORY_CRITICAL_THRESHOLD) {
+                URHO3D_LOGERRORF("CRITICAL: Physical memory usage: %zu MB - Forcing cleanup!",
+                                 physicalMemory / (1024 * 1024));
+
+                // Force aggressive cleanup
+                ForceMemoryCleanup();
+
+            } else if (physicalMemory > MEMORY_WARNING_THRESHOLD) {
+                URHO3D_LOGWARNINGF("WARNING: High physical memory usage: %zu MB",
+                                   physicalMemory / (1024 * 1024));
+            }
+        }
+
+        // Check virtual memory for memory leaks
+        if (virtualMemory > VIRTUAL_MEMORY_THRESHOLD) {
+            URHO3D_LOGWARNINGF("WARNING: High virtual memory usage: %zu MB (potential memory leak)",
+                               virtualMemory / (1024 * 1024));
+        }
+
+        // Log memory stats periodically
+        static int logCounter = 0;
+        if (++logCounter >= 6) { // Every minute (6 * 10 seconds)
+            logCounter = 0;
+            URHO3D_LOGINFOF("Memory Stats - Physical: %zu MB, Virtual: %zu MB",
+                            physicalMemory / (1024 * 1024),
+                            virtualMemory / (1024 * 1024));
+        }
+
+        // Additional cleanup checks
+        if (scene_) {
+            // Count total nodes - if too many, clean up
+            unsigned nodeCount = scene_->GetNumChildren(true);
+            if (nodeCount > 10000) { // Arbitrary limit
+                URHO3D_LOGWARNINGF("High node count: %u - performing cleanup", nodeCount);
+                CleanupExcessNodes();
+            }
+        }
+    }
+}
+
+// Force cleanup when memory is critical
+void AlgebraKart::ForceMemoryCleanup() {
+    URHO3D_LOGINFO("Performing forced memory cleanup...");
+
+    // Clean up audio
+    CleanupAudioResources();
+
+    // Clean up particle pool aggressively (fixed array)
+    for (int i = 0; i < 20; ++i) { // Match your array size
+        if (particlePool_[i].node) {
+            particlePool_[i].node->Remove();
+            particlePool_[i].node.Reset();
+        }
+        if (particlePool_[i].emitter) {
+            particlePool_[i].emitter.Reset();
+        }
+        particlePool_[i].active = false;
+        particlePool_[i].timeToLive = 0.0f;
+    }
+
+    // Clean up old UI elements
+    auto* ui_ = GetSubsystem<UI>();
+        if (ui_ && ui_->GetRoot()) {
+        auto children = ui_->GetRoot()->GetChildren();
+        for (auto child : children) {
+            if (child->GetName().StartsWith("temp_") ||
+                child->GetName().StartsWith("effect_")) {
+                child->Remove();
+            }
+        }
+    }
+
+    // Force garbage collection on scene
+    if (scene_) {
+        // Remove temporary nodes
+        PODVector<Node*> tempNodes;
+        scene_->GetChildrenWithTag(tempNodes, "temporary", true);
+        for (Node* node : tempNodes) {
+            node->Remove();
+        }
+    }
+
+    // Clear caches
+    auto* cache = GetSubsystem<ResourceCache>();
+    if (cache) {
+        cache->ReleaseAllResources(false);
+    }
+
+    URHO3D_LOGINFO("Forced cleanup completed");
+}
+
+// =============================================================================
+// 8. FIX: Proper Resource Cache Management
+// =============================================================================
+
+// In AlgebraKart.cpp - Complete resource cache management
+void AlgebraKart::ManageResourceCache(float timeStep) {
+    static float cacheCleanupTimer = 0.0f;
+    static float aggressiveCleanupTimer = 0.0f;
+    static const float CACHE_CLEANUP_INTERVAL = 60.0f; // Clean every minute
+    static const float AGGRESSIVE_CLEANUP_INTERVAL = 300.0f; // Aggressive clean every 5 minutes
+
+    cacheCleanupTimer += timeStep;
+    aggressiveCleanupTimer += timeStep;
+
+    // Regular cache cleanup
+    if (cacheCleanupTimer >= CACHE_CLEANUP_INTERVAL) {
+        cacheCleanupTimer = 0.0f;
+
+        auto* cache = GetSubsystem<ResourceCache>();
+        if (cache) {
+            // Get memory usage before cleanup
+            size_t memoryBefore = GetProcessMemoryUsage();
+
+            // Release unused resources (don't force release of actively used resources)
+            cache->ReleaseAllResources(false);
+
+            // Log cleanup results
+            size_t memoryAfter = GetProcessMemoryUsage();
+            if (memoryBefore > 0 && memoryAfter > 0) {
+                int memoryFreed = (int)((memoryBefore - memoryAfter) / (1024 * 1024));
+                if (memoryFreed > 0) {
+                    URHO3D_LOGINFOF("Resource cache cleaned - freed %d MB", memoryFreed);
+                } else {
+                    URHO3D_LOGINFO("Resource cache cleaned - no memory freed");
+                }
+            } else {
+                URHO3D_LOGINFO("Resource cache cleaned");
+            }
+        }
+    }
+
+    // Aggressive cleanup when memory is high
+    if (aggressiveCleanupTimer >= AGGRESSIVE_CLEANUP_INTERVAL) {
+        aggressiveCleanupTimer = 0.0f;
+
+        size_t currentMemory = GetProcessMemoryUsage();
+        if (currentMemory > MEMORY_WARNING_THRESHOLD) {
+            URHO3D_LOGINFO("Performing aggressive resource cache cleanup due to high memory usage");
+
+            auto* cache = GetSubsystem<ResourceCache>();
+            if (cache) {
+                // More aggressive cleanup - force release even actively used resources
+                cache->ReleaseAllResources(true);
+
+                // Also clear any cached UI resources
+                auto* ui = GetSubsystem<UI>();
+                if (ui) {
+                    // Clear cached UI elements that aren't currently displayed
+                    auto root = ui->GetRoot();
+                    if (root) {
+                        // Remove hidden UI elements to free memory
+                        PODVector<UIElement*> hiddenElements;
+                        root->GetChildren(hiddenElements, true);
+
+                        for (UIElement* element : hiddenElements) {
+                            if (!element->IsVisible() &&
+                                element->GetName().StartsWith("temp_")) {
+                                element->Remove();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Add helper function for cache statistics
+void AlgebraKart::LogResourceCacheStats() {
+    auto* cache = GetSubsystem<ResourceCache>();
+    if (!cache) return;
+
+    // Get cache statistics (if available in your Urho3D version)
+    unsigned totalResources = 0;
+    unsigned long long totalMemory = 0;
+
+    // Count resources by type
+    const auto& resources = cache->GetAllResources();
+    for (const auto& pair : resources) {
+        totalResources++;
+        // Note: Exact memory usage per resource might not be available
+        // This is a rough estimate
+    }
+
+    URHO3D_LOGINFOF("Resource Cache Stats - Total resources: %u", totalResources);
+}
+
+// =============================================================================
+// 9. FIX: Scene Node Cleanup Implementation
+// =============================================================================
+
+// In AlgebraKart.cpp - Complete scene cleanup implementation
+void AlgebraKart::CleanupExcessNodes() {
+    if (!scene_) return;
+
+    URHO3D_LOGINFO("Starting excess node cleanup...");
+
+    unsigned removedNodes = 0;
+    PODVector<Node*> nodesToRemove;
+
+    // Get all child nodes
+    PODVector<Node*> allNodes;
+    scene_->GetChildrenWithTag(allNodes, "", true); // Get all nodes
+
+    for (Node* node : allNodes) {
+        if (!node) continue;
+
+        bool shouldRemove = false;
+        String nodeName = node->GetName();
+
+        // Remove temporary nodes
+        if (nodeName.StartsWith("temp_") ||
+            nodeName.StartsWith("effect_") ||
+            nodeName.StartsWith("particle_")) {
+            shouldRemove = true;
+        }
+
+        // Remove nodes without any components
+        if (node->GetNumComponents() == 0 && node->GetNumChildren() == 0) {
+            shouldRemove = true;
+        }
+
+        // Remove orphaned vehicle nodes
+        if (node->HasComponent<Vehicle>()) {
+            Vehicle* vehicle = node->GetComponent<Vehicle>();
+            if (!vehicle || !vehicle->GetNode()) {
+                shouldRemove = true;
+            }
+        }
+
+        // Remove orphaned NetworkActor nodes
+        if (node->HasComponent<NetworkActor>()) {
+            NetworkActor* actor = node->GetComponent<NetworkActor>();
+            if (!actor || !actor->IsAlive() || !actor->GetConnection()) {
+                shouldRemove = true;
+            }
+        }
+
+        // Remove old particle emitter nodes that are no longer emitting
+        if (node->HasComponent<ParticleEmitter>()) {
+            ParticleEmitter* emitter = node->GetComponent<ParticleEmitter>();
+            if (!emitter || !emitter->IsEmitting()) {
+                // Check if particle effect has been running for too long
+                static const float MAX_PARTICLE_AGE = 30.0f; // 30 seconds
+                if (node->GetScene()) {
+                    // Clean up dead/expired particles in the fixed array
+                    for (int i = 0; i < PARTICLE_POOL_SIZE; ++i) {
+                        ParticlePool &particle = particlePool_[i];
+                        float particleAge = scene_->GetElapsedTime() - particle.creationTime;
+                        if (particleAge > particle.timeToLive) {
+                            shouldRemove = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Remove nodes that are too far from any players (optimization)
+        if (nodeName.Contains("debris") || nodeName.Contains("pickup")) {
+            bool nearPlayer = false;
+            Vector3 nodePos = node->GetWorldPosition();
+
+            // Check distance to any network actors
+            PODVector<Node*> actorNodes;
+            scene_->GetChildrenWithComponent<NetworkActor>(actorNodes, true);
+
+            for (Node* actorNode : actorNodes) {
+                if (actorNode && actorNode->GetComponent<NetworkActor>()) {
+                    float distance = (nodePos - actorNode->GetWorldPosition()).Length();
+                    if (distance < 500.0f) { // Within 500 units
+                        nearPlayer = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!nearPlayer) {
+                shouldRemove = true;
+            }
+        }
+
+        if (shouldRemove) {
+            nodesToRemove.Push(node);
+        }
+    }
+
+    // Remove the marked nodes
+    for (Node* node : nodesToRemove) {
+        if (node && node->GetScene()) {
+            node->Remove();
+            removedNodes++;
+        }
+    }
+
+    if (removedNodes > 0) {
+        URHO3D_LOGINFOF("Cleaned up %u excess nodes", removedNodes);
+    } else {
+        URHO3D_LOGINFO("No excess nodes found to clean up");
+    }
+}
 
 URHO3D_DEFINE_APPLICATION_MAIN(AlgebraKart)
 
@@ -307,6 +717,39 @@ AlgebraKart::AlgebraKart(Context *context) :
     currentMovement_ = Vector3::ZERO;
     SetCameraMode(CAMERA_THIRD_PERSON);
 
+}
+
+AlgebraKart::~AlgebraKart() {
+    // FIX: Unsubscribe from all events to prevent handler leaks
+    UnsubscribeFromAllEvents();
+
+    // Clean up all subsystems
+    CleanupAudioResources();
+
+    UI *ui = GetSubsystem<UI>();
+
+    // Clean up UI
+    if (ui && ui->GetRoot()) {
+        ui->GetRoot()->RemoveAllChildren();
+    }
+
+    // Clean up evolution manager
+    EvolutionManager::clean();
+
+    // Clean up particle pool (fixed array)
+    for (int i = 0; i < 20; ++i) { // Match your array size
+        if (particlePool_[i].node) {
+            particlePool_[i].node->Remove();
+            particlePool_[i].node.Reset();
+        }
+        if (particlePool_[i].emitter) {
+            particlePool_[i].emitter.Reset();
+        }
+        particlePool_[i].active = false;
+        particlePool_[i].timeToLive = 0.0f;
+    }
+
+    URHO3D_LOGINFO("AlgebraKart destructor completed");
 }
 
 void AlgebraKart::Setup() {
@@ -496,6 +939,19 @@ void AlgebraKart::Stop() {
 
     // Dump engine resources
     Game::Stop();
+
+    // Clean up all client connections first
+    for (auto& pair : actorMap_) {
+        Connection* conn = pair.first_;
+        // Trigger proper cleanup
+        VariantMap eventData;
+        eventData[ClientDisconnected::P_CONNECTION] = conn;
+        HandleClientDisconnected(StringHash(), eventData);
+    }
+
+
+    actorMap_.Clear();
+    loginList_.Clear();
 }
 
 void AlgebraKart::CreateAgents() {
@@ -2304,72 +2760,61 @@ NetworkActor* AlgebraKart::FindNetworkActorFromNode(Node* node) {
     return nullptr;
 }
 
-
-void AlgebraKart::SetParticleEmitter(int hitId, float contactX, float contactY, int type, float timeStep) {
-    // CREATE
-    auto *cache = GetSubsystem<ResourceCache>();
-    ParticleEffect2D *particleEffect;
-    Vector2 position;
-
-    switch (type) {
-        case 0:
-            particleEffect = cache->GetResource<ParticleEffect2D>("Urho2D/sun.pex");
-            position.x_ = contactX;
-            position.y_ = contactY;
-            break;
-        case 1:
-            particleEffect = cache->GetResource<ParticleEffect2D>("Urho2D/power.pex");
-            position.x_ = contactX;
-            position.y_ = contactY;
-            break;
-    }
-
-    if (!particleEffect)
-        return;
-
-    for (int i = 0; i < sizeof(particlePool_) / sizeof(*particlePool_); i++) {
-        if (!particlePool_[i].used) {
-            particlePool_[i].used = true;
-            particlePool_[i].usedBy = hitId;
-            particlePool_[i].node = scene_->CreateChild("GreenSpiral");
-            auto *particleEmitter = particlePool_[i].node->CreateComponent<ParticleEmitter2D>(LOCAL);
-            particleEmitter->SetEffect(particleEffect);
-            particlePool_[i].node->SetPosition(Vector3(position.x_, position.y_, 0.0));
-            particlePool_[i].lastEmit = timeStep;
-            particlePool_[i].currEmit = 0;
-            particlePool_[i].timeout = 0.8f;
-
-            break;
-        }
-    }
-
-    URHO3D_LOGINFOF("PARTICLE EMITTER CREATED used by id=%d", hitId);
-}
-
 void AlgebraKart::HandleUpdateParticlePool(float timeStep) {
-    // CREATE
-    auto *cache = GetSubsystem<ResourceCache>();
-/*    auto* particleEffect = cache->GetResource<ParticleEffect2D>("Urho2D/sun.pex");
-    if (!particleEffect)
-        return;
-*/
-    for (int i = 0; i < sizeof(particlePool_) / sizeof(*particlePool_); i++) {
-        if (particlePool_[i].used) {
 
-            particlePool_[i].currEmit += timeStep;
+    // FIX: Clean up particles in fixed-size array pool
+    static float cleanupTimer = 0.0f;
 
-            if (particlePool_[i].currEmit - particlePool_[i].lastEmit > particlePool_[i].timeout) {
-                if (particlePool_[i].node) {
-                    particlePool_[i].node->Remove();
-                    particlePool_[i].used = false;
-                    particlePool_[i].usedBy = -1;
+    cleanupTimer += timeStep;
+
+    // Clean up every 2 seconds for the fixed array
+    if (cleanupTimer >= 2.0f) {
+        cleanupTimer = 0.0f;
+
+        // Clean up dead/expired particles in the fixed array
+        for (int i = 0; i < PARTICLE_POOL_SIZE; ++i) {
+            ParticlePool& particle = particlePool_[i];
+
+            // Check if particle is expired or invalid
+            bool shouldCleanup = false;
+
+            if (!particle.node || !particle.node->GetScene()) {
+                shouldCleanup = true;
+            }
+            else if (particle.timeToLive > 0) {
+                particle.timeToLive -= timeStep;
+                if (particle.timeToLive <= 0) {
+                    shouldCleanup = true;
+                }
+            }
+
+            // Clean up the particle
+            if (shouldCleanup) {
+                if (particle.node && particle.node->GetScene()) {
+                    particle.node->Remove();
+                }
+
+                // Reset the particle slot
+                particle.node.Reset();
+                particle.timeToLive = 0.0f;
+                particle.active = false;
+
+                // Reset any other particle properties you have
+                if (particle.emitter) {
+                    particle.emitter.Reset();
                 }
             }
         }
     }
 
+    // Also update particle lifetimes each frame
+    for (int i = 0; i < PARTICLE_POOL_SIZE; ++i) {
+        ParticlePool& particle = particlePool_[i];
+        if (particle.active && particle.timeToLive > 0) {
+            particle.timeToLive -= timeStep;
+        }
+    }
 }
-
 
 void AlgebraKart::HandleCollisionEnd(StringHash eventType, VariantMap &eventData) {
     // Get colliding node
@@ -3905,6 +4350,11 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
 
     // Call our render update
     HandleRenderUpdate(eventType, eventData);
+
+    // Memory management calls
+    MonitorMemoryUsage(timeStep);
+    ManageResourceCache(timeStep);
+
 }
 
 void AlgebraKart::ProcessAudioStream() {
@@ -10475,22 +10925,6 @@ void AlgebraKart::ArrangePlayersInFormation() {
     }
 }
 
-void AlgebraKart::MonitorMemoryUsage(float timeStep) {
-    static float memoryCheckTimer = 0.0f;
-    static float lastMemoryUsage = 0.0f;
-
-    memoryCheckTimer += timeStep;
-    if (memoryCheckTimer > 60.0f) { // Check every minute
-        // Log memory usage, connection count, agent count
-        URHO3D_LOGINFOF("Memory check - Active connections: %d, AI agents: %d, Scene nodes: %d",
-                        GetSubsystem<Network>()->GetClientConnections().Size(),
-                        EvolutionManager::getInstance()->getAgents().size(),
-                        scene_->GetNumChildren(true));
-
-        memoryCheckTimer = 0.0f;
-    }
-}
-
 void AlgebraKart::UpdateBeatSequencerUI(float timeStep)
 {
     if (!beatSequencerUI_ || !beatSequencerUI_->GetMainWindow()->IsVisible()) {
@@ -10695,4 +11129,74 @@ void AlgebraKart::InitializeMissileSystem() {
     scene_->SetVar("MissileManager", missileManager);
 
     URHO3D_LOGINFO("Missile system initialized");
+}
+
+int AlgebraKart::FindFreeParticleSlot() {
+    for (int i = 0; i < PARTICLE_POOL_SIZE; ++i) {
+        if (!particlePool_[i].active || !particlePool_[i].node) {
+            return i;
+        }
+    }
+
+    // If no free slot, reuse oldest slot
+    static int nextSlot = 0;
+    int oldestSlot = nextSlot;
+    nextSlot = (nextSlot + 1) % PARTICLE_POOL_SIZE;
+
+    // Clean up the slot we're about to reuse
+    if (particlePool_[oldestSlot].node) {
+        particlePool_[oldestSlot].node->Remove();
+        particlePool_[oldestSlot].node.Reset();
+    }
+    if (particlePool_[oldestSlot].emitter) {
+        particlePool_[oldestSlot].emitter.Reset();
+    }
+
+    return oldestSlot;
+}
+
+// When creating particles, use the helper method to find free slots
+void AlgebraKart::SetParticleEmitter(int hitId, float contactX, float contactY, int type, float timeStep) {
+    // Find a free particle slot
+    int slotIndex = FindFreeParticleSlot();
+
+    if (slotIndex >= 0) {
+        ParticlePool& particle = particlePool_[slotIndex];
+
+        // Clean up previous particle in this slot
+        if (particle.node) {
+            particle.node->Remove();
+        }
+
+        // Create new particle
+        Node* particleNode = scene_->CreateChild("Particle");
+        ParticleEmitter* emitter = particleNode->CreateComponent<ParticleEmitter>();
+
+        // Set up the particle
+        particle.node = particleNode;
+        particle.emitter = emitter;
+        particle.active = true;
+        particle.timeToLive = 5.0f; // 5 second lifetime
+        particle.creationTime = scene_->GetElapsedTime();
+
+        // Configure emitter based on type
+        switch (type) {
+            case 0: // Explosion
+                emitter->SetEffect(GetSubsystem<ResourceCache>()->GetResource<ParticleEffect>("Particle/Explosion.xml"));
+                particle.timeToLive = 2.0f;
+                break;
+            case 1: // Smoke
+                emitter->SetEffect(GetSubsystem<ResourceCache>()->GetResource<ParticleEffect>("Particle/Smoke.xml"));
+                particle.timeToLive = 8.0f;
+                break;
+                // Add more types as needed
+        }
+
+        // Position the particle
+        particleNode->SetPosition(Vector3(contactX, 0.1f, contactY));
+
+        URHO3D_LOGINFOF("Created particle in slot %d, type %d", slotIndex, type);
+    } else {
+        URHO3D_LOGWARNING("No free particle slots available");
+    }
 }

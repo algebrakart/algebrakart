@@ -295,6 +295,9 @@ public:
 
     // Player state variables
     bool alive_;
+
+    bool IsAlive() const;
+
     bool onVehicle_;
     bool canEnter_;
     bool entered_;

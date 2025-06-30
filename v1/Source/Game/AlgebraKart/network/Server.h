@@ -157,7 +157,9 @@ protected:
 
     void OutputLoginListToConsole();
 
-protected:
+    void PeriodicCleanup();
+
+        protected:
     SharedPtr<Scene> scene_;
     HashMap<String, Connection*> loginList_;
     Vector<String> aiBotLoginList_;

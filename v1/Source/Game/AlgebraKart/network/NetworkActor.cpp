@@ -130,21 +130,53 @@ void NetworkActor::Kill() {
     // Hide arrow when player dies
     HideVehicleDirectionArrow();
 
-    if (this) {
-        URHO3D_LOGINFOF("**** DESTROYING NetworkActor OBJECT -> %d", this->id_);
-        if (vehicle_) {
-            vehicle_->SetEnabled(false);
-            vehicle_->Kill();
-        }
+    // FIX: More thorough cleanup
+    if (!alive_) return; // Already killed
 
+    alive_ = false;
+
+    // Clean up vehicle properly
+    if (vehicle_) {
+        vehicle_->Kill();
+        vehicle_.Reset(); // Clear shared pointer
+    }
+
+    // Clean up missile system
+    if (projectileManager_) {
+        projectileManager_.Reset();
+    }
+
+    // Clear target locks
+    ClearTargetLock();
+
+    // Remove from any threat lists
+    for (auto& threat : beingTargetedBy_) {
+        if (threat) {
+            threat->RemoveThreat(this);
+        }
+    }
+    beingTargetedBy_.Clear();
+
+    // Clean up UI elements
+    if (lockOnIndicator_) {
+        lockOnIndicator_->Remove();
+        lockOnIndicator_.Reset();
+    }
+
+    if (this) {
         if (node_) {
             URHO3D_LOGINFOF("**** DESTROYING CLIENT NODE OBJECT -> %d", this->id_);
             //node_->RemoveAllChildren();
             node_->Remove();
         }
-
         this->killed_ = true;
     }
+
+    // Unsubscribe from events
+    UnsubscribeFromAllEvents();
+
+    URHO3D_LOGINFOF("NetworkActor %d killed and cleaned up", id_);
+
 }
 
 void NetworkActor::SetScene(Scene *scene) {
@@ -1948,4 +1980,8 @@ void NetworkActor::ShowLockOnIndicator(bool show)
         // Hide indicator
         // lockOnIndicator_->SetVisible(false);
     }
+}
+
+bool NetworkActor::IsAlive() const {
+    return alive_;
 }
