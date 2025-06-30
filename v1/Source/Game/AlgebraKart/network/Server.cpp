@@ -328,22 +328,23 @@ void Server::PeriodicCleanup() {
         const auto& children = scene_->GetChildren();
         for (Node* child : children) {
             bool hasValidComponent = false;
-
-            if (auto* actor = child->GetComponent<NetworkActor>()) {
-                if (!actor->GetConnection() || !actor->alive_) {
-                    child->Remove();
-                    continue;
+            if (child) {
+                if (auto *actor = child->GetComponent<NetworkActor>()) {
+                    if (!actor->GetConnection() || !actor->alive_) {
+                        child->Remove();
+                        continue;
+                    }
+                    hasValidComponent = true;
                 }
-                hasValidComponent = true;
-            }
 
-            if (auto* vehicle = child->GetComponent<Vehicle>()) {
-                hasValidComponent = true;
-            }
+                if (auto *vehicle = child->GetComponent<Vehicle>()) {
+                    hasValidComponent = true;
+                }
 
-            // If node has no valid components, mark for removal
-            if (!hasValidComponent && child->GetName().StartsWith("temp_")) {
-                orphanedNodes.Push(child);
+                // If node has no valid components, mark for removal
+                if (!hasValidComponent && child->GetName().StartsWith("temp_")) {
+                    orphanedNodes.Push(child);
+                }
             }
         }
 

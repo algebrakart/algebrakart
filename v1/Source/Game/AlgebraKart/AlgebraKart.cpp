@@ -353,21 +353,21 @@ void AlgebraKart::MonitorMemoryUsage(float timeStep) {
 
         if (physicalMemory > 0) {
             if (physicalMemory > MEMORY_CRITICAL_THRESHOLD) {
-                URHO3D_LOGERRORF("CRITICAL: Physical memory usage: %zu MB - Forcing cleanup!",
+                URHO3D_LOGERRORF("CRITICAL: Physical memory usage: %u MB - Forcing cleanup!",
                                  physicalMemory / (1024 * 1024));
 
                 // Force aggressive cleanup
                 ForceMemoryCleanup();
 
             } else if (physicalMemory > MEMORY_WARNING_THRESHOLD) {
-                URHO3D_LOGWARNINGF("WARNING: High physical memory usage: %zu MB",
+                URHO3D_LOGWARNINGF("WARNING: High physical memory usage: %u MB",
                                    physicalMemory / (1024 * 1024));
             }
         }
 
         // Check virtual memory for memory leaks
         if (virtualMemory > VIRTUAL_MEMORY_THRESHOLD) {
-            URHO3D_LOGWARNINGF("WARNING: High virtual memory usage: %zu MB (potential memory leak)",
+            URHO3D_LOGWARNINGF("WARNING: High virtual memory usage: %u MB (potential memory leak)",
                                virtualMemory / (1024 * 1024));
         }
 
@@ -1599,42 +1599,44 @@ void AlgebraKart::HandleAI(float timeStep) {
         if (EvolutionManager::getInstance()->getNetworkActors().size() > 0) {
             bool dead = (!EvolutionManager::getInstance()->getNetworkActors()[i]);
             if (!dead) {
-                String botName = EvolutionManager::getInstance()->getNetworkActors()[i]->GetUserName();
-                std::shared_ptr<AgentController> controller = EvolutionManager::getInstance()->getAgentControllers()[i];
-                // Process sensor inputs through ffn and apply calculated inputs
-                controller->update(timeStep);
+                if (!EvolutionManager::getInstance()->getNetworkActors().empty()) {
+                    String botName = EvolutionManager::getInstance()->getNetworkActors()[i]->GetUserName();
+                    std::shared_ptr<AgentController> controller = EvolutionManager::getInstance()->getAgentControllers()[i];
+                    // Process sensor inputs through ffn and apply calculated inputs
+                    controller->update(timeStep);
 
-                if (controller->isAlive()) {
-                    std::shared_ptr<NetworkActor> actor = EvolutionManager::getInstance()->getNetworkActors()[i];
-                    if (actor) {
-                        float speed = actor->vehicle_->GetSpeedKmH();
-                        float SPEED_KILL_LIMIT = 400.0f;
-                        if (speed > SPEED_KILL_LIMIT) {
+                    if (controller->isAlive()) {
+                        std::shared_ptr<NetworkActor> actor = EvolutionManager::getInstance()->getNetworkActors()[i];
+                        if (actor) {
+                            float speed = actor->vehicle_->GetSpeedKmH();
+                            float SPEED_KILL_LIMIT = 400.0f;
+                            if (speed > SPEED_KILL_LIMIT) {
 
-                            /*
-                            controller->die();
-                            actor->Kill();
+                                /*
+                                controller->die();
+                                actor->Kill();
 
-                            // respawn?
-                            EvolutionManager::getInstance()->getNetworkActors()[i]->Kill();
-                            EvolutionManager::getInstance()->getNetworkActors()[i] = nullptr;
-                            URHO3D_LOGDEBUGF("CreateAgents -> SpawnPlayer: %d", (i));
-                            // Spawn ai bot and generate NetworkActor
-                            EvolutionManager::getInstance()->getNetworkActors()[i] = SpawnPlayer(i);
-                            agents[i]->setRespawnTime(0);
-                            scene_->MarkNetworkUpdate();
-                            */
+                                // respawn?
+                                EvolutionManager::getInstance()->getNetworkActors()[i]->Kill();
+                                EvolutionManager::getInstance()->getNetworkActors()[i] = nullptr;
+                                URHO3D_LOGDEBUGF("CreateAgents -> SpawnPlayer: %d", (i));
+                                // Spawn ai bot and generate NetworkActor
+                                EvolutionManager::getInstance()->getNetworkActors()[i] = SpawnPlayer(i);
+                                agents[i]->setRespawnTime(0);
+                                scene_->MarkNetworkUpdate();
+                                */
 
+                            }
                         }
                     }
-                }
 
-                if (!controller->isAlive()) {
-                    if (EvolutionManager::getInstance()->getNetworkActors()[i]) {
+                    if (!controller->isAlive()) {
+                        if (EvolutionManager::getInstance()->getNetworkActors()[i]) {
 
-                        EvolutionManager::getInstance()->getNetworkActors()[i]->Kill();
-                        scene_->MarkNetworkUpdate();
-                        EvolutionManager::getInstance()->getNetworkActors()[i] = nullptr;
+                            EvolutionManager::getInstance()->getNetworkActors()[i]->Kill();
+                            scene_->MarkNetworkUpdate();
+                            EvolutionManager::getInstance()->getNetworkActors()[i] = nullptr;
+                        }
                     }
                 }
             }
@@ -9211,71 +9213,70 @@ void AlgebraKart::DestroyPlayer(Connection *connection) {
     if (!actorMap_[connection].Expired() && actorMap_[connection].NotNull()) {
         // Remove network actor from csp server
         cspServer_->snapshot.removeNode(actorMap_[connection]->GetNode());
-    }
 
-    String playerName = actorMap_[connection]->GetUserName();
-    // Store in local login list
-    loginList_.Remove(playerName);
+        String playerName = actorMap_[connection]->GetUserName();
+        // Store in local login list
+        loginList_.Remove(playerName);
 
-    ClientObj *actor = actorMap_[connection];
-    if (actor) {
-        // Clean up sequencer and recorder references
-        if (actor && actor->GetSequencer()) {
-            actor->GetSequencer()->Reset();
-            actor->GetSequencer().Reset(); // Clear shared pointer
-        }
+        ClientObj *actor = actorMap_[connection];
+        if (actor) {
+            // Clean up sequencer and recorder references
+            if (actor && actor->GetSequencer()) {
+                actor->GetSequencer()->Reset();
+                actor->GetSequencer().Reset(); // Clear shared pointer
+            }
 
-        // Remove from all collections
-        actorMap_.Erase(connection);
+            // Remove from all collections
+            actorMap_.Erase(connection);
 
-        // FIX: Clean up any remaining network actors associated with this connection
-        // This is critical - actors might hold references preventing cleanup
-        Scene *scene = scene_;
-        if (scene) {
-            PODVector<Node *> actorNodes;
-            scene->GetChildrenWithComponent<NetworkActor>(actorNodes, true);
+            // FIX: Clean up any remaining network actors associated with this connection
+            // This is critical - actors might hold references preventing cleanup
+            Scene *scene = scene_;
+            if (scene) {
+                PODVector<Node *> actorNodes;
+                scene->GetChildrenWithComponent<NetworkActor>(actorNodes, true);
 
-            for (Node *node: actorNodes) {
-                NetworkActor *actor = node->GetComponent<NetworkActor>();
-                if (actor && actor->GetConnection() == connection) {
-                    // Properly cleanup the actor
-                    actor->Kill();
-                    // Clear maps
-                    actorMap_.Erase(connection);
-                    actorTextMap_.Erase(connection);
-                    serverObjects_.Erase(connection);
-                    // Clean up connection
-                    actor->CleanupConnection(connection);
-                    actor->SetConnection(nullptr);
-                    node->Remove(); // Remove the entire node
+                for (Node *node: actorNodes) {
+                    NetworkActor *actor = node->GetComponent<NetworkActor>();
+                    if (actor && actor->GetConnection() == connection) {
+                        // Properly cleanup the actor
+                        actor->Kill();
+                        // Clear maps
+                        actorMap_.Erase(connection);
+                        actorTextMap_.Erase(connection);
+                        serverObjects_.Erase(connection);
+                        // Clean up connection
+                        actor->CleanupConnection(connection);
+                        actor->SetConnection(nullptr);
+                        node->Remove(); // Remove the entire node
+                    }
                 }
             }
         }
-    }
 
-    // Remove minimap marker
-    if (minimapPlayerMap_.Contains(connection))
-    {
-        Node* marker = minimapPlayerMap_[connection];
-        if (marker)
-            marker->Remove();
-        minimapPlayerMap_.Erase(connection);
-    }
+        // Remove minimap marker
+        if (minimapPlayerMap_.Contains(connection)) {
+            Node * marker = minimapPlayerMap_[connection];
+            if (marker)
+                marker->Remove();
+            minimapPlayerMap_.Erase(connection);
+        }
 
 
-    URHO3D_LOGINFOF("Client disconnected and cleaned up: %s", connection->GetAddress().CString());
+        URHO3D_LOGINFOF("Client disconnected and cleaned up: %s", connection->GetAddress().CString());
 
-    // Push update to clients
-    connection->SendServerUpdate();
+        // Push update to clients
+        connection->SendServerUpdate();
 
-    // Send server login list refresh
-    Server *server = GetSubsystem<Server>();
-    // Send refreshed login list to clients
-    server->SendLoginListRefreshToClients();
+        // Send server login list refresh
+        Server *server = GetSubsystem<Server>();
+        // Send refreshed login list to clients
+        server->SendLoginListRefreshToClients();
 
-    // Cleanup any remaining references
-    if (welcomeMsgMap_.Contains(connection)) {
-        welcomeMsgMap_.Erase(connection);
+        // Cleanup any remaining references
+        if (welcomeMsgMap_.Contains(connection)) {
+            welcomeMsgMap_.Erase(connection);
+        }
     }
 }
 

@@ -130,10 +130,11 @@ void NetworkActor::Kill() {
     // Hide arrow when player dies
     HideVehicleDirectionArrow();
 
-    // FIX: More thorough cleanup
     if (!alive_) return; // Already killed
 
     alive_ = false;
+    // Unsubscribe from events
+    UnsubscribeFromAllEvents();
 
     // Clean up vehicle properly
     if (vehicle_) {
@@ -165,17 +166,12 @@ void NetworkActor::Kill() {
 
     if (this) {
         if (node_) {
-            URHO3D_LOGINFOF("**** DESTROYING CLIENT NODE OBJECT -> %d", this->id_);
-            //node_->RemoveAllChildren();
             node_->Remove();
         }
         this->killed_ = true;
     }
 
-    // Unsubscribe from events
-    UnsubscribeFromAllEvents();
-
-    URHO3D_LOGINFOF("NetworkActor %d killed and cleaned up", id_);
+    URHO3D_LOGINFOF("NetworkActor %d destroyed.", id_);
 
 }
 
@@ -1972,7 +1968,7 @@ void NetworkActor::ShowLockOnIndicator(bool show)
     // Create/show/hide lock-on reticle or warning indicators
     if (show && !lockOnIndicator_)
     {
-        // Create lock-on indicator UI element
+        // Create lock-on indicatImprove cleanup.or UI element
         // lockOnIndicator_ = CreateLockOnReticle();
     }
     else if (!show && lockOnIndicator_)
