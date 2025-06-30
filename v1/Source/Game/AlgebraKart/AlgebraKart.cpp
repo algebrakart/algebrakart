@@ -1599,15 +1599,17 @@ void AlgebraKart::HandleAI(float timeStep) {
         if (EvolutionManager::getInstance()->getNetworkActors().size() > 0) {
             bool dead = (!EvolutionManager::getInstance()->getNetworkActors()[i]);
             if (!dead) {
-                if (!EvolutionManager::getInstance()->getNetworkActors().empty()) {
-                    String botName = EvolutionManager::getInstance()->getNetworkActors()[i]->GetUserName();
+                if (EvolutionManager::getInstance()->getNetworkActors()[i]->IsAlive()) {
+
+                    //String botName = EvolutionManager::getInstance()->getNetworkActors()[i]->GetUserName();
                     std::shared_ptr<AgentController> controller = EvolutionManager::getInstance()->getAgentControllers()[i];
-                    // Process sensor inputs through ffn and apply calculated inputs
-                    controller->update(timeStep);
 
                     if (controller->isAlive()) {
+                        // Process sensor inputs through ffn and apply calculated inputs
+                        controller->update(timeStep);
+
                         std::shared_ptr<NetworkActor> actor = EvolutionManager::getInstance()->getNetworkActors()[i];
-                        if (actor) {
+                        if (actor && actor->vehicle_) {
                             float speed = actor->vehicle_->GetSpeedKmH();
                             float SPEED_KILL_LIMIT = 400.0f;
                             if (speed > SPEED_KILL_LIMIT) {
@@ -10483,13 +10485,14 @@ void AlgebraKart::UpdateCameraFirstPerson(float timeStep) {
 void AlgebraKart::UpdateCameraThirdPerson(float timeStep) {
     NetworkActor* actor = GetLocalNetworkActor();
     if (!actor || !actor->GetNode() || !clientCam_) return;
+    if (!actor->GetBody()) return;
 
     Node* actorNode = actor->GetNode();
     Node* cameraNode = clientCam_->GetNode();
 
     // Initialize camera position if needed
     if (!cameraInitialized_) {
-        smoothCameraPosition_ = actorNode->GetWorldPosition();
+        smoothCameraPosition_ = actor->GetBody()->GetPosition();
         smoothCameraRotation_ = actorNode->GetWorldRotation();
         cameraInitialized_ = true;
     }
@@ -10499,7 +10502,7 @@ void AlgebraKart::UpdateCameraThirdPerson(float timeStep) {
 
     if (actor->onVehicle_ && actor->vehicle_ && actor->vehicle_->GetNode() && actor->vehicle_->GetRaycastVehicle()) {
         // In vehicle - dynamic camera based on speed
-        Node* vehicleNode = actor->vehicle_->GetNode();
+        Vector3 vPos = actor->vehicle_->GetBody()->GetPosition();
         float speed = actor->vehicle_->GetSpeedKmH();
 
         // Adjust camera distance based on speed
@@ -10507,26 +10510,26 @@ void AlgebraKart::UpdateCameraThirdPerson(float timeStep) {
         float dynamicHeight = cameraHeight_ + (speed * 0.1f);
 
         // Calculate camera offset
-        Vector3 forward = vehicleNode->GetWorldRotation() * Vector3::FORWARD;
+        Vector3 forward = actor->vehicle_->GetBody()->GetRotation() * Vector3::FORWARD;
         Vector3 up = Vector3::UP;
 
-        targetPosition = vehicleNode->GetWorldPosition() -
+        targetPosition = vPos -
                          forward * dynamicDistance +
                          up * dynamicHeight;
 
         // Look ahead of the vehicle
-        lookAtPosition = vehicleNode->GetWorldPosition() +
+        lookAtPosition = vPos +
                          forward * cameraLookAhead_ +
                          up * 5.0f;
     } else {
         // On foot - standard third person
-        Vector3 forward = actorNode->GetWorldRotation() * Vector3::FORWARD;
+        Vector3 forward = actor->GetBody()->GetRotation() * Vector3::FORWARD;
 
-        targetPosition = actorNode->GetWorldPosition() -
+        targetPosition = actor->GetBody()->GetPosition() -
                          forward * 30.0f +
                          Vector3::UP * 15.0f;
 
-        lookAtPosition = actorNode->GetWorldPosition() + Vector3::UP * 5.0f;
+        lookAtPosition = actor->GetBody()->GetPosition() + Vector3::UP * 5.0f;
     }
 
     // Raycast to prevent camera going through walls

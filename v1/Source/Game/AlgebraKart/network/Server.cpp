@@ -273,7 +273,7 @@ void Server::HandleClientDisconnected(StringHash eventType, VariantMap& eventDat
 
     OutputLoginListToConsole();
 
-    PeriodicCleanup();
+    //PeriodicCleanup();
 
     URHO3D_LOGINFO("**** HandleClientDisconnected COMPLETED");
 

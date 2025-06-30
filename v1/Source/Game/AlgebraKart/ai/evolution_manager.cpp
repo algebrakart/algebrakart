@@ -78,8 +78,51 @@ void EvolutionManager::instantiate() {
 }
 
 void EvolutionManager::clean() {
-    if (instance)
+    if (instance) {
+        // FIX: Clean up all agents and their resources
+        for (auto& agent : instance->agents) {
+            if (agent) {
+                agent->kill();
+                // Clean up associated network actor
+                if (agent->getActor()) {
+                    agent->getActor()->Kill();
+                    agent->setActor(nullptr);
+                }
+            }
+        }
+        instance->agents.clear();
+
+        // FIX: Clean up agent controllers
+        for (auto& controller : instance->agentControllers) {
+            if (controller) {
+                // Clean up sensors and flags
+                controller.reset();
+            }
+        }
+        instance->agentControllers.clear();
+
+        // FIX: Clean up genetic algorithm and all populations
+        if (instance->geneticAlgorithm) {
+            // Clear current and previous populations
+            auto currentPop = instance->geneticAlgorithm->getCurrentPopulation();
+            auto prevPop = instance->geneticAlgorithm->getPrevPopulation();
+
+            // These are shared_ptr, so just clear the containers
+            currentPop.clear();
+            prevPop.clear();
+
+            delete instance->geneticAlgorithm;
+            instance->geneticAlgorithm = nullptr;
+        }
+
+        // FIX: Clean up network actors
+        instance->networkActors.clear();
+
         delete instance;
+        instance = nullptr;
+    }
+
+    URHO3D_LOGINFO("Evolution Manager cleaned up");
 }
 
 EvolutionManager::~EvolutionManager() {

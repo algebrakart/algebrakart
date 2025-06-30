@@ -121,11 +121,13 @@ void AgentController::update(float duration) {
     std::shared_ptr<NetworkActor> actor = EvolutionManager::getInstance()->getNetworkActors()[agentIndex];
     Scene *scene_ = EvolutionManager::getInstance()->getNetworkActors()[agentIndex]->GetScene();
     Vehicle *vehicle = EvolutionManager::getInstance()->getNetworkActors()[agentIndex]->GetVehicle();
+
+    if (!actor || !vehicle || !scene_)
+        return;
     Node *node = EvolutionManager::getInstance()->getNetworkActors()[agentIndex]->GetVehicle()->GetNode();
 
-    if (!actor || !vehicle || !scene_ || !node)
+    if (!node)
         return;
-
 
     // Auto-enter, if not entered vehicle
     if (!actor->entered_)
