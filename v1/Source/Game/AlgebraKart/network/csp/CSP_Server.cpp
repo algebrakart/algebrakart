@@ -73,7 +73,17 @@ void add_replicated_node(StateSnapshot& snapshot, Node* node) {
 
 
 void CSP_Server::prepareStateSnapshot()
-{
+{/*
+    // CRITICAL: Limit snapshot history to prevent memory explosion
+    static const size_t MAX_SNAPSHOTS = 60; // Only keep 60 snapshots (1 second at 60fps)
+
+    // Clear old snapshots before creating new ones
+    while (stateSnapshots_.Size() > MAX_SNAPSHOTS) {
+        stateSnapshots_.Pop();
+    }
+*/
+/////
+
 	state.Clear();
 
 	// Write placeholder last input ID, which will be set per connection before sending
@@ -82,12 +92,19 @@ void CSP_Server::prepareStateSnapshot()
 	auto scene = GetScene();
 	//scene->ApplyAttributes();
 
-	//snapshot.nodes.clear();
-	//add_replicated_child_nodes(snapshot, scene);
+	snapshot.nodes_.Clear();
+	add_replicated_child_nodes(snapshot, scene);
 
 	// write state snapshot
 	snapshot.writeState(&state, GetScene());
+
+ //   stateSnapshots_.Push(snapshot);
+
+//    URHO3D_LOGDEBUGF("CSP snapshots: %u (max: %u)", stateSnapshots_.Size(), MAX_SNAPSHOTS);
+
 }
+
+
 
 void CSP_Server::sendStateUpdates()
 {
