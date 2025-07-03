@@ -334,59 +334,44 @@ size_t GetProcessVirtualMemoryUsage() {
 #endif
 }
 
-// In AlgebraKart.cpp - Enhanced cross-platform memory monitoring
+// Cross-platform memory monitoring
 void AlgebraKart::MonitorMemoryUsage(float timeStep) {
     static float memoryCheckTimer = 0.0f;
-    static const float MEMORY_CHECK_INTERVAL = 10.0f; // Check every 10 seconds
-    static const size_t MEMORY_WARNING_THRESHOLD = 1024 * 1024 * 1024; // 1GB
-    static const size_t MEMORY_CRITICAL_THRESHOLD = 2048 * 1024 * 1024; // 2GB
-    static const size_t VIRTUAL_MEMORY_THRESHOLD = 4096 * 1024 * 1024; // 4GB virtual
-
     memoryCheckTimer += timeStep;
 
-    if (memoryCheckTimer >= MEMORY_CHECK_INTERVAL) {
+    if (memoryCheckTimer >= 2.0f) { // Check every 2 seconds during crisis
         memoryCheckTimer = 0.0f;
 
-        // Get memory usage (cross-platform)
         size_t physicalMemory = GetProcessMemoryUsage();
         size_t virtualMemory = GetProcessVirtualMemoryUsage();
 
-        if (physicalMemory > 0) {
-            if (physicalMemory > MEMORY_CRITICAL_THRESHOLD) {
-                URHO3D_LOGERRORF("CRITICAL: Physical memory usage: %u MB - Forcing cleanup!",
-                                 physicalMemory / (1024 * 1024));
-
-                // Force aggressive cleanup
-                ForceMemoryCleanup();
-
-            } else if (physicalMemory > MEMORY_WARNING_THRESHOLD) {
-                URHO3D_LOGWARNINGF("WARNING: High physical memory usage: %u MB",
-                                   physicalMemory / (1024 * 1024));
-            }
+        // Log every check during high memory usage
+        if (physicalMemory > 1024 * 1024 * 1024) { // Over 1GB
+            MemoryTracker::LogMemoryState("MONITORING");
+            MemoryTracker::LogSceneStats(scene_);
         }
 
-        // Check virtual memory for memory leaks
-        if (virtualMemory > VIRTUAL_MEMORY_THRESHOLD) {
-            URHO3D_LOGWARNINGF("WARNING: High virtual memory usage: %u MB (potential memory leak)",
-                               virtualMemory / (1024 * 1024));
-        }
+        // EMERGENCY TRIGGERS
+        if (physicalMemory > 2048 * 1024 * 1024) { // Over 2GB - CRITICAL
+            URHO3D_LOGERROR("CRITICAL MEMORY USAGE - TRIGGERING EMERGENCY CLEANUP!");
 
-        // Log memory stats periodically
-        static int logCounter = 0;
-        if (++logCounter >= 6) { // Every minute (6 * 10 seconds)
-            logCounter = 0;
-            URHO3D_LOGINFOF("Memory Stats - Physical: %zu MB, Virtual: %zu MB",
-                            physicalMemory / (1024 * 1024),
-                            virtualMemory / (1024 * 1024));
-        }
+            // Trigger all emergency cleanups
+            //EmergencySceneCleanup();
+            //EmergencyAudioCleanup();
+            //EvolutionManager::EmergencyCleanup();
+            ForceMemoryCleanup();
 
-        // Additional cleanup checks
-        if (scene_) {
-            // Count total nodes - if too many, clean up
-            unsigned nodeCount = scene_->GetNumChildren(true);
-            if (nodeCount > 10000) { // Arbitrary limit
-                URHO3D_LOGWARNINGF("High node count: %u - performing cleanup", nodeCount);
-                CleanupExcessNodes();
+            // If still over 2.5GB, restart might be needed
+            size_t postCleanupMemory = GetProcessMemoryUsage();
+            if (postCleanupMemory > 2560 * 1024 * 1024) { // 2.5GB
+                URHO3D_LOGERROR("MEMORY CLEANUP FAILED - SERVER RESTART RECOMMENDED!");
+
+                // Log final diagnostics
+                MemoryTracker::LogMemoryState("POST_EMERGENCY_CLEANUP");
+                MemoryTracker::LogSceneStats(scene_);
+
+                // Could trigger graceful shutdown here if needed
+                // engine_->Exit();
             }
         }
     }
@@ -692,7 +677,9 @@ AlgebraKart::AlgebraKart(Context *context) :
         minimapRotateWithPlayer_(false),
         minimapTargetPosition_(Vector3::ZERO),
         replaySystemEnabled_(true),
-        lastReplayTriggerTime_(0.0f)
+        lastReplayTriggerTime_(0.0f),
+        currentSteeringValue_(0.0f),
+        hasValidSteeringData_(false)
 {
 
 
@@ -715,8 +702,20 @@ AlgebraKart::AlgebraKart(Context *context) :
     currentJumpCooldown_ = 0.0f;
     targetMovement_ = Vector3::ZERO;
     currentMovement_ = Vector3::ZERO;
-    SetCameraMode(CAMERA_THIRD_PERSON);
 
+    // Initialize camera obstruction system
+    cameraObstructed_ = false;
+    targetCameraDistance_ = 50.0f;
+    currentCameraDistance_ = 50.0f;
+    cameraObstructionSmoothSpeed_ = 8.0f;
+    maxCameraDistance_ = 200.0f;
+    minCameraDistance_ = 10.0f;
+    obstructionCheckTimer_ = 0.0f;
+    obstructionCheckInterval_ = 0.1f; // Check every 100ms
+    hasValidCameraPosition_ = false;
+
+    // Set camera mode
+    SetCameraMode(CAMERA_THIRD_PERSON);
 }
 
 AlgebraKart::~AlgebraKart() {
@@ -920,6 +919,7 @@ void AlgebraKart::Start() {
         SubscribeToEvent(E_NODECOLLISION, URHO3D_HANDLER(AlgebraKart, HandleCollisionReplay));
 
         URHO3D_LOGINFO("Replay system initialized");
+        UpdateLoadingProgress(0.30f, "Connecting to server...");
 
         // Set initial state
         UpdateUIState(false);
@@ -2112,6 +2112,13 @@ void AlgebraKart::HandlePlayerStateUpdate(StringHash eventType, VariantMap& even
         float steer = eventData[P_STEER].GetFloat();
         int pickupItemState = eventData[P_PICKUP_ITEM].GetInt();
 
+        currentSteeringValue_ = steer;
+        hasValidSteeringData_ = true;
+        UpdateSteeringWheelDisplay();
+
+        URHO3D_LOGDEBUGF("Client -> HandlePlayerStateUpdate: life=%d, prana=%d, rpm=%f, velocity=%f, steer=%f, pickup=%d",
+                         life, prana, rpm, velocity, steer, pickupItemState);
+
         // Sequencer data
         float currTime = 0;
         float beatTime = 0;
@@ -2119,11 +2126,6 @@ void AlgebraKart::HandlePlayerStateUpdate(StringHash eventType, VariantMap& even
 //        float currTime = eventData[P_SEQ_CURR_TIME].GetFloat();
  //       float beatTime = eventData[P_SEQ_BEAT_TIME].GetFloat();
   //      int beat = eventData[P_SEQ_BEAT].GetInt();
-
-
-        if (life == 0) {
-            // TODO: Actor may register but with empty values, not sure why
-        }
 
         /*
         URHO3D_LOGINFOF("Client -> HandlePlayerStateUpdate: %d %f, %f, %d, %d, %f, %f, %f, %f, %f, %d, %d",
@@ -2890,6 +2892,9 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
                             bodyPos = body->GetPosition();
                             rotation = na->GetNode()->GetRotation();
 
+                            if (hasValidSteeringData_) {
+                                UpdateSteeringWheelDisplay();
+                            }
 
                             if (speedometerNeedleSprite_) {
                                 if (v) {
@@ -2969,11 +2974,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
                             if (na->entered_) {
                                 if (v) {
                                     float steering = v->GetSteering();
-                                    if (steerWheelSprite_) {
-                                        steerWheelSprite_->SetVisible(true);
-                                        steerActorSprite_->SetVisible(false);
-                                        steerWheelSprite_->SetRotation(360.0f * steering);
-                                    }
+
 
                                 }
                             } else {
@@ -3417,10 +3418,7 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
     // Update loading screen animation
     UpdateLoadingScreen(timeStep);
 
-    // 60 second memory monitor
-    MonitorMemoryUsage(timeStep);
-
-    // Skip on loading
+        // Skip on loading
     if (levelLoading_) return;
     if (clientLevelLoading_) return;
 
@@ -3699,68 +3697,96 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
                     lastRaceRank_ = 0;
                 }
 
-            }
-        }
+                if (lastPlayerStateTime_ > 0.2f) {
 
-        // Send to RACE VICTORY to client
+                    // Send the event forward
+                    VariantMap &playerStateData = GetEventDataMap();
 
-        // Update race rank send timer
-        lastRaceVictory_ += timeStep;
+                    //URHO3D_PARAM(P_LIFE, Life);         // unsigned
+                    //URHO3D_PARAM(P_RPM, RPM);         // float
+                    //URHO3D_PARAM(P_VELOCITY, Velocity);     // float
+                    //URHO3D_PARAM(P_PRANA, Prana);           // float
+                    //URHO3D_PARAM(P_STEER, Steering);         // float
+                    //URHO3D_PARAM(P_PICKUP_ITEM, PickUp);            // int
 
-        for (int r = 0; r < rankList.size(); r++) {
+                    auto *actor = dynamic_cast<NetworkActor *>(actorMap_[connection].Get());
+                    if (actor) {
+                        // Load player state event packet
+                        playerStateData[ClientPlayerState::P_LIFE] = actor->GetLife();
+                        playerStateData[ClientPlayerState::P_RPM] = actor->GetSpeed();
+                        playerStateData[ClientPlayerState::P_VELOCITY] = actor->GetBody()->GetLinearVelocity().Length();
+                        playerStateData[ClientPlayerState::P_PRANA] = actor->GetPrana();
+                        playerStateData[ClientPlayerState::P_STEER] = actor->GetVehicle()->GetSteering();
+                        playerStateData[ClientPlayerState::P_PICKUP_ITEM] = actor->GetPickUpItemState();
 
-            String username = String(rankList.at(r).second);
-            String rankScore = String(rankList.at(r).first);
-
-            playerIdPackedStr += username;
-            playerIdPackedStr += ";"; // delimiter
-
-            rankPackedStr += String(username)+String("|")+String(rankScore);
-            rankPackedStr += ";"; // delimiter
-
-        }
-
-        // Load race victory event packet
-        newEventData[P_PLAYERID_LIST] = playerIdPackedStr;
-        newEventData[P_RANK_LIST] = rankPackedStr;
-        newEventData[P_TIME_LIST] = timePackedStr;
-
-        // Retrieve Client actors
-        if (GetSubsystem<Network>()->GetClientConnections().Size()) {
-            auto connections = GetSubsystem<Network>()->GetClientConnections();
-            for (auto it = connections.Begin(); it != connections.End(); ++it) {
-
-                Connection *connection = (*it);
-
-                // Send race rank every 2500 ms
-                if (lastRaceVictory_ > 2.5f) {
-                    connection->SendRemoteEvent(E_RACEVICTORY, true, newEventData);
-                    String clientId = connection->ToString().CString();
-
-                    URHO3D_LOGINFOF("E_RACEVICTORY -> %s -> %s", playerIdPackedStr.CString(), timePackedStr.CString());
-
-                    // Reset timer
-                    lastRaceVictory_ = 0;
+                        connection->SendRemoteEvent(E_PLAYERSTATE, true, playerStateData);
+                    }
+                    lastPlayerStateTime_ = 0;
                 }
+            }
+
+            lastPlayerStateTime_ += timeStep;
+
+            // Send to RACE VICTORY to client
+
+            // Update race rank send timer
+            lastRaceVictory_ += timeStep;
+
+            for (int r = 0; r < rankList.size(); r++) {
+
+                String username = String(rankList.at(r).second);
+                String rankScore = String(rankList.at(r).first);
+
+                playerIdPackedStr += username;
+                playerIdPackedStr += ";"; // delimiter
+
+                rankPackedStr += String(username) + String("|") + String(rankScore);
+                rankPackedStr += ";"; // delimiter
 
             }
-        }
 
-        // Show rankings
-        int r = 0;
-        float vertScale = 26.0f;
-        float vAlignRank = 260.0f;
-        for (int r = 0; r < rankList.size(); r++) {
-            if (rankText_[r]) {
-                rankText_[r]->SetAlignment(HA_LEFT, VA_TOP);
-                rankText_[r]->SetPosition(10.0f, vAlignRank + (r * vertScale));
-                rankText_[r]->SetVisible(true);
-                rankText_[r]->SetText(
-                        String("[") + String(r) + String("] ") + String(rankList.at(r).second) + String(": ") +
-                        String(rankList.at(r).first));
+            // Load race victory event packet
+            newEventData[P_PLAYERID_LIST] = playerIdPackedStr;
+            newEventData[P_RANK_LIST] = rankPackedStr;
+            newEventData[P_TIME_LIST] = timePackedStr;
+
+            // Retrieve Client actors
+            if (GetSubsystem<Network>()->GetClientConnections().Size()) {
+                auto connections = GetSubsystem<Network>()->GetClientConnections();
+                for (auto it = connections.Begin(); it != connections.End(); ++it) {
+
+                    Connection *connection = (*it);
+
+                    // Send race rank every 2500 ms
+                    if (lastRaceVictory_ > 2.5f) {
+                        connection->SendRemoteEvent(E_RACEVICTORY, true, newEventData);
+                        String clientId = connection->ToString().CString();
+
+                        URHO3D_LOGINFOF("E_RACEVICTORY -> %s -> %s", playerIdPackedStr.CString(),
+                                        timePackedStr.CString());
+
+                        // Reset timer
+                        lastRaceVictory_ = 0;
+                    }
+
+                }
+            }
+
+            // Show rankings
+            int r = 0;
+            float vertScale = 26.0f;
+            float vAlignRank = 260.0f;
+            for (int r = 0; r < rankList.size(); r++) {
+                if (rankText_[r]) {
+                    rankText_[r]->SetAlignment(HA_LEFT, VA_TOP);
+                    rankText_[r]->SetPosition(10.0f, vAlignRank + (r * vertScale));
+                    rankText_[r]->SetVisible(true);
+                    rankText_[r]->SetText(
+                            String("[") + String(r) + String("] ") + String(rankList.at(r).second) + String(": ") +
+                            String(rankList.at(r).first));
+                }
             }
         }
-
 
         int k = 0;
         float vAlign = 100.0f;
@@ -4349,8 +4375,8 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
         }
     }
 
-    // Update beat sequencer UI
-    UpdateBeatSequencerUI(timeStep);
+    // Update audio UI system
+    UpdateAudioUISystem(timeStep);
 
     // Call our render update
     HandleRenderUpdate(eventType, eventData);
@@ -5600,7 +5626,7 @@ void AlgebraKart::DoPlay() {
     renderer->SetViewport(0, nullptr);
     renderer->SetViewport(1, nullptr);
     renderer->SetViewport(2, nullptr);
-    //renderer->SetViewport(3, nullptr);
+    renderer->SetViewport(3, nullptr);
 
     // Run frame to refresh screen
     if (engine_)
@@ -5680,9 +5706,6 @@ void AlgebraKart::CreateUI() {
 
     // Setup menu viewport
     //SetupMenuViewport();
-
-    // Setup sequencer viewport
-    SetupSequencerViewport();
 
 
     ResourceCache *cache = GetSubsystem<ResourceCache>();
@@ -5958,7 +5981,7 @@ void AlgebraKart::SetupSequencerViewport() {
 
     // Load or create enhanced sequencer scene
     seqScene_ = MakeShared<Scene>(context_);
-    seqScene_->SetName("EnhancedSeqScene");
+    seqScene_->SetName("SeqScene");
 
     // Create zone for lighting
     Node * zoneNode = seqScene_->CreateChild("Zone");
@@ -6043,6 +6066,15 @@ void AlgebraKart::SetupSequencerViewport() {
     seqTimeCursorModel_ = cursorNode->CreateComponent<StaticModel>();
     seqTimeCursorModel_->SetModel(cache->GetResource<Model>("Models/Cylinder.mdl"));
 
+    Node * beatTimeNode = seqScene_->CreateChild("BeatTimeCursor");
+    beatTimeCursorModel_ = beatTimeNode->CreateComponent<StaticModel>();
+    beatTimeCursorModel_->SetModel(cache->GetResource<Model>("Models/Cylinder.mdl"));
+
+    Node * metronomeNode = seqScene_->CreateChild("MetronomeCursor");
+    metronomeCursorModel_ = metronomeNode->CreateComponent<StaticModel>();
+    metronomeCursorModel_->SetModel(cache->GetResource<Model>("Models/Cylinder.mdl"));
+
+
     Material *cursorMaterial = new Material(context_);
     cursorMaterial->SetTechnique(0, cache->GetResource<Technique>("Techniques/DiffUnlit.xml"));
     cursorMaterial->SetShaderParameter("MatDiffColor", Color::YELLOW);
@@ -6053,9 +6085,10 @@ void AlgebraKart::SetupSequencerViewport() {
     cursorNode->SetScale(Vector3(0.5f, 3.0f, 8.0f));
 
     // Setup viewport
+    float seqWidth = 900.0f;
     float seqHeight = 200.0f;
     seqViewport_ = new Viewport(context_, seqScene_, seqCam_,
-                                IntRect(graphics->GetWidth() - 400, graphics->GetHeight() - seqHeight,
+                                IntRect(graphics->GetWidth() + seqWidth, graphics->GetHeight() - seqHeight,
                                         graphics->GetWidth(), graphics->GetHeight()));
     renderer->SetViewport(3, seqViewport_);
 }
@@ -6304,31 +6337,26 @@ void AlgebraKart::MoveCamera(float timeStep) {
                                 case CAMERA_ISOMETRIC:
                                     UpdateCameraIsometric(timeStep);
                                     break;
-                                case CAMERA_FREEFLY:
-                                    // Free-fly camera
+
+                                    ///
+                                case CAMERA_FREEFLY: {
+                                // Enhanced free-fly camera with obstruction detection
                                     Vector3 lookAtObject;
 
-
                                     if (na) {
-
                                         String username = actor->GetUserName();
                                         float botSpeedKm = 0;
                                         Quaternion forward;
-
                                         float velMult = 8.0f;
+
+                                        // Update obstruction detection
+                                        UpdateCameraObstruction(timeStep, na);
 
                                         Vector3 cameraTargetPos;
                                         auto *naBody = na->GetNode()->GetComponent<RigidBody>(true);
 
-
-                                        if (na->numPickups_ > 0) {
-                                            // we got here
-                                            int a;
-                                        }
-
                                         if (na->onVehicle_ && na->entered_) {
                                             if (naBody) {
-                                                // CLIENT RIGID BODY RETRIEVED
                                                 pos = naBody->GetPosition();
                                                 rot = naBody->GetRotation();
                                                 lVel = naBody->GetLinearVelocity();
@@ -6337,148 +6365,84 @@ void AlgebraKart::MoveCamera(float timeStep) {
                                             if (v) {
                                                 auto *vBody = v->GetNode()->GetComponent<RigidBody>(true);
                                                 if (vBody) {
-                                                    // CLIENT RIGID BODY RETRIEVED
                                                     pos = vBody->GetPosition();
                                                     rot = vBody->GetRotation();
                                                     lVel = vBody->GetLinearVelocity();
                                                     lookAtObject = vBody->GetPosition();
-                                                    // Back wheel points forward
                                                     forward = -vBody->GetNode()->GetRotation();
-
                                                 }
-
                                             }
 
-                                            //float bodyVel = EvolutionManager::getInstance()->getAgents()[camMode_ -1]->getActor()->vehicle_->GetBody()->GetLinearVelocity().Length();
                                             botSpeedKm = Clamp(botSpeedKm, 1.0f, 2000.0f);
-
-                                            // On vehicle
                                             float velLen = lVel.Length();
 
+                                            // Use obstruction-adjusted distance
+                                            float adjustedDistance = currentCameraDistance_;
 
-                                            // FRONT VIEW
-                                            // Zoom up on body velocity increase
-                                            cameraTargetPos =
-                                                    pos + forward *
-                                                          Vector3(velLen *
-                                                                  velMult * 0.07,
-                                                                  (CAMERA_RAY_DISTANCE_LIMIT / 22) * velLen,
-                                                                  50.0f + velLen *
-                                                                          velMult) * 0.6f;
+                                            // Calculate target position with obstruction awareness
+                                            Vector3 baseDirection = forward * Vector3(velLen * velMult * 0.07f,
+                                                                                      (CAMERA_RAY_DISTANCE_LIMIT / 22) * velLen,
+                                                                                      -50.0f + -velLen * velMult);
 
+                                            cameraTargetPos = pos + baseDirection * 0.6f;
 
-                                            // REAR VIEW
-                                            // Zoom up on body velocity increase
-                                            cameraTargetPos =
-                                                    pos + forward *
-                                                          Vector3(velLen *
-                                                                  velMult * 0.07,
-                                                                  (CAMERA_RAY_DISTANCE_LIMIT / 22) * velLen,
-                                                                  -50.0f + -velLen *
-                                                                           velMult) * 0.6f;
+                                            // Check for obstructions and adjust if needed
+                                            float obstacleDistance;
+                                            if (CheckCameraObstruction(cameraTargetPos, pos, na, obstacleDistance)) {
+                                                Vector3 safeDirection = GetSafeDirectionFromObstruction(
+                                                        baseDirection.Normalized(), pos, adjustedDistance);
+                                                cameraTargetPos = pos + safeDirection * adjustedDistance;
+                                            }
 
-                                            // IN-CAR VIEW
-                                            // Dashboard view
-                                            cameraTargetPos =
-                                                    pos + (Vector3::UP * 3.0f) + forward *
-                                                                                 Vector3(0.0f,
-                                                                                         0,
-                                                                                         0.0f);
-
-                                            lookAtObject = pos + naBody->GetRotation() * Vector3::FORWARD*15.0f;
+                                            lookAtObject = pos + naBody->GetRotation() * Vector3::FORWARD * 15.0f;
                                         } else {
-                                            // On foot
+                                            // On foot with obstruction handling
                                             botSpeedKm = 0;
-                                            // Back wheel points forward
                                             forward = rot;
-
                                             float velLen = lVel.Length();
 
-                                            // Zoom up on body velocity increase
-                                            cameraTargetPos = (pos-(Vector3::FORWARD*77.0f)) + Vector3::UP * 57.3f;
-                                            /*Vector3::UP * 3.3f - forward *
-                                                                       Vector3(0.0f + velLen *
-                                                                                      velMult * 0.07,
-                                                                               CAMERA_RAY_DISTANCE_LIMIT / 20,
-                                                                               78.0f + velLen *
-                                                                                       velMult) * 0.11f;
-*/
+                                            float adjustedDistance = Max(78.0f, currentCameraDistance_);
+                                            Vector3 baseDirection = -Vector3::FORWARD;
+
+                                            cameraTargetPos = pos + baseDirection * adjustedDistance + Vector3::UP * 57.3f;
+
+                                            // Check for obstructions
+                                            float obstacleDistance;
+                                            if (CheckCameraObstruction(cameraTargetPos, pos, na, obstacleDistance)) {
+                                                Vector3 safeDirection = GetSafeDirectionFromObstruction(
+                                                        baseDirection, pos, adjustedDistance);
+                                                cameraTargetPos = pos + safeDirection * adjustedDistance + Vector3::UP * 57.3f;
+                                            }
 
                                             lookAtObject = naBody->GetPosition();
-
                                         }
+
                                         Vector3 cameraStartPos = clientCam_->GetNode()->GetPosition();
-
                                         bool stopMove = false;
-                                        // Camera ray cast limiter
+
+                                        // Camera ray cast limiter (keep existing timing logic)
                                         if (lastCamRaycast > CAM_RAYCAST_TIME_WAIT) {
-
-                                            /*
-                                         // Raycast camera against static objects (physics collision mask 2)
-                                         // and move it closer to the vehicle if something in between
-                                         Ray cameraRay(cameraStartPos, cameraTargetPos - cameraStartPos);
-                                         float cameraRayLength = (cameraTargetPos - cameraStartPos).Length();
-                                         PhysicsRaycastResult result;
-
-
-                                         // Adjust camera up to ray length
-
-                                         if (cameraRayLength < 10.0f) {
-                                             scene_->GetComponent<PhysicsWorld>()->RaycastSingle(result, cameraRay,
-                                                                                                 cameraRayLength,
-                                                                                                 NETWORKACTOR_COL_LAYER);
-                                         } else {
-                                             scene_->GetComponent<PhysicsWorld>()->RaycastSingleSegmented(result,
-                                                                                                          cameraRay,
-                                                                                                          cameraRayLength,
-                                                                                                          NETWORKACTOR_COL_LAYER);
-                                         }
-
-                                         if (result.body_)
-                                             cameraTargetPos =
-                                                     cameraStartPos +
-                                                     cameraRay.direction_ * (result.distance_ - 0.5f);
-                 */
-                                            // Reset timer for recent ray cast
                                             lastCamRaycast = 0;
 
+                                            float w1 = stopMove ? 1.0f : 0.94f;
+                                            float w2 = stopMove ? 0.0f : 0.06f;
 
-                                            // Set camera position and orientation
-                                            float w1;
-                                            float w2;
+                                            Vector3 weightedSum = clientCam_->GetNode()->GetPosition() * w1 + cameraTargetPos * w2;
 
-                                            if (stopMove) {
-                                                w1 = 1.0f; // hold position
-                                                w2 = 0.0f;
-                                            } else {
-                                                w1 = 0.94f;
-                                                w2 = 0.06f;
-                                            }
-
-                                            Vector3 weightedSum =
-                                                    clientCam_->GetNode()->GetPosition() * w1 + cameraTargetPos * w2;
-
-                                            // Calculate camera distance
                                             clientCam_->GetNode()->SetPosition(weightedSum);
+
                                             Quaternion lastRot = clientCam_->GetNode()->GetRotation();
-                                            // Take average from look at object
-                                            Vector3 cameraLook;
                                             clientCam_->GetNode()->LookAt(lookAtObject);
                                             Quaternion nextRot = clientCam_->GetNode()->GetRotation();
 
                                             float t = 0.8f;
-                                            Quaternion q = lastRot*(1-t)-nextRot*t;
-
-                                            // lerp(q0,q1,t)=q0(1−t)+q1t;
+                                            Quaternion q = lastRot * (1 - t) - nextRot * t;
                                             clientCam_->GetNode()->SetRotation(q);
-
-
-
-                                            //clientCam_->GetNode()->SetPosition(cameraTargetPos);
-                                            //clientCam_->GetNode()->SetRotation(dir);
                                         }
                                     }
                                     break;
+                                }
+                                    ///
                             }
 
                             // Update listener position for 3D audio
@@ -6939,6 +6903,7 @@ void AlgebraKart::UpdateLoadingScreen(float timeStep) {
 }
 
 void AlgebraKart::DoConnect() {
+
     // Show loading screen at the start of connection
     ShowLoadingScreen();
 
@@ -8117,6 +8082,392 @@ SharedPtr<Node> AlgebraKart::SpawnPlayer() {
     return networkActorNode;
 }
 
+void AlgebraKart::InitializeAudioUISystem()
+{
+    URHO3D_LOGINFO("Initializing Enhanced Audio UI System...");
+
+    // Create beat sequencer UI
+    beatSequencerUI_ = new BeatSequencerUI(context_);
+    beatSequencerUI_->Initialize();
+    beatSequencerUI_->SetVisible(false); // Start hidden
+
+    // Create synthesizer controls UI
+    synthControlsUI_ = new SynthesizerControlsUI(context_);
+    synthControlsUI_->Initialize();
+    synthControlsUI_->SetVisible(false); // Start hidden
+
+    // Create master audio control panel
+    CreateMasterAudioPanel();
+
+    // Subscribe to UI events
+    SubscribeToEvent("BeatToggled", URHO3D_HANDLER(AlgebraKart, HandleBeatToggled));
+    SubscribeToEvent("SequencerPlayToggle", URHO3D_HANDLER(AlgebraKart, HandleSequencerPlayToggle));
+    SubscribeToEvent("SequencerStop", URHO3D_HANDLER(AlgebraKart, HandleSequencerStop));
+    SubscribeToEvent("SequencerRecordToggle", URHO3D_HANDLER(AlgebraKart, HandleSequencerRecordToggle));
+
+    // Synthesizer events
+    SubscribeToEvent("SynthOscillatorChanged", URHO3D_HANDLER(AlgebraKart, HandleSynthParameterChanged));
+    SubscribeToEvent("SynthFilterChanged", URHO3D_HANDLER(AlgebraKart, HandleSynthParameterChanged));
+    SubscribeToEvent("SynthEnvelopeChanged", URHO3D_HANDLER(AlgebraKart, HandleSynthParameterChanged));
+    SubscribeToEvent("SynthEffectsChanged", URHO3D_HANDLER(AlgebraKart, HandleSynthParameterChanged));
+
+    URHO3D_LOGINFO("Audio UI System initialized successfully");
+}
+
+void AlgebraKart::CreateMasterAudioPanel()
+{
+    auto* ui = GetSubsystem<UI>();
+    auto* graphics = GetSubsystem<Graphics>();
+    auto* cache = GetSubsystem<ResourceCache>();
+
+    // Create master audio panel
+    audioMasterPanel_ = ui->GetRoot()->CreateChild<UIElement>();
+    audioMasterPanel_->SetName("MasterAudioPanel");
+    audioMasterPanel_->SetSize(300, 80);
+    audioMasterPanel_->SetPosition(graphics->GetWidth() - 320, graphics->GetHeight() - 100);
+    audioMasterPanel_->SetOpacity(0.9f);
+    audioMasterPanel_->SetLayoutMode(LM_VERTICAL);
+    audioMasterPanel_->SetLayoutSpacing(5);
+
+    // Background
+    auto* background = audioMasterPanel_->CreateChild<BorderImage>();
+    background->SetSize(300, 80);
+    background->SetColor(Color(0.1f, 0.1f, 0.15f, 0.8f));
+    background->SetPriority(-1);
+
+    // Title row
+    auto* titleRow = audioMasterPanel_->CreateChild<UIElement>();
+    titleRow->SetLayoutMode(LM_HORIZONTAL);
+    titleRow->SetLayoutSpacing(10);
+    titleRow->SetMinHeight(25);
+
+    auto* titleText = titleRow->CreateChild<Text>();
+    titleText->SetText("AUDIO MASTER");
+    titleText->SetFont(cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"), 12);
+    titleText->SetColor(Color::WHITE);
+
+    // Status indicator
+    audioStatusText_ = titleRow->CreateChild<Text>();
+    audioStatusText_->SetText("● ACTIVE");
+    audioStatusText_->SetFont(cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"), 10);
+    audioStatusText_->SetColor(Color::GREEN);
+    audioStatusText_->SetAlignment(HA_RIGHT, VA_CENTER);
+
+    // Control row
+    auto* controlRow = audioMasterPanel_->CreateChild<UIElement>();
+    controlRow->SetLayoutMode(LM_HORIZONTAL);
+    controlRow->SetLayoutSpacing(10);
+    controlRow->SetMinHeight(25);
+
+    // Sequencer toggle button
+    auto* seqButton = controlRow->CreateChild<Button>();
+    seqButton->SetName("SequencerToggleButton");
+    seqButton->SetMinSize(60, 25);
+    seqButton->SetMaxSize(60, 25);
+
+    auto* seqButtonText = seqButton->CreateChild<Text>();
+    seqButtonText->SetText("SEQ");
+    seqButtonText->SetFont(cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"), 10);
+    seqButtonText->SetAlignment(HA_CENTER, VA_CENTER);
+    seqButtonText->SetColor(Color::WHITE);
+    seqButton->SetStyleAuto();
+
+    SubscribeToEvent(seqButton, E_RELEASED, URHO3D_HANDLER(AlgebraKart, HandleBeatSequencerToggle));
+
+    // Synthesizer toggle button
+    auto* synthButton = controlRow->CreateChild<Button>();
+    synthButton->SetName("SynthToggleButton");
+    synthButton->SetMinSize(60, 25);
+    synthButton->SetMaxSize(60, 25);
+
+    auto* synthButtonText = synthButton->CreateChild<Text>();
+    synthButtonText->SetText("SYNTH");
+    synthButtonText->SetFont(cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"), 10);
+    synthButtonText->SetAlignment(HA_CENTER, VA_CENTER);
+    synthButtonText->SetColor(Color::WHITE);
+    synthButton->SetStyleAuto();
+
+    SubscribeToEvent(synthButton, E_RELEASED, URHO3D_HANDLER(AlgebraKart, HandleSynthControlsToggle));
+
+    // Master volume control
+    auto* volumeContainer = controlRow->CreateChild<UIElement>();
+    volumeContainer->SetLayoutMode(LM_VERTICAL);
+    volumeContainer->SetMinWidth(100);
+
+    auto* volumeLabel = volumeContainer->CreateChild<Text>();
+    volumeLabel->SetText("MASTER");
+    volumeLabel->SetFont(cache->GetResource<Font>("Fonts/Anonymous Pro.ttf"), 8);
+    volumeLabel->SetColor(Color::GRAY);
+    volumeLabel->SetTextAlignment(HA_CENTER);
+
+    masterVolumeSlider_ = volumeContainer->CreateChild<Slider>();
+    masterVolumeSlider_->SetName("MasterVolumeSlider");
+    masterVolumeSlider_->SetMinHeight(15);
+    masterVolumeSlider_->SetRange(1.0f);
+    masterVolumeSlider_->SetValue(0.8f);
+    masterVolumeSlider_->SetStyleAuto();
+
+    SubscribeToEvent(masterVolumeSlider_, E_SLIDERCHANGED, URHO3D_HANDLER(AlgebraKart, HandleMasterVolumeChanged));
+}
+
+void AlgebraKart::UpdateAudioUISystem(float timeStep)
+{
+    if (!beatSequencerUI_ || !synthControlsUI_) return;
+
+    // Update beat sequencer if visible
+    if (beatSequencerUI_->GetMainWindow()->IsVisible()) {
+        UpdateUIFromSequencerState(timeStep);
+    }
+
+    // Update synthesizer oscilloscope if visible
+    if (synthControlsUI_->GetMainWindow()->IsVisible()) {
+        UpdateSynthesizerWaveformDisplay();
+    }
+
+    // Update master panel status
+    UpdateMasterPanelStatus();
+
+    // Process real-time audio analysis
+    ProcessRealtimeAudioAnalysis();
+}
+
+void AlgebraKart::UpdateUIFromSequencerState(float timeStep)
+{
+    // Get current sequencer state from the active player
+    if (!isSnapped_) return;
+
+    String actorName = String("actor-") + clientName_;
+    Node *actorNode = scene_->GetChild(actorName);
+
+    if (actorNode) {
+        ClientObj *actor = actorNode->GetDerivedComponent<ClientObj>();
+        if (actor && actor->GetSequencer()) {
+            Sequencer* sequencer = actor->GetSequencer();
+
+            // Get current beat and timing info
+            int currentBeat = sequencer->GetBeat();
+            float beatTime = sequencer->GetBeatTime();
+            bool isPlaying = !sequencer->IsMute();
+
+            // Update the sequencer UI
+            beatSequencerUI_->UpdateSequencer(timeStep, currentBeat, beatTime, isPlaying);
+
+            // Update spectrum analyzer
+            if (analyzer_ && !analyzer_->spectrum().Empty()) {
+                beatSequencerUI_->UpdateSpectrum(analyzer_->spectrum());
+            }
+
+            // Update VU meters using captured audio
+            if (capturer_ && !capturer_->getBuffer()->Empty()) {
+                float leftLevel = CalculateChannelLevel(0, *capturer_->getBuffer());
+                float rightLevel = CalculateChannelLevel(1, *capturer_->getBuffer());
+                beatSequencerUI_->UpdateVUMeters(leftLevel, rightLevel);
+            }
+        }
+    }
+}
+
+void AlgebraKart::UpdateSynthesizerWaveformDisplay()
+{
+    // Generate synthetic waveform for oscilloscope display
+    // In a real implementation, you'd capture this from your synthesizer output
+
+    const int waveformSize = 200;
+    realtimeWaveform_.Resize(waveformSize);
+
+    static float phase = 0.0f;
+    float frequency = 440.0f; // A4 note
+    float sampleRate = 44100.0f;
+
+    // Generate a simple sine wave for demonstration
+    for (int i = 0; i < waveformSize; i++) {
+        float t = phase + (i / sampleRate);
+        realtimeWaveform_[i] = Sin(2.0f * M_PI * frequency * t) * 0.5f;
+    }
+
+    phase += waveformSize / sampleRate;
+    if (phase > 1.0f) phase -= 1.0f;
+
+    // Update the oscilloscope
+    synthControlsUI_->UpdateOscilloscope(realtimeWaveform_);
+}
+
+void AlgebraKart::UpdateMasterPanelStatus()
+{
+    if (!audioStatusText_) return;
+
+    // Update audio system status
+    bool audioActive = false;
+    String statusText = "● INACTIVE";
+    Color statusColor = Color::RED;
+
+    if (isSnapped_) {
+        String actorName = String("actor-") + clientName_;
+        Node *actorNode = scene_->GetChild(actorName);
+
+        if (actorNode) {
+            ClientObj *actor = actorNode->GetDerivedComponent<ClientObj>();
+            if (actor && actor->GetSequencer() && !actor->GetSequencer()->IsMute()) {
+                audioActive = true;
+                statusText = "● PLAYING";
+                statusColor = Color::GREEN;
+            }
+        }
+    }
+
+    // Check if radio is playing
+    if (_radioStream && _radioStream->IsPlaying()) {
+        statusText = "● RADIO";
+        statusColor = Color::YELLOW;
+        audioActive = true;
+    }
+
+    audioStatusText_->SetText(statusText);
+    audioStatusText_->SetColor(statusColor);
+}
+
+void AlgebraKart::ProcessRealtimeAudioAnalysis()
+{
+    // This method processes audio in real-time for UI visualization
+    if (!analyzer_ || !capturer_) return;
+
+    // Update spectrum analysis
+    if (audioSpectrumOptions_.inputSize < capturer_->bufferReadCount()) {
+        analyzer_->update(capturer_->getBuffer(), capturer_->bufferHeadIndex(),
+                          audioSpectrumOptions_.bottomLevel,
+                          audioSpectrumOptions_.topLevel, audioSpectrumOptions_.minFreq,
+                          audioSpectrumOptions_.maxFreq, audioSpectrumOptions_.axisLogBase);
+    }
+
+    // Store current spectrum for UI updates
+    if (!analyzer_->spectrum().Empty()) {
+        realtimeSpectrum_ = analyzer_->spectrum();
+    }
+}
+
+// Event Handlers
+
+void AlgebraKart::HandleBeatSequencerToggle(StringHash eventType, VariantMap& eventData)
+{
+    if (beatSequencerUI_) {
+        bool visible = beatSequencerUI_->GetMainWindow()->IsVisible();
+        beatSequencerUI_->SetVisible(!visible);
+
+        URHO3D_LOGINFOF("Beat sequencer %s", visible ? "hidden" : "shown");
+
+        // Update button appearance
+        auto* button = static_cast<Button*>(eventData[Released::P_ELEMENT].GetPtr());
+        if (button) {
+            auto* text = button->GetChild("Text", true);
+            if (text) {
+                static_cast<Text*>(text)->SetColor(visible ? Color::WHITE : Color::GREEN);
+            }
+        }
+    }
+}
+
+void AlgebraKart::HandleSynthControlsToggle(StringHash eventType, VariantMap& eventData)
+{
+    if (synthControlsUI_) {
+        bool visible = synthControlsUI_->GetMainWindow()->IsVisible();
+        synthControlsUI_->SetVisible(!visible);
+
+        URHO3D_LOGINFOF("Synthesizer controls %s", visible ? "hidden" : "shown");
+
+        // Update button appearance
+        auto* button = static_cast<Button*>(eventData[Released::P_ELEMENT].GetPtr());
+        if (button) {
+            auto* text = button->GetChild("Text", true);
+            if (text) {
+                static_cast<Text*>(text)->SetColor(visible ? Color::WHITE : Color::GREEN);
+            }
+        }
+    }
+}
+
+void AlgebraKart::HandleMasterVolumeChanged(StringHash eventType, VariantMap& eventData)
+{
+    float volume = masterVolumeSlider_->GetValue();
+
+    // Apply to Urho3D audio system
+    auto* audio = GetSubsystem<Audio>();
+    audio->SetMasterGain(SOUND_MUSIC, volume * 0.3f);
+    audio->SetMasterGain(SOUND_EFFECT, volume * 0.3f);
+
+    URHO3D_LOGINFOF("Master volume set to: %.2f", volume);
+}
+
+void AlgebraKart::HandleSynthParameterChanged(StringHash eventType, VariantMap& eventData)
+{
+    // Apply synthesizer parameter changes to your actual Synthesizer component
+    ApplySynthParametersToSynthesizer(eventData);
+}
+
+// Integration Methods
+
+void AlgebraKart::ApplyBeatPatternToSequencer(int channel, int step, bool active)
+{
+    // Apply beat pattern changes to your existing Sequencer
+    if (!isSnapped_) return;
+
+    String actorName = String("actor-") + clientName_;
+    Node *actorNode = scene_->GetChild(actorName);
+
+    if (actorNode) {
+        ClientObj *actor = actorNode->GetDerivedComponent<ClientObj>();
+        if (actor && actor->GetSequencer()) {
+            // Here you would modify your sequencer's pattern
+            // This requires extending your Sequencer class to support dynamic patterns
+
+            URHO3D_LOGINFOF("Applied beat change: Channel %d, Step %d, Active %s",
+                            channel, step, active ? "true" : "false");
+
+            // Example implementation (you'd need to add these methods to Sequencer):
+            // actor->GetSequencer()->SetBeatPattern(channel, step, active);
+        }
+    }
+}
+
+void AlgebraKart::ApplySynthParametersToSynthesizer(const VariantMap& params)
+{
+    // Apply synthesizer parameters to your existing Synthesizer component
+    if (!isSnapped_) return;
+
+    String actorName = String("actor-") + clientName_;
+    Node *actorNode = scene_->GetChild(actorName);
+
+    if (actorNode) {
+        ClientObj *actor = actorNode->GetDerivedComponent<ClientObj>();
+        // You would need to add a GetSynthesizer() method to your actor
+        // if (actor && actor->GetSynthesizer()) {
+        //     Synthesizer* synth = actor->GetSynthesizer();
+        //
+        //     // Apply oscillator parameters
+        //     if (params.Contains("Osc1Freq")) {
+        //         synth->SetOscillator1Frequency(params["Osc1Freq"].GetFloat());
+        //     }
+        //
+        //     // Apply filter parameters
+        //     if (params.Contains("FilterCutoff")) {
+        //         synth->SetFilterCutoff(params["FilterCutoff"].GetFloat());
+        //     }
+        //
+        //     // Apply envelope parameters
+        //     if (params.Contains("Attack")) {
+        //         synth->SetAttack(params["Attack"].GetFloat());
+        //     }
+        //
+        //     // Apply effects
+        //     if (params.Contains("ReverbEnabled")) {
+        //         synth->SetReverbEnabled(params["ReverbEnabled"].GetBool());
+        //     }
+        // }
+
+        URHO3D_LOGINFO("Applied synthesizer parameter changes");
+    }
+}
+
+
 // CLIENT CODE
 void AlgebraKart::CreateClientUI() {
     if (headless_) {
@@ -8129,6 +8480,61 @@ void AlgebraKart::CreateClientUI() {
     ResourceCache *cache = GetSubsystem<ResourceCache>();
     auto *graphics = GetSubsystem<Graphics>();
 
+    auto* ui = GetSubsystem<UI>();
+
+    // Create steering wheel sprites with proper positioning
+    auto* steerWheelTexture = cache->GetResource<Texture2D>("Textures/steer-wheel.png");
+    auto* steerActorTexture = cache->GetResource<Texture2D>("Textures/steer-actor.png");
+
+    if (steerWheelTexture) {
+        steerWheelSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        steerWheelSprite_->SetTexture(steerWheelTexture);
+
+        int textureWidth = steerWheelTexture->GetWidth();
+        int textureHeight = steerWheelTexture->GetHeight();
+
+        // Position steering wheel in bottom-left, avoiding other UI elements
+        float wheelSize = 120.0f;
+        float marginFromEdge = 30.0f;
+
+        steerWheelSprite_->SetSize(wheelSize, wheelSize);
+        steerWheelSprite_->SetScale(1.0f);
+        steerWheelSprite_->SetHotSpot(wheelSize / 2, wheelSize / 2); // Center rotation point
+        steerWheelSprite_->SetAlignment(HA_LEFT, VA_BOTTOM);
+        steerWheelSprite_->SetPosition(Vector2(marginFromEdge + wheelSize/2,
+                                               -(marginFromEdge + wheelSize/2)));
+        steerWheelSprite_->SetOpacity(0.8f);
+        steerWheelSprite_->SetPriority(-90);
+        steerWheelSprite_->SetVisible(true); // Hidden by default
+
+        URHO3D_LOGINFO("Steering wheel sprite created and positioned");
+    }
+
+    if (steerActorTexture) {
+        steerActorSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        steerActorSprite_->SetTexture(steerActorTexture);
+
+        int textureWidth = steerActorTexture->GetWidth();
+        int textureHeight = steerActorTexture->GetHeight();
+
+        // Position actor indicator relative to steering wheel
+        float actorSize = 80.0f;
+        float marginFromEdge = 30.0f;
+
+        steerActorSprite_->SetSize(actorSize, actorSize);
+        steerActorSprite_->SetScale(1.0f);
+        steerActorSprite_->SetHotSpot(actorSize / 2, actorSize / 2);
+        steerActorSprite_->SetAlignment(HA_LEFT, VA_BOTTOM);
+        steerActorSprite_->SetPosition(Vector2(marginFromEdge + 120.0f / 2,
+                                               -(marginFromEdge + 120.0f / 2)));
+        steerActorSprite_->SetOpacity(0.9f);
+        steerActorSprite_->SetPriority(-85);
+        steerActorSprite_->SetVisible(false); // Hidden by default
+
+        URHO3D_LOGINFO("Steering actor sprite created and positioned");
+    }
+
+
     DebugRenderer *dbgRenderer = scene_->CreateComponent<DebugRenderer>();
     // Client will non-authoratively managed physics locally based on server copy
     clientPhysicsWorld_ = scene_->CreateComponent<PhysicsWorld>(LOCAL);
@@ -8140,8 +8546,6 @@ void AlgebraKart::CreateClientUI() {
 
     clientPhysicsWorld_->SetEnabled(false);
     clientPhysicsWorld_->SetUpdateEnabled(false);
-
-    UI *ui = GetSubsystem<UI>();
 
     packetsIn_ = ui->GetRoot()->CreateChild<Text>();
     packetsIn_->SetText("Packets in : 0");
@@ -8221,42 +8625,32 @@ void AlgebraKart::CreateClientUI() {
     // Get mini map p1 texture
     Texture2D *miniMapP1Texture = cache->GetResource<Texture2D>("Textures/minimap-p1.png");
     if (!miniMapP1Texture)
-        return;
+        URHO3D_LOGERROR("Missing texture!");
 
     // Get mini map waypoint texture
     Texture2D *miniMapWPTexture = cache->GetResource<Texture2D>("Textures/minimap-wp.png");
     if (!miniMapWPTexture)
-        return;
+        URHO3D_LOGERROR("Missing texture!");
 
     // Get mini map background texture
     Texture2D *miniMapBkgTexture = cache->GetResource<Texture2D>("Textures/minimap-bk.png");
     if (!miniMapBkgTexture)
-        return;
+        URHO3D_LOGERROR("Missing texture!");
 
     // Get marker map background texture
     Texture2D *markerMapBkgTexture = cache->GetResource<Texture2D>("Textures/MarkerMap.png");
     if (!markerMapBkgTexture)
-        return;
+        URHO3D_LOGERROR("Missing texture!");
 
     // Get genotype texture
     Texture2D *genotypeTexture = cache->GetResource<Texture2D>("Textures/genotype.png");
     if (!genotypeTexture)
-        return;
+        URHO3D_LOGERROR("Missing texture!");
 
     // Get genotype background texture
     Texture2D *genotypeBkgTexture = cache->GetResource<Texture2D>("Textures/genotype-bk.png");
     if (!genotypeBkgTexture)
-        return;
-
-    // Get steering wheel texture
-    Texture2D *steerWheelTexture = cache->GetResource<Texture2D>("Textures/steer-wheel.png");
-    if (!steerWheelTexture)
-        return;
-
-    // Get steering actor texture
-    Texture2D *steerActorTexture = cache->GetResource<Texture2D>("Textures/steer-actor.png");
-    if (!steerWheelTexture)
-        return;
+        URHO3D_LOGERROR("Missing texture!");
 
 
     // Radio stream audio spectrum sprites
@@ -8363,47 +8757,6 @@ void AlgebraKart::CreateClientUI() {
     //steerWheelSprite_ = ui->GetRoot()->CreateChild<Sprite>();
     //steerActorSprite_ = ui->GetRoot()->CreateChild<Sprite>();
     radioSpectrumSprite_ = ui->GetRoot()->CreateChild<Sprite>();
-
-    // Fix steering wheel positioning to avoid overlap with pickup items
-    // Get steering wheel texture
-    auto* steeringWheelTexture = cache->GetResource<Texture2D>("Textures/hud/steer_wheel.png");
-    auto* steeringActorTexture = cache->GetResource<Texture2D>("Textures/hud/steer_actor.png");
-
-    if (steeringWheelTexture) {
-        steerWheelSprite_ = ui->GetRoot()->CreateChild<Sprite>();
-        steerWheelSprite_->SetTexture(steeringWheelTexture);
-
-        int textureWidth = steeringWheelTexture->GetWidth();
-        int textureHeight = steeringWheelTexture->GetHeight();
-
-        // Position steering wheel in bottom-left corner, away from pickup items (top-right)
-        steerWheelSprite_->SetSize(textureWidth, textureHeight);
-        steerWheelSprite_->SetScale(0.4f); // Adjust scale as needed
-        steerWheelSprite_->SetHotSpot(textureWidth / 2, textureHeight / 2);
-        steerWheelSprite_->SetAlignment(HA_LEFT, VA_BOTTOM);
-        steerWheelSprite_->SetPosition(Vector2(120, graphics->GetHeight() - 120)); // Bottom-left position
-        steerWheelSprite_->SetOpacity(0.8f);
-        steerWheelSprite_->SetPriority(-90);
-        steerWheelSprite_->SetVisible(false); // Hidden by default
-    }
-
-    if (steeringActorTexture) {
-        steerActorSprite_ = ui->GetRoot()->CreateChild<Sprite>();
-        steerActorSprite_->SetTexture(steeringActorTexture);
-
-        int textureWidth = steeringActorTexture->GetWidth();
-        int textureHeight = steeringActorTexture->GetHeight();
-
-        // Position actor indicator on the steering wheel
-        steerActorSprite_->SetSize(textureWidth, textureHeight);
-        steerActorSprite_->SetScale(0.3f);
-        steerActorSprite_->SetHotSpot(textureWidth / 2, textureHeight / 2);
-        steerActorSprite_->SetAlignment(HA_LEFT, VA_BOTTOM);
-        steerActorSprite_->SetPosition(Vector2(120, graphics->GetHeight() - 120)); // Same as steering wheel
-        steerActorSprite_->SetOpacity(0.9f);
-        steerActorSprite_->SetPriority(-85);
-        steerActorSprite_->SetVisible(false); // Hidden by default
-    }
 
     // Create analog speedometer
     auto* speedometerBkgTexture = cache->GetResource<Texture2D>("Textures/hud/speedometer_bg.png");
@@ -8763,37 +9116,6 @@ void AlgebraKart::CreateClientUI() {
     markerMapBkgSprite_->SetVisible(true);
 
 */
-    textureWidth = steerWheelTexture->GetWidth();
-    textureHeight = steerWheelTexture->GetHeight();
-
-    float steerWheelX = 496.0f;
-    float steerWheelY = 77.0f;
-
-
-    steerWheelSprite_->SetScale((256.0f / textureWidth)*0.49f);
-    steerWheelSprite_->SetSize(textureWidth, textureHeight);
-    steerWheelSprite_->SetHotSpot(textureWidth / 2, textureHeight / 2);
-    steerWheelSprite_->SetAlignment(HA_LEFT, VA_TOP);
-    steerWheelSprite_->SetPosition(Vector2(steerWheelX, steerWheelY));
-    steerWheelSprite_->SetOpacity(0.5f);
-    // Set a low priority so that other UI elements can be drawn on top
-    steerWheelSprite_->SetPriority(-100);
-    steerWheelSprite_->SetVisible(true);
-
-
-
-
-    steerActorSprite_->SetScale((256.0f / textureWidth)*0.56f);
-    steerActorSprite_->SetSize(textureWidth, textureHeight);
-    steerActorSprite_->SetHotSpot(textureWidth / 2, textureHeight / 2);
-    steerActorSprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-    steerActorSprite_->SetPosition(Vector2(steerWheelX, steerWheelY));
-    steerActorSprite_->SetOpacity(0.5f);
-    // Set a low priority so that other UI elements can be drawn on top
-    steerActorSprite_->SetPriority(-100);
-    steerActorSprite_->SetVisible(true);
-
-
     radioSpectrumSprite_->SetScale(256.0f / radioSpectrumTexture_->GetWidth());
     radioSpectrumSprite_->SetSize(radioSpectrumTexture_->GetWidth(), radioSpectrumTexture_->GetHeight());
     radioSpectrumSprite_->SetHotSpot(radioSpectrumTexture_->GetWidth() / 2, radioSpectrumTexture_->GetHeight() / 2);
@@ -8862,6 +9184,10 @@ void AlgebraKart::CreateClientUI() {
         debugData1.append("");
         radioText_[i]->SetText(debugData1.c_str());
     }
+
+    InitializeAudioUISystem();
+    // Setup sequencer viewport
+    SetupSequencerViewport();
 
 }
 
@@ -10315,13 +10641,29 @@ void AlgebraKart::HandleKeyDown(StringHash eventType, VariantMap& eventData) {
         drawDebug_ = !drawDebug_;
     }
 
-    // Toggle beat sequencer UI with 'B' key
+    // Audio UI hotkeys
     if (key == KEY_B) {
+        // Toggle beat sequencer
         if (beatSequencerUI_) {
             bool visible = beatSequencerUI_->GetMainWindow()->IsVisible();
             beatSequencerUI_->SetVisible(!visible);
-            URHO3D_LOGINFO(visible ? "Beat sequencer hidden" : "Beat sequencer shown");
         }
+    }
+    else if (key == KEY_N) {
+        // Toggle synthesizer controls
+        if (synthControlsUI_) {
+            bool visible = synthControlsUI_->GetMainWindow()->IsVisible();
+            synthControlsUI_->SetVisible(!visible);
+        }
+    }
+    else if (key == KEY_M) {
+        // Toggle master audio panel
+        if (audioMasterPanel_) {
+            bool visible = audioMasterPanel_->IsVisible();
+            audioMasterPanel_->SetVisible(!visible);
+        }
+    } else if (key == KEY_0) {
+
     }
 
     // Replay system controls
@@ -10427,217 +10769,6 @@ NetworkActor* AlgebraKart::GetLocalNetworkActor() {
     }
 }
 
-// First Person Camera Implementation
-void AlgebraKart::UpdateCameraFirstPerson(float timeStep) {
-    NetworkActor* actor = GetLocalNetworkActor();
-    if (!actor || !actor->GetNode() || !clientCam_) return;
-
-    Node* actorNode = actor->GetNode();
-    Node* cameraNode = clientCam_->GetNode();
-
-    // Initialize camera position if needed
-    if (!cameraInitialized_) {
-        smoothCameraPosition_ = actorNode->GetWorldPosition();
-        smoothCameraRotation_ = actorNode->GetWorldRotation();
-        cameraInitialized_ = true;
-    }
-
-    Vector3 targetPosition;
-    Quaternion targetRotation;
-
-    if (actor->onVehicle_ && actor->vehicle_) {
-        // In vehicle - position camera at driver's eye level
-        Node* vehicleNode = actor->vehicle_->GetNode();
-        targetPosition = vehicleNode->GetWorldPosition() +
-                         vehicleNode->GetWorldRotation() * Vector3(0.0f, 8.0f, 2.0f);
-        targetRotation = vehicleNode->GetWorldRotation();
-    } else {
-        // On foot - position camera at head level
-        targetPosition = actor->GetBody()->GetPosition() + Vector3(0.0f, 2.6f, 0.0f) + actor->GetBody()->GetLinearVelocity()/12.0f;
-        targetRotation = actor->GetBody()->GetRotation();
-    }
-
-    // Apply mouse look if right mouse button is held
-    if (GetSubsystem<Input>()->GetMouseButtonDown(MOUSEB_RIGHT)) {
-        IntVector2 mouseMove = GetSubsystem<Input>()->GetMouseMove();
-        const float MOUSE_SENSITIVITY = 0.1f;
-
-        // Adjust rotation based on mouse input
-        float yawDelta = -mouseMove.x_ * MOUSE_SENSITIVITY;
-        float pitchDelta = -mouseMove.y_ * MOUSE_SENSITIVITY;
-
-        // Create rotation adjustments
-        Quaternion yawRotation(yawDelta, Vector3::UP);
-        Quaternion pitchRotation(pitchDelta, targetRotation * Vector3::RIGHT);
-
-        targetRotation = yawRotation * pitchRotation * targetRotation;
-    }
-
-    // Smooth camera movement
-    smoothCameraPosition_ = smoothCameraPosition_.Lerp(targetPosition, cameraSmoothSpeed_ * timeStep);
-    smoothCameraRotation_ = smoothCameraRotation_.Slerp(targetRotation, cameraSmoothSpeed_ * timeStep);
-
-    cameraNode->SetWorldPosition(smoothCameraPosition_);
-    cameraNode->SetRotation(smoothCameraRotation_);
-}
-
-// Third Person Camera Implementation
-void AlgebraKart::UpdateCameraThirdPerson(float timeStep) {
-    NetworkActor* actor = GetLocalNetworkActor();
-    if (!actor || !actor->GetNode() || !clientCam_) return;
-    if (!actor->GetBody()) return;
-
-    Node* actorNode = actor->GetNode();
-    Node* cameraNode = clientCam_->GetNode();
-
-    // Initialize camera position if needed
-    if (!cameraInitialized_) {
-        smoothCameraPosition_ = actor->GetBody()->GetPosition();
-        smoothCameraRotation_ = actorNode->GetWorldRotation();
-        cameraInitialized_ = true;
-    }
-
-    Vector3 targetPosition;
-    Vector3 lookAtPosition;
-
-    if (actor->onVehicle_ && actor->vehicle_ && actor->vehicle_->GetNode() && actor->vehicle_->GetRaycastVehicle()) {
-        // In vehicle - dynamic camera based on speed
-        Vector3 vPos = actor->vehicle_->GetBody()->GetPosition();
-        float speed = actor->vehicle_->GetSpeedKmH();
-
-        // Adjust camera distance based on speed
-        float dynamicDistance = cameraDistance_ + (speed * 0.3f);
-        float dynamicHeight = cameraHeight_ + (speed * 0.1f);
-
-        // Calculate camera offset
-        Vector3 forward = actor->vehicle_->GetBody()->GetRotation() * Vector3::FORWARD;
-        Vector3 up = Vector3::UP;
-
-        targetPosition = vPos -
-                         forward * dynamicDistance +
-                         up * dynamicHeight;
-
-        // Look ahead of the vehicle
-        lookAtPosition = vPos +
-                         forward * cameraLookAhead_ +
-                         up * 5.0f;
-    } else {
-        // On foot - standard third person
-        Vector3 forward = actor->GetBody()->GetRotation() * Vector3::FORWARD;
-
-        targetPosition = actor->GetBody()->GetPosition() -
-                         forward * 30.0f +
-                         Vector3::UP * 15.0f;
-
-        lookAtPosition = actor->GetBody()->GetPosition() + Vector3::UP * 5.0f;
-    }
-
-    // Raycast to prevent camera going through walls
-    PhysicsRaycastResult result;
-    Vector3 rayStart = lookAtPosition;
-    Vector3 rayDirection = (targetPosition - lookAtPosition).Normalized();
-    float rayDistance = (targetPosition - lookAtPosition).Length();
-
-    scene_->GetComponent<PhysicsWorld>()->RaycastSingle(result,
-                                                        Ray(rayStart, rayDirection), rayDistance, NETWORKACTOR_COL_LAYER);
-
-    if (result.body_) {
-        // Adjust camera position if there's an obstacle
-        targetPosition = rayStart + rayDirection * (result.distance_ - 2.0f);
-    }
-
-    // Smooth camera movement
-    smoothCameraPosition_ = smoothCameraPosition_.Lerp(targetPosition, cameraSmoothSpeed_ * timeStep);
-
-    cameraNode->SetWorldPosition(smoothCameraPosition_);
-    cameraNode->LookAt(lookAtPosition, Vector3::UP);
-}
-
-// Isometric Camera Implementation
-void AlgebraKart::UpdateCameraIsometric(float timeStep) {
-    NetworkActor* actor = GetLocalNetworkActor();
-    if (!clientCam_) return;
-
-    Node* cameraNode = clientCam_->GetNode();
-    Vector3 targetPosition;
-    Vector3 lookAtPosition;
-
-    // Initialize camera for isometric view
-    if (!cameraInitialized_) {
-        clientCam_->SetOrthographic(false);
-        clientCam_->SetFov(30.0f);
-        cameraInitialized_ = true;
-    }
-
-    // Get player speed and position
-    float currentSpeed = 0.0f;
-    if (actor && actor->GetNode()) {
-        lookAtPosition = actor->GetBody()->GetPosition();
-
-        // Get speed from vehicle or actor
-        if (actor->onVehicle_ && actor->vehicle_ && actor->vehicle_->GetRaycastVehicle()) {
-            currentSpeed = actor->vehicle_->GetSpeedKmH();
-        } else {
-            Vector3 velocity = actor->GetBody()->GetLinearVelocity();
-            currentSpeed = velocity.Length() * 3.6f; // Convert m/s to km/h
-        }
-    } else {
-        lookAtPosition = Vector3::ZERO;
-    }
-
-    // Speed-based zoom calculation
-    static float smoothedSpeed = 0.0f;
-    smoothedSpeed = Lerp(smoothedSpeed, currentSpeed, 2.0f * timeStep);
-
-    // Calculate dynamic height: zoom out as speed increases
-    float baseHeight = isometricCameraHeight_;
-    float speedMultiplier = 1.0f;
-
-    if (smoothedSpeed > 10.0f) { // Only zoom when speed > 10 km/h
-        // Zoom out by 2% for every 10 km/h above threshold
-        speedMultiplier = 1.0f + ((smoothedSpeed - 10.0f) * 0.02f);
-    }
-
-    float dynamicHeight = baseHeight * speedMultiplier;
-    dynamicHeight = Clamp(dynamicHeight, 200.0f, 800.0f); // Reasonable limits
-
-    // Calculate isometric camera position
-    float angleRad = isometricCameraAngle_ * M_DEGTORAD;
-    Vector3 cameraOffset(
-            dynamicHeight * Sin(angleRad),
-            dynamicHeight * Cos(angleRad),
-            dynamicHeight * Sin(angleRad)
-    );
-
-    targetPosition = lookAtPosition + cameraOffset;
-
-    // Existing mouse controls (preserve current functionality)
-    if (GetSubsystem<Input>()->GetMouseButtonDown(MOUSEB_MIDDLE)) {
-        IntVector2 mouseMove = GetSubsystem<Input>()->GetMouseMove();
-        const float PAN_SPEED = 0.5f;
-
-        Vector3 right = cameraNode->GetWorldRotation() * Vector3::RIGHT;
-        Vector3 forward = Vector3(cameraNode->GetWorldDirection().x_, 0, cameraNode->GetWorldDirection().z_).Normalized();
-
-        targetPosition += right * mouseMove.x_ * PAN_SPEED;
-        targetPosition -= forward * mouseMove.y_ * PAN_SPEED;
-        lookAtPosition += right * mouseMove.x_ * PAN_SPEED;
-        lookAtPosition -= forward * mouseMove.y_ * PAN_SPEED;
-    }
-
-    // Mouse wheel zoom (manual override)
-    int wheelDelta = GetSubsystem<Input>()->GetMouseMoveWheel();
-    if (wheelDelta != 0) {
-        isometricCameraHeight_ = Clamp(isometricCameraHeight_ - wheelDelta * 20.0f, 100.0f, 600.0f);
-    }
-
-    // Smooth camera movement
-    smoothCameraPosition_ = smoothCameraPosition_.Lerp(targetPosition, cameraSmoothSpeed_ * timeStep);
-
-    cameraNode->SetWorldPosition(smoothCameraPosition_);
-    cameraNode->LookAt(lookAtPosition, Vector3::UP);
-}
-
 void AlgebraKart::HandleClientDisconnected(StringHash eventType, VariantMap &eventData) {
     using namespace ClientConnected;
     Connection* client = static_cast<Connection*>(eventData[P_CONNECTION].GetPtr());
@@ -10650,7 +10781,7 @@ void AlgebraKart::HandleClientDisconnected(StringHash eventType, VariantMap &eve
 
 void AlgebraKart::HandleServerConnected(StringHash eventType, VariantMap& eventData)
 {
-    UpdateLoadingProgress(0.5f, "Connecting to server...");
+    UpdateLoadingProgress(0.55f, "Connected to server.");
     StartMultiplayerGameSession();
     // Start in game mode
     UpdateUIState(true);
@@ -10861,7 +10992,6 @@ Vector3 AlgebraKart::GetGridPosition(int gridIndex) {
 }
 
 
-// Add this method to reset grid positions at the start of a race
 void AlgebraKart::StartRace() {
     // Reset grid positions for new race
     ResetGridPositions();
@@ -10925,65 +11055,6 @@ void AlgebraKart::ArrangePlayersInFormation() {
                     na->vehicle_->GetNode()->SetRotation(racingOrientation);
                 }
             }
-        }
-    }
-}
-
-void AlgebraKart::UpdateBeatSequencerUI(float timeStep)
-{
-    if (!beatSequencerUI_ || !beatSequencerUI_->GetMainWindow()->IsVisible()) {
-        return;
-    }
-
-    // Get sequencer data from the actor if available
-    bool isPlaying = false;
-    int currentBeat = 0;
-    float beatTime = 0.0f;
-
-    // Check if we have access to the player's sequencer
-    if (isSnapped_) {
-        String actorName = String("actor-") + clientName_;
-        Node *actorNode = scene_->GetChild(actorName);
-
-        if (actorNode) {
-            ClientObj *actor = actorNode->GetDerivedComponent<ClientObj>();
-            if (actor && actor->GetSequencer()) {
-                Sequencer* sequencer = actor->GetSequencer();
-                currentBeat = sequencer->GetBeat();
-                beatTime = sequencer->GetBeatTime();
-                isPlaying = !sequencer->IsMute(); // Use mute state as playing indicator
-            }
-        }
-    }
-
-    // Update the sequencer UI
-    beatSequencerUI_->UpdateSequencer(timeStep, currentBeat, beatTime, isPlaying);
-
-    // Update spectrum analyzer if audio analysis is available
-    if (analyzer_ && capturer_) {
-        const Vector<float>& spectrum = analyzer_->spectrum();
-        if (!spectrum.Empty()) {
-            beatSequencerUI_->UpdateSpectrum(spectrum);
-        }
-
-        // Calculate simple VU levels from spectrum data
-        if (spectrum.Size() > 0) {
-            float leftLevel = 0.0f;
-            float rightLevel = 0.0f;
-
-            // Simple stereo separation
-            int halfSpectrum = spectrum.Size() / 2;
-            for (int i = 0; i < halfSpectrum; i++) {
-                leftLevel += spectrum[i];
-            }
-            for (int i = halfSpectrum; i < spectrum.Size(); i++) {
-                rightLevel += spectrum[i];
-            }
-
-            leftLevel /= halfSpectrum;
-            rightLevel /= (spectrum.Size() - halfSpectrum);
-
-            beatSequencerUI_->UpdateVUMeters(leftLevel, rightLevel);
         }
     }
 }
@@ -11202,5 +11273,465 @@ void AlgebraKart::SetParticleEmitter(int hitId, float contactX, float contactY, 
         URHO3D_LOGINFOF("Created particle in slot %d, type %d", slotIndex, type);
     } else {
         URHO3D_LOGWARNING("No free particle slots available");
+    }
+}
+
+bool AlgebraKart::CheckCameraObstruction(const Vector3& cameraPos, const Vector3& targetPos,
+                                         NetworkActor* playerActor, float& obstacleDistance) {
+    if (!scene_ || !playerActor) {
+        obstacleDistance = 0.0f;
+        return false;
+    }
+
+    Vector3 rayDirection = (cameraPos - targetPos).Normalized();
+    float rayDistance = (cameraPos - targetPos).Length();
+
+    if (rayDistance < 0.1f) {
+        obstacleDistance = 0.0f;
+        return false;
+    }
+
+    // Perform raycast from player to camera position
+    PhysicsRaycastResult result;
+    Ray cameraRay(targetPos, rayDirection);
+
+    // Use physics world raycast with collision filtering
+    PODVector<PhysicsRaycastResult> results;
+    scene_->GetComponent<PhysicsWorld>()->Raycast(results, cameraRay, rayDistance,
+                                                  NETWORKACTOR_COL_LAYER);
+
+    // Filter out player-related objects
+    for (const auto& hit : results) {
+        if (!hit.body_) continue;
+
+        Node* hitNode = hit.body_->GetNode();
+        if (!hitNode) continue;
+
+        // Skip if this is the player's actor node
+        if (hitNode == playerActor->GetNode()) continue;
+
+        // Skip if this is the player's vehicle node
+        if (playerActor->vehicle_ && hitNode == playerActor->vehicle_->GetNode()) continue;
+
+        // Skip if this is a child of the player's actor or vehicle
+        Node* parent = hitNode->GetParent();
+        bool isPlayerRelated = false;
+        while (parent) {
+            if (parent == playerActor->GetNode() ||
+                (playerActor->vehicle_ && parent == playerActor->vehicle_->GetNode())) {
+                isPlayerRelated = true;
+                break;
+            }
+            parent = parent->GetParent();
+        }
+
+        if (isPlayerRelated) continue;
+
+        // Skip if this is a pickup, particle, or other non-obstructing object
+        String nodeName = hitNode->GetName();
+        if (nodeName.Contains("Pickup") || nodeName.Contains("Particle") ||
+            nodeName.Contains("Effect") || nodeName.Contains("FloatText")) {
+            continue;
+        }
+
+        // We found a valid obstruction
+        obstacleDistance = hit.distance_;
+        return true;
+    }
+
+    obstacleDistance = rayDistance;
+    return false;
+}
+
+float AlgebraKart::CalculateObstructionZoomOut(float baseDistance, float obstructionDistance) {
+    // Calculate how much to zoom out based on obstruction
+    float obstructionRatio = obstructionDistance / baseDistance;
+
+    if (obstructionRatio >= 0.9f) {
+        // No significant obstruction
+        return baseDistance;
+    }
+
+    // Calculate zoom out factor - closer obstructions require more zoom
+    float zoomOutFactor = 1.0f + (1.0f - obstructionRatio) * 2.0f;
+    float adjustedDistance = baseDistance * zoomOutFactor;
+
+    // Clamp to reasonable limits
+    return Clamp(adjustedDistance, minCameraDistance_, maxCameraDistance_);
+}
+
+void AlgebraKart::UpdateCameraObstruction(float timeStep, NetworkActor* actor) {
+    if (!actor || !clientCam_) return;
+
+    // Update check timer
+    obstructionCheckTimer_ += timeStep;
+
+    if (obstructionCheckTimer_ >= obstructionCheckInterval_) {
+        obstructionCheckTimer_ = 0.0f;
+
+        Vector3 currentCameraPos = clientCam_->GetNode()->GetWorldPosition();
+        Vector3 playerPos = actor->GetBody()->GetPosition();
+
+        // Add slight offset to player position for better line of sight
+        Vector3 targetPos = playerPos + Vector3::UP * 5.0f;
+
+        float obstacleDistance;
+        bool isObstructed = CheckCameraObstruction(currentCameraPos, targetPos, actor, obstacleDistance);
+
+        if (isObstructed) {
+            cameraObstructed_ = true;
+
+            // Calculate required distance to clear obstruction
+            float clearanceDistance = obstacleDistance * 0.8f; // 80% of obstruction distance for safety
+            float currentDistance = (currentCameraPos - targetPos).Length();
+
+            // Determine if we need to zoom out
+            if (clearanceDistance < currentDistance) {
+                targetCameraDistance_ = CalculateObstructionZoomOut(currentDistance, clearanceDistance);
+            }
+        } else {
+            // Gradually return to normal distance when no obstruction
+            if (cameraObstructed_) {
+                targetCameraDistance_ = currentCameraDistance_ * 0.95f; // Slowly zoom back in
+                if (targetCameraDistance_ <= cameraDistance_ * 1.1f) {
+                    cameraObstructed_ = false;
+                    targetCameraDistance_ = cameraDistance_;
+                }
+            }
+        }
+    }
+
+    // Smooth interpolation of camera distance
+    currentCameraDistance_ = Lerp(currentCameraDistance_, targetCameraDistance_,
+                                  cameraObstructionSmoothSpeed_ * timeStep);
+}
+
+Vector3 AlgebraKart::GetSafeDirectionFromObstruction(const Vector3& obstructedDirection,
+                                                     const Vector3& playerPos, float distance) {
+    // Try multiple directions around the obstruction
+    Vector<Vector3> testDirections;
+
+    // Create test directions in a hemisphere behind the player
+    Vector3 up = Vector3::UP;
+    Vector3 right = obstructedDirection.CrossProduct(up).Normalized();
+    Vector3 forward = up.CrossProduct(right).Normalized();
+
+    // Add test directions with different angles
+    float angles[] = {0.0f, 30.0f, -30.0f, 60.0f, -60.0f, 90.0f, -90.0f, 120.0f, -120.0f};
+
+    for (float angle : angles) {
+        Quaternion rotation(angle, up);
+        Vector3 testDir = rotation * obstructedDirection;
+        testDirections.Push(testDir);
+
+        // Also test elevated positions
+        Quaternion elevationRot(20.0f, right);
+        testDirections.Push(elevationRot * testDir);
+    }
+
+    // Test each direction for obstructions
+    for (const Vector3& testDir : testDirections) {
+        Vector3 testPos = playerPos + testDir * distance;
+        float obstacleDistance;
+
+        if (!CheckCameraObstruction(testPos, playerPos, GetLocalNetworkActor(), obstacleDistance)) {
+            return testDir;
+        }
+    }
+
+    // If all directions are obstructed, return elevated position
+    return (obstructedDirection + Vector3::UP * 0.5f).Normalized();
+}
+
+// Updated camera mode implementations:
+
+void AlgebraKart::UpdateCameraFirstPerson(float timeStep) {
+    NetworkActor* actor = GetLocalNetworkActor();
+    if (!actor || !actor->GetNode() || !clientCam_) return;
+
+    Node* actorNode = actor->GetNode();
+    Node* cameraNode = clientCam_->GetNode();
+
+    // Initialize camera position if needed
+    if (!cameraInitialized_) {
+        smoothCameraPosition_ = actorNode->GetWorldPosition();
+        smoothCameraRotation_ = actorNode->GetWorldRotation();
+        targetCameraDistance_ = 2.0f; // Very close for first person
+        currentCameraDistance_ = 2.0f;
+        cameraInitialized_ = true;
+    }
+
+    Vector3 targetPosition;
+    Quaternion targetRotation;
+
+    if (actor->onVehicle_ && actor->vehicle_) {
+        // In vehicle - position camera at driver's eye level
+        Node* vehicleNode = actor->vehicle_->GetNode();
+        targetPosition = vehicleNode->GetWorldPosition() +
+                         vehicleNode->GetWorldRotation() * Vector3(0.0f, 8.0f, 10.0f) +
+                         actor->GetBody()->GetLinearVelocity() / 4.0f;
+        targetRotation = vehicleNode->GetWorldRotation();
+    } else {
+        // On foot - position camera at head level
+        targetPosition = actor->GetBody()->GetPosition() +
+                         Vector3(0.0f, 2.6f, 0.0f) +
+                         actor->GetBody()->GetLinearVelocity() / 4.0f;
+        targetRotation = actor->GetBody()->GetRotation();
+    }
+
+    // Apply mouse look if right mouse button is held
+    if (GetSubsystem<Input>()->GetMouseButtonDown(MOUSEB_RIGHT)) {
+        IntVector2 mouseMove = GetSubsystem<Input>()->GetMouseMove();
+        const float MOUSE_SENSITIVITY = 0.1f;
+
+        float yawDelta = -mouseMove.x_ * MOUSE_SENSITIVITY;
+        float pitchDelta = -mouseMove.y_ * MOUSE_SENSITIVITY;
+
+        Quaternion yawRotation(yawDelta, Vector3::UP);
+        Quaternion pitchRotation(pitchDelta, targetRotation * Vector3::RIGHT);
+
+        targetRotation = yawRotation * pitchRotation * targetRotation;
+    }
+
+    // First person doesn't need obstruction checking since camera is inside player
+    smoothCameraPosition_ = smoothCameraPosition_.Lerp(targetPosition, cameraSmoothSpeed_ * timeStep);
+    smoothCameraRotation_ = smoothCameraRotation_.Slerp(targetRotation, cameraSmoothSpeed_ * timeStep);
+
+    cameraNode->SetWorldPosition(smoothCameraPosition_);
+    cameraNode->SetRotation(smoothCameraRotation_);
+}
+
+void AlgebraKart::UpdateCameraThirdPerson(float timeStep) {
+    NetworkActor* actor = GetLocalNetworkActor();
+    if (!actor || !actor->GetNode() || !clientCam_) return;
+    if (!actor->GetBody()) return;
+
+    Node* actorNode = actor->GetNode();
+    Node* cameraNode = clientCam_->GetNode();
+
+    // Initialize camera position if needed
+    if (!cameraInitialized_) {
+        smoothCameraPosition_ = actor->GetBody()->GetPosition();
+        smoothCameraRotation_ = actorNode->GetWorldRotation();
+        targetCameraDistance_ = cameraDistance_;
+        currentCameraDistance_ = cameraDistance_;
+        cameraInitialized_ = true;
+    }
+
+    // Update obstruction detection
+    UpdateCameraObstruction(timeStep, actor);
+
+    Vector3 targetPosition;
+    Vector3 lookAtPosition;
+    float dynamicDistance = currentCameraDistance_; // Use obstruction-adjusted distance
+
+    if (actor->onVehicle_ && actor->vehicle_ && actor->vehicle_->GetNode() && actor->vehicle_->GetRaycastVehicle()) {
+        // In vehicle - dynamic camera based on speed
+        Vector3 vPos = actor->vehicle_->GetBody()->GetPosition();
+        float speed = actor->vehicle_->GetSpeedKmH();
+
+        // Adjust camera distance based on speed and obstructions
+        float speedDistance = dynamicDistance + (speed * 0.3f);
+        float finalDistance = Max(speedDistance, currentCameraDistance_);
+        float dynamicHeight = cameraHeight_ + (speed * 0.1f);
+
+        // Calculate camera offset
+        Vector3 forward = actor->vehicle_->GetBody()->GetRotation() * Vector3::FORWARD;
+        Vector3 baseDirection = -forward; // Behind the vehicle
+
+        // Check if base direction is obstructed
+        Vector3 testPos = vPos + baseDirection * finalDistance + Vector3::UP * dynamicHeight;
+        float obstacleDistance;
+
+        if (CheckCameraObstruction(testPos, vPos, actor, obstacleDistance)) {
+            // Find alternative direction
+            baseDirection = GetSafeDirectionFromObstruction(baseDirection, vPos, finalDistance);
+        }
+
+        targetPosition = vPos + baseDirection * finalDistance + Vector3::UP * dynamicHeight;
+        lookAtPosition = vPos + forward * cameraLookAhead_ + Vector3::UP * 5.0f;
+    } else {
+        // On foot - standard third person with obstruction handling
+        Vector3 forward = actor->GetBody()->GetRotation() * Vector3::FORWARD;
+        Vector3 baseDirection = -forward;
+
+        Vector3 testPos = actor->GetBody()->GetPosition() + baseDirection * dynamicDistance + Vector3::UP * 15.0f;
+        float obstacleDistance;
+
+        if (CheckCameraObstruction(testPos, actor->GetBody()->GetPosition(), actor, obstacleDistance)) {
+            baseDirection = GetSafeDirectionFromObstruction(baseDirection, actor->GetBody()->GetPosition(), dynamicDistance);
+        }
+
+        targetPosition = actor->GetBody()->GetPosition() + baseDirection * dynamicDistance + Vector3::UP * 15.0f;
+        lookAtPosition = actor->GetBody()->GetPosition() + Vector3::UP * 5.0f;
+    }
+
+    // Final obstruction check for the calculated position
+    float finalObstacleDistance;
+    if (CheckCameraObstruction(targetPosition, lookAtPosition, actor, finalObstacleDistance)) {
+        // Move camera closer to clear obstruction
+        Vector3 direction = (targetPosition - lookAtPosition).Normalized();
+        targetPosition = lookAtPosition + direction * (finalObstacleDistance * 0.8f);
+    }
+
+    // Store valid position for fallback
+    if (!cameraObstructed_) {
+        lastValidCameraPosition_ = targetPosition;
+        hasValidCameraPosition_ = true;
+    } else if (hasValidCameraPosition_) {
+        // Blend towards last valid position if current position is problematic
+        targetPosition = targetPosition.Lerp(lastValidCameraPosition_, 0.3f);
+    }
+
+    // Smooth camera movement
+    smoothCameraPosition_ = smoothCameraPosition_.Lerp(targetPosition, cameraSmoothSpeed_ * timeStep);
+
+    cameraNode->SetWorldPosition(smoothCameraPosition_);
+    cameraNode->LookAt(lookAtPosition, Vector3::UP);
+}
+
+void AlgebraKart::UpdateCameraIsometric(float timeStep) {
+    NetworkActor* actor = GetLocalNetworkActor();
+    if (!clientCam_) return;
+
+    Node* cameraNode = clientCam_->GetNode();
+    Vector3 targetPosition;
+    Vector3 lookAtPosition;
+
+    // Initialize camera for isometric view
+    if (!cameraInitialized_) {
+        clientCam_->SetOrthographic(false);
+        clientCam_->SetFov(30.0f);
+        targetCameraDistance_ = isometricCameraHeight_;
+        currentCameraDistance_ = isometricCameraHeight_;
+        cameraInitialized_ = true;
+    }
+
+    float currentSpeed = 0.0f;
+    if (actor && actor->GetNode()) {
+        lookAtPosition = actor->GetBody()->GetPosition();
+
+        if (actor->onVehicle_ && actor->vehicle_ && actor->vehicle_->GetRaycastVehicle()) {
+            currentSpeed = actor->vehicle_->GetSpeedKmH();
+        } else {
+            Vector3 velocity = actor->GetBody()->GetLinearVelocity();
+            currentSpeed = velocity.Length() * 3.6f;
+        }
+
+        // Update obstruction detection for isometric view
+        UpdateCameraObstruction(timeStep, actor);
+    } else {
+        lookAtPosition = Vector3::ZERO;
+    }
+
+    // Speed-based zoom calculation with obstruction adjustment
+    static float smoothedSpeed = 0.0f;
+    smoothedSpeed = Lerp(smoothedSpeed, currentSpeed, 2.0f * timeStep);
+
+    float baseHeight = Max(isometricCameraHeight_, currentCameraDistance_);
+    float speedMultiplier = 1.0f;
+
+    if (smoothedSpeed > 10.0f) {
+        speedMultiplier = 1.0f + ((smoothedSpeed - 10.0f) * 0.02f);
+    }
+
+    float dynamicHeight = baseHeight * speedMultiplier;
+    dynamicHeight = Clamp(dynamicHeight, 200.0f, maxCameraDistance_);
+
+    // Calculate isometric camera position
+    float angleRad = isometricCameraAngle_ * M_DEGTORAD;
+    Vector3 cameraOffset(
+            dynamicHeight * Sin(angleRad),
+            dynamicHeight * Cos(angleRad),
+            dynamicHeight * Sin(angleRad)
+    );
+
+    targetPosition = lookAtPosition + cameraOffset;
+
+    // Check for obstructions in isometric view
+    if (actor) {
+        float obstacleDistance;
+        if (CheckCameraObstruction(targetPosition, lookAtPosition, actor, obstacleDistance)) {
+            // For isometric, just increase height to clear obstruction
+            float clearanceHeight = dynamicHeight * 1.5f;
+            clearanceHeight = Clamp(clearanceHeight, dynamicHeight, maxCameraDistance_);
+
+            cameraOffset = Vector3(
+                    clearanceHeight * Sin(angleRad),
+                    clearanceHeight * Cos(angleRad),
+                    clearanceHeight * Sin(angleRad)
+            );
+            targetPosition = lookAtPosition + cameraOffset;
+        }
+    }
+
+    // Handle mouse controls (preserve existing functionality)
+    if (GetSubsystem<Input>()->GetMouseButtonDown(MOUSEB_MIDDLE)) {
+        IntVector2 mouseMove = GetSubsystem<Input>()->GetMouseMove();
+        const float PAN_SPEED = 0.5f;
+
+        Vector3 right = cameraNode->GetWorldRotation() * Vector3::RIGHT;
+        Vector3 forward = Vector3(cameraNode->GetWorldDirection().x_, 0,
+                                  cameraNode->GetWorldDirection().z_).Normalized();
+
+        targetPosition += right * mouseMove.x_ * PAN_SPEED;
+        targetPosition -= forward * mouseMove.y_ * PAN_SPEED;
+        lookAtPosition += right * mouseMove.x_ * PAN_SPEED;
+        lookAtPosition -= forward * mouseMove.y_ * PAN_SPEED;
+    }
+
+    // Mouse wheel zoom (manual override)
+    int wheelDelta = GetSubsystem<Input>()->GetMouseMoveWheel();
+    if (wheelDelta != 0) {
+        isometricCameraHeight_ = Clamp(isometricCameraHeight_ - wheelDelta * 20.0f,
+                                       100.0f, 600.0f);
+        targetCameraDistance_ = isometricCameraHeight_;
+    }
+
+    // Smooth camera movement
+    smoothCameraPosition_ = smoothCameraPosition_.Lerp(targetPosition, cameraSmoothSpeed_ * timeStep);
+
+    cameraNode->SetWorldPosition(smoothCameraPosition_);
+    cameraNode->LookAt(lookAtPosition, Vector3::UP);
+}
+
+void AlgebraKart::UpdateSteeringWheelDisplay() {
+    if (!steerWheelSprite_ || !steerActorSprite_) return;
+
+    // Check if we're in a valid state to show steering wheel
+    bool shouldShowSteering = true;
+    bool isInVehicle = false;
+
+    if (hasValidSteeringData_) {
+        String actorName = String("actor-") + clientName_;
+        Node *actorNode = scene_->GetChild(actorName);
+
+        if (actorNode) {
+            ClientObj *actor = actorNode->GetDerivedComponent<ClientObj>();
+            if (actor) {
+                NetworkActor *na = actorNode->GetDerivedComponent<NetworkActor>();
+                if (na && na->entered_) {
+                    isInVehicle = true;
+                    shouldShowSteering = true;
+                }
+            }
+        }
+    }
+
+    if (shouldShowSteering) {
+        // Show vehicle steering wheel
+        steerWheelSprite_->SetVisible(true);
+
+        // Apply steering rotation - convert steering value to degrees
+        // Assuming steering ranges from -1.0 to 1.0, map to -180 to 180 degrees
+        float steeringDegrees = currentSteeringValue_ * 180.0f; // Max 180 degrees rotation
+        steerWheelSprite_->SetRotation(steeringDegrees);
+
+        URHO3D_LOGDEBUGF("Steering wheel updated: value=%f, degrees=%f",
+                         currentSteeringValue_, steeringDegrees);
+    }
+    else {
+        // Hide both when not needed
+        steerWheelSprite_->SetVisible(false);
     }
 }

@@ -41,8 +41,6 @@ struct CSP_Server : Component
 	HashMap<Connection*, ID> clientLastIDs; // updated when the input is actually applied
 	
 	StateSnapshot snapshot;
-    Vector<StateSnapshot> stateSnapshots_;
-
 	// for debugging
 	unsigned usedInputs = 0; // number of used inputs
 

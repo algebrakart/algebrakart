@@ -462,8 +462,41 @@ private:
         int samplingFrequency = 0;
     } audioSpectrumOptions_;
 
+    class MemoryTracker {
+    public:
+        static void LogMemoryState(const String& location) {
+            size_t physMem = GetProcessMemoryUsage();
+            size_t virtMem = GetProcessVirtualMemoryUsage();
 
+            URHO3D_LOGERRORF("MEMORY [%s]: Physical=%u MB, Virtual=%u MB",
+                             location.CString(),
+                             physMem / (1024 * 1024),
+                             virtMem / (1024 * 1024));
+        }
 
+        static void LogSceneStats(Scene* scene) {
+            if (!scene) return;
+
+            unsigned totalNodes = scene->GetNumChildren(true);
+            unsigned networkActors = 0;
+            unsigned vehicles = 0;
+            unsigned particles = 0;
+            unsigned soundSources = 0;
+
+            PODVector<Node*> allNodes;
+            scene->GetChildren(allNodes, true);
+
+            for (Node* node : allNodes) {
+                if (node->HasComponent<NetworkActor>()) networkActors++;
+                if (node->HasComponent<Vehicle>()) vehicles++;
+                if (node->HasComponent<ParticleEmitter>()) particles++;
+                if (node->HasComponent<SoundSource3D>()) soundSources++;
+            }
+
+            URHO3D_LOGERRORF("SCENE STATS: Nodes=%u, Actors=%u, Vehicles=%u, Particles=%u, Sounds=%u",
+                             totalNodes, networkActors, vehicles, particles, soundSources);
+        }
+    };
 
     bool accelSndPlaying_;
     WeakPtr<SoundSource3D> lastSnd_;
@@ -548,7 +581,7 @@ private:
 
     Vector<Vector3> focusObjects_;
     unsigned int focusIndex_;
-    double lastPlayerStateTime_;
+    float lastPlayerStateTime_;
 
     //WeakPtr<TileMap3D> tileMap_;
 
@@ -892,15 +925,48 @@ private:
     void UpdateAudioUISystem(float timeStep);
     void HandleAudioUIEvents();
 
+    // Camera obstruction detection system
+    bool cameraObstructed_;
+    float targetCameraDistance_;
+    float currentCameraDistance_;
+    float cameraObstructionSmoothSpeed_;
+    float maxCameraDistance_;
+    float minCameraDistance_;
+    float obstructionCheckTimer_;
+    float obstructionCheckInterval_;
+    Vector3 lastValidCameraPosition_;
+    bool hasValidCameraPosition_;
+
+    // Steering wheel data from server
+    float currentSteeringValue_;
+    bool hasValidSteeringData_;
+
+    void UpdateSteeringWheelDisplay();
+    void UpdateSteeringWheelFromInput(float steerInput);
+    void SetSteeringWheelVisibility(bool visible);
+
+// Camera obstruction helper methods (add to AlgebraKart.h):
+    bool CheckCameraObstruction(const Vector3& cameraPos, const Vector3& targetPos,
+                                NetworkActor* playerActor, float& obstacleDistance);
+    float CalculateObstructionZoomOut(float baseDistance, float obstructionDistance);
+    void UpdateCameraObstruction(float timeStep, NetworkActor* actor);
+    Vector3 GetSafeDirectionFromObstruction(const Vector3& obstructedDirection,
+                                            const Vector3& playerPos, float distance);
+
     /// Event handlers for the new UI system
     void HandleBeatSequencerToggle(StringHash eventType, VariantMap& eventData);
     void HandleSynthControlsToggle(StringHash eventType, VariantMap& eventData);
     void HandleMasterVolumeChanged(StringHash eventType, VariantMap& eventData);
+    void HandleSynthParameterChanged(StringHash eventType, VariantMap& eventData);
 
     /// Integration with existing synthesizer/sequencer
     void ApplyBeatPatternToSequencer(int channel, int step, bool active);
     void ApplySynthParametersToSynthesizer(const VariantMap& params);
     void UpdateUIFromSequencerState();
+    void UpdateUIFromSequencerState(float timeStep);
+    void UpdateSynthesizerWaveformDisplay();
+    void UpdateMasterPanelStatus();
+    void ProcessRealtimeAudioAnalysis();
 
     /// Master audio control panel
     void CreateMasterAudioPanel();
@@ -951,6 +1017,7 @@ private:
 
     void InitializeMissileSystem();
 
+    void MemoryMonitoring(float timeStep);
 
     };
 

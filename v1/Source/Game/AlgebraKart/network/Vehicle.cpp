@@ -137,7 +137,7 @@ Vehicle::Vehicle(Context* context)
 
     // Fastest reached
 //    m_fmaxEngineForce = 560000.0f;//950.f;
-    m_fmaxEngineForce = 35000.0f;//950.f;
+    m_fmaxEngineForce = 240000.0f;//950.f;
 
   //  m_fmaxEngineForce = 4200.0f;//5400.0f;//950.f;
 

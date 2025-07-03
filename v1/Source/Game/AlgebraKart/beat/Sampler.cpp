@@ -40,8 +40,8 @@ void Sampler::Play(int sampleIdx) {
     if (sampleQueue_.Size() <= sampleIdx)
         return;
 
-
-
+// This is where we play a sample
+/*
     if (sampleQueue_[sampleIdx] != nullptr) {
         auto *cache = GetSubsystem<ResourceCache>();
         auto *source = node_->CreateComponent<SoundSource3D>(LOCAL);
@@ -56,7 +56,7 @@ void Sampler::Play(int sampleIdx) {
         // Play sample
         source->SetAutoRemoveMode(REMOVE_COMPONENT);
         source->Play(sampleQueue_[sampleIdx]);
-    }
+    }*/
 }
 
 void Sampler::Load(Sound* sample) {
