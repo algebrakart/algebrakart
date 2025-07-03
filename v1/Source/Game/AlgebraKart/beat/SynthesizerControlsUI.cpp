@@ -650,3 +650,7 @@ void SynthesizerControlsUI::UpdateSynthParameters()
 
     // Similar updates for other effects...
 }
+
+const SharedPtr<Window> &SynthesizerControlsUI::GetMainWindow() const {
+    return synthWindow_;
+}

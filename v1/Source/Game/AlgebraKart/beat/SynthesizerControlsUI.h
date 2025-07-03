@@ -38,6 +38,7 @@ public:
     void SetVisible(bool visible);
     void UpdateOscilloscope(const Vector<float>& waveformData);
     void UpdateSynthParameters();
+    const SharedPtr<Window> &GetMainWindow() const;
 
 private:
     void CreateSynthWindow();
