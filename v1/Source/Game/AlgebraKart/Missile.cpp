@@ -79,7 +79,7 @@ void Missile::Start()
     {
         model_ = GetNode()->CreateComponent<StaticModel>();
         auto* cache = GetSubsystem<ResourceCache>();
-        model_->SetModel(cache->GetResource<Model>("Models/go kart.065.mdl"));
+        model_->SetModel(cache->GetResource<Model>("Models/Box.mdl"));
 //        model_->SetMaterial(cache->GetResource<Material>("Materials/Missile.xml"));
     }
 
@@ -455,12 +455,12 @@ void Missile::HandleMissileCollision(StringHash eventType, VariantMap& eventData
     }
 
     // Check if we hit terrain or other solid objects
-    auto* rigidBody = otherNode->GetComponent<RigidBody>();
+ /*   auto* rigidBody = otherNode->GetComponent<RigidBody>();
     if (rigidBody && rigidBody->GetMass() == 0.0f) // Static object
     {
         URHO3D_LOGINFO("Missile hit terrain");
         Explode();
-    }
+    }*/
 }
 
 void Missile::Explode()

@@ -785,12 +785,9 @@ private:
     bool bkgMusic_;
     bool sndFx_;
 
-    /// Packets in per second
-    SharedPtr<Text> packetsIn_;
-    /// Packets out per second
-    SharedPtr<Text> packetsOut_;
-    /// Packet counter UI update timer
-    Timer packetCounterTimer_;
+    SharedPtr<Text> networkInfo_;
+    /// Network counter UI update timer
+    Timer networkCounterTimer_;
 
     void ArrangePlayersInFormation();
 
@@ -940,6 +937,44 @@ private:
     // Steering wheel data from server
     float currentSteeringValue_;
     bool hasValidSteeringData_;
+
+    struct UILayout {
+        // Screen margins
+        float marginLeft = 20.0f;
+        float marginRight = 20.0f;
+        float marginTop = 20.0f;
+        float marginBottom = 20.0f;
+
+        // UI zones
+        struct Zone {
+            float x, y, width, height;
+        };
+
+        Zone topLeft, topRight, bottomLeft, bottomRight, bottomCenter, centerRight;
+
+        void CalculateZones(float screenWidth, float screenHeight) {
+            // Top-left zone: Power bars and status
+            topLeft = {marginLeft, marginTop, 400.0f, 200.0f};
+
+            // Top-right zone: Radio info and minimap
+            topRight = {screenWidth - 350.0f - marginRight, marginTop, 350.0f, 250.0f};
+
+            // Bottom-left zone: Steering wheel
+            bottomLeft = {marginLeft, screenHeight - 150.0f - marginBottom, 150.0f, 150.0f};
+
+            // Bottom-right zone: Vehicle damage and pickup
+            bottomRight = {screenWidth - 200.0f - marginRight, screenHeight - 200.0f - marginBottom, 200.0f, 200.0f};
+
+            // Bottom-center zone: Speedometer
+            bottomCenter = {screenWidth/2.0f - 100.0f, screenHeight - 180.0f - marginBottom, 200.0f, 180.0f};
+
+            // Center-right zone: Radio spectrum/VU meter
+            centerRight = {screenWidth - 320.0f - marginRight, screenHeight/2.0f - 100.0f, 320.0f, 200.0f};
+        }
+    };
+
+    UILayout uiLayout_;
+
 
     void UpdateSteeringWheelDisplay();
     void UpdateSteeringWheelFromInput(float steerInput);

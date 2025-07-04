@@ -118,6 +118,7 @@ NetworkActor::NetworkActor(Context *context)
     numPickups_ = 0;
     activePickup_ = 0;
 
+    hitTarget_ = Vector3(0, 0, 0);
 }
 
 NetworkActor::~NetworkActor() {
@@ -845,14 +846,14 @@ void NetworkActor::FixedUpdate(float timeStep) {
                 //URHO3D_LOGDEBUGF("%s -> FIRE = %l", vehicleName.CString(), controls_.buttons_);
                 URHO3D_LOGDEBUGF("**NETWORK ACTOR FIRE** -> %l", controls_.buttons_);
                 float limit = 0.4f;
-                if (lastFire_ > limit) {
+//                if (lastFire_ > limit) {
                     if (controls_.buttons_ & NTWK_CTRL_FIRE) {
                         // Fire uses pick up
                         UsePickup();
                         Fire();
                         lastFire_ = 0;
                     }
-                }
+  //              }
             }
 
             if (controls_.buttons_ & NTWK_CTRL_JUMP) {

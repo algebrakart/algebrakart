@@ -162,6 +162,7 @@
 #include <utility>
 
 #include "ViewCone.h"
+#include "../../Urho3D/UI/ProgressBar.h"
 
 using namespace std;
 
@@ -1060,8 +1061,7 @@ void AlgebraKart::UpdateUIState(bool state) {
             }
 
 
-            packetsIn_->SetVisible(state);
-            packetsOut_->SetVisible(state);
+            networkInfo_->SetVisible(state);
         }
 
     } else {
@@ -1073,10 +1073,8 @@ void AlgebraKart::UpdateUIState(bool state) {
                debugText_[i]->SetVisible(!state);
         }
 
-        if (packetsIn_)
-            packetsIn_->SetVisible(!state);
-        if (packetsOut_)
-            packetsOut_->SetVisible(!state);
+        if (networkInfo_)
+            networkInfo_->SetVisible(!state);
     }
 }
 
@@ -2963,6 +2961,22 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
                                     sprite_->SetPriority(-100);
                                     sprite_->SetVisible(true);
 
+                                    sprite_ = vDamage_FA_LineSprites_.At(i);
+                                    sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+                                    sprite_->SetPosition(Vector2(centerX, centerY+110.0f+(i*height)));
+                                    sprite_->SetOpacity(0.9f);
+                                    // Set a low priority so that other UI elements can be drawn on top
+                                    sprite_->SetPriority(-100);
+                                    sprite_->SetVisible(true);
+
+                                    sprite_ = vDamage_RA_LineSprites_.At(i);
+                                    sprite_->SetAlignment(HA_RIGHT, VA_BOTTOM);
+                                    sprite_->SetPosition(Vector2(centerX, centerY-110.0f+(i*height)));
+                                    sprite_->SetOpacity(0.9f);
+                                    // Set a low priority so that other UI elements can be drawn on top
+                                    sprite_->SetPriority(-100);
+                                    sprite_->SetVisible(true);
+
                                     // ? left
                                     // 90 middle
                                     // ? right
@@ -4385,6 +4399,14 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
     MonitorMemoryUsage(timeStep);
     ManageResourceCache(timeStep);
 
+
+    ///
+    // Update missile manager
+    if (globalMissileManager_) {
+        float timeStep = eventData[Update::P_TIMESTEP].GetFloat();
+        globalMissileManager_->Update(timeStep);
+    }
+
 }
 
 void AlgebraKart::ProcessAudioStream() {
@@ -4496,27 +4518,10 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
 
         loadProgress_ = Random(0.0f, 1.0f);
 
-        if (packetsIn_) {
-            if (packetCounterTimer_.GetMSec(false) > 1000 && GetSubsystem<Network>()->GetServerConnection()) {
-                packetsIn_->SetText(
-                        "Packets  in: " + String(GetSubsystem<Network>()->GetServerConnection()->GetPacketsInPerSec()));
-                packetsOut_->SetText(
-                        "Packets out: " +
-                        String(GetSubsystem<Network>()->GetServerConnection()->GetPacketsOutPerSec()));
-                packetCounterTimer_.Reset();
-            }
-
-            if (packetCounterTimer_.GetMSec(false) > 1000 && GetSubsystem<Network>()->GetClientConnections().Size()) {
-                int packetsIn = 0;
-                int packetsOut = 0;
-                auto connections = GetSubsystem<Network>()->GetClientConnections();
-                for (auto it = connections.Begin(); it != connections.End(); ++it) {
-                    packetsIn += (*it)->GetPacketsInPerSec();
-                    packetsOut += (*it)->GetPacketsOutPerSec();
-                }
-                packetsIn_->SetText("Packets  in: " + String(packetsIn));
-                packetsOut_->SetText("Packets out: " + String(packetsOut));
-                packetCounterTimer_.Reset();
+        if (networkInfo_) {
+            if (networkCounterTimer_.GetMSec(false) > 1000 && GetSubsystem<Network>()->GetServerConnection()) {
+                networkInfo_->SetText(String("Ping: ") + String(GetSubsystem<Network>()->GetServerConnection()->GetRoundTripTime()) + String(" ms"));
+                networkCounterTimer_.Reset();
             }
         }
 
@@ -8482,6 +8487,7 @@ void AlgebraKart::CreateClientUI() {
 
     auto* ui = GetSubsystem<UI>();
 
+    /*
     // Create steering wheel sprites with proper positioning
     auto* steerWheelTexture = cache->GetResource<Texture2D>("Textures/steer-wheel.png");
     auto* steerActorTexture = cache->GetResource<Texture2D>("Textures/steer-actor.png");
@@ -8532,9 +8538,10 @@ void AlgebraKart::CreateClientUI() {
         steerActorSprite_->SetVisible(false); // Hidden by default
 
         URHO3D_LOGINFO("Steering actor sprite created and positioned");
-    }
+    }*/
 
 
+    /*
     DebugRenderer *dbgRenderer = scene_->CreateComponent<DebugRenderer>();
     // Client will non-authoratively managed physics locally based on server copy
     clientPhysicsWorld_ = scene_->CreateComponent<PhysicsWorld>(LOCAL);
@@ -8839,7 +8846,7 @@ void AlgebraKart::CreateClientUI() {
     sprite_->SetRectangle(IntRect(info.x, info.y, info.x + info.image_->GetWidth(), info.y + info.image_->GetHeight()));
     sprite_->SetHotSpot(Vector2(info.file_->pivotX_, info.file_->pivotY_));
 */
-
+/*
     int progBarSize = 15;
 
     // Set sprite texture
@@ -9116,6 +9123,7 @@ void AlgebraKart::CreateClientUI() {
     markerMapBkgSprite_->SetVisible(true);
 
 */
+       /*
     radioSpectrumSprite_->SetScale(256.0f / radioSpectrumTexture_->GetWidth());
     radioSpectrumSprite_->SetSize(radioSpectrumTexture_->GetWidth(), radioSpectrumTexture_->GetHeight());
     radioSpectrumSprite_->SetHotSpot(radioSpectrumTexture_->GetWidth() / 2, radioSpectrumTexture_->GetHeight() / 2);
@@ -9184,10 +9192,658 @@ void AlgebraKart::CreateClientUI() {
         debugData1.append("");
         radioText_[i]->SetText(debugData1.c_str());
     }
+    */
+    ////
+
+    // Calculate UI layout zones
+    uiLayout_.CalculateZones(graphics->GetWidth(), graphics->GetHeight());
+
+    // =============================================================================
+    // STEERING WHEEL - Bottom Left Zone
+    // =============================================================================
+    auto* steerWheelTexture = cache->GetResource<Texture2D>("Textures/steer-wheel.png");
+    auto* steerActorTexture = cache->GetResource<Texture2D>("Textures/steer-actor.png");
+
+    if (steerWheelTexture) {
+        steerWheelSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        steerWheelSprite_->SetTexture(steerWheelTexture);
+
+        float wheelSize = 120.0f;
+        steerWheelSprite_->SetSize(wheelSize, wheelSize);
+        steerWheelSprite_->SetScale(1.0f);
+        steerWheelSprite_->SetHotSpot(wheelSize / 2, wheelSize / 2);
+        steerWheelSprite_->SetAlignment(HA_LEFT, VA_TOP);
+
+        // Position in bottom-left zone
+        steerWheelSprite_->SetPosition(Vector2(
+                uiLayout_.bottomLeft.x + wheelSize/2,
+                uiLayout_.bottomLeft.y + wheelSize/2
+        ));
+
+        steerWheelSprite_->SetOpacity(0.8f);
+        steerWheelSprite_->SetPriority(-90);
+        steerWheelSprite_->SetVisible(true);
+    }
+
+    if (steerActorTexture) {
+        steerActorSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        steerActorSprite_->SetTexture(steerActorTexture);
+
+        float actorSize = 80.0f;
+        steerActorSprite_->SetSize(actorSize, actorSize);
+        steerActorSprite_->SetScale(1.0f);
+        steerActorSprite_->SetHotSpot(actorSize / 2, actorSize / 2);
+        steerActorSprite_->SetAlignment(HA_LEFT, VA_TOP);
+
+        // Position relative to steering wheel
+        steerActorSprite_->SetPosition(Vector2(
+                uiLayout_.bottomLeft.x + 120.0f/2,
+                uiLayout_.bottomLeft.y + 120.0f/2
+        ));
+
+        steerActorSprite_->SetOpacity(0.9f);
+        steerActorSprite_->SetPriority(-85);
+        steerActorSprite_->SetVisible(false);
+    }
+
+    // =============================================================================
+    // POWER BARS - Top Left Zone
+    // =============================================================================
+    auto *font = cache->GetResource<Font>(INGAME_FONT);
+    auto *font3 = cache->GetResource<Font>(INGAME_FONT3);
+    auto *font4 = cache->GetResource<Font>(INGAME_FONT4);
+
+    // Power Bar Textures
+    Texture2D *powerBarTexture = cache->GetResource<Texture2D>("Textures/powerbar.png");
+    Texture2D *powerBarBkgTexture = cache->GetResource<Texture2D>("Textures/powerbar-bk.png");
+    Texture2D *rpmBarTexture = cache->GetResource<Texture2D>("Textures/rpm.png");
+    Texture2D *rpmBarBkgTexture = cache->GetResource<Texture2D>("Textures/powerbar-bk.png");
+    Texture2D *velBarTexture = cache->GetResource<Texture2D>("Textures/velocity.png");
+    Texture2D *velBarBkgTexture = cache->GetResource<Texture2D>("Textures/powerbar-bk.png");
+
+    if (powerBarTexture && powerBarBkgTexture) {
+        // Create power bar sprites
+        powerBarP1Sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        powerBarBkgP1Sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        rpmBarP1Sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        rpmBarBkgP1Sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        velBarP1Sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        velBarBkgP1Sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+
+        // Power bar text labels
+        powerBarText_ = ui->GetRoot()->CreateChild<Text>("powerBarText");
+        powerBarText_->SetAlignment(HA_LEFT, VA_TOP);
+        powerBarText_->SetPosition(uiLayout_.topLeft.x, uiLayout_.topLeft.y + 20.0f);
+        powerBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 16);
+        powerBarText_->SetTextEffect(TE_SHADOW);
+        powerBarText_->SetText(String("HEALTH"));
+        powerBarText_->SetVisible(true);
+
+        rpmBarText_ = ui->GetRoot()->CreateChild<Text>("rpmBarText");
+        rpmBarText_->SetAlignment(HA_LEFT, VA_TOP);
+        rpmBarText_->SetPosition(uiLayout_.topLeft.x, uiLayout_.topLeft.y + 70.0f);
+        rpmBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 16);
+        rpmBarText_->SetTextEffect(TE_SHADOW);
+        rpmBarText_->SetText(String("RPM"));
+        rpmBarText_->SetVisible(true);
+
+        velBarText_ = ui->GetRoot()->CreateChild<Text>("velBarText");
+        velBarText_->SetAlignment(HA_LEFT, VA_TOP);
+        velBarText_->SetPosition(uiLayout_.topLeft.x, uiLayout_.topLeft.y + 120.0f);
+        velBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 16);
+        velBarText_->SetTextEffect(TE_SHADOW);
+        velBarText_->SetText(String("SPEED"));
+        velBarText_->SetVisible(true);
+
+        pranaBarText_ = ui->GetRoot()->CreateChild<Text>("pranaBarText");
+        pranaBarText_->SetAlignment(HA_LEFT, VA_TOP);
+        pranaBarText_->SetPosition(uiLayout_.topLeft.x, uiLayout_.topLeft.y + 170.0f);
+        pranaBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 16);
+        pranaBarText_->SetTextEffect(TE_SHADOW);
+        pranaBarText_->SetText(String("ENERGY"));
+        pranaBarText_->SetVisible(true);
+
+        // Progress bar text indicators
+        int progBarSize = 15;
+        powerBarProgBarText_ = ui->GetRoot()->CreateChild<Text>("powerBarProgText");
+        powerBarProgBarText_->SetAlignment(HA_LEFT, VA_TOP);
+        powerBarProgBarText_->SetPosition(uiLayout_.topLeft.x + 120.0f, uiLayout_.topLeft.y + 21.0f);
+        powerBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), progBarSize);
+        powerBarProgBarText_->SetTextEffect(TE_SHADOW);
+        powerBarProgBarText_->SetColor(Color(1,1,0.4));
+        powerBarProgBarText_->SetVisible(true);
+
+        rpmBarProgBarText_ = ui->GetRoot()->CreateChild<Text>("rpmBarProgText");
+        rpmBarProgBarText_->SetAlignment(HA_LEFT, VA_TOP);
+        rpmBarProgBarText_->SetPosition(uiLayout_.topLeft.x + 120.0f, uiLayout_.topLeft.y + 71.0f);
+        rpmBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), progBarSize);
+        rpmBarProgBarText_->SetTextEffect(TE_SHADOW);
+        rpmBarProgBarText_->SetColor(Color(5/255.0f,173/255.0f,219/255.0f));
+        rpmBarProgBarText_->SetVisible(true);
+
+        velBarProgBarText_ = ui->GetRoot()->CreateChild<Text>("velBarProgText");
+        velBarProgBarText_->SetAlignment(HA_LEFT, VA_TOP);
+        velBarProgBarText_->SetPosition(uiLayout_.topLeft.x + 120.0f, uiLayout_.topLeft.y + 121.0f);
+        velBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), progBarSize);
+        velBarProgBarText_->SetTextEffect(TE_SHADOW);
+        velBarProgBarText_->SetColor(Color(0.7,0.1,1));
+        velBarProgBarText_->SetVisible(true);
+
+        pranaBarProgBarText_ = ui->GetRoot()->CreateChild<Text>("pranaBarProgText");
+        pranaBarProgBarText_->SetAlignment(HA_LEFT, VA_TOP);
+        pranaBarProgBarText_->SetPosition(uiLayout_.topLeft.x + 120.0f, uiLayout_.topLeft.y + 171.0f);
+        pranaBarProgBarText_->SetFont(cache->GetResource<Font>(INGAME_FONT4), progBarSize);
+        pranaBarProgBarText_->SetTextEffect(TE_SHADOW);
+        pranaBarProgBarText_->SetColor(Color(0.1, 0.7,0.1));
+        pranaBarProgBarText_->SetVisible(true);
+
+        // Configure power bar sprites
+        int textureWidth = powerBarTexture->GetWidth();
+        int textureHeight = powerBarTexture->GetHeight();
+
+        // Health bar
+        powerBarP1Sprite_->SetTexture(powerBarTexture);
+        powerBarP1Sprite_->SetScale(256.0f / textureWidth);
+        powerBarP1Sprite_->SetSize(textureWidth, textureHeight);
+        powerBarP1Sprite_->SetHotSpot(textureWidth, textureHeight);
+        powerBarP1Sprite_->SetAlignment(HA_LEFT, VA_TOP);
+        powerBarP1Sprite_->SetPosition(Vector2(uiLayout_.topLeft.x + 280.0f, uiLayout_.topLeft.y + 47.0f));
+        powerBarP1Sprite_->SetOpacity(1.0f);
+        powerBarP1Sprite_->SetPriority(-100);
+        powerBarP1Sprite_->SetVisible(false);
+
+        powerBarBkgP1Sprite_->SetTexture(powerBarBkgTexture);
+        powerBarBkgP1Sprite_->SetScale(256.0f / textureWidth);
+        powerBarBkgP1Sprite_->SetSize(textureWidth, textureHeight);
+        powerBarBkgP1Sprite_->SetHotSpot(textureWidth, textureHeight);
+        powerBarBkgP1Sprite_->SetAlignment(HA_LEFT, VA_TOP);
+        powerBarBkgP1Sprite_->SetPosition(Vector2(uiLayout_.topLeft.x + 280.0f, uiLayout_.topLeft.y + 47.0f));
+        powerBarBkgP1Sprite_->SetOpacity(0.2f);
+        powerBarBkgP1Sprite_->SetPriority(-100);
+        powerBarBkgP1Sprite_->SetVisible(false);
+
+        // RPM bar
+        rpmBarP1Sprite_->SetTexture(rpmBarTexture);
+        rpmBarP1Sprite_->SetScale(256.0f / textureWidth);
+        rpmBarP1Sprite_->SetSize(textureWidth, textureHeight);
+        rpmBarP1Sprite_->SetHotSpot(textureWidth, textureHeight);
+        rpmBarP1Sprite_->SetAlignment(HA_LEFT, VA_TOP);
+        rpmBarP1Sprite_->SetPosition(Vector2(uiLayout_.topLeft.x + 280.0f, uiLayout_.topLeft.y + 97.0f));
+        rpmBarP1Sprite_->SetOpacity(1.0f);
+        rpmBarP1Sprite_->SetPriority(-100);
+        rpmBarP1Sprite_->SetVisible(false);
+
+        rpmBarBkgP1Sprite_->SetTexture(rpmBarBkgTexture);
+        rpmBarBkgP1Sprite_->SetScale(256.0f / textureWidth);
+        rpmBarBkgP1Sprite_->SetSize(textureWidth, textureHeight);
+        rpmBarBkgP1Sprite_->SetHotSpot(textureWidth, textureHeight);
+        rpmBarBkgP1Sprite_->SetAlignment(HA_LEFT, VA_TOP);
+        rpmBarBkgP1Sprite_->SetPosition(Vector2(uiLayout_.topLeft.x + 280.0f, uiLayout_.topLeft.y + 97.0f));
+        rpmBarBkgP1Sprite_->SetOpacity(0.2f);
+        rpmBarBkgP1Sprite_->SetPriority(-100);
+        rpmBarBkgP1Sprite_->SetVisible(false);
+
+        // Velocity bar
+        velBarP1Sprite_->SetTexture(velBarTexture);
+        velBarP1Sprite_->SetScale(256.0f / textureWidth);
+        velBarP1Sprite_->SetSize(textureWidth, textureHeight);
+        velBarP1Sprite_->SetHotSpot(textureWidth, textureHeight);
+        velBarP1Sprite_->SetAlignment(HA_LEFT, VA_TOP);
+        velBarP1Sprite_->SetPosition(Vector2(uiLayout_.topLeft.x + 280.0f, uiLayout_.topLeft.y + 147.0f));
+        velBarP1Sprite_->SetOpacity(1.0f);
+        velBarP1Sprite_->SetPriority(-100);
+        velBarP1Sprite_->SetVisible(false);
+
+        velBarBkgP1Sprite_->SetTexture(velBarBkgTexture);
+        velBarBkgP1Sprite_->SetScale(256.0f / textureWidth);
+        velBarBkgP1Sprite_->SetSize(textureWidth, textureHeight);
+        velBarBkgP1Sprite_->SetHotSpot(textureWidth, textureHeight);
+        velBarBkgP1Sprite_->SetAlignment(HA_LEFT, VA_TOP);
+        velBarBkgP1Sprite_->SetPosition(Vector2(uiLayout_.topLeft.x + 280.0f, uiLayout_.topLeft.y + 147.0f));
+        velBarBkgP1Sprite_->SetOpacity(0.2f);
+        velBarBkgP1Sprite_->SetPriority(-100);
+        velBarBkgP1Sprite_->SetVisible(false);
+    }
+
+    // =============================================================================
+    // VEHICLE DAMAGE SYSTEM - Bottom Right Zone
+    // =============================================================================
+    Texture2D *hudVDamageTexture = cache->GetResource<Texture2D>("Textures/hud_v-damage.png");
+    Texture2D *hudVDamageLineTexture = cache->GetResource<Texture2D>("Textures/hud_vdamage-line.png");
+
+    if (hudVDamageTexture) {
+        vDamageSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        vDamageSprite_->SetTexture(hudVDamageTexture);
+        vDamageSprite_->SetScale(1.0f);
+        vDamageSprite_->SetSize(hudVDamageTexture->GetWidth(), hudVDamageTexture->GetHeight());
+        vDamageSprite_->SetHotSpot(0, 0);
+        vDamageSprite_->SetAlignment(HA_LEFT, VA_TOP);
+
+        // Position in bottom-right zone
+        vDamageSprite_->SetPosition(Vector2(
+                uiLayout_.bottomRight.x + 10.0f,
+                uiLayout_.bottomRight.y + 10.0f
+        ));
+
+        vDamageSprite_->SetOpacity(0.9f);
+        vDamageSprite_->SetPriority(-100);
+        vDamageSprite_->SetVisible(false);
+
+        // Create damage indicator lines
+        if (hudVDamageLineTexture) {
+            SharedPtr<Sprite> sprite_;
+            for (int i = 0; i < VDAMAGE_BODY_NUM_LINES; i++) {
+                // Front left wheel lines
+                sprite_ = SharedPtr<Sprite>(ui->GetRoot()->CreateChild<Sprite>());
+                sprite_->SetTexture(hudVDamageLineTexture);
+                sprite_->SetScale(1.0f);
+                sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+                sprite_->SetAlignment(HA_LEFT, VA_TOP);
+                sprite_->SetPosition(Vector2(
+                        uiLayout_.bottomRight.x + 15.0f,
+                        uiLayout_.bottomRight.y + 30.0f + (i * 3.0f)
+                ));
+                sprite_->SetOpacity(0.9f);
+                sprite_->SetPriority(-95);
+                sprite_->SetVisible(false);
+                vDamage_FL_LineSprites_.Push(sprite_);
+
+                // Front right wheel lines
+                sprite_ = SharedPtr<Sprite>(ui->GetRoot()->CreateChild<Sprite>());
+                sprite_->SetTexture(hudVDamageLineTexture);
+                sprite_->SetScale(1.0f);
+                sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+                sprite_->SetAlignment(HA_LEFT, VA_TOP);
+                sprite_->SetPosition(Vector2(
+                        uiLayout_.bottomRight.x + 15.0f,
+                        uiLayout_.bottomRight.y + 30.0f + (i * 3.0f)
+                ));
+                sprite_->SetOpacity(0.9f);
+                sprite_->SetPriority(-95);
+                sprite_->SetVisible(false);
+                vDamage_FR_LineSprites_.Push(sprite_);
+
+                // Back left wheel lines
+                sprite_ = SharedPtr<Sprite>(ui->GetRoot()->CreateChild<Sprite>());
+                sprite_->SetTexture(hudVDamageLineTexture);
+                sprite_->SetScale(1.0f);
+                sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+                sprite_->SetAlignment(HA_LEFT, VA_TOP);
+                sprite_->SetPosition(Vector2(
+                        uiLayout_.bottomRight.x + 15.0f,
+                        uiLayout_.bottomRight.y + 30.0f + (i * 3.0f)
+                ));
+                sprite_->SetOpacity(0.9f);
+                sprite_->SetPriority(-95);
+                sprite_->SetVisible(false);
+                vDamage_BL_LineSprites_.Push(sprite_);
+
+                // Back right wheel lines
+                sprite_ = SharedPtr<Sprite>(ui->GetRoot()->CreateChild<Sprite>());
+                sprite_->SetTexture(hudVDamageLineTexture);
+                sprite_->SetScale(1.0f);
+                sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+                sprite_->SetAlignment(HA_LEFT, VA_TOP);
+                sprite_->SetPosition(Vector2(
+                        uiLayout_.bottomRight.x + 15.0f,
+                        uiLayout_.bottomRight.y + 30.0f + (i * 3.0f)
+                ));
+                sprite_->SetOpacity(0.9f);
+                sprite_->SetPriority(-95);
+                sprite_->SetVisible(false);
+                vDamage_BR_LineSprites_.Push(sprite_);
+
+                // Front axle wheel lines
+                sprite_ = SharedPtr<Sprite>(ui->GetRoot()->CreateChild<Sprite>());
+                sprite_->SetTexture(hudVDamageLineTexture);
+                sprite_->SetScale(1.0f);
+                sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+                sprite_->SetAlignment(HA_LEFT, VA_TOP);
+                sprite_->SetPosition(Vector2(
+                        uiLayout_.bottomRight.x + 15.0f,
+                        uiLayout_.bottomRight.y + 30.0f + (i * 3.0f)
+                ));
+                sprite_->SetOpacity(0.9f);
+                sprite_->SetPriority(-95);
+                sprite_->SetVisible(false);
+                vDamage_FA_LineSprites_.Push(sprite_);
+
+                // Rear axle wheel lines
+                sprite_ = SharedPtr<Sprite>(ui->GetRoot()->CreateChild<Sprite>());
+                sprite_->SetTexture(hudVDamageLineTexture);
+                sprite_->SetScale(1.0f);
+                sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+                sprite_->SetAlignment(HA_LEFT, VA_TOP);
+                sprite_->SetPosition(Vector2(
+                        uiLayout_.bottomRight.x + 15.0f,
+                        uiLayout_.bottomRight.y + 30.0f + (i * 3.0f)
+                ));
+                sprite_->SetOpacity(0.9f);
+                sprite_->SetPriority(-95);
+                sprite_->SetVisible(false);
+                vDamage_RA_LineSprites_.Push(sprite_);
+            }
+        }
+    }
+
+
+    // Vehicle damage HUD
+    vDamageSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+    // Indicator Lines
+    SharedPtr<Sprite> sprite_;
+    for (int i = 0; i < VDAMAGE_BODY_NUM_LINES; i++) {
+        sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        sprite_->SetTexture(hudVDamageLineTexture);
+        sprite_->SetScale(1.0f);
+        sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetPosition(Vector2(0, 0));
+        sprite_->SetOpacity(0.9f);
+        // Set a low priority so that other UI elements can be drawn on top
+        sprite_->SetPriority(-100);
+        sprite_->SetVisible(false);
+        vDamage_FL_LineSprites_.Push(sprite_);
+
+        sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        sprite_->SetTexture(hudVDamageLineTexture);
+        sprite_->SetScale(1.0f);
+        sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetPosition(Vector2(0, 0));
+        sprite_->SetOpacity(0.9f);
+        // Set a low priority so that other UI elements can be drawn on top
+        sprite_->SetPriority(-100);
+        sprite_->SetVisible(false);
+        vDamage_FR_LineSprites_.Push(sprite_);
+
+        sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        sprite_->SetTexture(hudVDamageLineTexture);
+        sprite_->SetScale(1.0f);
+        sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetPosition(Vector2(0, 0));
+        sprite_->SetOpacity(0.9f);
+        // Set a low priority so that other UI elements can be drawn on top
+        sprite_->SetPriority(-100);
+        sprite_->SetVisible(false);
+        vDamage_BL_LineSprites_.Push(sprite_);
+
+        sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        sprite_->SetTexture(hudVDamageLineTexture);
+        sprite_->SetScale(1.0f);
+        sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetPosition(Vector2(0, 0));
+        sprite_->SetOpacity(0.9f);
+        // Set a low priority so that other UI elements can be drawn on top
+        sprite_->SetPriority(-100);
+        sprite_->SetVisible(false);
+        vDamage_BR_LineSprites_.Push(sprite_);
+
+        sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        sprite_->SetTexture(hudVDamageLineTexture);
+        sprite_->SetScale(1.0f);
+        sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetPosition(Vector2(0, 0));
+        sprite_->SetOpacity(0.9f);
+        // Set a low priority so that other UI elements can be drawn on top
+        sprite_->SetPriority(-100);
+        sprite_->SetVisible(false);
+        vDamage_FA_LineSprites_.Push(sprite_);
+
+        sprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        sprite_->SetTexture(hudVDamageLineTexture);
+        sprite_->SetScale(1.0f);
+        sprite_->SetSize(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetHotSpot(hudVDamageLineTexture->GetWidth(), hudVDamageLineTexture->GetHeight());
+        sprite_->SetPosition(Vector2(0, 0));
+        sprite_->SetOpacity(0.9f);
+        // Set a low priority so that other UI elements can be drawn on top
+        sprite_->SetPriority(-100);
+        sprite_->SetVisible(false);
+        vDamage_RA_LineSprites_.Push(sprite_);
+    }
+
+    // =============================================================================
+    // PICKUP SYSTEM - Bottom Right Zone (below vehicle damage)
+    // =============================================================================
+    Texture2D *hudPickupTexture = cache->GetResource<Texture2D>("Textures/hud_pickup.png");
+
+    // Load pickup item textures
+    for (int id = 1; id < 7; id++) {
+        Texture2D *hudPickupItemTexture = cache->GetResource<Texture2D>(
+                "Textures/pickups/pickup-0" + String(id) + ".png");
+        if (hudPickupItemTexture) {
+            hudPickupItemTextures_.Push(hudPickupItemTexture);
+        }
+    }
+
+    if (hudPickupTexture) {
+        pickupSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        pickupSprite_->SetTexture(hudPickupTexture);
+        pickupSprite_->SetScale(1.0f);
+        pickupSprite_->SetSize(hudPickupTexture->GetWidth(), hudPickupTexture->GetHeight());
+        pickupSprite_->SetAlignment(HA_LEFT, VA_TOP);
+
+        // Position below vehicle damage in bottom-right zone
+        pickupSprite_->SetPosition(Vector2(
+                uiLayout_.bottomRight.x + 20.0f,
+                uiLayout_.bottomRight.y + 120.0f
+        ));
+
+        pickupSprite_->SetOpacity(0.9f);
+        pickupSprite_->SetPriority(-100);
+        pickupSprite_->SetVisible(true);
+
+        pickupItemSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        if (!hudPickupItemTextures_.Empty()) {
+            pickupItemSprite_->SetTexture(hudPickupItemTextures_[0]);
+        }
+        pickupItemSprite_->SetScale(1.0f);
+        pickupItemSprite_->SetSize(hudPickupTexture->GetWidth(), hudPickupTexture->GetHeight());
+        pickupItemSprite_->SetAlignment(HA_LEFT, VA_TOP);
+
+        // Position relative to pickup background
+        pickupItemSprite_->SetPosition(Vector2(
+                uiLayout_.bottomRight.x + 23.0f,
+                uiLayout_.bottomRight.y + 123.0f
+        ));
+
+        pickupItemSprite_->SetOpacity(0.9f);
+        pickupItemSprite_->SetPriority(-95);
+        pickupItemSprite_->SetVisible(true);
+    }
+
+    // =============================================================================
+    // SPEEDOMETER - Bottom Center Zone
+    // =============================================================================
+    auto* speedometerBkgTexture = cache->GetResource<Texture2D>("Textures/hud/speedometer_bg.png");
+    auto* speedometerNeedleTexture = cache->GetResource<Texture2D>("Textures/hud/speedometer_needle.png");
+
+    if (speedometerBkgTexture) {
+        speedometerBkgSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        speedometerBkgSprite_->SetTexture(speedometerBkgTexture);
+
+        int textureWidth = speedometerBkgTexture->GetWidth();
+        int textureHeight = speedometerBkgTexture->GetHeight();
+
+        speedometerBkgSprite_->SetSize(textureWidth, textureHeight);
+        speedometerBkgSprite_->SetScale(1.0f);
+        speedometerBkgSprite_->SetHotSpot(textureWidth / 2, textureHeight / 2);
+        speedometerBkgSprite_->SetAlignment(HA_LEFT, VA_TOP);
+
+        // Position in bottom-center zone
+        speedometerBkgSprite_->SetPosition(Vector2(
+                uiLayout_.bottomCenter.x + uiLayout_.bottomCenter.width/2,
+                uiLayout_.bottomCenter.y + uiLayout_.bottomCenter.height/2
+        ));
+
+        speedometerBkgSprite_->SetOpacity(0.8f);
+        speedometerBkgSprite_->SetPriority(-100);
+        speedometerBkgSprite_->SetVisible(true);
+    }
+
+    if (speedometerNeedleTexture) {
+        speedometerNeedleSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+        speedometerNeedleSprite_->SetTexture(speedometerNeedleTexture);
+
+        int textureWidth = speedometerNeedleTexture->GetWidth();
+        int textureHeight = speedometerNeedleTexture->GetHeight();
+
+        speedometerNeedleSprite_->SetSize(textureWidth, textureHeight);
+        speedometerNeedleSprite_->SetScale(1.0f);
+        speedometerNeedleSprite_->SetHotSpot(textureWidth / 2, textureHeight - 5);
+        speedometerNeedleSprite_->SetAlignment(HA_LEFT, VA_TOP);
+
+        // Position relative to speedometer background
+        speedometerNeedleSprite_->SetPosition(Vector2(
+                uiLayout_.bottomCenter.x + uiLayout_.bottomCenter.width/2,
+                uiLayout_.bottomCenter.y + uiLayout_.bottomCenter.height/2 - 7.0f
+        ));
+
+        speedometerNeedleSprite_->SetOpacity(0.9f);
+        speedometerNeedleSprite_->SetPriority(-85);
+        speedometerNeedleSprite_->SetVisible(true);
+    }
+
+    // Digital speed text
+    speedometerText_ = ui->GetRoot()->CreateChild<Text>();
+    speedometerText_->SetFont(cache->GetResource<Font>(INGAME_FONT3), 16);
+    speedometerText_->SetTextAlignment(HA_CENTER);
+    speedometerText_->SetColor(Color::WHITE);
+    speedometerText_->SetAlignment(HA_LEFT, VA_TOP);
+    speedometerText_->SetPosition(IntVector2(
+            uiLayout_.bottomCenter.x + uiLayout_.bottomCenter.width/2 - 30,
+            uiLayout_.bottomCenter.y + uiLayout_.bottomCenter.height/2 + 60
+    ));
+    speedometerText_->SetText("0 KM/H");
+    speedometerText_->SetVisible(false);
+    speedometerText_->SetPriority(-80);
+
+    // =============================================================================
+    // RADIO SYSTEM - Center Right Zone
+    // =============================================================================
+
+    // Radio spectrum visualization
+    radioVisualizerImg_ = new PixelImage(context_);
+    radioSpectrumTexture_ = (new Texture2D(context_));
+    radioVisualizerImg_->SetSize(radioSpectrumWidth_, radioSpectrumHeight_);
+    radioSpectrumTexture_->SetData(radioVisualizerImg_, false);
+
+    radioSpectrumSprite_ = ui->GetRoot()->CreateChild<Sprite>();
+    radioSpectrumSprite_->SetTexture(radioSpectrumTexture_);
+    radioSpectrumSprite_->SetScale(256.0f / radioSpectrumTexture_->GetWidth());
+    radioSpectrumSprite_->SetSize(radioSpectrumTexture_->GetWidth(), radioSpectrumTexture_->GetHeight());
+    radioSpectrumSprite_->SetHotSpot(radioSpectrumTexture_->GetWidth() / 2, radioSpectrumTexture_->GetHeight() / 2);
+    radioSpectrumSprite_->SetAlignment(HA_LEFT, VA_TOP);
+
+    // Position in center-right zone
+    radioSpectrumSprite_->SetPosition(Vector2(
+            uiLayout_.centerRight.x + 20.0f,
+            uiLayout_.centerRight.y + 30.0f
+    ));
+
+    radioSpectrumSprite_->SetOpacity(0.5f);
+    radioSpectrumSprite_->SetPriority(-100);
+    radioSpectrumSprite_->SetVisible(true);
+
+    // Create VU meter
+    CreateVUMeter();
+
+    // Radio track text information
+    for (int i = 0; i < NUM_RADIO_TRACK_FIELDS; i++) {
+        radioText_[i] = ui->GetRoot()->CreateChild<Text>("RadioTrackListText");
+        radioText_[i]->SetAlignment(HA_LEFT, VA_TOP);
+        radioText_[i]->SetPosition(
+                uiLayout_.centerRight.x + 10.0f,
+                uiLayout_.centerRight.y + 80.0f + (i * 15.0f)
+        );
+        radioText_[i]->SetVisible(true);
+        radioText_[i]->SetColor(Color(235/255.0f, 217/255.0f, 255/255));
+        radioText_[i]->SetFont(INGAME_FONT2, 9);
+        radioText_[i]->SetTextEffect(TE_SHADOW);
+        radioText_[i]->SetText("");
+    }
+
+    // =============================================================================
+    // NETWORK STATUS - Top Right Zone
+    // =============================================================================
+    networkInfo_ = ui->GetRoot()->CreateChild<Text>();
+    networkInfo_->SetText("Ping: - ms");
+    networkInfo_->SetColor(Color::WHITE);
+    networkInfo_->SetFont(cache->GetResource<Font>(INGAME_FONT), 10);
+    networkInfo_->SetAlignment(HA_LEFT, VA_TOP);
+    networkInfo_->SetPosition(uiLayout_.topRight.x + 200.0f, uiLayout_.topRight.y + 200.0f);
+
+    // =============================================================================
+    // DEBUG AND RANK TEXT - Use remaining spaces
+    // =============================================================================
+
+    // Debug text
+    for (int i = 0; i < NUM_DEBUG_FIELDS; i++) {
+        debugText_[i] = ui->GetRoot()->CreateChild<Text>("DebugText");
+        debugText_[i]->SetAlignment(HA_LEFT, VA_TOP);
+        debugText_[i]->SetPosition(10.0f, 300.0f + (i * 15));
+        debugText_[i]->SetFont(font, 8);
+        debugText_[i]->SetTextEffect(TE_SHADOW);
+        debugText_[i]->SetVisible(false);
+        debugText_[i]->SetText("-");
+    }
+
+    // Rank text
+    for (int i = 0; i < NUM_RANK_FIELDS; i++) {
+        rankText_[i] = ui->GetRoot()->CreateChild<Text>("RankText");
+        rankText_[i]->SetAlignment(HA_RIGHT, VA_TOP);
+        rankText_[i]->SetPosition(graphics->GetWidth() - 200.0f, 300.0f + (i * 25));
+        rankText_[i]->SetFont(cache->GetResource<Font>(INGAME_FONT3), 8);
+        rankText_[i]->SetTextEffect(TE_SHADOW);
+        rankText_[i]->SetVisible(false);
+        rankText_[i]->SetText("-");
+    }
+
+    // Login list text
+    for (int i = 0; i < NUM_LOGIN_FIELDS; i++) {
+        loginListText_[i] = ui->GetRoot()->CreateChild<Text>("LoginListText");
+        loginListText_[i]->SetAlignment(HA_LEFT, VA_TOP);
+        loginListText_[i]->SetPosition(uiLayout_.topRight.x, uiLayout_.topRight.y + (i * 20));
+        loginListText_[i]->SetFont(font3, 12);
+        loginListText_[i]->SetTextEffect(TE_SHADOW);
+        loginListText_[i]->SetVisible(false);
+        loginListText_[i]->SetText("");
+    }
+
+    // Initialize physics and other client systems...
+    DebugRenderer *dbgRenderer = scene_->CreateComponent<DebugRenderer>();
+    clientPhysicsWorld_ = scene_->CreateComponent<PhysicsWorld>(LOCAL);
+    clientPhysicsWorld_->SetFps(60);
+    clientPhysicsWorld_->DrawDebugGeometry(false);
+    clientPhysicsWorld_->SetDebugRenderer(dbgRenderer);
+    clientPhysicsWorld_->SetInterpolation(false);
+    clientPhysicsWorld_->SetEnabled(false);
+    clientPhysicsWorld_->SetUpdateEnabled(false);
+    /////
 
     InitializeAudioUISystem();
     // Setup sequencer viewport
     SetupSequencerViewport();
+
+    // Missile lock-on indicator
+    auto *missileUIContainer_ = ui->GetRoot()->CreateChild<UIElement>();
+    missileUIContainer_->SetSize(200, 50);
+    missileUIContainer_->SetPosition(graphics->GetWidth() / 2 - 100, 100);
+
+    auto *missileProgressBar_ = missileUIContainer_->CreateChild<ProgressBar>();
+    missileProgressBar_->SetSize(200, 20);
+    missileProgressBar_->SetRange(1.0f);
+    missileProgressBar_->SetValue(0.0f);
+    missileProgressBar_->SetVisible(false);
+
+    auto *missileStatusText_ = missileUIContainer_->CreateChild<Text>();
+    missileStatusText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 14);
+    missileStatusText_->SetText("NO TARGET");
+    missileStatusText_->SetAlignment(HA_CENTER, VA_TOP);
+    missileStatusText_->SetPosition(0, 25);
 
 }
 
@@ -9922,20 +10578,6 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
     auto *graphics = GetSubsystem<Graphics>();
 
     UI *ui = GetSubsystem<UI>();
-
-    packetsIn_ = ui->GetRoot()->CreateChild<Text>();
-    packetsIn_->SetText("Packets in : 0");
-    packetsIn_->SetFont(cache->GetResource<Font>(INGAME_FONT2), 9);
-    packetsIn_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-    packetsIn_->SetPosition(-50, -20);
-
-    packetsOut_ = ui->GetRoot()->CreateChild<Text>();
-    packetsOut_->SetText("Packets out: 0");
-    packetsOut_->SetFont(cache->GetResource<Font>(INGAME_FONT2), 9);
-    packetsOut_->SetAlignment(HA_RIGHT, VA_BOTTOM);
-    packetsOut_->SetHorizontalAlignment(HA_LEFT);
-    packetsOut_->SetVerticalAlignment(VA_CENTER);
-    packetsOut_->SetPosition(-50, -10);
 
     // Debug text
     for (int i = 0; i < NUM_DEBUG_FIELDS; i++) {
