@@ -2305,7 +2305,7 @@ void AlgebraKart::HandlePlayerStateUpdate(StringHash eventType, VariantMap& even
         // Update speedometer
         if (speedometerBkgSprite_ && speedometerNeedleSprite_ && speedometerText_) {
             // Show speedometer when in vehicle and moving
-            bool showSpeedometer = false;
+            bool showSpeedometer = true;
             if (auto* networkActor = actorMap_[GetSubsystem<Network>()->GetServerConnection()].Get()) {
                 bool inVehicle = true; //networkActor->entered_;
                 showSpeedometer = inVehicle && velocity > 1.0f; // Show when moving faster than 1 km/h
@@ -2322,7 +2322,7 @@ void AlgebraKart::HandlePlayerStateUpdate(StringHash eventType, VariantMap& even
                 float speedRatio = Clamp(velocity / maxSpeed, 0.0f, 1.0f);
 
                 // Needle rotates from -90 degrees (left) to +90 degrees (right)
-                float needleRotation = -90.0f + (speedRatio * 180.0f);
+                float needleRotation = -45.0f + (speedRatio * 180.0f);
                 speedometerNeedleSprite_->SetRotation(needleRotation);
 
                 // Update digital readout
@@ -2894,12 +2894,13 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
                                 UpdateSteeringWheelDisplay();
                             }
 
+                            /*
                             if (speedometerNeedleSprite_) {
                                 if (v) {
                                         // Update speedometer display based on current vehicle speed
                                         if (speedometerNeedleSprite_ && speedometerBkgSprite_) {
                                             // Get current player's vehicle speed
-                                            float currentSpeed = na->GetSpeed();
+                                            float currentSpeed = v->GetSpeedKmH();weew
 
                                             // Calculate needle rotation (0-180 degrees for 0-200 km/h)
                                             float maxDisplaySpeed = 200.0f;
@@ -2915,7 +2916,7 @@ void AlgebraKart::HandleRenderUpdate(StringHash eventType, VariantMap &eventData
                                             }
                                         }
                                 }
-                            }
+                            }*/
 
                             ///
 
@@ -4520,7 +4521,15 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
 
         if (networkInfo_) {
             if (networkCounterTimer_.GetMSec(false) > 1000 && GetSubsystem<Network>()->GetServerConnection()) {
-                networkInfo_->SetText(String("Ping: ") + String(GetSubsystem<Network>()->GetServerConnection()->GetRoundTripTime()) + String(" ms"));
+                float ping = GetSubsystem<Network>()->GetServerConnection()->GetRoundTripTime();
+                networkInfo_->SetText(String("Ping: ") + String(ping) + String(" ms"));
+                if ((ping > 0) && (ping < 100)) {
+                    networkInfo_->SetColor(Color::WHITE);
+                } else if ((ping >= 100) && (ping < 200)) {
+                    networkInfo_->SetColor(Color::YELLOW);
+                } else if ((ping >= 200) && (ping < 300)) {
+                    networkInfo_->SetColor(Color::RED);
+                }
                 networkCounterTimer_.Reset();
             }
         }
@@ -10579,7 +10588,7 @@ void AlgebraKart::InitiateGameMap(Scene *scene) {
 
     UI *ui = GetSubsystem<UI>();
 
-    // Debug text
+    // Debug textwww.algebrakart.com
     for (int i = 0; i < NUM_DEBUG_FIELDS; i++) {
         debugText_[i] = ui->GetRoot()->CreateChild<Text>("DebugText");
         debugText_[i]->SetAlignment(HA_LEFT, VA_CENTER);
