@@ -109,4 +109,5 @@ private:
     Vector3 lastKnownTargetPos_;
     Vector3 lastKnownTargetVel_;
     float timeSinceLastTargetUpdate_;
+
 };

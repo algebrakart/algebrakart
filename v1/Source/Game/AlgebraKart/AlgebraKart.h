@@ -3,6 +3,7 @@
 
 #include <Urho3D/Core/CoreEvents.h>
 #include <Urho3D/Engine/Engine.h>
+#include <Urho3D/Core/Timer.h>
 #include <Urho3D/Graphics/Camera.h>
 #include <Urho3D/Graphics/Graphics.h>
 #include <Urho3D/Graphics/Octree.h>
@@ -911,6 +912,29 @@ private:
     const size_t MEMORY_WARNING_THRESHOLD = 1024 * 1024 * 1024; // 1GB
     const size_t MEMORY_CRITICAL_THRESHOLD = 2048 * 1024 * 1024; // 2GB
 
+    // Missile Camera System
+    SharedPtr<Node> missileCameraNode_;
+    SharedPtr<Camera> missileCamera_;
+    SharedPtr<Viewport> missileViewport_;
+    WeakPtr<Node> trackedMissileNode_;
+    bool missileCameraActive_;
+    float missileCameraDistance_;
+    float missileCameraHeight_;
+    Vector3 missileCameraOffset_;
+    Timer missileCameraTimer_;
+    float maxMissileCameraTime_;
+
+    // Camera following parameters
+    Vector3 smoothMissileCameraPosition_;
+    Quaternion smoothMissileCameraRotation_;
+    float missileCameraSmoothSpeed_;
+    bool missileCameraInitialized_;
+
+    // UI elements for missile camera
+    SharedPtr<Text> missileCameraStatusText_;
+    SharedPtr<BorderImage> missileCameraFrame_;
+
+
     void ForceMemoryCleanup();
     void CleanupExcessNodes(); // Clean up orphaned and excess scene nodes
     void ManageResourceCache(float timeStep);
@@ -937,6 +961,27 @@ private:
     // Steering wheel data from server
     float currentSteeringValue_;
     bool hasValidSteeringData_;
+
+    // Missile camera methods
+    void InitializeMissileCameraSystem();
+    void CreateMissileCamera();
+    void DestroyMissileCamera();
+    void StartMissileTracking(Node* missileNode);
+    void StopMissileTracking();
+    void UpdateMissileCamera(float timeStep);
+    void SetupMissileCameraViewport();
+    void CreateMissileCameraUI();
+    bool IsMissileCameraActive() const { return missileCameraActive_; }
+
+    // Enhanced missile firing to integrate with camera
+    void FireMissileWithCamera(NetworkActor* actor, const Vector3& target);
+
+    // Missile camera system
+    Timer missileCameraDestroyTimer_;
+    bool scheduledMissileCameraDestroy_;
+    float missileCameraDestroyDelay_;
+    Vector<WeakPtr<Node>> trackedMissiles_;  // Track multiple missiles
+    Timer missileCleanupTimer_;
 
     struct UILayout {
         // Screen margins

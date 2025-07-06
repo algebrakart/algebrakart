@@ -2073,7 +2073,7 @@ void AlgebraKart::HandleNodeCollision(StringHash eventType, VariantMap& eventDat
 
     URHO3D_LOGINFOF("hitNodeA=%d, hitNodeB=%d", hitNodeA, hitNodeB);
     URHO3D_LOGINFOF("hitNodeA id=%d, hitNodeB id=%d", hitNodeA->GetID(), hitNodeB->GetName());
-        Vector2 contactPosition; 
+        Vector2 contactPosition;
 
         MemoryBuffer contacts(eventData[P_CONTACTS].GetBuffer());
         while (!contacts.IsEof()) {
@@ -5265,7 +5265,15 @@ void AlgebraKart::HandlePostUpdate(StringHash eventType, VariantMap &eventData) 
                     hudTextList_[i]->SetVisible(true);
                 }
             }
+
+        // Update missile camera system
+        if (missileCameraActive_) {
+            using namespace Update;
+            float timeStep = eventData[P_TIMESTEP].GetFloat();
+            UpdateMissileCamera(timeStep);
         }
+
+    }
 }
 
 
@@ -11317,6 +11325,21 @@ void AlgebraKart::HandleKeyDown(StringHash eventType, VariantMap& eventData) {
 
     }
 
+
+    // Missile firing with camera (example: F key)
+    if (key == KEY_F) {
+        if (!isServer_) { // Client only
+            NetworkActor* localActor = GetLocalNetworkActor();
+            if (localActor) {
+                // Simple targeting - fire forward from player
+                Vector3 fireDirection = localActor->GetBody()->GetRotation() * Vector3::FORWARD;
+                Vector3 targetPos = localActor->GetBody()->GetPosition() + fireDirection * 500.0f;
+
+                FireMissileWithCamera(localActor, targetPos);
+            }
+        }
+    }
+
     // Replay system controls
     if (replaySystem_) {
         if (key == KEY_R && GetSubsystem<Input>()->GetKeyDown(KEY_CTRL)) {
@@ -12384,5 +12407,343 @@ void AlgebraKart::UpdateSteeringWheelDisplay() {
     else {
         // Hide both when not needed
         steerWheelSprite_->SetVisible(false);
+    }
+}
+
+void AlgebraKart::InitializeMissileCameraSystem() {
+    URHO3D_LOGINFO("Initializing Missile Camera System...");
+
+    // Initialize missile camera parameters
+    missileCameraActive_ = false;
+    missileCameraDistance_ = 50.0f;
+    missileCameraHeight_ = 15.0f;
+    missileCameraOffset_ = Vector3(0, 10, -30);
+    maxMissileCameraTime_ = 15.0f;
+    missileCameraSmoothSpeed_ = 8.0f;
+    missileCameraInitialized_ = false;
+
+    // Create missile camera UI
+    CreateMissileCameraUI();
+
+    URHO3D_LOGINFO("Missile Camera System initialized");
+}
+
+void AlgebraKart::CreateMissileCamera() {
+    if (missileCameraNode_) {
+        URHO3D_LOGWARNING("Missile camera already exists");
+        return;
+    }
+
+    // Create missile camera node
+    missileCameraNode_ = scene_->CreateChild("MissileCamera", LOCAL);
+    missileCamera_ = missileCameraNode_->CreateComponent<Camera>();
+
+    // Configure missile camera
+    missileCamera_->SetFarClip(5000.0f);
+    missileCamera_->SetNearClip(0.1f);
+    missileCamera_->SetFov(75.0f);
+    missileCamera_->SetFillMode(FILL_SOLID);
+
+    // Set initial position (will be updated in tracking)
+    missileCameraNode_->SetPosition(Vector3(0, 100, 0));
+
+    // Setup viewport for missile camera
+    SetupMissileCameraViewport();
+
+    // Initialize smooth camera values
+    smoothMissileCameraPosition_ = Vector3::ZERO;
+    smoothMissileCameraRotation_ = Quaternion::IDENTITY;
+    missileCameraInitialized_ = false;
+
+    URHO3D_LOGINFO("Missile camera created");
+}
+
+void AlgebraKart::DestroyMissileCamera() {
+    if (!missileCameraNode_) return;
+
+    // Remove viewport
+    auto* renderer = GetSubsystem<Renderer>();
+    renderer->SetViewport(4, nullptr); // Assuming viewport 4 for missile camera
+
+    // Clean up camera node
+    missileCameraNode_->Remove();
+    missileCameraNode_.Reset();
+    missileCamera_.Reset();
+    missileViewport_.Reset();
+
+    // Reset tracking
+    trackedMissileNode_.Reset();
+    missileCameraActive_ = false;
+    missileCameraInitialized_ = false;
+
+    // Hide UI elements
+    if (missileCameraStatusText_) {
+        missileCameraStatusText_->SetVisible(false);
+    }
+    if (missileCameraFrame_) {
+        missileCameraFrame_->SetVisible(false);
+    }
+
+    URHO3D_LOGINFO("Missile camera destroyed");
+}
+
+void AlgebraKart::StartMissileTracking(Node* missileNode) {
+    if (!missileNode) {
+        URHO3D_LOGERROR("Cannot track null missile node");
+        return;
+    }
+
+    // Create camera if it doesn't exist
+    if (!missileCameraNode_) {
+        CreateMissileCamera();
+    }
+
+    // Set tracked missile
+    trackedMissileNode_ = missileNode;
+    missileCameraActive_ = true;
+    missileCameraTimer_.Reset();
+
+    // Initialize camera position relative to missile
+    Vector3 missilePos = missileNode->GetWorldPosition();
+    smoothMissileCameraPosition_ = missilePos + missileCameraOffset_;
+    smoothMissileCameraRotation_ = Quaternion::IDENTITY;
+    missileCameraInitialized_ = false;
+
+    // Show UI elements
+    if (missileCameraStatusText_) {
+        missileCameraStatusText_->SetVisible(true);
+        missileCameraStatusText_->SetText("MISSILE CAM - TRACKING");
+    }
+    if (missileCameraFrame_) {
+        missileCameraFrame_->SetVisible(true);
+    }
+
+    URHO3D_LOGINFOF("Started tracking missile: %s", missileNode->GetName().CString());
+}
+
+void AlgebraKart::StopMissileTracking() {
+    if (!missileCameraActive_) return;
+
+    missileCameraActive_ = false;
+    trackedMissileNode_.Reset();
+
+    // Keep camera active for a brief moment to show impact
+    auto* time = GetSubsystem<Time>();
+    float elapsedTime = time->GetElapsedTime();
+
+    // Schedule camera destruction after a short delay
+    //GetSubsystem<Engine>()->DelayedExecute(2.0f, [this]() {
+    //    DestroyMissileCamera();
+    //});
+    // Fix destroy missile camera
+
+    // Update UI
+    if (missileCameraStatusText_) {
+        missileCameraStatusText_->SetText("MISSILE CAM - IMPACT");
+    }
+
+    URHO3D_LOGINFO("Stopped missile tracking");
+}
+
+void AlgebraKart::UpdateMissileCamera(float timeStep) {
+    if (!missileCameraActive_ || !missileCameraNode_ || trackedMissileNode_.Expired()) {
+        // Check if missile was destroyed
+        if (missileCameraActive_ && trackedMissileNode_.Expired()) {
+            StopMissileTracking();
+        }
+        return;
+    }
+
+    Node* missileNode = trackedMissileNode_.Get();
+    if (!missileNode) {
+        StopMissileTracking();
+        return;
+    }
+
+    // Check maximum tracking time
+    if (missileCameraTimer_.GetMSec(false) > maxMissileCameraTime_ * 1000) {
+        URHO3D_LOGINFO("Missile camera timeout reached");
+        StopMissileTracking();
+        return;
+    }
+
+    // Get missile properties
+    Vector3 missilePos = missileNode->GetWorldPosition();
+    Vector3 missileVelocity = Vector3::ZERO;
+    Quaternion missileRotation = missileNode->GetWorldRotation();
+
+    // Try to get missile velocity from RigidBody
+    RigidBody* missileBody = missileNode->GetComponent<RigidBody>();
+    if (missileBody) {
+        missileVelocity = missileBody->GetLinearVelocity();
+    }
+
+    // Calculate dynamic camera position based on missile movement
+    Vector3 targetCameraPosition;
+    Vector3 lookAtPosition = missilePos;
+
+    if (missileVelocity.LengthSquared() > 1.0f) {
+        // Missile is moving - position camera behind it
+        Vector3 missileDirection = missileVelocity.Normalized();
+        float speed = missileVelocity.Length();
+
+        // Dynamic offset based on speed
+        float dynamicDistance = missileCameraDistance_ + (speed * 0.5f);
+        dynamicDistance = Clamp(dynamicDistance, 20.0f, 200.0f);
+
+        float dynamicHeight = missileCameraHeight_ + (speed * 0.1f);
+        dynamicHeight = Clamp(dynamicHeight, 5.0f, 50.0f);
+
+        // Position camera behind and above the missile
+        Vector3 cameraOffset = -missileDirection * dynamicDistance + Vector3::UP * dynamicHeight;
+
+        // Add some side offset for better view
+        Vector3 rightVector = missileDirection.CrossProduct(Vector3::UP).Normalized();
+        cameraOffset += rightVector * (dynamicDistance * 0.3f);
+
+        targetCameraPosition = missilePos + cameraOffset;
+
+        // Look ahead of the missile for better anticipation
+        lookAtPosition = missilePos + missileDirection * (dynamicDistance * 0.5f);
+    } else {
+        // Missile is stationary or moving slowly - use fixed offset
+        targetCameraPosition = missilePos + missileCameraOffset_;
+    }
+
+    // Check for camera obstructions
+    Vector3 rayDirection = (targetCameraPosition - missilePos).Normalized();
+    float rayDistance = (targetCameraPosition - missilePos).Length();
+
+    PhysicsRaycastResult result;
+    Ray cameraRay(missilePos, rayDirection);
+    scene_->GetComponent<PhysicsWorld>()->RaycastSingle(result, cameraRay, rayDistance, 2);
+    if (result.body_) {
+        // Obstruction detected - move camera closer
+        if (result.distance_ > 5.0f) {
+            targetCameraPosition = missilePos + rayDirection * (result.distance_ - 2.0f);
+        }
+    }
+
+    // Initialize smooth camera if needed
+    if (!missileCameraInitialized_) {
+        smoothMissileCameraPosition_ = targetCameraPosition;
+        smoothMissileCameraRotation_ = Quaternion::IDENTITY;
+        missileCameraInitialized_ = true;
+    }
+
+    // Smooth camera movement
+    smoothMissileCameraPosition_ = smoothMissileCameraPosition_.Lerp(
+            targetCameraPosition, missileCameraSmoothSpeed_ * timeStep);
+
+    // Update camera position and rotation
+    missileCameraNode_->SetWorldPosition(smoothMissileCameraPosition_);
+    missileCameraNode_->LookAt(lookAtPosition, Vector3::UP);
+
+    // Update UI with missile information
+    if (missileCameraStatusText_) {
+        float timeRemaining = maxMissileCameraTime_ - (missileCameraTimer_.GetMSec(false) / 1000.0f);
+        String statusText = String("MISSILE CAM - ") + String(timeRemaining, 1) + String("s");
+
+        // Add missile speed if available
+        if (missileVelocity.LengthSquared() > 0.1f) {
+            float speedKmh = missileVelocity.Length() * 3.6f;
+            statusText += String(" | ") + String(speedKmh, 0) + String(" km/h");
+        }
+
+        missileCameraStatusText_->SetText(statusText);
+    }
+}
+
+void AlgebraKart::SetupMissileCameraViewport() {
+    if (!missileCamera_) return;
+
+    auto* graphics = GetSubsystem<Graphics>();
+    auto* renderer = GetSubsystem<Renderer>();
+
+    // Create missile camera viewport (top-right corner)
+    int viewportWidth = 300;
+    int viewportHeight = 200;
+    int viewportX = graphics->GetWidth() - viewportWidth - 20;
+    int viewportY = 20;
+
+    IntRect missileViewportRect(viewportX, viewportY,
+                                viewportX + viewportWidth,
+                                viewportY + viewportHeight);
+
+    missileViewport_ = new Viewport(context_, scene_, missileCamera_, missileViewportRect);
+
+    // Set render path (can use a simpler one for performance)
+    SharedPtr<RenderPath> renderPath = SharedPtr<RenderPath>(new RenderPath());
+    renderPath->Load(GetSubsystem<ResourceCache>()->GetResource<XMLFile>("RenderPaths/Forward.xml"));
+
+    // Remove some effects for better performance
+    renderPath->RemoveCommands("BloomHDR");
+    renderPath->RemoveCommands("FXAA2");
+
+    missileViewport_->SetRenderPath(renderPath);
+
+    // Set the viewport (using viewport index 4)
+    renderer->SetViewport(4, missileViewport_);
+
+    URHO3D_LOGINFO("Missile camera viewport created");
+}
+
+void AlgebraKart::CreateMissileCameraUI() {
+    if (headless_) return;
+
+    auto* ui = GetSubsystem<UI>();
+    auto* cache = GetSubsystem<ResourceCache>();
+    auto* graphics = GetSubsystem<Graphics>();
+
+    // Create status text for missile camera
+    missileCameraStatusText_ = ui->GetRoot()->CreateChild<Text>();
+    missileCameraStatusText_->SetFont(cache->GetResource<Font>(INGAME_FONT), 12);
+    missileCameraStatusText_->SetColor(Color::YELLOW);
+    missileCameraStatusText_->SetAlignment(HA_RIGHT, VA_TOP);
+    missileCameraStatusText_->SetPosition(-20, 25);
+    missileCameraStatusText_->SetText("MISSILE CAM");
+    missileCameraStatusText_->SetVisible(false);
+    missileCameraStatusText_->SetPriority(100); // High priority to appear on top
+
+    // Create frame border for missile viewport
+    missileCameraFrame_ = ui->GetRoot()->CreateChild<BorderImage>();
+    missileCameraFrame_->SetTexture(cache->GetResource<Texture2D>("Textures/UI/UIElement.png"));
+    missileCameraFrame_->SetImageBorder(IntRect(2, 2, 2, 2));
+    missileCameraFrame_->SetColor(Color::RED);
+    missileCameraFrame_->SetSize(304, 204); // Slightly larger than viewport
+    missileCameraFrame_->SetAlignment(HA_RIGHT, VA_TOP);
+    missileCameraFrame_->SetPosition(-22, 18);
+    missileCameraFrame_->SetVisible(false);
+    missileCameraFrame_->SetPriority(99);
+
+    // Add crosshair overlay
+    auto* crosshair = missileCameraFrame_->CreateChild<Text>();
+    crosshair->SetFont(cache->GetResource<Font>(INGAME_FONT), 16);
+    crosshair->SetColor(Color::RED);
+    crosshair->SetText("+");
+    crosshair->SetAlignment(HA_CENTER, VA_CENTER);
+    crosshair->SetPosition(0, 0);
+}
+
+void AlgebraKart::FireMissileWithCamera(NetworkActor* actor, const Vector3& target) {
+    if (!actor || !globalMissileManager_) {
+        URHO3D_LOGERROR("Cannot fire missile - invalid actor or missile manager");
+        return;
+    }
+
+    // Fire the missile using existing missile system
+    Vector3 startPos = actor->GetBody()->GetPosition() + Vector3(0, 5, 0);
+    Missile *m = globalMissileManager_->CreateMissile(scene_, actor, startPos, target);
+    Node* missileNode = m->GetNode();
+    if (missileNode) {
+        // Start tracking the missile with camera
+        StartMissileTracking(missileNode);
+
+        URHO3D_LOGINFOF("Missile fired and camera tracking started");
+
+        // Play missile launch sound
+        PlaySoundEffectLocal("Sounds/missile_launch.ogg");
+    } else {
+        URHO3D_LOGERROR("Failed to create missile");
     }
 }
