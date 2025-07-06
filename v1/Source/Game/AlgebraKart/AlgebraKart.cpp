@@ -3729,7 +3729,7 @@ void AlgebraKart::HandleUpdate(StringHash eventType, VariantMap &eventData) {
                         // Load player state event packet
                         playerStateData[ClientPlayerState::P_LIFE] = actor->GetLife();
                         playerStateData[ClientPlayerState::P_RPM] = actor->GetSpeed();
-                        playerStateData[ClientPlayerState::P_VELOCITY] = actor->GetBody()->GetLinearVelocity().Length();
+                        playerStateData[ClientPlayerState::P_VELOCITY] = actor->vehicle_->GetSpeedKmH();
                         playerStateData[ClientPlayerState::P_PRANA] = actor->GetPrana();
                         playerStateData[ClientPlayerState::P_STEER] = actor->GetVehicle()->GetSteering();
                         playerStateData[ClientPlayerState::P_PICKUP_ITEM] = actor->GetPickUpItemState();

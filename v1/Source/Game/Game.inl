@@ -191,8 +191,6 @@ void Game::Start()
         SubscribeToEvent(E_TOUCHBEGIN, URHO3D_HANDLER(Game, HandleTouchBegin));
 
     if (!headless_) {
-        // Create logo
-        CreateLogo();
         // Set custom window Title & Icon
         SetWindowTitleAndIcon();
         // Create console and debug HUD
