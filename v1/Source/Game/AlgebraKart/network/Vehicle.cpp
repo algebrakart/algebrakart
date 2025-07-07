@@ -2945,7 +2945,7 @@ void Vehicle::CheckAndRecoverFromPenetration() {
 
         // Apply recovery impulse
         body_->ApplyImpulse(recoveryForce * GetSubsystem<Time>()->GetTimeStep());
-        URHO3D_LOGINFOF("Recovery force applied: [%f, %f, %f]", recoveryForce.x_, recoveryForce.y_, recoveryForce.z_);
+        //URHO3D_LOGINFOF("Recovery force applied: [%f, %f, %f]", recoveryForce.x_, recoveryForce.y_, recoveryForce.z_);
 
         // Temporarily reduce engine force during recovery
         for (int i = 0; i < numWheels_; i++) {
@@ -2953,6 +2953,6 @@ void Vehicle::CheckAndRecoverFromPenetration() {
             raycastVehicle_->SetEngineForce(i, currentEngineForce * 0.3f);
         }
 
-        URHO3D_LOGDEBUGF("Vehicle penetration detected! Recovery force applied: %f", recoveryForce.y_);
+        //URHO3D_LOGDEBUGF("Vehicle penetration detected! Recovery force applied: %f", recoveryForce.y_);
     }
 }
